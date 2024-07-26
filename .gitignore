@@ -47,3 +47,59 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# ignore certain folders within structure
+data-raw/
+literature/
+
+# ignore figures (take up a lot of space)
+*.png
+*.jpg
+*.jpeg
+*.zip
+
+# ignroe stock synthesis files
+admodel.cov
+admodel.dep
+admodel.hes
+checkup.sso
+*.tmp
+console.output.txt
+CumReport.sso
+derived_posteriors.sso
+echoinput.sso
+fmin.log
+gradient.*
+ParmTrace.sso
+plots/
+plots_StartTime*/
+posterior_obj_func.sso
+posterior_vectors.sso
+posteriors.sso
+rebuild.sso
+runnumber.ss
+SIS_table.sso
+ss.b0*
+ss.bar
+ss.ecm
+ss.eva
+ss.exe
+ss.exe
+ss.log
+ss.mc2
+ss.mcm
+ss.p0*
+ss.r0*
+ss.rep
+ss.std
+
+# rmarkdown / latex files
+*.aux
+*.log
+*.out
+*.tex
+*.upa
+*.upb
+*.md
+*.pdf
+_main.Rmd
