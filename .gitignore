@@ -52,6 +52,9 @@ rsconnect/
 data-raw/
 literature/
 
+# ignore R project
+*.RProj
+
 # ignore figures (take up a lot of space)
 *.png
 *.jpg
