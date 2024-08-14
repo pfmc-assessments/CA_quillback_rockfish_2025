@@ -1,0 +1,19 @@
+## Base Model Results
+
+### Parameter Estimates
+
+#### Biology Parameters
+
+#### Selectivity
+
+#### Catchability
+
+#### Stock-recruit Parameters
+
+### Fits to the Data
+
+### Population Trajectory
+
+### Comparison of Base Model to Previous Assessments
+
+### Comparison with Similar Stocks and Species
