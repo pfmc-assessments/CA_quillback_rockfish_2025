@@ -1,0 +1,53 @@
+# Pull survey catches and biological data for California quillback
+# 
+# Outputs R workspace of each surveys info saved into one of two objects
+#  catch - list of catches
+#  bio - list of available biological data
+# Created by Brian Langseth
+
+library(here)
+library(ggplot2)
+library(magrittr)
+
+# Pull all surveys, but remove (comment-out) those that have no catches
+survey_names <- c("Triennial", #"AFSC.Slope", 
+                  "NWFSC.Combo", #"NWFSC.Slope", 
+                  "NWFSC.Shelf", #"NWFSC.Hypoxia", #"NWFSC.Santa.Barb.Basin", 
+                  "NWFSC.Video", 
+                  "Triennial.Canada")
+
+catch <- bio <- list()
+for(i in 1:length(survey_names)) {
+  
+  #Catches
+  catch[[i]] <- nwfscSurvey::pull_catch(common_name = 'quillback rockfish',
+                                        survey = survey_names[i],
+                                        dir = here('data-raw')) %>%
+    dplyr::mutate(Date = as.character(Date),
+                  State = dplyr::case_when(Latitude_dd < 42 ~ 'CA',
+                                           Latitude_dd < 46.25 ~ 'OR',
+                                           TRUE ~ 'WA'))
+
+  #Biological data - samples only exist for the WCGBTS and Tri Canada (only 5 of these)
+  if(survey_names[i] %in% c("NWFSC.Combo", "Triennial.Canada")){
+    
+    bio[[i]] <- nwfscSurvey::pull_bio(common_name = 'quillback rockfish',
+                                      survey = survey_names[i],
+                                      dir = here('data-raw')) %>%
+      dplyr::mutate(Date = as.character(Date),
+                    State = dplyr::case_when(Latitude_dd < 42 ~ 'CA',
+                                             Latitude_dd < 46.25 ~ 'OR',
+                                             TRUE ~ 'WA'))
+  }
+
+  print(paste(survey_names[i], sum(catch[[i]]$total_catch_wt_kg)))
+}
+# Triennial 72.697
+# NWFSC.Combo 231.31
+# NWFSC.Shelf 1.89
+# NWFSC.Video 2.1
+# Triennial.Canada 97.131
+
+save.image(file = file.path(here('data-raw'),"survey_pulls_Aug21.RData"))
+
+
