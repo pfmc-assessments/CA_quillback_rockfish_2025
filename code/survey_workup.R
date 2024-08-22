@@ -1,8 +1,8 @@
-# Workup pulled survey catches and biological data for California quillback
+# Workup pulled catches and biological data from NOAA surveys
 # 
 # Pulls R workspace saved from survey_pulls.R
-#  catch - list of catches
-#  bio - list of available biological data
+#  catch - list of catches indexed by "survey_names"
+#  bio - list of available biological data indexed by "survey_names"
 #
 # Created by Brian Langseth
 
@@ -12,7 +12,8 @@ library(magrittr)
 
 load(file = file.path(here('data-raw'),"survey_pulls_Aug21.RData"))
 
-# Calculate total research catches and plot
+## Calculate total research catches and plot
+
 # For CA only numbers for Triennial and Combo
 research_catch <- list(NWFSC.Combo = dplyr::select(catch[[which(survey_names=="NWFSC.Combo")]], 
                                                    Year, total_catch_numbers,
@@ -40,16 +41,23 @@ research_catch <- research_catch %>% dplyr::filter(total_catch_numbers>0)
 # 5  2017 CA    NWFSC.Co…                   2              1.62
 
 #Plot areas were caught (based on CPUE)
-nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = catch[[1]], main = survey_names[1]) #Tri
-nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = catch[[2]], main = survey_names[2]) #WCGBTS
+nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[1]],State=="CA"), 
+                        main = survey_names[1], plot = 1) #Tri
+nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[2]],State=="CA"), 
+                        main = survey_names[2], plot = 1) #WCGBTS
 
 
 
-
-# Combine biological data
+## Combine biological data for only CA (only occurs in WCGBTS)
 
 research_bio <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]], 
                               Year, Length_cm, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, State) %>%
   dplyr::filter(State == "CA")
 
-nwfscSurvey::plot_bio_patterns(dir = here("data_explore_figs"), bio = bio[[2]])
+#Plot biological data by depth and latitude
+nwfscSurvey::plot_bio_patterns(dir = here("data_explore_figs"), bio = research_bio, plot = 1)
+
+
+##Rename "plots" folder to something more understandable
+
+file.rename(here("data_explore_figs","plots"),here("data_explore_figs", "survey_figs"))
