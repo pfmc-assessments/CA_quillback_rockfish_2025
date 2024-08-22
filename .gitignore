@@ -60,6 +60,8 @@ literature/
 *.jpg
 *.jpeg
 *.zip
+#except exploratory figures
+!data_explore_figs/*.png
 
 # ignroe stock synthesis files
 admodel.cov
