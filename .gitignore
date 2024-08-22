@@ -62,6 +62,8 @@ literature/
 *.zip
 #except exploratory figures
 !data_explore_figs/*.png
+#and those within subfolders
+!data_explore_figs/*/*.png
 
 # ignroe stock synthesis files
 admodel.cov
