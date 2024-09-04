@@ -10,7 +10,7 @@ library(here)
 library(ggplot2)
 library(magrittr)
 
-load(file = file.path(here('data-raw'),"survey_pulls_Aug21.RData"))
+load(file = file.path(here('data-raw'),"survey_pulls_Sept4.RData"))
 
 ## Calculate total research catches and plot
 
@@ -40,22 +40,28 @@ research_catch <- research_catch %>% dplyr::filter(total_catch_numbers>0)
 # 4  2014 CA    NWFSC.Co…                   4              4.1 
 # 5  2017 CA    NWFSC.Co…                   2              1.62
 
-#Plot areas were caught (based on CPUE)
-nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[1]],State=="CA"), 
-                        main = survey_names[1], plot = 1) #Tri
-nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[2]],State=="CA"), 
-                        main = survey_names[2], plot = 1) #WCGBTS
+#Plot areas where caught (based on CPUE)
+#Commented out because already uploaded
+# nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[1]],State=="CA"), 
+#                         main = survey_names[1], plot = 1) #Tri
+# nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[2]],State=="CA"), 
+#                         main = survey_names[2], plot = 1) #WCGBTS
 
 
 
-## Combine biological data for only CA (only occurs in WCGBTS)
+## Combine biological data for only CA (occurs in WCGBTS and 1 in Triennial)
 
 research_bio <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]], 
-                              Year, Length_cm, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, State) %>%
+                              Year, Length_cm, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, State) %>% 
+  dplyr::bind_rows(trawl = ., 
+                   triennial = dplyr::select(bio[[which(survey_names == "Triennial")]]$length_data, 
+                                             Year, Length_cm, Sex, Depth_m, Latitude_dd, Longitude_dd, State),
+                   .id = 'survey') %>%
   dplyr::filter(State == "CA")
 
 #Plot biological data by depth and latitude
-nwfscSurvey::plot_bio_patterns(dir = here("data_explore_figs"), bio = research_bio, plot = 1)
+#Commented out because already uploaded
+# nwfscSurvey::plot_bio_patterns(dir = here("data_explore_figs"), bio = research_bio, plot = 1)
 
 
 ##Rename "plots" folder to something more understandable

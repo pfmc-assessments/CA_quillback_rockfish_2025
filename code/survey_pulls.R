@@ -8,6 +8,7 @@
 library(here)
 library(ggplot2)
 library(magrittr)
+#devtools::install_github("pfmc-assessments/nwfscSurvey")
 
 # Pull all surveys, but remove (comment-out) those that have no catches
 survey_names <- c("Triennial", #"AFSC.Slope", 
@@ -28,7 +29,21 @@ for(i in 1:length(survey_names)) {
                                            Latitude_dd < 46.25 ~ 'OR',
                                            TRUE ~ 'WA'))
 
-  #Biological data - samples only exist for the WCGBTS and Tri Canada (only 5 of these)
+  #Biological data - samples exist for the Tri, WCGBTS and Tri Canada (only 5 of these)
+  #Triennial outputs a list so handle differently. Also there are no quillback ages, 
+  #so only apply to lengths
+  if(survey_names[i] %in% c("Triennial")){
+    
+    bio[[i]] <- nwfscSurvey::pull_bio(common_name = 'quillback rockfish',
+                                      survey = survey_names[i],
+                                      dir = here('data-raw')) 
+    bio[[i]]$length_data <- bio[[i]]$length_data %>% 
+      dplyr::mutate(Date = as.character(Date),
+                    State = dplyr::case_when(Latitude_dd < 42 ~ 'CA',
+                                             Latitude_dd < 46.25 ~ 'OR',
+                                             TRUE ~ 'WA'))
+  }
+  
   if(survey_names[i] %in% c("NWFSC.Combo", "Triennial.Canada")){
     
     bio[[i]] <- nwfscSurvey::pull_bio(common_name = 'quillback rockfish',
@@ -48,6 +63,6 @@ for(i in 1:length(survey_names)) {
 # NWFSC.Video 2.1
 # Triennial.Canada 97.131
 
-save.image(file = file.path(here('data-raw'),"survey_pulls_Aug21.RData"))
+save.image(file = file.path(here('data-raw'),"survey_pulls_Sept4.RData"))
 
 
