@@ -45,18 +45,25 @@ table(catch$FLEET_CODE)
 table(catch$GEAR_NAME)
 table(catch$PACFIN_GEAR_CODE)
 table(catch$PACFIN_GROUP_GEAR_CODE) #This is what the expansions are based on
+table(catch$PACFIN_GEAR_CODE, catch$PACFIN_GROUP_GEAR_CODE)
 table(catch$CATCH_AREA_DESCRIPTION) 
 #There are 3 records caught >42 degree N. This amount is small (~7.5 lbs).
 #We assign where landed and these would count toward CA ACL so keep in.
 table(catch$AREA_TYPE_NAME)
 table(catch$PACFIN_CATCH_AREA_CODE)
-table(catch$PORT_NAME)
-table(catch$COUNTY_CODE)
-table(catch$PACFIN_GROUP_PORT_CODE) #This is what the expansions are based on
 table(catch$PACFIN_GROUP_CATCH_AREA_CODE)
-table(catch$SPECIES_CODE_NAME)
+table(catch$COUNTY_CODE)
+table(catch$PORT_NAME)
+table(catch$PACFIN_GROUP_PORT_CODE) #This is what the expansions are based on but
+#county is nearly a one to one match so county could be fine too
+table(catch$COUNTY_CODE, catch$PACFIN_GROUP_PORT_CODE)
+table(catch$IOPAC_PORT_GROUP)
+table(catch$IOPAC_PORT_GROUP, catch$PACFIN_GROUP_PORT_CODE, useNA = "always")
+#suggest using pacfin group port code because IOPAC has more NAs
+table(catch$SPECIES_CODE_NAME) #same as MARKET_CATEGORY_NAME
 #Nominal quillback is a decent amount, all since 1994
 table(catch$LANDING_YEAR, catch$SPECIES_CODE_NAME)
+table(catch$LANDING_YEAR, catch$IS_SPECIES_COMP_USED)
 table(catch$CDFW_AREA_BLOCK)
 
 #Some plots to see basic patterns among fields
@@ -90,23 +97,23 @@ aggDispN <- catch %>%
 
 #Simplify into gear groupings
 
-table(catch$PACFIN_GEAR_CODE, catch$PACFIN_GROUP_GEAR_CODE)
-
 #If we break down by gears there are confidentiality issues for some of the lesser gears
 #Dealer is the most restrictive
+#Ultimately, gear groupings isn't really helpful as nearly all is HKL, which
+#is an aggregate of refined gear codes LGL and VHL/POL
 aggGear <- catch %>% 
   dplyr::group_by(PACFIN_GROUP_GEAR_CODE, LANDING_YEAR) %>% 
   dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
   data.frame()
-aggN <- catch %>% 
+aggGearN <- catch %>% 
   dplyr::group_by(PACFIN_GROUP_GEAR_CODE, LANDING_YEAR) %>% 
   dplyr::summarize(N = length(unique(VESSEL_NAME))) %>% 
   data.frame()
-aggID <- catch %>% 
+aggGearID <- catch %>% 
   dplyr::group_by(PACFIN_GROUP_GEAR_CODE, LANDING_YEAR) %>% 
   dplyr::summarize(N = length(unique(VESSEL_ID))) %>% 
   data.frame()
-aggDealer <- catch %>% 
+aggGearDealer <- catch %>% 
   dplyr::group_by(PACFIN_GROUP_GEAR_CODE, LANDING_YEAR) %>% 
   dplyr::summarize(N = length(unique(DEALER_ID))) %>%  
   data.frame()
@@ -122,9 +129,13 @@ aggPortYear <- catch %>%
   dplyr::group_by(PACFIN_GROUP_PORT_CODE, LANDING_YEAR) %>%
   dplyr::summarize(sum = round(sum(LANDED_WEIGHT_MTONS),4)) %>%
   data.frame() 
+aggPortDisp <- catch %>%
+  dplyr::group_by(PACFIN_GROUP_PORT_CODE, disp, LANDING_YEAR) %>%
+  dplyr::summarize(sum = round(sum(LANDED_WEIGHT_MTONS),4)) %>%
+  data.frame()  
 
-#If we break out by county there are confidentiality issues and dealer is 
-#the most restrictive for port, but for port/year vessel name is
+#If we break out by port code there are confidentiality issues and dealer is 
+#the most restrictive except for port/year where vessel name is
 aggPortN <- catch %>%
   dplyr::group_by(PACFIN_GROUP_PORT_CODE) %>%
   dplyr::summarize(N = length(unique(DEALER_ID))) %>%
@@ -133,7 +144,10 @@ aggPortYearN <- catch %>%
   dplyr::group_by(PACFIN_GROUP_PORT_CODE, LANDING_YEAR) %>%
   dplyr::summarize(N = length(unique(VESSEL_NAME))) %>%
   data.frame() 
-
+aggPortDispN <- catch %>%
+  dplyr::group_by(PACFIN_GROUP_PORT_CODE, disp, LANDING_YEAR) %>%
+  dplyr::summarize(N = length(unique(DEALER_ID))) %>%
+  data.frame()
 
 #Explore by sector
 #Ultimately not very helpful. Nearly all is nearshore and only reported since 2002
@@ -191,7 +205,7 @@ ggsave(here('data_explore_figs',"pacfin_landings_disp.png"),
 #Plot by gear
 #Filter out records (by gear) that have fewer than 3 dealers which is most restrictive
 #Not informative
-dontShow = unique(c(which(aggDealer$N<3)))
+dontShow = unique(c(which(aggGearDealer$N<3)))
 
 ggplot(aggGear[-dontShow,], aes(fill = PACFIN_GROUP_GEAR_CODE, y = sum, x = LANDING_YEAR)) + 
   geom_bar(position="stack", stat="identity") +
@@ -227,6 +241,20 @@ ggplot(aggPortYear[-dontShow,], aes(group = PACFIN_GROUP_PORT_CODE, x = LANDING_
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"pacfin_landings_port_group_year.png"),
        width = 6, height = 4)
+
+#and now by port by year and disposition
+dontShow = c(which(aggPortDispN$N<3))
+
+ggplot(aggPortDisp[-dontShow,], aes(group = PACFIN_GROUP_PORT_CODE, x = LANDING_YEAR, y = sum)) + 
+  geom_line(aes(colour = PACFIN_GROUP_PORT_CODE)) + 
+  xlab("Year") +
+  ylab("Landings (MT)") +
+  facet_wrap(~ disp) +
+  ggtitle("PacFIN landings of quillback by port group, disposition, and year \nFiltered for confidentiality") + 
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"pacfin_landings_port_group_disp_year.png"),
+       width = 6, height = 4)
+
 
 
 #Plot by sector - Not really informative when based only on landings
