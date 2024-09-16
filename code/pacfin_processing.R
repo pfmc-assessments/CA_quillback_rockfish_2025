@@ -277,3 +277,166 @@ ggsave(here('data_explore_figs',"pacfin_landings_sector.png"),
 # Load bio sampling data ----
 
 #-----------------------------------------------------------------------------#
+
+# PacFIN Commercial - 1984-2023 Landings mtons
+load(here("data-raw", "PacFIN.QLBK.bds.26.Jul.2024.RData"))
+bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
+
+##############################################################################-
+#Explore the data
+##############################################################################-
+
+table(bio$SAMPLE_TYPE_DESC)
+table(bio$SAMPLE_METHOD_CODE) #all random
+table(bio$DATA_TYPE)
+table(bio$AGENCY_CONDITION_CODE)
+table(bio$PACFIN_CONDITION_CODE) #some alive
+#Most of the live fish fishery is out of crescent city
+table(bio$PACFIN_GROUP_PORT_CODE, bio$PACFIN_CONDITION_CODE, useNA = "always")
+table(bio$SAMPLE_YEAR) #why is there 1978 entries when the catch data does not go that far back?
+table(bio$AGENCY_CODE)
+table(bio$PACFIN_PORT_CODE, bio$PACFIN_GROUP_PORT_CODE)
+table(bio$AGENCY_GEAR_CODE, bio$PACFIN_GEAR_CODE)
+table(bio$AGENCY_GEAR_CODE, bio$PACFIN_GROUP_PORT_CODE) #SFA is all LGL
+table(bio$VESSEL_ID)
+table(bio$VESSEL_NAME)
+table(bio$FISHING_AREA_BLOCK_NUMBER)
+table(bio$PSMFC_CATCH_AREA_CODE)
+table(bio$DEPTH_AVERAGE_FATHOMS)
+table(bio$MARKET_CATEGORY)
+table(bio$PACFIN_SPECIES_CODE)
+table(bio$OBSERVED_FREQUENCY)
+table(bio$FISH_LENGTH_TYPE_CODE, useNA = "always") #fork length, but a number are NAs
+#No lengths are taken for these fish
+table(bio$FISH_LENGTH_TYPE_DESC, useNA = "always")
+table(bio$FISH_LENGTH_TYPE_CODE, is.na(bio$FISH_LENGTH), useNA = "always")
+table(bio$SAMPLE_YEAR, is.na(bio$FISH_LENGTH)) #Why are we missing lengths
+table(bio$FISH_LENGTH)
+table(bio$FORK_LENGTH)
+table(bio$SEX_CODE) #mostly unsexed 
+table(bio$SAMPLE_YEAR, bio$SEX_CODE) #sexed really only since 2019
+table(bio$AGENCY_FISH_MATURITY_CODE) #some data here, like not detailed enough
+table(bio$FINAL_FISH_AGE_CODE)
+table(bio$AGE_COUNT)
+table(bio$AGENCY_GRADE_CODE, useNA = "always")
+table(bio$PACFIN_GRADE_NAME, useNA = "always")
+table(bio$PACFIN_GRADE_NAME, bio$PACFIN_CONDITION_CODE) #grade code doesn't
+#doesn't seem to be dependent on disposition. Alive fish are both large and small
+table(bio$FISH_LENGTH_UNITS, useNA = "always")
+table(bio$FISH_LENGTH_IS_ESTIMATED)
+
+
+#There are a number of samples in 2018 and 2019 without lengths. Why?
+nolen <- bio[is.na(bio$FISH_LENGTH),]
+table(nolen$SAMPLE_YEAR)
+table(nolen$PACFIN_GROUP_PORT_CODE) #nearly all are from eureka
+table(nolen$PACFIN_CONDITION_CODE) #all are alive
+table(nolen$AGENCY_GEAR_CODE) #nearly all from LGL 
+table(nolen$SAMPLE_ID) #coming from 5 different trips
+#Still not sure why there are no lengths
+
+
+
+##############################################################################-
+#Process the data
+##############################################################################-
+
+#Simplify disposition to alive vs. dead
+#Only species marked alive have a condition code. Assume all others are dead.
+
+bio$disp <- "dead"
+bio[which(bio$PACFIN_CONDITION_CODE == "A"), "disp"] <- "alive"
+
+#Reogranized port group codes from North to South
+bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4BDA",
+                                          bio$PACFIN_GROUP_PORT_CODE == "BGA" ~ "3BGA",
+                                          bio$PACFIN_GROUP_PORT_CODE == "CCA" ~ "1CCA",
+                                          bio$PACFIN_GROUP_PORT_CODE == "ERA" ~ "2ERA",
+                                          bio$PACFIN_GROUP_PORT_CODE == "MNA" ~ "6MNA",
+                                          bio$PACFIN_GROUP_PORT_CODE == "MRA" ~ "7MRA",
+                                          bio$PACFIN_GROUP_PORT_CODE == "SFA" ~ "5SFA")
+
+
+
+
+#############-
+#Plotting
+#############-
+
+#Lengths over time show a lot of trends
+ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR)) +
+  geom_point(colour = "#00BFC4")
+
+##
+#by length type
+##
+ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR, color = FISH_LENGTH_TYPE_CODE)) +
+  geom_point()
+
+
+##
+#By areas
+##
+
+#by port group
+ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR, color = PACFIN_GROUP_PORT_CODE)) +
+  geom_point() +
+  labs(color = "Port group")
+
+#Two big signals, increasing size in during the 2000s (occurs only in CCA), 
+#and then diverse sizes in last few years because of sampling in ERA. 
+#Maybe also smaller fish in SFA and maybe BDA (is this the live fish fishery?)
+#Why only sample in eureka in recent years? Is this representative of rest of areas. 
+#Why only sample in CCA in aughts? Is this representative of rest of areas.
+ggplot(bio, aes(color = PACFIN_GROUP_PORT_CODE, y = FISH_LENGTH, x = SAMPLE_YEAR)) +
+  geom_point() + 
+  facet_wrap(~PACFIN_GROUP_PORT_CODE) +
+  labs(color = "Port group")
+
+#Smaller sizes in BDA and SFA does not appear to an effect of the live fish fishery
+ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR)) +
+  geom_point(aes(fill = factor(disp), colour = factor(disp)), shape = 21) + 
+  facet_wrap(~PACFIN_GROUP_PORT_CODE)
+
+#Density plots also show limited difference in live/dead lengths
+#BGA difference mostly due to different timing for live/dead
+ggplot(bio, aes(x = FISH_LENGTH)) +
+  geom_density(aes(colour = disp)) + 
+  facet_wrap(~PACFIN_GROUP_PORT_CODE)
+
+#Test whether areas have different lengths irrespective of years and organize
+#by ports north to south to see if there is a north south gradient.
+ggplot(bio, aes(fill = group_port_NS, y = FISH_LENGTH, x = group_port_NS)) +
+  geom_violin()
+#Bodega and San Fran fish are smaller but crescent city, eureka, and bragg are
+#all similar.
+ggplot(bio, aes(color = group_port_NS, x = FISH_LENGTH)) +
+  geom_density()
+#Seems like the more likely explanation is depth. This is probably not the best
+#dataset to look at differences in size by latitude.
+
+
+##
+#by gear
+## 
+
+#Catches are nearly all HKL group, but here the gear codes are not grouped 
+#so look at finer scale codes
+ggplot(bio, aes(y = FISH_LENGTH, x = PACFIN_GEAR_CODE)) +
+  geom_violin(aes(fill = PACFIN_GEAR_CODE))
+#Looking just at the main HKL and LGL codes does not show strong differences
+#Looking at differences over years, or ports doesn't seem worthwhile
+ggplot(bio %>% dplyr::filter(PACFIN_GEAR_CODE %in% c("HKL", "LGL")),
+       aes(x = FISH_LENGTH)) +
+  geom_density(aes(colour = PACFIN_GEAR_CODE))
+
+
+
+
+
+
+
+
+
+
+
