@@ -14,6 +14,7 @@ library(ggplot2)
 library(magrittr)
 #devtools::install_github("pfmc-assessments/PacFIN.Utilities")
 library(PacFIN.Utilities)
+library(gridExtra)
 
 #-----------------------------------------------------------------------------#
 
@@ -177,6 +178,14 @@ aggCatch <- catch %>%
 #############-
 #Plotting
 #############-
+
+ggplot(aggCatch, aes(y = sum, x = LANDING_YEAR)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Landings (MT)") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"pacfin_landings.png"),
+       width = 6, height = 4)
 
 #Compare current landings with landings from pacfin for the 2021 assessment
 #All very similar with greatest difference being slightly less catch in 2017 this 
@@ -366,12 +375,25 @@ bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4B
 #Lengths over time show a lot of trends
 ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR)) +
   geom_point(colour = "#00BFC4")
+ggsave(here('data_explore_figs',"pacfin_length.png"), 
+       width = 6, height = 4)
 
 ##
-#by length type
+#By disposition
 ##
-ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR, color = FISH_LENGTH_TYPE_CODE)) +
+
+#Group dot and density plot together
+par(mfrow=c(2,1))
+p1 <- ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR, color = disp)) +
   geom_point()
+p2 <- ggplot(bio, aes(x = FISH_LENGTH)) +
+  geom_density(aes(colour = disp))
+#Doesn't seem to have differences between live and dead fish fishery
+
+grid.arrange(p1, p2, nrow = 2)
+g <- gridExtra::arrangeGrob(p1, p2, nrow=2) #generates g
+ggsave(here('data_explore_figs',"pacfin_length_disposition.png"), g, 
+       width = 6, height = 4)
 
 
 ##
@@ -392,11 +414,15 @@ ggplot(bio, aes(color = PACFIN_GROUP_PORT_CODE, y = FISH_LENGTH, x = SAMPLE_YEAR
   geom_point() + 
   facet_wrap(~PACFIN_GROUP_PORT_CODE) +
   labs(color = "Port group")
+ggsave(here('data_explore_figs',"pacfin_length_port_group.png"), 
+       width = 6, height = 4)
 
 #Smaller sizes in BDA and SFA does not appear to an effect of the live fish fishery
 ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR)) +
   geom_point(aes(fill = factor(disp), colour = factor(disp)), shape = 21) + 
   facet_wrap(~PACFIN_GROUP_PORT_CODE)
+ggsave(here('data_explore_figs',"pacfin_length_port_group_disposition.png"), 
+       width = 6, height = 4)
 
 #Density plots also show limited difference in live/dead lengths
 #BGA difference mostly due to different timing for live/dead
@@ -414,7 +440,8 @@ ggplot(bio, aes(color = group_port_NS, x = FISH_LENGTH)) +
   geom_density()
 #Seems like the more likely explanation is depth. This is probably not the best
 #dataset to look at differences in size by latitude.
-
+ggsave(here('data_explore_figs',"pacfin_length_port_group_violin.png"), 
+       width = 6, height = 4)
 
 ##
 #by gear
