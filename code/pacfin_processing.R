@@ -56,7 +56,7 @@ table(catch$PACFIN_GROUP_CATCH_AREA_CODE)
 table(catch$COUNTY_CODE)
 table(catch$PORT_NAME)
 table(catch$PACFIN_GROUP_PORT_CODE) #This is what the expansions are based on but
-#county is nearly a one to one match so county could be fine too
+#county is nearly a one to one match so county could be fine too. Go with port group
 table(catch$COUNTY_CODE, catch$PACFIN_GROUP_PORT_CODE)
 table(catch$IOPAC_PORT_GROUP)
 table(catch$IOPAC_PORT_GROUP, catch$PACFIN_GROUP_PORT_CODE, useNA = "always")
@@ -303,6 +303,8 @@ table(bio$PACFIN_CONDITION_CODE) #some alive
 #Most of the live fish fishery is out of crescent city
 table(bio$PACFIN_GROUP_PORT_CODE, bio$PACFIN_CONDITION_CODE, useNA = "always")
 table(bio$SAMPLE_YEAR) #why is there 1978 entries when the catch data does not go that far back?
+#This is not uncommon, petrale is a good example. Bio samples go back farther but
+#catch data only to 1981
 table(bio$AGENCY_CODE)
 table(bio$PACFIN_PORT_CODE, bio$PACFIN_GROUP_PORT_CODE)
 table(bio$AGENCY_GEAR_CODE, bio$PACFIN_GEAR_CODE)
@@ -319,12 +321,13 @@ table(bio$FISH_LENGTH_TYPE_CODE, useNA = "always") #fork length, but a number ar
 #No lengths are taken for these fish
 table(bio$FISH_LENGTH_TYPE_DESC, useNA = "always")
 table(bio$FISH_LENGTH_TYPE_CODE, is.na(bio$FISH_LENGTH), useNA = "always")
-table(bio$SAMPLE_YEAR, is.na(bio$FISH_LENGTH)) #Why are we missing lengths
+table(bio$SAMPLE_YEAR, is.na(bio$FISH_LENGTH)) #Why are we missing lengths. These
+#samples were for species composition samples only and so weren't measured. 
 table(bio$FISH_LENGTH)
 table(bio$FORK_LENGTH)
 table(bio$SEX_CODE) #mostly unsexed 
 table(bio$SAMPLE_YEAR, bio$SEX_CODE) #sexed really only since 2019
-table(bio$AGENCY_FISH_MATURITY_CODE) #some data here, like not detailed enough
+table(bio$AGENCY_FISH_MATURITY_CODE) #some data here, likely not detailed enough
 table(bio$FINAL_FISH_AGE_CODE)
 table(bio$AGE_COUNT)
 table(bio$AGENCY_GRADE_CODE, useNA = "always")
@@ -342,7 +345,8 @@ table(nolen$PACFIN_GROUP_PORT_CODE) #nearly all are from eureka
 table(nolen$PACFIN_CONDITION_CODE) #all are alive
 table(nolen$AGENCY_GEAR_CODE) #nearly all from LGL 
 table(nolen$SAMPLE_ID) #coming from 5 different trips
-#Still not sure why there are no lengths
+#See above. These were species-composition samples only so weren't measure. 
+#Will want to remove these.
 
 
 
@@ -352,7 +356,6 @@ table(nolen$SAMPLE_ID) #coming from 5 different trips
 
 #Simplify disposition to alive vs. dead
 #Only species marked alive have a condition code. Assume all others are dead.
-
 bio$disp <- "dead"
 bio[which(bio$PACFIN_CONDITION_CODE == "A"), "disp"] <- "alive"
 
@@ -364,6 +367,9 @@ bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4B
                                           bio$PACFIN_GROUP_PORT_CODE == "MNA" ~ "6MNA",
                                           bio$PACFIN_GROUP_PORT_CODE == "MRA" ~ "7MRA",
                                           bio$PACFIN_GROUP_PORT_CODE == "SFA" ~ "5SFA")
+
+#Remove the fish without lengths
+bio <- bio[which(!is.na(bio$FISH_LENGTH)),]
 
 
 
@@ -457,8 +463,17 @@ ggplot(bio %>% dplyr::filter(PACFIN_GEAR_CODE %in% c("HKL", "LGL")),
        aes(x = FISH_LENGTH)) +
   geom_density(aes(colour = PACFIN_GEAR_CODE))
 
-
-
+#By gear and port
+ggplot(bio, aes(y = FISH_LENGTH, x = PACFIN_GEAR_CODE)) +
+  geom_violin(aes(fill = PACFIN_GEAR_CODE)) +
+  facet_wrap(~PACFIN_GROUP_PORT_CODE)
+ggplot(bio %>% dplyr::filter(PACFIN_GEAR_CODE %in% c("HKL", "LGL")),
+       aes(x = FISH_LENGTH)) +
+  geom_density(aes(colour = PACFIN_GEAR_CODE)) +
+  facet_wrap(~PACFIN_GROUP_PORT_CODE)
+#Seems like any "gear" difference is really a difference in area since
+#SFA and BDA which are smaller are from only one gear. Among CCA, where
+#both gears exist, the sizes are similar.
 
 
 
