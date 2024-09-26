@@ -169,17 +169,17 @@ aggSectorYearN <- catch %>%
 
 aggCatch <- catch %>%
   dplyr::group_by(LANDING_YEAR) %>%
-  dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
+  dplyr::summarize(mtons = sum(LANDED_WEIGHT_MTONS)) %>%
   data.frame() %>% 
   merge(., data.frame("LANDING_YEAR" = c(1984:2023)), by = "LANDING_YEAR", all = TRUE)
-
+write.csv(aggCatch,here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
 
 
 #############-
 #Plotting
 #############-
 
-ggplot(aggCatch, aes(y = sum, x = LANDING_YEAR)) +
+ggplot(aggCatch, aes(y = mtons, x = LANDING_YEAR)) +
   geom_bar(position = "stack", stat = "identity") +
   xlab("Year") +
   ylab("Landings (MT)") +
@@ -190,7 +190,7 @@ ggsave(here('data_explore_figs',"pacfin_landings.png"),
 #Compare current landings with landings from pacfin for the 2021 assessment
 #All very similar with greatest difference being slightly less catch in 2017 this 
 #time around
-plot(x = aggCatch$LANDING_YEAR, y = aggCatch$sum, type = "l", lwd = 2, col = "black")
+plot(x = aggCatch$LANDING_YEAR, y = aggCatch$mtons, type = "l", lwd = 2, col = "black")
 lines(x = catch2021$year, y = catch2021$ca, lty = 1, col = "green", lwd= 2)
 plot((merge(aggCatch, catch2021, by.x = "LANDING_YEAR", by.y = "year") %>% 
         dplyr::mutate("diff" = round(sum - ca, 3)))$diff, x = c(1984:2020))
