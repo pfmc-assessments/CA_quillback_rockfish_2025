@@ -172,7 +172,7 @@ aggCatch <- catch %>%
   dplyr::summarize(mtons = sum(LANDED_WEIGHT_MTONS)) %>%
   data.frame() %>% 
   merge(., data.frame("LANDING_YEAR" = c(1984:2023)), by = "LANDING_YEAR", all = TRUE)
-write.csv(aggCatch,here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
+#write.csv(aggCatch,here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
 
 
 #############-
