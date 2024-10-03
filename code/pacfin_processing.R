@@ -292,7 +292,7 @@ load(here("data-raw", "PacFIN.QLBK.bds.26.Jul.2024.RData"))
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
 ##############################################################################-
-#Explore the data
+## Explore the data ----
 ##############################################################################-
 
 table(bio$SAMPLE_TYPE_DESC)
@@ -351,7 +351,7 @@ table(nolen$SAMPLE_ID) #coming from 5 different trips
 
 
 ##############################################################################-
-#Process the data
+## Process the data ----
 ##############################################################################-
 
 #Simplify disposition to alive vs. dead
@@ -374,9 +374,9 @@ bio <- bio[which(!is.na(bio$FISH_LENGTH)),]
 
 
 
-#############-
-#Plotting
-#############-
+################-
+## Plotting ----
+################-
 
 #Lengths over time show a lot of trends
 ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR)) +
