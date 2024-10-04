@@ -32,7 +32,7 @@ catch2021 = read.csv(file.path(dir,"pacfin_catch_by_area_Feb2021.csv"), header =
 
 
 ##############################################################################-
-#Explore the data
+## Explore the data ----
 ##############################################################################-
 
 #Looking across fields to see if anything is odd
@@ -75,7 +75,7 @@ plot(table(catch$LANDING_MONTH)) #summer is most common time period
 
 
 ##############################################################################-
-#Process the data
+## Process the data ----
 ##############################################################################-
 
 #Simplify disposition to alive vs. dead, and group gear codes together
@@ -175,9 +175,9 @@ aggCatch <- catch %>%
 #write.csv(aggCatch,here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
 
 
-#############-
-#Plotting
-#############-
+################-
+## Plotting ----
+################-
 
 ggplot(aggCatch, aes(y = mtons, x = LANDING_YEAR)) +
   geom_bar(position = "stack", stat = "identity") +
