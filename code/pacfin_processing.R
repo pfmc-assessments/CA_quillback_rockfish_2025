@@ -325,7 +325,7 @@ table(bio$SAMPLE_YEAR, is.na(bio$FISH_LENGTH)) #Why are we missing lengths. Thes
 #samples were for species composition samples only and so weren't measured. 
 table(bio$FISH_LENGTH)
 table(bio$FORK_LENGTH)
-table(bio$SEX_CODE) #mostly unsexed 
+table(bio$SEX_CODE) #mostly unsexed but quite a few with sexes
 table(bio$SAMPLE_YEAR, bio$SEX_CODE) #sexed really only since 2019
 table(bio$AGENCY_FISH_MATURITY_CODE) #some data here, likely not detailed enough
 table(bio$FINAL_FISH_AGE_CODE)
@@ -370,6 +370,17 @@ bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4B
 
 #Remove the fish without lengths
 bio <- bio[which(!is.na(bio$FISH_LENGTH)),]
+
+#Output basic bio data for later use for analysis and comps
+bio$source = "pacfin"
+out <- bio %>% dplyr::select("Year" = SAMPLE_YEAR,
+                             "length_cm" = FISH_LENGTH,
+                             "weight_kg" = FISH_WEIGHT, #No weights in PacFIN
+                             "sex" = SEX_CODE,
+                             "area" = PACFIN_GROUP_PORT_CODE,
+                             disp,
+                             source)
+#write.csv(out, here("data","CAquillback_com_bio.csv"), row.names = FALSE)
 
 
 
