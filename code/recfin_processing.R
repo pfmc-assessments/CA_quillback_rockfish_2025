@@ -30,8 +30,8 @@ catch_recfin_2021 = read.csv(file.path(dir,"recreational_catch_by_area_model_Feb
   dplyr::select(c("Year","CA_mort_mt"))
 
 
-# MRFSS Recreational - 1980-2003 Landings mtons
-ca_mrfss = read.csv(here("data-raw","RecFIN-MRFSS-CTE510-California-quillback-1980---2003_17.Oct.2024.csv"), header = T)
+# MRFSS Recreational - 1980-2004 Landings mtons
+ca_mrfss = read.csv(here("data-raw","MRFSS-CTE510-California-quillback-1980---2004_17.Oct.2024.csv"), header = T)
 
 #Pull 2021 assessment values for comparison. These are recFIN landings + discards
 catch_mrfss_2021 = read.csv(file.path(dir,"quillback_ca_mrfss_total_motalityMT.csv"), header = T) %>%
@@ -73,8 +73,11 @@ plot(ca_rec$SUM_RELEASED_DEAD_NUM/ca_rec$SUM_RELEASED_ALIVE_NUM)
 table(ca_mrfss$YEAR, useNA = "always")
 table(ca_mrfss$SCI_NAME, useNA = "always")
 table(ca_mrfss$MODE, useNA = "always")
+table(ca_mrfss$MODE_FX, useNA = "always") #This seems more complete
+table(ca_mrfss$MODE, ca_mrfss$MODE_FX, useNA = "always")
 table(ca_mrfss$AREA, useNA = "always")
 table(ca_mrfss$AREA_X, useNA = "always")
+table(ca_mrfss$AREA, ca_mrfss$AREA_X, useNA = "always")
 table(ca_mrfss$SP_CODE, useNA = "always")
 table(ca_mrfss$ST_NAME, useNA = "always")
 table(ca_mrfss$SUB_REG_NAME, useNA = "always")
@@ -104,7 +107,7 @@ table(ca_mrfss$FLAG_WGT, useNA = "always")
 #Plot the various catch amounts
 plot(ca_mrfss$WGT_AB1, ca_mrfss$TOT_CAT) #these are not the same
 abline(0,1)
-#Which field is not entirely clear. Used WGT_AB1 based on this discussion 
+#Which field is not entirely clear. Used WGT_AB1 in 2021 based on this discussion 
 #https://github.com/pfmc-assessments/california-data/discussions/2 and so plan to 
 #use again <- TO DO: SEEK CONFIRMATION
 
@@ -201,17 +204,16 @@ aggCatch_rec <- ca_rec %>%
 ca_mrfss$tot_mt <- ca_mrfss$WGT_AB1/1000
 
 #Modes
-ca_mrfss$mode <- dplyr::case_when(ca_mrfss$MODE == "PARTY/CHARTER BOAT" ~ "PC",
-                                  ca_mrfss$MODE == "PRIVATE/RENTAL BOAT" ~ "PR",
-                                  TRUE ~ "UNK")
+ca_mrfss$mode <- dplyr::case_when(ca_mrfss$MODE_FX == 6 ~ "PC",
+                                  ca_mrfss$MODE_FX == 7 ~ "PR",
+                                  TRUE ~ "OTH")
 
-#Dont have a district or sub-area category
+#Dont have a district or sub-area category to determine location within state
 
 
 ##Aggregate across variables. No checking of number is needed since SMP_TRIP
 # (number of fishers sampled) is all > 3 and so catch from any individual record 
 # can be shown
-
 
 #Break out by fleet modes
 aggFleet_mrfss <- ca_mrfss %>%
@@ -226,11 +228,11 @@ aggFleetYr_mrfss <- ca_mrfss %>%
 
 #Break out by water area
 aggArea_mrfss <- ca_mrfss %>%
-  dplyr::group_by(AREA) %>%
+  dplyr::group_by(AREA_X) %>%
   dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE))
 
 aggAreaYr_mrfss <- ca_mrfss %>%
-  dplyr::group_by(AREA, YEAR) %>%
+  dplyr::group_by(AREA_X, YEAR) %>%
   dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
   data.frame()
 
@@ -331,17 +333,19 @@ ggsave(here('data_explore_figs',"recfin_mortality_district_fleet_percent.png"),
 ###############-
 
 ggplot(aggCatch_mrfss, aes(y = tot_mt, x = YEAR)) +
-  geom_bar(position = "stack", stat = "identity") +
+  geom_bar(position = "stack", stat = "identity", fill = "#00BFC4") +
   xlab("Year") +
   ylab("Landings (MT)") +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"mrfss_mortality.png"),
+       width = 6, height = 4)
 
 #Compare current mortality with mortality from the 2021 assessment
 #These are the same
 plot(x = aggCatch_mrfss$YEAR, y = aggCatch_mrfss$tot_mt, type = "l", lwd = 2, col = "black")
 lines(x = catch_mrfss_2021$Year, y = catch_mrfss_2021$total_mt, lty = 1, col = "green", lwd= 2)
 plot((merge(aggCatch_mrfss, catch_mrfss_2021, by.x = "YEAR", by.y = "Year") %>% 
-        dplyr::mutate("diff" = round(tot_mt - total_mt, 3)))$diff, x = c(1980:1989, 1993:2003))
+        dplyr::mutate("diff" = round(tot_mt - total_mt, 3)))$diff, x = c(1980:1989, 1993:2004))
 
 
 #By fleet type - total mortality
@@ -356,9 +360,10 @@ ggsave(here('data_explore_figs',"mrfss_mortality_fleet.png"),
 
 #By water area - total mortality
 ggplot(aggAreaYr_mrfss, aes(y = tot_mt, x = YEAR)) +
-  geom_bar(position = "stack", stat = "identity", aes(fill = AREA)) +
+  geom_bar(position = "stack", stat = "identity", aes(fill = factor(AREA_X))) +
   xlab("Year") +
   ylab("Total mortality (MT)") +
+  scale_fill_discrete(labels = c("OCEAN (<= 3 MI)", "OCEAN (> 3 MI)", "INLAND", "UNK", "NA")) +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 

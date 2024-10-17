@@ -89,7 +89,7 @@ legend("topleft", c("CPFV", "Skiff/Shore"), col = c(3, 1), lty = 1, lwd = 3, bty
 # Output from recfin_processing.R
 # Currently I add fishing modes together and only have a single aggregate time series. 
 
-# MRFSS data from 1980-2003 (replace the 1980 value with historical 1980 value)
+# MRFSS data from 1980-2004 (replace the 1980 value with historical 1980 value)
 ca_rec_mrfss <- read.csv(here("data", "CAquillback_mrfss_catches.csv"))
 
 # RecFIN data from 2005-2023
