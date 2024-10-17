@@ -7,6 +7,7 @@
 #
 #   Uses output from the following scripts, combines them, and then fills in gaps
 #     pacfin_processing.R
+#     recfin_processing.R
 #
 #
 ##############################################################################################################
@@ -21,7 +22,7 @@ library(readxl)
 #---------------------------------------------------------------------------------------------------------------#
 
 ###
-# Historical commercial landings 
+# Historical commercial landings ---- 
 ###
 
 # These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
@@ -45,16 +46,17 @@ ca_com_hist2 <- read.csv(here("data-raw", "ca_hist_commercial_1969_1980_ej.csv")
 
 
 ###
-# PacFIN landings
+# PacFIN landings ----
 ###
 
 # Output from pacfin_processing.R
+# Data from 1984-2023
 ca_pacfin <- read.csv(here("data", "CAquillback_pacfin_landings.csv"))
 
 
 
 ###
-# Historical recreational landings
+# Historical recreational landings ----
 ###
 
 # These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
@@ -80,4 +82,16 @@ lines(ca_rec_hist$Year, ca_rec_hist$QLBKmt_pc, lwd = 3, col = "green")
 legend("topleft", c("CPFV", "Skiff/Shore"), col = c(3, 1), lty = 1, lwd = 3, bty = "n")
 
 
-                      
+###
+# RecFIN/MRFSS landings ----
+###
+
+# Output from recfin_processing.R
+# Currently I add fishing modes together and only have a single aggregate time series. 
+
+# MRFSS data from 1980-2003 (replace the 1980 value with historical 1980 value)
+ca_rec_mrfss <- read.csv(here("data", "CAquillback_mrfss_catches.csv"))
+
+# RecFIN data from 2005-2023
+ca_rec_recfin <- read.csv(here("data", "CAquillback_recfin_catches.csv"))
+
