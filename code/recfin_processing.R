@@ -18,9 +18,14 @@ library(gridExtra)
 
 #-----------------------------------------------------------------------------#
 
-# Load catch data ----
+# Process RecFIN catch data ----
 
 #-----------------------------------------------------------------------------#
+
+##
+#Load catch data
+##
+
 # RecFIN Recreational - 2005-2023 Landings mtons
 ca_rec = read.csv(here("data-raw","RecFIN-CTE001-California-quillback-1990---2023_2.Oct.2024.csv"), header = T)
 
@@ -30,22 +35,9 @@ catch_recfin_2021 = read.csv(file.path(dir,"recreational_catch_by_area_model_Feb
   dplyr::select(c("Year","CA_mort_mt"))
 
 
-# MRFSS Recreational - 1980-2004 Landings mtons
-ca_mrfss = read.csv(here("data-raw","MRFSS-CTE510-California-quillback-1980---2004_17.Oct.2024.csv"), header = T)
-
-#Pull 2021 assessment values for comparison. These are recFIN landings + discards
-catch_mrfss_2021 = read.csv(file.path(dir,"quillback_ca_mrfss_total_motalityMT.csv"), header = T) %>%
-  dplyr::select(c("Year","North", "South"))
-catch_mrfss_2021$total_mt <- catch_mrfss_2021$North + catch_mrfss_2021$South
-
-
-##############################################################################-
+########################-
 ## Explore the data ----
-##############################################################################-
-
-###############-
-### Recfin ----
-###############-
+########################-
 
 #Looking across fields to see if anything is odd
 table(ca_rec$RECFIN_YEAR, useNA = "always")
@@ -60,65 +52,14 @@ table(ca_rec$SPECIES_NAME, useNA = "always")
 
 #Discard mortality ratios are the same for num and mt
 plot(ca_rec$SUM_RELEASED_DEAD_NUM/ca_rec$SUM_RELEASED_ALIVE_NUM - 
-     ca_rec$SUM_RELEASED_DEAD_MT/ca_rec$SUM_RELEASED_ALIVE_MT)
+       ca_rec$SUM_RELEASED_DEAD_MT/ca_rec$SUM_RELEASED_ALIVE_MT)
 #Discard mortality is generally < 5%
 plot(ca_rec$SUM_RELEASED_DEAD_NUM/ca_rec$SUM_RELEASED_ALIVE_NUM)
 
 
-###############-
-### MRFSS ----
-###############-
-
-#Looking across fields to see if anything is odd
-table(ca_mrfss$YEAR, useNA = "always")
-table(ca_mrfss$SCI_NAME, useNA = "always")
-table(ca_mrfss$MODE, useNA = "always")
-table(ca_mrfss$MODE_FX, useNA = "always") #This seems more complete
-table(ca_mrfss$MODE, ca_mrfss$MODE_FX, useNA = "always")
-table(ca_mrfss$AREA, useNA = "always")
-table(ca_mrfss$AREA_X, useNA = "always")
-table(ca_mrfss$AREA, ca_mrfss$AREA_X, useNA = "always")
-table(ca_mrfss$SP_CODE, useNA = "always")
-table(ca_mrfss$ST_NAME, useNA = "always")
-table(ca_mrfss$SUB_REG_NAME, useNA = "always")
-table(ca_mrfss$WGT_AB1, useNA = "always") #supposed to be in kgs
-table(ca_mrfss$WGT_B1, useNA = "always")
-table(ca_mrfss$TOT_CAT, useNA = "always") #Estimated total catch (A+B1+B2)
-table(ca_mrfss$LANDING, useNA = "always") #Estimate of total harvest (A+B1)
-table(ca_mrfss$TOT_CAT - ca_mrfss$LANDING, useNA = "always") #Some difference
-table(ca_mrfss$SMP_TRIP) #number of fishers sampled per trip. All above 3
-
-apply(ca_mrfss, 2, FUN = function(x) x = sum(is.na(x))) #Many empty entries
-table(ca_mrfss$TYPE, useNA = "always") #Cant find what this means in metadata <- TO DO: FOLLOW UP
-table(ca_mrfss$SUB_WGT, useNA = "always") #Cant find what this means in metadata <- TO DO: FOLLOW UP
-table(ca_mrfss$TSP_LEN, useNA = "always") #Sum length of A fish 
-table(ca_mrfss$TSP_WGT, useNA = "always") #Sum weight of A fish
-table(ca_mrfss$TSP_HARV, useNA = "always")
-table(ca_mrfss$TSPCLAIM, useNA = "always")
-table(ca_mrfss$ESTHARV, useNA = "always") #Estimate of B1
-table(ca_mrfss$ESTCLAIM, useNA = "always") #Estimate of A
-table(ca_mrfss$SURVEY, useNA = "always") #What is PCPS? Not in metadata  <- TO DO: FOLLOW UP
-#What are these flags?  <- TO DO: FOLLOW UP
-table(ca_mrfss$OUTFLG, useNA = "always") 
-table(ca_mrfss$POOL_FLG, useNA = "always")
-table(ca_mrfss$EX_FLG, useNA = "always")
-table(ca_mrfss$FLAG_WGT, useNA = "always")
-
-#Plot the various catch amounts
-plot(ca_mrfss$WGT_AB1, ca_mrfss$TOT_CAT) #these are not the same
-abline(0,1)
-#Which field is not entirely clear. Used WGT_AB1 in 2021 based on this discussion 
-#https://github.com/pfmc-assessments/california-data/discussions/2 and so plan to 
-#use again <- TO DO: SEEK CONFIRMATION
-
-
-##############################################################################-
+########################-
 ## Process the data ----
-##############################################################################-
-
-###############-
-### Recfin ----
-###############-
+########################-
 
 ##Simplify variables
 
@@ -134,7 +75,7 @@ ca_rec$district <- dplyr::case_when(grepl("Bay Area", ca_rec$DISTRICT_NAME) ~ "B
 
 
 ##Aggregate across variables. No checking of number is needed since these are public tables
-                                
+
 #Break out by fleet modes
 aggFleet <- ca_rec %>%
   dplyr::group_by(mode) %>%
@@ -184,7 +125,7 @@ aggTripType <- ca_rec %>%
                    dis_mt = sum(SUM_RELEASED_DEAD_MT),
                    land_mt = sum(SUM_RETAINED_MT))
 
-#Aggregate over years
+#Aggregate over years and output catch time series
 aggCatch_rec <- ca_rec %>%
   dplyr::group_by(RECFIN_YEAR) %>%
   dplyr::summarize(tot_mt = sum(SUM_TOTAL_MORTALITY_MT),
@@ -194,71 +135,16 @@ aggCatch_rec <- ca_rec %>%
 #write.csv(aggCatch_rec, here("data","CAquillback_recfin_catches.csv"), row.names = FALSE)
 
 
-###############-
-### MRFSS ----
-###############-
-
-##Simplify variables
-
-#Convert total mortality to mt
-ca_mrfss$tot_mt <- ca_mrfss$WGT_AB1/1000
-
-#Modes
-ca_mrfss$mode <- dplyr::case_when(ca_mrfss$MODE_FX == 6 ~ "PC",
-                                  ca_mrfss$MODE_FX == 7 ~ "PR",
-                                  TRUE ~ "OTH")
-
-#Dont have a district or sub-area category to determine location within state
-
-
-##Aggregate across variables. No checking of number is needed since SMP_TRIP
-# (number of fishers sampled) is all > 3 and so catch from any individual record 
-# can be shown
-
-#Break out by fleet modes
-aggFleet_mrfss <- ca_mrfss %>%
-  dplyr::group_by(mode) %>%
-  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE))
-
-aggFleetYr_mrfss <- ca_mrfss %>%
-  dplyr::group_by(mode, YEAR) %>%
-  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
-  data.frame()
-
-
-#Break out by water area
-aggArea_mrfss <- ca_mrfss %>%
-  dplyr::group_by(AREA_X) %>%
-  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE))
-
-aggAreaYr_mrfss <- ca_mrfss %>%
-  dplyr::group_by(AREA_X, YEAR) %>%
-  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
-  data.frame()
-
-
-#Aggregate over years
-aggCatch_mrfss <- ca_mrfss %>%
-  dplyr::group_by(YEAR) %>%
-  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
-  data.frame()
-#write.csv(aggCatch_mrfss, here("data","CAquillback_mrfss_catches.csv"), row.names = FALSE)
-
-
-
-########################################################################-
+#################-
 ## Plotting ----
-########################################################################-
-
-###############-
-### Recfin ----
-###############-
+#################-
 
 ggplot(aggCatch, aes(y = tot_mt, x = RECFIN_YEAR)) +
   geom_bar(position = "stack", stat = "identity") +
   xlab("Year") +
   ylab("Landings (MT)") +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
 
 #By discard/landing
 ggplot(aggCatch %>% tidyr::pivot_longer(cols = c(dis_mt, land_mt)), 
@@ -328,9 +214,129 @@ ggsave(here('data_explore_figs',"recfin_mortality_district_fleet_percent.png"),
        width = 6, height = 4)
 
 
-###############-
-### MRFSS ----
-###############-
+
+#-----------------------------------------------------------------------------#
+
+# Process MRFSS catch data ----
+
+#-----------------------------------------------------------------------------#
+
+##
+#Load catch data
+##
+
+# MRFSS Recreational - 1980-2004 Landings mtons
+ca_mrfss = read.csv(here("data-raw","MRFSS-CTE510-California-quillback-1980---2004_17.Oct.2024.csv"), header = T)
+
+#Pull 2021 assessment values for comparison. These are recFIN landings + discards
+dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/output catch"
+catch_mrfss_2021 = read.csv(file.path(dir,"quillback_ca_mrfss_total_motalityMT.csv"), header = T) %>%
+  dplyr::select(c("Year","North", "South"))
+catch_mrfss_2021$total_mt <- catch_mrfss_2021$North + catch_mrfss_2021$South
+
+
+########################-
+## Explore the data ----
+########################-
+
+#Looking across fields to see if anything is odd
+table(ca_mrfss$YEAR, useNA = "always")
+table(ca_mrfss$SCI_NAME, useNA = "always")
+table(ca_mrfss$MODE, useNA = "always")
+table(ca_mrfss$MODE_FX, useNA = "always") #This seems more complete
+table(ca_mrfss$MODE, ca_mrfss$MODE_FX, useNA = "always")
+table(ca_mrfss$AREA, useNA = "always")
+table(ca_mrfss$AREA_X, useNA = "always")
+table(ca_mrfss$AREA, ca_mrfss$AREA_X, useNA = "always")
+table(ca_mrfss$SP_CODE, useNA = "always")
+table(ca_mrfss$ST_NAME, useNA = "always")
+table(ca_mrfss$SUB_REG_NAME, useNA = "always")
+table(ca_mrfss$WGT_AB1, useNA = "always") #supposed to be in kgs
+table(ca_mrfss$WGT_B1, useNA = "always")
+table(ca_mrfss$TOT_CAT, useNA = "always") #Estimated total catch (A+B1+B2)
+table(ca_mrfss$LANDING, useNA = "always") #Estimate of total harvest (A+B1)
+table(ca_mrfss$TOT_CAT - ca_mrfss$LANDING, useNA = "always") #Some difference
+table(ca_mrfss$SMP_TRIP) #number of fishers sampled per trip. All above 3
+
+apply(ca_mrfss, 2, FUN = function(x) x = sum(is.na(x))) #Many empty entries
+table(ca_mrfss$TYPE, useNA = "always") #Cant find what this means in metadata <- TO DO: FOLLOW UP
+table(ca_mrfss$SUB_WGT, useNA = "always") #Cant find what this means in metadata <- TO DO: FOLLOW UP
+table(ca_mrfss$TSP_LEN, useNA = "always") #Sum length of A fish 
+table(ca_mrfss$TSP_WGT, useNA = "always") #Sum weight of A fish
+table(ca_mrfss$TSP_HARV, useNA = "always")
+table(ca_mrfss$TSPCLAIM, useNA = "always")
+table(ca_mrfss$ESTHARV, useNA = "always") #Estimate of B1
+table(ca_mrfss$ESTCLAIM, useNA = "always") #Estimate of A
+table(ca_mrfss$SURVEY, useNA = "always") #What is PCPS? Not in metadata  <- TO DO: FOLLOW UP
+#What are these flags?  <- TO DO: FOLLOW UP
+table(ca_mrfss$OUTFLG, useNA = "always") 
+table(ca_mrfss$POOL_FLG, useNA = "always")
+table(ca_mrfss$EX_FLG, useNA = "always")
+table(ca_mrfss$FLAG_WGT, useNA = "always")
+
+#Plot the various catch amounts
+plot(ca_mrfss$WGT_AB1, ca_mrfss$TOT_CAT) #these are not the same
+abline(0,1)
+#Which field is not entirely clear. Used WGT_AB1 in 2021 based on this discussion 
+#https://github.com/pfmc-assessments/california-data/discussions/2 and so plan to 
+#use again <- TO DO: SEEK CONFIRMATION
+
+
+#########################-
+## Process the data ----
+#########################-
+
+##Simplify variables
+
+#Convert total mortality to mt
+ca_mrfss$tot_mt <- ca_mrfss$WGT_AB1/1000
+
+#Modes
+ca_mrfss$mode <- dplyr::case_when(ca_mrfss$MODE_FX == 6 ~ "PC",
+                                  ca_mrfss$MODE_FX == 7 ~ "PR",
+                                  TRUE ~ "OTH")
+
+#Dont have a district or sub-area category to determine location within state
+
+
+##Aggregate across variables. No checking of number is needed since SMP_TRIP
+# (number of fishers sampled) is all > 3 and so catch from any individual record 
+# can be shown
+
+#Break out by fleet modes
+aggFleet_mrfss <- ca_mrfss %>%
+  dplyr::group_by(mode) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE))
+
+aggFleetYr_mrfss <- ca_mrfss %>%
+  dplyr::group_by(mode, YEAR) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
+  data.frame()
+
+
+#Break out by water area
+aggArea_mrfss <- ca_mrfss %>%
+  dplyr::group_by(AREA_X) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE))
+
+aggAreaYr_mrfss <- ca_mrfss %>%
+  dplyr::group_by(AREA_X, YEAR) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
+  data.frame()
+
+
+#Aggregate over years and output the catch time series
+aggCatch_mrfss <- ca_mrfss %>%
+  dplyr::group_by(YEAR) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
+  data.frame()
+#write.csv(aggCatch_mrfss, here("data","CAquillback_mrfss_catches.csv"), row.names = FALSE)
+
+
+
+#################-
+## Plotting ----
+#################-
 
 ggplot(aggCatch_mrfss, aes(y = tot_mt, x = YEAR)) +
   geom_bar(position = "stack", stat = "identity", fill = "#00BFC4") +
@@ -370,9 +376,13 @@ ggplot(aggAreaYr_mrfss, aes(y = tot_mt, x = YEAR)) +
 
 #-----------------------------------------------------------------------------#
 
-# Load bio sampling data ----
+# Load RecFIN bio sampling data ----
 
 #-----------------------------------------------------------------------------#
+
+##
+#Load the data
+##
 
 # RecFIN Recreational - 2005-2023 Landings mtons
 ca_bio_rec = read.csv(here("data-raw","RecFIN-SD001-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
@@ -386,13 +396,9 @@ ca_bio_rec = read.csv(here("data-raw","RecFIN-SD001-CALIFORNIA-quillback-1983---
 
 
 
-##############################################################################-
+########################-
 ## Explore the data ----
-##############################################################################-
-
-###############-
-### RecFIN ----
-###############-
+########################-
 
 table(ca_bio_rec$STATE_NAME, useNA = "always")
 table(ca_bio_rec$RECFIN_YEAR, useNA = "always")
@@ -443,20 +449,12 @@ plot(ca_bio_rec$RECFIN_LENGTH_MM, ca_bio_rec$AGENCY_WEIGHT)
 ca_bio_rec %>% dplyr::filter(AGENCY_WEIGHT_UNITS != "") 
 
 
-###############-
-### MRFSS ----
-###############-
 
-
-##############################################################################-
+########################-
 ## Process the data ----
-##############################################################################-
+########################-
 
 ##Simplify variables
-
-###############-
-### RecFIN ----
-###############-
 
 #Modes
 ca_bio_rec$mode <- dplyr::case_when(ca_bio_rec$RECFIN_MODE_NAME == "PARTY/CHARTER BOATS" ~ "PC",
@@ -504,19 +502,11 @@ out_bio <- ca_bio_rec %>% dplyr::select("Year" = RECFIN_YEAR,
 #write.csv(out_bio, here("data","CAquillback_rec_bio.csv"), row.names = FALSE)
 
 
-###############-
-### MRFSS ----
-###############-
 
-
-
-#############################################################-
+#################-
 ## Plotting ----
-#############################################################-
+#################-
 
-###############-
-### RecFIN ----
-###############-
 
 #CONCLUSIONS:
 #IS_RETAINED doesnt have enough data to be informative. Only on PC
@@ -617,6 +607,27 @@ ggsave(here('data_explore_figs',"recfin_weight_area_density.png"),
        width = 6, height = 4)
 
 
-###############-
-### MRFSS ----
-###############-
+#-----------------------------------------------------------------------------#
+
+# Load MRFSS bio sampling data ----
+
+#-----------------------------------------------------------------------------#
+
+##
+#Load the data
+##
+
+
+########################-
+## Explore the data ----
+########################-
+
+
+########################-
+## Process the data ----
+########################-
+
+
+#################-
+## Plotting ----
+#################-
