@@ -62,10 +62,10 @@ literature/
 *.zip
 #except exploratory figures
 !data_explore_figs/*.png
-#and those within subfolders
+#and those within subfolders of exploratory figures
 !data_explore_figs/*/*.png
 
-# ignroe stock synthesis files
+# ignore stock synthesis files
 admodel.cov
 admodel.dep
 admodel.hes
@@ -110,3 +110,6 @@ ss.std
 *.md
 *.pdf
 _main.Rmd
+
+# Windows files
+*Thumbs.db
