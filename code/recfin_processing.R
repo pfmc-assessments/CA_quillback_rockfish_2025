@@ -139,7 +139,7 @@ aggCatch_rec <- ca_rec %>%
 ## Plotting ----
 #################-
 
-ggplot(aggCatch, aes(y = tot_mt, x = RECFIN_YEAR)) +
+ggplot(aggCatch_rec, aes(y = tot_mt, x = RECFIN_YEAR)) +
   geom_bar(position = "stack", stat = "identity") +
   xlab("Year") +
   ylab("Landings (MT)") +
@@ -147,7 +147,7 @@ ggplot(aggCatch, aes(y = tot_mt, x = RECFIN_YEAR)) +
 
 
 #By discard/landing
-ggplot(aggCatch %>% tidyr::pivot_longer(cols = c(dis_mt, land_mt)), 
+ggplot(aggCatch_rec %>% tidyr::pivot_longer(cols = c(dis_mt, land_mt)), 
        aes(y = value, x = RECFIN_YEAR)) +
   geom_bar(position = "stack", stat = "identity", aes(fill = name)) +
   xlab("Year") +
@@ -160,9 +160,9 @@ ggsave(here('data_explore_figs',"recfin_mortality.png"),
 #Compare current mortality with mortality from the 2021 assessment
 #All very similar with greatest difference being slightly less catch in 2020 
 #and very slightly higher catch in 2006, 2008 and 2009 this time around
-plot(x = aggCatch$RECFIN_YEAR, y = aggCatch$tot_mt, type = "l", lwd = 2, col = "black")
+plot(x = aggCatch_rec$RECFIN_YEAR, y = aggCatch_rec$tot_mt, type = "l", lwd = 2, col = "black")
 lines(x = catch_recfin_2021$Year, y = catch_recfin_2021$CA_mort_mt, lty = 1, col = "green", lwd= 2)
-plot((merge(aggCatch, catch_recfin_2021, by.x = "RECFIN_YEAR", by.y = "Year") %>% 
+plot((merge(aggCatch_rec, catch_recfin_2021, by.x = "RECFIN_YEAR", by.y = "Year") %>% 
         dplyr::mutate("diff" = round(tot_mt - CA_mort_mt, 3)))$diff, x = c(2005:2020))
 
 
@@ -590,6 +590,13 @@ ggplot(ca_bio_rec, aes(color = area, y = RECFIN_LENGTH_MM, x = RECFIN_YEAR)) +
   facet_wrap(~area) +
   labs(color = "Port group")
 ggsave(here('data_explore_figs',"recfin_length_area.png"), 
+       width = 6, height = 4)
+
+ggplot(ca_bio_rec, aes(color = area, y = RECFIN_LENGTH_MM, x = RECFIN_YEAR)) +
+  geom_point() + 
+  facet_wrap(~area + mode) +
+  labs(color = "Port group")
+ggsave(here('data_explore_figs',"recfin_length_area_mode.png"), 
        width = 6, height = 4)
 
 #Density plots show larger fish in Redwood (and to an extent Wine) 
