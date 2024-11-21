@@ -371,7 +371,7 @@ bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4B
 #Remove the fish without lengths
 bio <- bio[which(!is.na(bio$FISH_LENGTH)),]
 
-#Output basic bio data for later use for analysis and comps
+#Output basic bio data for later use for analysis
 bio$source = "pacfin"
 out <- bio %>% dplyr::select("Year" = SAMPLE_YEAR,
                              "length_cm" = FISH_LENGTH,
@@ -446,18 +446,23 @@ ggsave(here('data_explore_figs',"pacfin_length_port_group_disposition.png"),
 ggplot(bio, aes(x = FISH_LENGTH)) +
   geom_density(aes(colour = disp)) + 
   facet_wrap(~PACFIN_GROUP_PORT_CODE)
+ggsave(here('data_explore_figs',"pacfin_length_port_group_disposition_density.png"), 
+       width = 6, height = 4)
+
 
 #Test whether areas have different lengths irrespective of years and organize
 #by ports north to south to see if there is a north south gradient.
 ggplot(bio, aes(fill = group_port_NS, y = FISH_LENGTH, x = group_port_NS)) +
   geom_violin()
+ggsave(here('data_explore_figs',"pacfin_length_port_group_violin.png"), 
+       width = 6, height = 4)
 #Bodega and San Fran fish are smaller but crescent city, eureka, and bragg are
 #all similar.
 ggplot(bio, aes(color = group_port_NS, x = FISH_LENGTH)) +
   geom_density()
 #Seems like the more likely explanation is depth. This is probably not the best
 #dataset to look at differences in size by latitude.
-ggsave(here('data_explore_figs',"pacfin_length_port_group_violin.png"), 
+ggsave(here('data_explore_figs',"pacfin_length_port_group_density.png"), 
        width = 6, height = 4)
 
 ##
