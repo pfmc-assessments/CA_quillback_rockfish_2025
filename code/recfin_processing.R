@@ -686,7 +686,9 @@ plot(ca_mrfss_bio$YEAR, ca_mrfss_bio$T_LEN)
 cbind(table(ca_mrfss_bio$YEAR, is.na(ca_mrfss_bio$T_LEN)), table(ca_mrfss_bio$YEAR, is.na(ca_mrfss_bio$LNGTH)))
 #Differences between them are not consistent, but MOST of the time T_len > LNGTH
 plot(ca_mrfss_bio$LNGTH, ca_mrfss_bio$T_LEN) 
-abline(0,1)
+abline(-8.696, 1.034) #Relationship from Echeverria and Lenarz 1984
+plot(ca_mrfss_bio$T_LEN, ca_mrfss_bio$LNGTH) 
+abline(9.075, 0.965) #Relationship from Echeverria and Lenarz 1984
 plot(ca_mrfss_bio$LNGTH - ca_mrfss_bio$T_LEN)
 plot(ca_mrfss_bio$LNGTH, ca_mrfss_bio$LNGTH - ca_mrfss_bio$T_LEN)
 
@@ -918,18 +920,10 @@ deb_bio$Year = as.numeric(deb_bio$Year)
 deb_bio$mode = "PC"
 deb_bio$weight_kg = NA
 
-#Output basic bio data for later use for analysis and comps
-out_deb <- deb_bio %>% dplyr::select(Year,
-                                     length_cm,
-                                     weight_kg,
-                                     sex,
-                                     area,
-                                     mode,
-                                     disp,
-                                     source)
-#write.csv(out_deb, here("data","CAquillback_deb_bio.csv"), row.names = FALSE)
 
+##
 #Check for duplicates
+##
 dups1 <- ca_mrfss_bio %>% dplyr::filter(YEAR %in% c(1997:1998), mode == "PC")
 dups1$Month <- substr(dups1$ID_CODE, 10,11)
 dups1$Day <- substr(dups1$ID_CODE, 12,13)
@@ -963,5 +957,24 @@ test <- comb[order(comb$Year, comb$Month, comb$Day, comb$TL),]
 plot(dups2$Day, dups2$TL, col = 2) #Deb data 
 points(dups1$Day, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN that are integers
 
+#Check conversions from TL to FL within duplicated MRFSS data
+dups1$convertFL <- 9.075 + dups1$T_LEN*0.965
+plot(dups1$convertFL - dups1$LNGTH) #doesnt match up perfectly
+
+##
+#Output basic bio data for later use for analysis and comps
+##
+
+out_deb <- deb_bio %>% dplyr::select(Year,
+                                     length_cm,
+                                     weight_kg,
+                                     sex,
+                                     area,
+                                     mode,
+                                     disp,
+                                     source)
+out_deb$length_cm <-  9.075 + out_deb$length_cm * 0.965 #convert to FL based on Echeverria and Lenarz 1984
+
+#write.csv(out_deb, here("data","CAquillback_deb_bio.csv"), row.names = FALSE)
 
 
