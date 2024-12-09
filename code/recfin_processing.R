@@ -872,3 +872,96 @@ ggplot(ca_mrfss_bio %>% dplyr::filter(!area %in% c("South")),
   geom_density(aes(colour = area))
 ggsave(here('data_explore_figs',"mrfss_weight_area_density.png"), 
        width = 6, height = 4)
+
+
+########################-
+# Check the Deb Wilson-Vandenberg dataset ----
+########################-
+
+#To see if duplicates exist in 1997 and 1998
+#Copper rockfish 2023 assessment replaced 1997 and 1998 MRFSS PC data with Deb's estimates
+#However, deb's estimates are total length so need to do conversions to FL
+
+#Pull 2021 assessment file for deb length data.
+dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/postSSC_request_data"
+deb_bio = data.frame(read_excel(file.path(dir,"Quillback Rockfish Length Data from Central California Onboard Sampling_Jul12_2021.xlsx"), sheet = "Sheet1"))
+table(deb_bio$FATE, useNA = "always")
+table(deb_bio$LANDING, useNA = "always")
+table(deb_bio$PORTNAME, useNA = "always")
+table(deb_bio$COUNTY, useNA = "always")
+
+#Assign County to codes in Deb's data to district from the lookup table. 
+#Have to load two workssheets from the lookup table:
+#First to get the county number, second to assign county number to district.
+#Although county 23 (Humboldt) has one INTSITE that is assigned to Wine, Deb's data doesn't have that
+#level of detail, so assign all Humboldt samples to Redwood.
+cty_lookup <- data.frame(read_excel(here("data-raw", "st_sub_reg_cnty_int_site_lookup_20200914.xlsx"), 
+                                sheet = "CNTY")) %>% dplyr::filter(ST == 6)
+lookup <- data.frame(read_excel(here("data-raw", "st_sub_reg_cnty_int_site_lookup_20200914.xlsx"), 
+                                sheet = "INTSITE"))
+
+deb_bio$cnty <- sapply(deb_bio$COUNTY, FUN = function(x) cty_lookup[which(x == cty_lookup$COUNTY_NAME), "CNTY"], USE.NAMES = FALSE)
+deb_bio$area <- dplyr::case_when(deb_bio$cnty %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 1), "CNTY"]) ~ "South",
+                                 deb_bio$cnty %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 2), "CNTY"]) ~ "Channel",
+                                 deb_bio$cnty %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 3), "CNTY"]) ~ "Central",
+                                 deb_bio$cnty %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 4), "CNTY"]) ~ "Bay",
+                                 deb_bio$cnty %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 6), "CNTY"]) ~ "Redwood",
+                                 deb_bio$cnty %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 5), "CNTY"]) ~ "Wine",
+                                 TRUE ~ NA)
+
+#Simplify variables
+deb_bio$disp = "RETAINED" #all are "K" which is retained
+deb_bio$source = "Deb"
+deb_bio$length_cm = deb_bio$TL/10 #because in mm
+deb_bio$sex = "U"
+deb_bio$Year = as.numeric(deb_bio$Year)
+deb_bio$mode = "PC"
+deb_bio$weight_kg = NA
+
+#Output basic bio data for later use for analysis and comps
+out_deb <- deb_bio %>% dplyr::select(Year,
+                                     length_cm,
+                                     weight_kg,
+                                     sex,
+                                     area,
+                                     mode,
+                                     disp,
+                                     source)
+#write.csv(out_deb, here("data","CAquillback_deb_bio.csv"), row.names = FALSE)
+
+#Check for duplicates
+dups1 <- ca_mrfss_bio %>% dplyr::filter(YEAR %in% c(1997:1998), mode == "PC")
+dups1$Month <- substr(dups1$ID_CODE, 10,11)
+dups1$Day <- substr(dups1$ID_CODE, 12,13)
+dups1 <- dups1 %>% dplyr::select(YEAR, Month, Day, T_LEN, LNGTH, CNTY)
+
+dups2 <- deb_bio %>% dplyr::filter(Year %in%  c(1997:1998)) %>% 
+  dplyr::select(Year, Month, Day, TL, cnty)
+
+#Plot lengths by day for each dataset 
+plot(dups1$Day, dups1$T_LEN) #MRFSS
+points(dups2$Day, dups2$TL, col = 2) #Deb data
+#There are some data that are different. These appear to be ones where T_LEN was not measured
+plot(dups1$Day, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN that are integers
+points(dups2$Day, dups2$TL, col = 2) #Deb data 
+
+#Combine to determine how many are duplicated
+dups1b <- dups1[which(dups1$T_LEN %% 1 == 0),] %>% 
+  dplyr::select(YEAR, Month, Day, T_LEN, CNTY) %>%
+  dplyr::rename(., Year = "YEAR", TL = "T_LEN", "cnty" = CNTY)
+dups1b$source = "mrfss"
+dups2$source = "deb"
+comb <- rbind(dups1b, dups2)
+test <- comb[order(comb$Year, comb$Month, comb$Day, comb$TL),]
+#There are four data points in deb that aren't in mrfss
+#      Year Month Day  TL cnty source
+# 123  1997    03  23 308   97    deb
+# 510  1997    04  19 302   97    deb
+# 610  1997    05  26 337   97    deb
+# 65   1998    04  11 260   97  mrfss
+# 74   1998    04  18 260   13    deb
+plot(dups2$Day, dups2$TL, col = 2) #Deb data 
+points(dups1$Day, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN that are integers
+
+
+
