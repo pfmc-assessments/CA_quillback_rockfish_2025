@@ -794,6 +794,81 @@ out_mrfss_bio <- ca_mrfss_bio %>% dplyr::select("Year" = YEAR,
                                         source)
 #write.csv(out_mrfss_bio, here("data","CAquillback_mrfss_bio.csv"), row.names = FALSE)
 
+
 #################-
 ## Plotting ----
 #################-
+
+#Lengths over time show some decline
+ggplot(ca_mrfss_bio, aes(y = LNGTH, x = YEAR)) +
+  geom_point(colour = "#00BFC4")
+ggsave(here('data_explore_figs',"mrfss_length.png"), 
+       width = 6, height = 4)
+
+##
+#No disposition information
+##
+
+##
+#By mode
+## 
+
+#PR is catching larger fish
+ggplot(ca_mrfss_bio, aes(y = LNGTH, x = mode)) +
+  geom_violin(aes(fill = mode))
+ggsave(here('data_explore_figs',"mrfss_length_mode_violin.png"), 
+       width = 6, height = 4)
+
+#Not much difference between PR and PC by mode other than in Redwood
+ggplot(ca_mrfss_bio, aes(y = LNGTH, x = mode)) +
+  geom_violin(aes(fill = mode)) +
+  facet_wrap(~area)
+ggsave(here('data_explore_figs',"mrfss_length_mode_area_violin.png"), 
+       width = 6, height = 4)
+#Based on this, PC and PR are similar within each district. 
+#Therefore, the fact that PC is smaller than PR must mean that there are more PR
+#in Redwood, which is noticeably larger than other districts.
+table(ca_mrfss_bio$area, ca_mrfss_bio$mode) #More PR in redwood. Saw this in RecFIN too
+
+#Using a density figure for mode and area
+ggplot(ca_mrfss_bio, aes(x = LNGTH)) +
+  geom_density(aes(color = mode)) +
+  facet_wrap(~area)
+
+
+##
+#By areas
+##
+
+#by port group (really districts)
+ggplot(ca_mrfss_bio, aes(y = LNGTH, x = YEAR, color = area)) +
+  geom_point() +
+  labs(color = "District")
+
+#Was there some special sampling done in redwood. Nothing is really less than 300 mm
+ggplot(ca_mrfss_bio, aes(color = area, y = LNGTH, x = YEAR)) +
+  geom_point() + 
+  facet_wrap(~area) +
+  labs(color = "District")
+ggsave(here('data_explore_figs',"mrfss_length_area.png"), 
+       width = 6, height = 4)
+
+ggplot(ca_mrfss_bio, aes(color = area, y = LNGTH, x = YEAR)) +
+  geom_point() + 
+  facet_wrap(~area + mode) +
+  labs(color = "DISTRICT")
+ggsave(here('data_explore_figs',"mrfss_length_area_mode.png"), 
+       width = 6, height = 4)
+
+#Density plots show larger fish in Redwood (and to an extent Wine) 
+ggplot(ca_mrfss_bio, aes(x = LNGTH)) +
+  geom_density(aes(colour = area))
+ggsave(here('data_explore_figs',"mrfss_length_area_density.png"), 
+       width = 6, height = 4)
+
+#Fish are also larger in areas where they are longer
+ggplot(ca_mrfss_bio %>% dplyr::filter(!area %in% c("South")), 
+       aes(x = WGT)) +
+  geom_density(aes(colour = area))
+ggsave(here('data_explore_figs',"mrfss_weight_area_density.png"), 
+       width = 6, height = 4)
