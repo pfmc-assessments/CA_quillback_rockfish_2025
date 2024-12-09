@@ -39,8 +39,8 @@ file.copy(from = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/Qui
 # These include landings in CA caught in OR/WA waters, which total 0.27 MT and are no more than 0.079 in any one year 
 ca_com_hist1 <- read.csv(here("data-raw", "ca_hist_commercial_1916_1968_ej_Feb2021_CAlandingsCaughtORWA.csv"))
 
-# Historical 1968-1980 Landings lbs
-# Original 1968-1980 data have hook and line and trawl gear. All is trawl except in BRG: 5 lbs for 1978, 3 lbs for 1979
+# Historical 1969-1980 Landings lbs
+# Original 1969-1980 data have hook and line and trawl gear. All is trawl except in BRG: 5 lbs for 1978, 3 lbs for 1979
 # In csv they are aggregated into time series by area. We are unlikely to break out by gear in model. 
 ca_com_hist2 <- read.csv(here("data-raw", "ca_hist_commercial_1969_1980_ej.csv"))
 

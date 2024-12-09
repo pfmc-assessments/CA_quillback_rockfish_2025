@@ -287,7 +287,7 @@ ggsave(here('data_explore_figs',"pacfin_landings_sector.png"),
 
 #-----------------------------------------------------------------------------#
 
-# PacFIN Commercial - 1984-2023 Landings mtons
+# PacFIN Commercial - 1978-2022
 load(here("data-raw", "PacFIN.QLBK.bds.26.Jul.2024.RData"))
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
