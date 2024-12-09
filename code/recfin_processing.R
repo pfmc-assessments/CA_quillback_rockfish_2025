@@ -15,6 +15,7 @@ library(magrittr)
 #devtools::install_github("pfmc-assessments/PacFIN.Utilities")
 library(PacFIN.Utilities)
 library(gridExtra)
+library(readxl)
 
 #-----------------------------------------------------------------------------#
 
@@ -384,7 +385,7 @@ ggplot(aggAreaYr_mrfss, aes(y = tot_mt, x = YEAR)) +
 #Load the data
 ##
 
-# RecFIN Recreational - 2005-2023 Landings mtons
+# RecFIN Recreational - 2004-2023
 ca_bio_rec = read.csv(here("data-raw","RecFIN-SD001-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
 
 # If pull the confidential data (SD501) have five additional fields, though the last is blank
@@ -489,7 +490,7 @@ round(test$AGENCY_WEIGHT,4) - test$RECFIN_IMPUTED_WEIGHT_KG
 #Of these, none have the same agency weight as imputed weight. So keep all
 
 #Output basic bio data for later use for analysis and comps
-ca_bio_rec$source = "recfin"
+ca_bio_rec$source <- "recfin"
 out_bio <- ca_bio_rec %>% dplyr::select("Year" = RECFIN_YEAR, 
                                     "length_cm" = RECFIN_LENGTH_MM,
                                     "weight_kg" = AGENCY_WEIGHT,
@@ -623,17 +624,175 @@ ggsave(here('data_explore_figs',"recfin_weight_area_density.png"),
 ##
 #Load the data
 ##
+# MRFSS Recreational - 1980-2003
+ca_mrfss_bio <- read.csv(here("data-raw","MRFSS-SD509-CALIFORNIA-quillback-1980---2003_22.Nov.2024.csv"), header = T)
 
 
 ########################-
 ## Explore the data ----
 ########################-
 
+table(ca_mrfss_bio$YEAR)
+table(ca_mrfss_bio$ST_NAME)
+table(ca_mrfss_bio$CNTY)
+table(ca_mrfss_bio$SUB_REG) #Seven are from south of conception, explore more below
+table(ca_mrfss_bio$CNTY, ca_mrfss_bio$SUB_REG, useNA = "always")
+table(ca_mrfss_bio$DIST) #NOTE this is distance from shore (1 = <3 nm, 2 = >3 nm, 6 = not sure, 8 = NA)
+table(ca_mrfss_bio$MODE_FX_NAME) #mode of fishing collapsed
+table(ca_mrfss_bio$MODE_F_NAME) #mode of fishing
+table(ca_mrfss_bio$MODE_F_NAME, ca_mrfss_bio$MODE_FX_NAME) #best to remove shore based samples
+table(ca_mrfss_bio$AREA_X_NAME) #collapsed area of fishing
+table(ca_mrfss_bio$AREA_NAME) #area of fishing
+table(ca_mrfss_bio$MODE_FX_NAME, ca_mrfss_bio$AREA_NAME) #these dont align with beach fishing. Keep in bay
+table(ca_mrfss_bio$SP_CODE)
+table(ca_mrfss_bio$INTSITE) #site code
+table(ca_mrfss_bio$GEAR) #type of gear (1 = hook and line, 8 = spear, 99 = refused)
+table(ca_mrfss_bio$MODE_FX_NAME, ca_mrfss_bio$GEAR) #Spear is on private/rental. Check on lengths
+table(ca_mrfss_bio$LNGTH, useNA = "always") #fork length - 38 records without length
+table(ca_mrfss_bio$WGT, useNA = "always") #weight in kg
+table(ca_mrfss_bio$T_LEN, useNA = "always") #total length - 64 records without T_LEN
+table(ca_mrfss_bio$WGT_FLAG) #m=missing r=outlier z=oversize (0 = measured)
+table(ca_mrfss_bio$INVALID) #BAD ASCII DATA READ
+
+#Important fields without any information though many more fields also have no entries
+apply(ca_mrfss_bio, 2, FUN = function(x) x = sum(is.na(x))) #Many empty entries
+table(ca_mrfss_bio$LENGTH)
+table(ca_mrfss_bio$LEN)
+table(ca_mrfss_bio$DISTRICT) #CRFS Coastal District
+table(ca_mrfss_bio$DISPO)
+table(ca_mrfss_bio$DISP3) #3 is eaten or plan to eat. Hard to say what the others are.
+table(ca_mrfss_bio$PORT)
+
+#Check subregion
+#Seven fish are from South of Point Conception. This is unexpected. 
+#One is from San Luis Obispo (CNTY = 79) yet has an INTSITE with a record I cant
+#corroborate in the region-county-intsite to district cross table file "st_sub_reg_cnty_int_site_lookup_20200914.xlsx"
+#Other six dont have information on CNTY location. Overall, keep in.
+#From cross table file, CNTY 79 is assigned to the central district
+ca_mrfss_bio[ca_mrfss_bio$SUB_REG == 1,]
+
+#Check beach/bank MODE_FX_NAME and spear GEAR to see if sizes are different.
+#Sizes aren't obviously different, but plan to remove spear gear
+table(ca_mrfss_bio$MODE_FX_NAME, ca_mrfss_bio$GEAR)
+plot(ca_mrfss_bio$LNGTH, col = as.factor(ca_mrfss_bio$GEAR), pch=19) #two red circles (spear), one green (refused)
+ca_mrfss_bio[which(ca_mrfss_bio$GEAR %in% c(8, 99)),]
+
+#Check length values
+#Unclear in the metadata whether these are measured. Some metadata say T_LEN is measured,
+#but there are a number of entries with many digits. Other metadata dont say what is measured
+plot(ca_mrfss_bio$YEAR, ca_mrfss_bio$LNGTH) 
+plot(ca_mrfss_bio$YEAR, ca_mrfss_bio$T_LEN) 
+#LNGTH fills in some gaps in T_LEN for 1994 and 1995, otherwise both have values
+cbind(table(ca_mrfss_bio$YEAR, is.na(ca_mrfss_bio$T_LEN)), table(ca_mrfss_bio$YEAR, is.na(ca_mrfss_bio$LNGTH)))
+#Differences between them are not consistent, but MOST of the time T_len > LNGTH
+plot(ca_mrfss_bio$LNGTH, ca_mrfss_bio$T_LEN) 
+abline(0,1)
+plot(ca_mrfss_bio$LNGTH - ca_mrfss_bio$T_LEN)
+plot(ca_mrfss_bio$LNGTH, ca_mrfss_bio$LNGTH - ca_mrfss_bio$T_LEN)
+
+#Check number of decimals
+table(nchar(sub('.*\\.', '', ca_mrfss_bio$T_LEN))) #no more than three digits
+table(nchar(sub('.*\\.', '', ca_mrfss_bio$LNGTH))) #as many as 8 digits
+table(nchar(sub('.*\\.', '', ca_mrfss_bio$WGT))) #there are clearly some that are converted
+
+#Check wgt values
+#There doesn't seem to be a consistent pattern. While 1, m, o, r, z seem to all have many digits,
+#weights with the 0 flag (which is supposedly measured) have many digits too, and thus dont seem measured
+plot(ca_mrfss_bio$WGT)
+table(ca_mrfss_bio$WGT_FLAG)
+table(ca_mrfss_bio$WGT,ca_mrfss_bio$WGT_FLAG)
+#The plot of weight and length make it seem pretty obvious most of these are imputted
+plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH)
+#From recfin, there were a few records of large individuals (> 4kg) that seemed to be pounds and not kg. 
+#However here, the two fish >4kg are also very long, and measurements are one digit. Thus it appears these
+#are indeed kgs so dont through out based on them being large
+ca_mrfss_bio[which(ca_mrfss_bio$WGT>4),]
+
 
 ########################-
 ## Process the data ----
 ########################-
 
+##Remove unrepresentative records
+
+#Remove the 38 records without LNGTH
+ca_mrfss_bio <- ca_mrfss_bio[!is.na(ca_mrfss_bio$LNGTH),]
+
+#Remove the 4 shore based fishing (dock/pier and jetty) and the 2 beach bank samples
+ca_mrfss_bio <- ca_mrfss_bio[which(ca_mrfss_bio$MODE_FX_NAME %in% c("Party/Charter Boat", "Private/Rental Boat")),]
+
+#Remove the 2 spear gear records
+ca_mrfss_bio <- ca_mrfss_bio[which(ca_mrfss_bio$GEAR %in% c(1,99)),]
+
+
+##Simplify variables
+
+#Modes
+ca_mrfss_bio$mode <- dplyr::case_when(ca_mrfss_bio$MODE_FX_NAME == "Party/Charter Boat" ~ "PC",
+                                    ca_mrfss_bio$MODE_FX_NAME == "Private/Rental Boat" ~ "PR",
+                                    TRUE ~ NA)
+
+#Area 
+#Read in the lookup table for CNTY-INTSITE to District
+#Only CNTY 23 is potentially split across districts (INTSITE 106 is Wine, all others are Redwood)
+lookup <- data.frame(read_excel(here("data-raw", "st_sub_reg_cnty_int_site_lookup_20200914.xlsx"), 
+                                sheet = "INTSITE"))
+table(lookup$DISTRICT_NAME,lookup$CNTY)
+table(ca_mrfss_bio[(ca_mrfss_bio$CNTY == 23), "INTSITE"], useNA="always") 
+#Order it this way so that CNTY 23 is assigned to redwood...
+ca_mrfss_bio$area <- dplyr::case_when(ca_mrfss_bio$CNTY %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 1), "CNTY"]) ~ "South",
+                                      ca_mrfss_bio$CNTY %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 2), "CNTY"]) ~ "Channel",
+                                      ca_mrfss_bio$CNTY %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 3), "CNTY"]) ~ "Central",
+                                      ca_mrfss_bio$CNTY %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 4), "CNTY"]) ~ "Bay",
+                                      ca_mrfss_bio$CNTY %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 6), "CNTY"]) ~ "Redwood",
+                                      ca_mrfss_bio$CNTY %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 5), "CNTY"]) ~ "Wine",
+                                      TRUE ~ NA)
+#...then assign CNTY 23 with INTSITE 106 to wine. Therefore, Im assuming CNTY is Redwood unless known to be Wine
+ca_mrfss_bio[which(ca_mrfss_bio$CNTY == 23 & ca_mrfss_bio$INTSITE == 106), "area"] <- "Wine"
+
+#Sexes
+#F_sex has records of 8, which does not align with metadata so assume unknown
+ca_mrfss_bio$sex <- "U"
+
+#Disposition
+#DISP3 lists out many with value 3 (which in metadata corresponds to DISP = 3 which are "eaten").
+#Assume all are retained
+ca_mrfss_bio$disp <- "RETAINED"
+
+#Add additional weight and length flag 
+#Base on the number of decimals for measured (decimals < 2), calculated (decimals > 2), or missing (NA) values
+#Need to divide LNGTH by 100 because sub() includes numbers to the left of the decimal and these are either whole of many decimal
+#Need to divide T_LEN by 100 and (decimals < or > 4) because have 0, 2, or 3 decimals
+ca_mrfss_bio$lngth_flag = ca_mrfss_bio$tlen_flag = ca_mrfss_bio$wgt_flag = "missing"
+ca_mrfss_bio[which(sapply(ca_mrfss_bio$LNGTH, function(x) nchar(sub('.*\\.', '', x/100))) > 2), "lngth_flag"] = "computed"
+ca_mrfss_bio[which(sapply(ca_mrfss_bio$LNGTH, function(x) nchar(sub('.*\\.', '', x/100))) <= 2), "lngth_flag"] = "measured"
+ca_mrfss_bio[which(sapply(ca_mrfss_bio$T_LEN, function(x) nchar(sub('.*\\.', '', x/100))) > 4), "tlen_flag"] = "computed"
+ca_mrfss_bio[which(sapply(ca_mrfss_bio$T_LEN, function(x) nchar(sub('.*\\.', '', x/100))) <= 4), "tlen_flag"] = "measured"
+ca_mrfss_bio[which(sapply(ca_mrfss_bio$WGT, function(x) nchar(sub('.*\\.', '', x))) > 2), "wgt_flag"] = "computed"
+ca_mrfss_bio[which(sapply(ca_mrfss_bio$WGT, function(x) nchar(sub('.*\\.', '', x))) <= 2), "wgt_flag"] = "measured"
+#Per discussion #2 in the california-data github, LNGTH was calculated before 1993 but has added data in 1997-1998 (I wonder if this is the dup Deb-WV data)
+plot(ca_mrfss_bio$YEAR, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$lngth_flag))
+plot(ca_mrfss_bio$YEAR, ca_mrfss_bio$T_LEN, col = factor(ca_mrfss_bio$tlen_flag)) #not as clear of a split (looks like odd ones are the 1 decimal values)
+plot(ca_mrfss_bio$YEAR, ca_mrfss_bio$WGT, col = factor(ca_mrfss_bio$wgt_flag))
+#Can get measured weights and lengths together to use as weight length curve should we wish
+plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$lngth_flag))
+plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$wgt_flag))
+plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$wgt_flag == "measured" & ca_mrfss_bio$lngth_flag  == "measured"))
+
+
+#Output basic bio data for later use for analysis and comps
+ca_mrfss_bio$source <- "mrfss"
+out_mrfss_bio <- ca_mrfss_bio %>% dplyr::select("Year" = YEAR, 
+                                        "length_cm" = LNGTH,
+                                        "weight_kg" = WGT,
+                                        sex,
+                                        area,
+                                        mode,
+                                        disp,
+                                        lngth_flag,
+                                        wgt_flag,
+                                        source)
+#write.csv(out_mrfss_bio, here("data","CAquillback_mrfss_bio.csv"), row.names = FALSE)
 
 #################-
 ## Plotting ----
