@@ -1026,7 +1026,15 @@ milgot_bio$sex <- "U"
 milgot_bio$disp <- "RETAINED"
 milgot_bio$source <- "MilGot"
 
+#No real way to determine number of trips. The number of fish on a 
+#year-month-port-mode combination is never larger than the number of possible
+#trips for that same combination. Suggest use number of unique
+#year-month-port-mode combinations instead of number of fish.
+#To do so will need to add month
+milgot_bio %>% dplyr::count(Year, Month, Port, mode)
+
 out_milgot <- milgot_bio %>% dplyr::select(Year,
+                                           Month,
                                            length_cm,
                                            weight_kg,
                                            sex,
@@ -1074,7 +1082,16 @@ milgei_bio$sex <- "U"
 milgei_bio$disp <- "RETAINED"
 milgei_bio$source <- "MilGei"
 
+#No real way to determine number of trips. Does not have month so will have to use
+#year-district-mode. Doesn't produce very many trips but this is the finest level
+#of detail with have
+milgei_bio %>% dplyr::count(YEAR, area, mode)
+
+#Add month so as to be able to combine with Miller and Gotshall
+milgei_bio$Month = NA
+
 out_milgei <- milgei_bio %>% dplyr::select("Year" = YEAR,
+                                           Month,
                                            length_cm,
                                            weight_kg,
                                            sex,
