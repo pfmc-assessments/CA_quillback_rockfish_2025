@@ -95,3 +95,9 @@ ca_rec_mrfss <- read.csv(here("data", "CAquillback_mrfss_catches.csv"))
 # RecFIN data from 2005-2023
 ca_rec_recfin <- read.csv(here("data", "CAquillback_recfin_catches.csv"))
 
+# Add 2020 proxy values from (https://github.com/pfmc-assessments/california-data/tree/main/recreational-fishery/proxy%202020%20data)
+# to value from RecFIN for 2020. Only 0.889 mt
+proxy2020 <- sum(read_excel(here("data-raw", "CDFWRec_QuillbackRF_AvgProxyValuesApr-Jun2020.xlsx"), sheet = "QuillbackRF")$`Proxy Average Value (mt)`)
+ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR == 2020, c("tot_mt", "land_mt")] <- 
+  ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR == 2020, c("tot_mt", "land_mt")] + proxy2020
+
