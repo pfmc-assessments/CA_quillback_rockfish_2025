@@ -987,7 +987,7 @@ out_deb$length_cm <-  9.075 + out_deb$length_cm * 0.965 #convert to FL based on 
 
 
 ########################-
-## Miller and Gotschall 1957-1972 (Quillback lengths only for 1959-1960) ----
+## Miller and Gotshall 1957-1972 (Quillback lengths only for 1959-1960) ----
 ########################-
 
 #Load the data - Table 3 is of lengths
@@ -1037,44 +1037,44 @@ out_milgot <- milgot_bio %>% dplyr::select(Year,
 
 
 ########################-
-## Miller and Gleibel 1959-1960 ----
+## Miller and Geibel 1959-1960 ----
 ########################-
 
 #Load the data
-milgle_bio <- data.frame(read_excel(here("data-raw", "bio_quillback_rockfish_Miller_NorCal_Lengths_59_72.xlsx"), sheet = "Sheet1"))
+milgei_bio <- data.frame(read_excel(here("data-raw", "bio_quillback_rockfish_Miller_NorCal_Lengths_59_72.xlsx"), sheet = "Sheet1"))
 
 #Check variables
-table(milgle_bio$YEAR)
-table(milgle_bio$NUMBER_OF_FISH)
-table(milgle_bio$COAST_DIST)
-table(milgle_bio$MODE)
-table(milgle_bio$mode_description)
-table(milgle_bio$Counties)
+table(milgei_bio$YEAR)
+table(milgei_bio$NUMBER_OF_FISH)
+table(milgei_bio$COAST_DIST)
+table(milgei_bio$MODE)
+table(milgei_bio$mode_description)
+table(milgei_bio$Counties)
 
 #Process data
 
 #Expand dataset so each row equals one length (will remove the count column)
-milgle_bio <- milgle_bio %>% tidyr::uncount(NUMBER_OF_FISH)
+milgei_bio <- milgei_bio %>% tidyr::uncount(NUMBER_OF_FISH)
 
 
 #Simplify variables
 
-milgle_bio$length_cm <- milgle_bio$LENGTH/10
-milgle_bio$weight_kg <- NA
+milgei_bio$length_cm <- milgei_bio$LENGTH/10
+milgei_bio$weight_kg <- NA
 #Replace port with district
-milgle_bio$area <- dplyr::case_when(milgle_bio$Counties == "DelNorte_Humboldt" ~ "Redwood",
-                                    milgle_bio$Counties == "Mendocino_Sonoma" ~ "Wine",
-                                    milgle_bio$Counties == "SanFranciscoBay" ~ "Bay",
-                                    milgle_bio$Counties == "SantaCruz_Monterey" ~ "Central",
+milgei_bio$area <- dplyr::case_when(milgei_bio$Counties == "DelNorte_Humboldt" ~ "Redwood",
+                                    milgei_bio$Counties == "Mendocino_Sonoma" ~ "Wine",
+                                    milgei_bio$Counties == "SanFranciscoBay" ~ "Bay",
+                                    milgei_bio$Counties == "SantaCruz_Monterey" ~ "Central",
                                     TRUE ~ NA)
-milgle_bio$mode <- dplyr::case_when(milgle_bio$mode_description == "private_rental" ~ "PR",
-                                    milgle_bio$mode_description == "party_boat" ~ "PC",
+milgei_bio$mode <- dplyr::case_when(milgei_bio$mode_description == "private_rental" ~ "PR",
+                                    milgei_bio$mode_description == "party_boat" ~ "PC",
                                     TRUE ~ NA)
-milgle_bio$sex <- "U"
-milgle_bio$disp <- "RETAINED"
-milgle_bio$source <- "MilGle"
+milgei_bio$sex <- "U"
+milgei_bio$disp <- "RETAINED"
+milgei_bio$source <- "MilGei"
 
-out_milgle <- milgle_bio %>% dplyr::select("Year" = YEAR,
+out_milgei <- milgei_bio %>% dplyr::select("Year" = YEAR,
                                            length_cm,
                                            weight_kg,
                                            sex,
@@ -1083,7 +1083,8 @@ out_milgle <- milgle_bio %>% dplyr::select("Year" = YEAR,
                                            disp,
                                            source)
 
-#write.csv(cbind(out_milgot, out_milgle), here("data","CAquillback_historical_bio.csv"), row.names = FALSE)
+#write.csv(rbind(out_milgot, out_milgei), here("data","CAquillback_historical_bio.csv"), row.names = FALSE)
 
 
-                         
+
+
