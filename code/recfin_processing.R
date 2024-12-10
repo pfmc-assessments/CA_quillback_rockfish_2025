@@ -226,7 +226,7 @@ ggsave(here('data_explore_figs',"recfin_mortality_district_fleet_percent.png"),
 #Load catch data
 ##
 
-# MRFSS Recreational - 1980-2004 Landings mtons
+# MRFSS Recreational - 1980-1989, 1993-2004 Landings mtons
 ca_mrfss = read.csv(here("data-raw","MRFSS-CTE510-California-quillback-1980---2004_17.Oct.2024.csv"), header = T)
 
 #Pull 2021 assessment values for comparison. These are recFIN landings + discards
@@ -377,7 +377,7 @@ ggplot(aggAreaYr_mrfss, aes(y = tot_mt, x = YEAR)) +
 
 #-----------------------------------------------------------------------------#
 
-# Load RecFIN bio sampling data ----
+# Process RecFIN bio sampling data ----
 
 #-----------------------------------------------------------------------------#
 
@@ -617,14 +617,15 @@ ggsave(here('data_explore_figs',"recfin_weight_area_density.png"),
 
 #-----------------------------------------------------------------------------#
 
-# Load MRFSS bio sampling data ----
+# Process MRFSS bio sampling data ----
 
 #-----------------------------------------------------------------------------#
 
 ##
 #Load the data
 ##
-# MRFSS Recreational - 1980-2003
+
+# MRFSS Recreational - 1980-1989, 1993-2003
 ca_mrfss_bio <- read.csv(here("data-raw","MRFSS-SD509-CALIFORNIA-quillback-1980---2003_22.Nov.2024.csv"), header = T)
 
 
@@ -876,13 +877,20 @@ ggsave(here('data_explore_figs',"mrfss_weight_area_density.png"),
        width = 6, height = 4)
 
 
+
+#-----------------------------------------------------------------------------#
+
+# Process historical bio sampling data ----
+
+#-----------------------------------------------------------------------------#
+
 ########################-
-# Check the Deb Wilson-Vandenberg dataset ----
+## Deb Wilson-Vandenberg dataset 1987-1998 ----
 ########################-
 
-#To see if duplicates exist in 1997 and 1998
-#Copper rockfish 2023 assessment replaced 1997 and 1998 MRFSS PC data with Deb's estimates
-#However, deb's estimates are total length so need to do conversions to FL
+#To see if duplicates exist in 1997 and 1998 and process data
+#Copper rockfish 2023 assessment replaced 1997 and 1998 MRFSS PC data with Deb's samples
+#However, deb's samples are total length so need to do conversions to FL
 
 #Pull 2021 assessment file for deb length data.
 dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/postSSC_request_data"
@@ -893,7 +901,7 @@ table(deb_bio$PORTNAME, useNA = "always")
 table(deb_bio$COUNTY, useNA = "always")
 
 #Assign County to codes in Deb's data to district from the lookup table. 
-#Have to load two workssheets from the lookup table:
+#Have to load two worksheets from the lookup table:
 #First to get the county number, second to assign county number to district.
 #Although county 23 (Humboldt) has one INTSITE that is assigned to Wine, Deb's data doesn't have that
 #level of detail, so assign all Humboldt samples to Redwood.
@@ -978,3 +986,104 @@ out_deb$length_cm <-  9.075 + out_deb$length_cm * 0.965 #convert to FL based on 
 #write.csv(out_deb, here("data","CAquillback_deb_bio.csv"), row.names = FALSE)
 
 
+########################-
+## Miller and Gotschall 1957-1972 (Quillback lengths only for 1959-1960) ----
+########################-
+
+#Load the data - Table 3 is of lengths
+milgot_bio <- data.frame(read_excel(here("data-raw", "Miller_Gotshall_catch_length_data.xlsx"), sheet = "Table 3",
+                                    col_types = c(rep("guess",7),"text")))
+
+#Check variables
+table(milgot_bio$Year)
+table(milgot_bio$Month)
+table(milgot_bio$Fishery)
+table(milgot_bio$Species)
+table(milgot_bio$Port)
+table(milgot_bio$other.notes..comments)
+
+#Process data
+
+#Retain only quillback lengths
+milgot_bio <- milgot_bio %>% dplyr::filter(Species == "QLBK")
+#Expand dataset so each row equals one length (will remove the count column)
+milgot_bio <- milgot_bio %>% tidyr::uncount(Count)
+
+#Simplify variables
+
+milgot_bio$length_cm <- milgot_bio$Length..cm.
+milgot_bio$weight_kg <- NA
+#Replace port with district
+milgot_bio$area <- dplyr::case_when(milgot_bio$Port == "Bodega Bay" ~ "Bay",
+                                    milgot_bio$Port == "Ft. Bragg" ~ "Wine",
+                                    milgot_bio$Port == "Princeton" ~ "Bay",
+                                    milgot_bio$Port == "Shelter Cove" ~ "Wine",
+                                    TRUE ~ NA)
+milgot_bio$mode <- dplyr::case_when(milgot_bio$Fishery %in% c("skiff", "Skiff") ~ "PR",
+                                    milgot_bio$Fishery == "CPFV" ~ "PC",
+                                    TRUE ~ NA)
+milgot_bio$sex <- "U"
+milgot_bio$disp <- "RETAINED"
+milgot_bio$source <- "MilGot"
+
+out_milgot <- milgot_bio %>% dplyr::select(Year,
+                                           length_cm,
+                                           weight_kg,
+                                           sex,
+                                           area,
+                                           mode,
+                                           disp,
+                                           source)
+
+
+########################-
+## Miller and Gleibel 1959-1960 ----
+########################-
+
+#Load the data
+milgle_bio <- data.frame(read_excel(here("data-raw", "bio_quillback_rockfish_Miller_NorCal_Lengths_59_72.xlsx"), sheet = "Sheet1"))
+
+#Check variables
+table(milgle_bio$YEAR)
+table(milgle_bio$NUMBER_OF_FISH)
+table(milgle_bio$COAST_DIST)
+table(milgle_bio$MODE)
+table(milgle_bio$mode_description)
+table(milgle_bio$Counties)
+
+#Process data
+
+#Expand dataset so each row equals one length (will remove the count column)
+milgle_bio <- milgle_bio %>% tidyr::uncount(NUMBER_OF_FISH)
+
+
+#Simplify variables
+
+milgle_bio$length_cm <- milgle_bio$LENGTH/10
+milgle_bio$weight_kg <- NA
+#Replace port with district
+milgle_bio$area <- dplyr::case_when(milgle_bio$Counties == "DelNorte_Humboldt" ~ "Redwood",
+                                    milgle_bio$Counties == "Mendocino_Sonoma" ~ "Wine",
+                                    milgle_bio$Counties == "SanFranciscoBay" ~ "Bay",
+                                    milgle_bio$Counties == "SantaCruz_Monterey" ~ "Central",
+                                    TRUE ~ NA)
+milgle_bio$mode <- dplyr::case_when(milgle_bio$mode_description == "private_rental" ~ "PR",
+                                    milgle_bio$mode_description == "party_boat" ~ "PC",
+                                    TRUE ~ NA)
+milgle_bio$sex <- "U"
+milgle_bio$disp <- "RETAINED"
+milgle_bio$source <- "MilGle"
+
+out_milgle <- milgle_bio %>% dplyr::select("Year" = YEAR,
+                                           length_cm,
+                                           weight_kg,
+                                           sex,
+                                           area,
+                                           mode,
+                                           disp,
+                                           source)
+
+#write.csv(cbind(out_milgot, out_milgle), here("data","CAquillback_historical_bio.csv"), row.names = FALSE)
+
+
+                         
