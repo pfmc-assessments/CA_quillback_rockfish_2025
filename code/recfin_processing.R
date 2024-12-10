@@ -1086,5 +1086,73 @@ out_milgei <- milgei_bio %>% dplyr::select("Year" = YEAR,
 #write.csv(rbind(out_milgot, out_milgei), here("data","CAquillback_historical_bio.csv"), row.names = FALSE)
 
 
+#################-
+## Plotting of Miller and G*s----
+#################-
 
+hist_bio <- rbind(out_milgot, out_milgei)
+
+#Lengths over time show some decline
+ggplot(hist_bio, aes(y = length_cm*10, x = Year)) +
+  geom_point(colour = "#00BFC4")
+
+##
+#By mode
+## 
+
+#PR is catching larger fish
+ggplot(hist_bio, aes(y = length_cm*10, x = mode)) +
+  geom_violin(aes(fill = mode))
+
+#Can really distinguish here. Not enough contrast other than for wine
+ggplot(hist_bio, aes(y = length_cm*10, x = mode)) +
+  geom_violin(aes(fill = mode)) +
+  facet_wrap(~area)
+
+#Using a density figure for mode and area
+ggplot(hist_bio, aes(x = length_cm*10)) +
+  geom_density(aes(color = mode)) +
+  facet_wrap(~area)
+
+
+##
+#By areas
+##
+
+ggplot(hist_bio, aes(y = length_cm*10, x = Year, color = area)) +
+  geom_point() +
+  labs(color = "District")
+
+ggplot(hist_bio, aes(color = area, y = length_cm*10, x = Year)) +
+  geom_point() + 
+  facet_wrap(~area) +
+  labs(color = "District")
+
+ggplot(hist_bio, aes(color = area, y = length_cm*10, x = Year)) +
+  geom_point() + 
+  facet_wrap(~area + mode) +
+  labs(color = "DISTRICT")
+
+#Density plots show larger fish in Redwood (and to an extent Wine) 
+ggplot(hist_bio, aes(x = length_cm*10)) +
+  geom_density(aes(colour = area))
+
+
+##
+#By data set
+##
+
+#Similar across data sources
+
+ggplot(hist_bio, aes(y = length_cm*10, x = source)) +
+  geom_violin(aes(fill = source)) + 
+  facet_wrap(~Year)
+
+ggplot(hist_bio, aes(x = length_cm*10)) +
+  geom_density(aes(colour = source)) +
+  facet_wrap(~area)
+
+ggplot(hist_bio, aes(x = length_cm*10)) +
+  geom_density(aes(colour = source)) +
+  facet_wrap(~mode)
 
