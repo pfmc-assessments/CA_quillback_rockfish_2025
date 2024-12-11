@@ -86,19 +86,19 @@ posteriors.sso
 rebuild.sso
 runnumber.ss
 SIS_table.sso
-ss.b0*
-ss.bar
-ss.ecm
-ss.eva
-ss.exe
-ss.exe
-ss.log
-ss.mc2
-ss.mcm
-ss.p0*
-ss.r0*
-ss.rep
-ss.std
+ss3.b0*
+ss3.bar
+ss3.ecm
+ss3.eva
+ss3.exe
+ss3.exe
+ss3.log
+ss3.mc2
+ss3.mcm
+ss3.p0*
+ss3.r0*
+ss3.rep
+ss3.std
 
 # rmarkdown / latex files
 *.aux
