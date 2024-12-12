@@ -22,7 +22,7 @@ library(gridExtra)
 
 #-----------------------------------------------------------------------------#
 # PacFIN Commercial - 1984-2023 Landings mtons
-load(here("data-raw", "PacFIN.QLBK.CompFT.26.Jul.2024.RData"))
+load(here("data-raw", "PacFIN.QLBK.CompFT.11.Dec.2024.RData"))
 catch = catch.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
 #Pull 2021 assessment values for comparison. These are pacFIN landings; no discards yet
@@ -171,8 +171,8 @@ aggCatch <- catch %>%
   dplyr::group_by(LANDING_YEAR) %>%
   dplyr::summarize(mtons = sum(LANDED_WEIGHT_MTONS)) %>%
   data.frame() %>% 
-  merge(., data.frame("LANDING_YEAR" = c(1984:2023)), by = "LANDING_YEAR", all = TRUE)
-#write.csv(aggCatch,here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
+  merge(., data.frame("LANDING_YEAR" = c(1984:2024)), by = "LANDING_YEAR", all = TRUE)
+#write.csv(aggCatch[aggCatch$LANDING_YEAR %in% c(1984:2023),], here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
 
 
 ################-
@@ -193,7 +193,7 @@ ggsave(here('data_explore_figs',"pacfin_landings.png"),
 plot(x = aggCatch$LANDING_YEAR, y = aggCatch$mtons, type = "l", lwd = 2, col = "black")
 lines(x = catch2021$year, y = catch2021$ca, lty = 1, col = "green", lwd= 2)
 plot((merge(aggCatch, catch2021, by.x = "LANDING_YEAR", by.y = "year") %>% 
-        dplyr::mutate("diff" = round(sum - ca, 3)))$diff, x = c(1984:2020))
+        dplyr::mutate("diff" = round(mtons - ca, 3)))$diff, x = c(1984:2020))
 
 
 #Plot by disposition
@@ -288,7 +288,7 @@ ggsave(here('data_explore_figs',"pacfin_landings_sector.png"),
 #-----------------------------------------------------------------------------#
 
 # PacFIN Commercial - 1978-2022
-load(here("data-raw", "PacFIN.QLBK.bds.26.Jul.2024.RData"))
+load(here("data-raw", "PacFIN.QLBK.bds.11.Dec.2024.RData"))
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
 ##############################################################################-
