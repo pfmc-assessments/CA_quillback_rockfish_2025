@@ -6,6 +6,7 @@
 ##########################################################################################
 #Alternative to devtools if it doesn't work on your machine
 #pak::pkg_install("pfmc-assessments/PEPtools")
+#pak::pkg_install("r4ss/r4ss") #Version 1.50.0
 
 #Load packages
 library(r4ss)
