@@ -123,7 +123,7 @@ SS_write(mod,
 tictoc::tic()
 r4ss::run(dir = here('models',new_name), 
           exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
+          #extras = '-nohess',
           show_in_console = TRUE, 
           skipfinished = FALSE)
 tictoc::toc()

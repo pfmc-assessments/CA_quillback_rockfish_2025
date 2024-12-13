@@ -1,6 +1,6 @@
 Note 1 Information: Max data length bin: 50  < max pop len bins: 58; so will accumulate larger pop len bins
 Warning 1 : 1st iteration warning: ssb(endyr)/ssb(styr)= 3.17894e-05; suggest start with larger R0 to get near 0.4; or use depletion fleet option
 Warning 2 : 1st iteration warning: catch logL > 50% total logL; check configuration; suggest start with larger R0
-Warning 3 : Final gradient: 4.19097e-05 is larger than final_conv: 1e-05
+Warning 3 : Final gradient: 1.97103e-05 is larger than final_conv: 1e-05
 Note 2 Information: A revised protocol for the Fcast_yr specification is available and recommended.
  3 warnings  and 2 notes 
