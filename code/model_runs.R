@@ -4,15 +4,20 @@
 #   By: Brian Langseth, Melissa Monk, Julia Coates
 #
 ##########################################################################################
+#Alternative to devtools if it doesn't work on your machine
+#pak::pkg_install("pfmc-assessments/PEPtools")
 
+#Load packages
 library(r4ss)
 library(PEPtools)
 library(here)
 library(dplyr)
 library(tictoc)
 
+
 ##########################################################################################-
-#                                 ---- TEMPLATE ----  
+#                                 ---- TEMPLATE ---- 
+#                                 ---- COPY ONLY --- 
 ##########################################################################################-
 
 #Use this structure to set up model runs below
@@ -75,6 +80,11 @@ SSsummarize(xx) |>
 
 dev.off()
 
+##########################################################################################-
+#                                 ---- END TEMPLATE ---- 
+##########################################################################################-
+
+
 
 ##########################################################################################-
 #                     ---- Set up from 2021 base to 2025 version ----
@@ -134,5 +144,7 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here('models', new_name))
 
 dev.off()
+
+
 
 
