@@ -329,7 +329,8 @@ table(bio$SEX_CODE) #mostly unsexed but quite a few with sexes
 table(bio$SAMPLE_YEAR, bio$SEX_CODE) #sexed really only since 2019
 table(bio$AGENCY_FISH_MATURITY_CODE) #some data here, likely not detailed enough
 table(bio$FINAL_FISH_AGE_CODE)
-table(bio$AGE_COUNT)
+table(bio$AGE_COUNT) #thirteen fish with double reads
+table(bio$FINAL_FISH_AGE_IN_YEARS)
 table(bio$AGENCY_GRADE_CODE, useNA = "always")
 table(bio$PACFIN_GRADE_NAME, useNA = "always")
 table(bio$PACFIN_GRADE_NAME, bio$PACFIN_CONDITION_CODE) #grade code doesn't
@@ -376,6 +377,7 @@ bio$source = "pacfin"
 out <- bio %>% dplyr::select("Year" = SAMPLE_YEAR,
                              "length_cm" = FISH_LENGTH,
                              "weight_kg" = FISH_WEIGHT, #No weights in PacFIN
+                             "age" = FINAL_FISH_AGE_IN_YEARS,
                              "sex" = SEX_CODE,
                              "area" = PACFIN_GROUP_PORT_CODE,
                              disp,
