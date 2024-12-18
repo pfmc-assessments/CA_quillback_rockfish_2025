@@ -13,6 +13,7 @@ library(here)
 library(ggplot2)
 library(magrittr)
 #devtools::install_github("pfmc-assessments/PacFIN.Utilities")
+#pak::pkg_install("pfmc-assessments/PacFIN.Utilities")
 library(PacFIN.Utilities)
 library(gridExtra)
 library(readxl)
@@ -32,12 +33,13 @@ ca_rec = read.csv(here("data-raw","RecFIN-CTE001-California-quillback-1990---202
 
 #Pull 2021 assessment values for comparison. These are recFIN landings + discards
 dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/output catch"
+#dir = "T:/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/output catch"  #Melissa's path
 catch_recfin_2021 = read.csv(file.path(dir,"recreational_catch_by_area_model_Feb2021.csv"), header = T) %>%
   dplyr::select(c("Year","CA_mort_mt"))
 
 
 ########################-
-## Explore the data ----
+# Explore the data ----
 ########################-
 
 #Looking across fields to see if anything is odd
@@ -231,6 +233,7 @@ ca_mrfss = read.csv(here("data-raw","MRFSS-CTE510-California-quillback-1980---20
 
 #Pull 2021 assessment values for comparison. These are recFIN landings + discards
 dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/output catch"
+#dir = "T:/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/output catch"  #Melissa's path
 catch_mrfss_2021 = read.csv(file.path(dir,"quillback_ca_mrfss_total_motalityMT.csv"), header = T) %>%
   dplyr::select(c("Year","North", "South"))
 catch_mrfss_2021$total_mt <- catch_mrfss_2021$North + catch_mrfss_2021$South
@@ -269,12 +272,14 @@ table(ca_mrfss$TSPCLAIM, useNA = "always")
 table(ca_mrfss$ESTHARV, useNA = "always") #Estimate of B1
 table(ca_mrfss$ESTCLAIM, useNA = "always") #Estimate of A
 table(ca_mrfss$SURVEY, useNA = "always") #What is PCPS? Not in metadata  <- TO DO: FOLLOW UP
+#Melissa: PCPS is the Party Charter Phone Survey used to estimate CPFV effort; surveys CPFV operators
+#88 blanks in the survey type? What are these?
 #What are these flags?  <- TO DO: FOLLOW UP
 table(ca_mrfss$OUTFLG, useNA = "always") 
 table(ca_mrfss$POOL_FLG, useNA = "always")
 table(ca_mrfss$EX_FLG, useNA = "always")
 table(ca_mrfss$FLAG_WGT, useNA = "always")
-
+#Melissa: weight flag: blank - real weight or weight missing; 0 = real 0; should be alphabetic. I don't have a definition for X
 #Plot the various catch amounts
 plot(ca_mrfss$WGT_AB1, ca_mrfss$TOT_CAT) #these are not the same
 abline(0,1)
@@ -1173,3 +1178,8 @@ ggplot(hist_bio, aes(x = length_cm*10)) +
   geom_density(aes(colour = source)) +
   facet_wrap(~mode)
 
+########################-
+# Geibel and Collier 1992-1998 ----
+########################-
+
+#Load the data
