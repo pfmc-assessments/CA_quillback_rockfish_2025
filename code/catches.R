@@ -101,3 +101,17 @@ proxy2020 <- sum(read_excel(here("data-raw", "CDFWRec_QuillbackRF_AvgProxyValues
 ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR == 2020, c("tot_mt", "land_mt")] <- 
   ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR == 2020, c("tot_mt", "land_mt")] + proxy2020
 
+# Add the 2020 and 2021 unallocated rockfish genus catch assigned to quillback. 
+# Values pulled from github on Dec 17, 2024 from
+# https://github.com/pfmc-assessments/california-data/blob/main/recreational-fishery/proxy%202020%20data/genus_allocate_quillback_20241205.csv
+# Add allocated values (2020 for PR and PC, 2021 for PC only) to those that already exist in recfin 
+# Because have no discards in 2020 or 2021, add allocated values to both landings and total mortality
+update2020_21 <- utils::read.csv(file = here("data-raw", "genus_allocate_quillback_20241205.csv"), header = TRUE)
+alloc_val <- update2020_21 %>% dplyr::group_by(year, mode, orig_allocated) %>% 
+  dplyr::summarize(sum = sum(quillback_kg) * 0.001) #0.001 to get into MT
+ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2020),][,c("tot_mt", "land_mt")] <- 
+  ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2020),][,c("tot_mt", "land_mt")] + 
+  sum(alloc_val[alloc_val$year == 2020 & alloc_val$orig_allocated == "allocated",]$sum)
+ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2021),][,c("tot_mt", "land_mt")] <- 
+  ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2021),][,c("tot_mt", "land_mt")] + 
+  alloc_val[alloc_val$year == 2021 & alloc_val$orig_allocated == "allocated",]$sum
