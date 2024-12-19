@@ -432,6 +432,7 @@ plot(ca_bio_rec$AGENCY_LENGTH) #there appear to be some outliers....
 plot(ca_bio_rec$RECFIN_LENGTH_MM) 
 plot(ca_bio_rec$AGENCY_LENGTH - ca_bio_rec$RECFIN_LENGTH_MM) #...but these are in mm
 ca_bio_rec %>% dplyr::filter(AGENCY_LENGTH_UNITS == "M") #I guess M means mm
+#Melissa: M = missing is what it shoudl be, but looks to be the measurements of discarded fish 
 ca_bio_rec %>% dplyr::filter(RECFIN_LENGTH_MM > 600)
 
 #There are three fish outside the max: 999, 804, and 640. Of these, the 804 fish
@@ -446,6 +447,8 @@ plot(ca_bio_rec$RECFIN_LENGTH_MM, ca_bio_rec$AGENCY_WEIGHT)
 #Overall if use weight from recfin data, we should exclude these large weights that 
 #seem like they are pounds instead of kg, and any measured weights with more than 2 digits
 #of precision
+#Melissa: the weights will not be as accurate as fishery surveys; I would not recommend using weights from the onboard CPFV
+#samples due to the inabaility to accurately weigh fish on a moving vessel
 
 #There does not appear to be any differences in the type of length measurement 
 #so assume all are fork length. 
@@ -1183,3 +1186,88 @@ ggplot(hist_bio, aes(x = length_cm*10)) +
 ########################-
 
 #Load the data
+geicol_bio <- data.frame(read.csv(here("data-raw", "Geibel_Collier_qlbk_lengths.csv")))
+
+
+#Check variables
+table(geicol_bio$YEAR)
+table(geicol_bio$DAY)
+table(geicol_bio$MONTH)
+table(geicol_bio$PORTNAME)
+table(geicol_bio$COUNTY)
+table(geicol_bio$LENGTH)
+
+
+#Simplify variables
+geicol_bio$length_cm <- geicol_bio$LENGTH/10
+geicol_bio$weight_kg <- NA
+
+#Replace port with district - all from Redwood
+geicol_bio$area <- "Redwood"
+
+#all PR                                  
+geicol_bio$mode <- "PR"
+geicol_bio$sex <- "U"
+geicol_bio$disp <- "RETAINED"
+geicol_bio$source <- "GeiCol"
+
+#Get the number of trips from a combo of variables
+#There is no realy way to match the effort data to lengths from the same trip
+#Fish on the same day and port could be from the same trip or not...
+geicol_bio %>% dplyr::count(YEAR, MONTH, DAY, PORT)
+
+geicol_bio %>% dplyr::count(PORTNAME)
+
+#rename month
+geicol_bio$Month = geicol_bio$MONTH
+
+out_geicol <- geicol_bio %>% dplyr::select("Year" = YEAR,
+                                           Month,
+                                           length_cm,
+                                           weight_kg,
+                                           sex,
+                                           area,
+                                           mode,
+                                           disp,
+                                           source)
+#write.csv(out_geicol), here("data","CAquillback_historical_bio_skiff.csv"), row.names = FALSE)
+#Melissa - can merge this with other data if you'd like
+
+#################-
+## Plotting of Giebel and Collier's data----
+#################-
+
+#Lengths similar over time
+ggplot(out_geicol, aes(y = length_cm*10, x = Year)) +
+  geom_point(colour = "#00BFC4")
+
+##
+#By mode
+## 
+
+#Smaller fish in 1998. Other yeas fairly consistent
+ggplot(out_geicol, aes(y = length_cm*10, x = as.factor(Year))) +
+  geom_violin(aes(fill = as.factor(Year))) 
+
+#Using a density figure for year - all fairly similar
+ggplot(out_geicol, aes(x = length_cm*10)) +
+  geom_density(aes(color = as.factor(Year))) 
+
+
+##
+#By Port
+##
+
+ggplot(geicol_bio, aes(y = length_cm*10, x = YEAR, color = PORTNAME)) +
+  geom_point() +
+  labs(color = "Port")
+
+ggplot(geicol_bio, aes(color = PORTNAME, y = length_cm*10, x = as.factor(YEAR))) +
+  geom_point() + 
+  facet_wrap(~PORTNAME) +
+  labs(color = "District")
+
+#Density plots show slightly larger fish in Crescent City 
+#Its strange that the lenght and effort data have different port codings
+ggplot(geicol_bio, aes(x = length_cm*10)) +
+  geom_density(aes(colour = PORTNAME))
