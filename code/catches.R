@@ -44,6 +44,35 @@ ca_com_hist1 <- read.csv(here("data-raw", "ca_hist_commercial_1916_1968_ej_Feb20
 # In csv they are aggregated into time series by area. We are unlikely to break out by gear in model. 
 ca_com_hist2 <- read.csv(here("data-raw", "ca_hist_commercial_1969_1980_ej.csv"))
 
+#Convert lbs to MT
+ca_com_hist2$QLBKmt <- ca_com_hist2$Grand.Total/2204.62 
+
+
+##
+#Plot the data
+##
+
+ggplot(ca_com_hist, aes(y = QLBKmt, x = Year)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Landings (MT)") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  geom_vline(xintercept = 1968.5, linetype = "dashed")
+ggsave(here('data_explore_figs',"hist_com_landings.png"),
+       width = 6, height = 4)
+
+#Scaled to match scale of pacfin landings
+ggplot(ca_com_hist, aes(y = QLBKmt, x = Year)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Landings (MT)") +
+  ylim(0,50) +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  geom_vline(xintercept = 1968.5, linetype = "dashed")
+ggsave(here('data_explore_figs',"hist_com_landings_scaled.png"),
+       width = 6, height = 4)
+
+
 
 ###
 # PacFIN landings ----
@@ -82,6 +111,7 @@ lines(ca_rec_hist$Year, ca_rec_hist$QLBKmt_pc, lwd = 3, col = "green")
 legend("topleft", c("CPFV", "Skiff/Shore"), col = c(3, 1), lty = 1, lwd = 3, bty = "n")
 
 
+
 ###
 # RecFIN/MRFSS landings ----
 ###
@@ -115,3 +145,73 @@ ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2020),][,c("tot_mt", "land_mt")] 
 ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2021),][,c("tot_mt", "land_mt")] <- 
   ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2021),][,c("tot_mt", "land_mt")] + 
   alloc_val[alloc_val$year == 2021 & alloc_val$orig_allocated == "allocated",]$sum
+
+
+#---------------------------------------------------------------------------------------------------------------#
+
+# Combine data into single overall catch data frame and output ----
+
+#---------------------------------------------------------------------------------------------------------------#
+
+##
+#Create new data frame
+##
+
+ca_catch <- data.frame("Year" = 1916:2024)
+ca_catch$com_tot <- NA
+ca_catch$com_lan <- NA
+ca_catch$com_dis <- NA
+ca_catch$rec_tot <- NA
+ca_catch$rec_lan <- NA
+ca_catch$rec_dis <- NA
+
+
+##
+#Add historical commercial data
+##
+
+ca_com_hist <- rbind(ca_com_hist1, ca_com_hist2[c("Year","QLBKmt")])
+ca_catch[ca_catch$Year %in% ca_com_hist$Year, "com_lan"] <- ca_com_hist$QLBKmt
+
+
+##
+#Add pacfin data
+##
+
+ca_catch[ca_catch$Year %in% ca_pacfin$LANDING_YEAR, "com_lan"] <- ca_pacfin$mtons
+
+
+##
+#Add historical recreational data
+##
+
+ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_lan"] <- ca_rec_hist$QLBKmt
+
+
+##
+#Add MRFSS data
+##
+
+#Do not add 1980 MRFSS value. Use the estimate from the historical reconstruction instead
+ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), "rec_tot"] <- 
+  ca_rec_mrfss[!(ca_rec_mrfss$YEAR %in% 1980),]$tot_mt
+
+
+##
+#Add RecFIN data
+##
+
+ca_catch[ca_catch$Year %in% ca_rec_recfin$RECFIN_YEAR, c("rec_tot", "rec_lan", "rec_dis")] <- 
+  ca_rec_recfin[, c("tot_mt", "land_mt", "dis_mt")]
+
+
+##
+#Output final total removals file
+##
+
+#write.csv(round(ca_catch,3), file = file.path(here("data", "CAquillback_total_removals.csv")), row.names = FALSE)
+
+
+
+
+
