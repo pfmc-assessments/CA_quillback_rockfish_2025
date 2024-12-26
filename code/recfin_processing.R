@@ -513,8 +513,9 @@ round(test$AGENCY_WEIGHT,4) - test$RECFIN_IMPUTED_WEIGHT_KG
 
 #Output basic bio data for later use for analysis and comps
 ca_bio_rec$source <- "recfin"
+ca_bio_rec$length_cm <- ca_bio_rec$RECFIN_LENGTH_MM/10
 out_bio <- ca_bio_rec %>% dplyr::select("Year" = RECFIN_YEAR, 
-                                    "length_cm" = RECFIN_LENGTH_MM,
+                                    length_cm,
                                     "weight_kg" = AGENCY_WEIGHT,
                                     sex,
                                     area,
@@ -807,8 +808,9 @@ plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$wgt_flag ==
 
 #Output basic bio data for later use for analysis and comps
 ca_mrfss_bio$source <- "mrfss"
+ca_mrfss_bio$length_cm <- ca_mrfss_bio$LNGTH/10
 out_mrfss_bio <- ca_mrfss_bio %>% dplyr::select("Year" = YEAR, 
-                                        "length_cm" = LNGTH,
+                                        length_cm,
                                         "weight_kg" = WGT,
                                         sex,
                                         area,

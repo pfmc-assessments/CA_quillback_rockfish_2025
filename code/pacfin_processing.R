@@ -406,9 +406,10 @@ bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4B
 bio <- bio[which(!is.na(bio$FISH_LENGTH)),]
 
 #Output basic bio data for later use for analysis
-bio$source = "pacfin"
+bio$source <- "pacfin"
+bio$length_cm <- bio$FISH_LENGTH/10
 out <- bio %>% dplyr::select("Year" = SAMPLE_YEAR,
-                             "length_cm" = FISH_LENGTH,
+                             length_cm,
                              "weight_kg" = FISH_WEIGHT, #No weights in PacFIN
                              "age" = FINAL_FISH_AGE_IN_YEARS,
                              "sex" = SEX_CODE,
