@@ -2,7 +2,7 @@
 #
 # 	Purpose: Explore RecFIN/MRFSS quillback rockfish landings/discards 
 #            before putting into form for use in SS. Also to explore
-#            biological data
+#            biological data, including other recreational sources
 #
 #   Created: Oct 3, 2024
 #			  by Brian Langseth 
@@ -56,8 +56,11 @@ table(ca_rec$SPECIES_NAME, useNA = "always")
 #Discard mortality ratios are the same for num and mt
 plot(ca_rec$SUM_RELEASED_DEAD_NUM/ca_rec$SUM_RELEASED_ALIVE_NUM - 
        ca_rec$SUM_RELEASED_DEAD_MT/ca_rec$SUM_RELEASED_ALIVE_MT)
-#Discard mortality is generally < 5%
+#Discard mortality is generally < 5% 
 plot(ca_rec$SUM_RELEASED_DEAD_NUM/ca_rec$SUM_RELEASED_ALIVE_NUM)
+#...but this isn't an accurate measure of discard mortality RATE.
+#Want the amount of releases that are dead over the total releases
+plot(ca_rec$SUM_RELEASED_DEAD_NUM/(ca_rec$SUM_RELEASED_ALIVE_NUM + ca_rec$SUM_RELEASED_DEAD_NUM))
 
 
 ########################-
@@ -91,6 +94,7 @@ aggFleetYr <- ca_rec %>%
                    dis_mt = sum(SUM_RELEASED_DEAD_MT),
                    land_mt = sum(SUM_RETAINED_MT)) %>%
   data.frame()
+aggFleetYr$YEAR <- aggFleetYr$RECFIN_YEAR
 
 #Break out by district
 aggDist <- ca_rec %>%
@@ -367,6 +371,16 @@ ggplot(aggFleetYr_mrfss, aes(y = tot_mt, x = YEAR)) +
   ylab("Total mortality (MT)") +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"mrfss_mortality_fleet.png"),
+       width = 6, height = 4)
+
+# Plotting MRFSS and RecFIN catches together combined by fleet
+aggFleetYr_comb <- rbind(aggFleetYr_mrfss, aggFleetYr[,c("mode", "YEAR", "tot_mt")])
+ggplot(aggFleetYr_comb, aes(y = tot_mt, x = YEAR)) +
+  geom_bar(position = "stack", stat = "identity", aes(fill = mode)) +
+  xlab("Year") +
+  ylab("Total mortality (MT)") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"rec_comb_mortality_fleet.png"),
        width = 6, height = 4)
 
 
@@ -1112,7 +1126,7 @@ out_milgei <- milgei_bio %>% dplyr::select("Year" = YEAR,
 
 
 #################-
-## Plotting of Miller and G*s----
+### Plotting of Miller and G*s----
 #################-
 
 hist_bio <- rbind(out_milgot, out_milgei)
@@ -1181,8 +1195,9 @@ ggplot(hist_bio, aes(x = length_cm*10)) +
   geom_density(aes(colour = source)) +
   facet_wrap(~mode)
 
+
 ########################-
-# Geibel and Collier 1992-1998 ----
+## Geibel and Collier 1992-1998 ----
 ########################-
 
 #Load the data
@@ -1233,8 +1248,9 @@ out_geicol <- geicol_bio %>% dplyr::select("Year" = YEAR,
 #write.csv(out_geicol), here("data","CAquillback_historical_bio_skiff.csv"), row.names = FALSE)
 #Melissa - can merge this with other data if you'd like
 
+
 #################-
-## Plotting of Giebel and Collier's data----
+### Plotting of Giebel and Collier's data----
 #################-
 
 #Lengths similar over time
