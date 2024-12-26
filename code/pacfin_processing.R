@@ -119,6 +119,26 @@ aggGearDealer <- catch %>%
   dplyr::summarize(N = length(unique(DEALER_ID))) %>%  
   data.frame()
 
+#If break down by Gear Code, not Gear Group Code. 
+#Gear group code  is what expansions are based on, but doing this by gear
+#to get a sense of approximate possible breakdown. 
+aggGear2 <- catch %>% 
+  dplyr::group_by(PACFIN_GEAR_CODE, LANDING_YEAR) %>% 
+  dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
+  data.frame()
+aggGearN2 <- catch %>% 
+  dplyr::group_by(PACFIN_GEAR_CODE, LANDING_YEAR) %>% 
+  dplyr::summarize(N = length(unique(VESSEL_NAME))) %>% 
+  data.frame()
+aggGearID2 <- catch %>% 
+  dplyr::group_by(PACFIN_GEAR_CODE, LANDING_YEAR) %>% 
+  dplyr::summarize(N = length(unique(VESSEL_ID))) %>% 
+  data.frame()
+aggGearDealer2 <- catch %>% 
+  dplyr::group_by(PACFIN_GEAR_CODE, LANDING_YEAR) %>% 
+  dplyr::summarize(N = length(unique(DEALER_ID))) %>%  
+  data.frame()
+
 
 #Aggregate into port groups
 
@@ -211,7 +231,7 @@ ggsave(here('data_explore_figs',"pacfin_landings_disp.png"),
        width = 6, height = 4)
 
 
-#Plot by gear
+#Plot by gear (really gear group)
 #Filter out records (by gear) that have fewer than 3 dealers which is most restrictive
 #Not informative
 dontShow = unique(c(which(aggGearDealer$N<3)))
@@ -223,6 +243,17 @@ ggplot(aggGear[-dontShow,], aes(fill = PACFIN_GROUP_GEAR_CODE, y = sum, x = LAND
   ggtitle("PacFIN landings of quillback by gear - Filtered for confidentiality") + 
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"pacfin_landings_gear.png"),
+       width = 6, height = 4)
+
+#Now by more refined gear (but not what expansion is based on) category
+dontShow = unique(c(which(aggGearDealer2$N<3)))
+ggplot(aggGear2[-dontShow,], aes(fill = PACFIN_GEAR_CODE, y = sum, x = LANDING_YEAR)) + 
+  geom_bar(position="stack", stat="identity") +
+  xlab("Year") +
+  ylab("Landings (MT)") + 
+  ggtitle("PacFIN landings of quillback by gear - Filtered for confidentiality") + 
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"pacfin_landings_gear_FOR_EXPLORE_ONLY.png"),
        width = 6, height = 4)
 
 
@@ -242,25 +273,27 @@ ggsave(here('data_explore_figs',"pacfin_landings_port_group.png"),
 #and now port by year
 dontShow = c(which(aggPortYearN$N<3))
 
-ggplot(aggPortYear[-dontShow,], aes(group = PACFIN_GROUP_PORT_CODE, x = LANDING_YEAR, y = sum)) + 
-  geom_line(aes(colour = PACFIN_GROUP_PORT_CODE)) + 
+ggplot(aggPortYear[-dontShow,], aes(fill = PACFIN_GROUP_PORT_CODE, x = LANDING_YEAR, y = sum)) + 
+  geom_bar(position = "stack", stat = "identity") + 
   xlab("Year") +
   ylab("Landings (MT)") + 
   ggtitle("PacFIN landings of quillback by port group and year - Filtered for confidentiality") + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  labs(fill = "Port")
 ggsave(here('data_explore_figs',"pacfin_landings_port_group_year.png"),
        width = 6, height = 4)
 
 #and now by port by year and disposition
 dontShow = c(which(aggPortDispN$N<3))
 
-ggplot(aggPortDisp[-dontShow,], aes(group = PACFIN_GROUP_PORT_CODE, x = LANDING_YEAR, y = sum)) + 
-  geom_line(aes(colour = PACFIN_GROUP_PORT_CODE)) + 
+ggplot(aggPortDisp[-dontShow,], aes(fill = PACFIN_GROUP_PORT_CODE, x = LANDING_YEAR, y = sum)) + 
+  geom_bar(position = "stack", stat = "identity") + 
   xlab("Year") +
   ylab("Landings (MT)") +
   facet_wrap(~ disp) +
   ggtitle("PacFIN landings of quillback by port group, disposition, and year \nFiltered for confidentiality") + 
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  labs(fill = "Port")
 ggsave(here('data_explore_figs',"pacfin_landings_port_group_disp_year.png"),
        width = 6, height = 4)
 
