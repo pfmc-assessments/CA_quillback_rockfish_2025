@@ -39,7 +39,7 @@ catch_recfin_2021 = read.csv(file.path(dir,"recreational_catch_by_area_model_Feb
 
 
 ########################-
-# Explore the data ----
+## Explore the data ----
 ########################-
 
 #Looking across fields to see if anything is odd
@@ -405,15 +405,14 @@ ggplot(aggAreaYr_mrfss, aes(y = tot_mt, x = YEAR)) +
 ##
 
 # RecFIN Recreational - 2004-2023
-ca_bio_rec = read.csv(here("data-raw","RecFIN-SD001-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
+ca_bio_rec = read.csv(here("data-raw","RecFIN-SD501-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
 
-# If pull the confidential data (SD501) have five additional fields, though the last is blank
+# If pull the nonconfidential data (SD001) lose five fields, though the last is blank
 # [1] "RECFIN_DATE"      "COUNTY_NUMBER"    "INTERVIEW_SITE"  
 # [4] "INTERVIEW_TIME"   "CPFV_LOCATION_ID"
-# Seems like the conf data is not needed
-#ca_bio_recfin_conf = read.csv(here("data-raw","RecFIN-SD501-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
-#colnames(ca_bio_recfin_conf)[!(colnames(ca_bio_recfin_conf) %in% colnames(ca_bio_recfin))]
-
+# Seems like the conf data is not needed, however we do need it to determine unique trips, so keep
+#ca_bio_rec_noconf = read.csv(here("data-raw","RecFIN-SD001-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
+#colnames(ca_bio_rec)[!(colnames(ca_bio_rec) %in% colnames(ca_bio_rec_noconf))]
 
 
 ########################-
@@ -440,13 +439,15 @@ table(ca_bio_rec$IS_RETAINED, ca_bio_rec$AGENCY_WEIGHT_UNITS, useNA = "always") 
 table(ca_bio_rec$SOURCE_CODE)
 table(ca_bio_rec$SOURCE_CODE, ca_bio_rec$IS_RETAINED) #those released were from CPFV boats
 table(ca_bio_rec$CAUGHT_BY_OBSERVED_ANGLER) #yet those CPFV boats were not observed
+table(ca_bio_rec$COUNTY_NUMBER, useNA = "always") #22 without a county number
+table(ca_bio_rec$INTERVIEW_SITE, useNA = "always") #37 without interview site
 
 #Check length units
 plot(ca_bio_rec$AGENCY_LENGTH) #there appear to be some outliers....
 plot(ca_bio_rec$RECFIN_LENGTH_MM) 
 plot(ca_bio_rec$AGENCY_LENGTH - ca_bio_rec$RECFIN_LENGTH_MM) #...but these are in mm
 ca_bio_rec %>% dplyr::filter(AGENCY_LENGTH_UNITS == "M") #I guess M means mm
-#Melissa: M = missing is what it shoudl be, but looks to be the measurements of discarded fish 
+#Melissa: M = missing is what it should be, but looks to be the measurements of discarded fish 
 ca_bio_rec %>% dplyr::filter(RECFIN_LENGTH_MM > 600)
 
 #There are three fish outside the max: 999, 804, and 640. Of these, the 804 fish
@@ -498,6 +499,7 @@ ca_bio_rec$sex <- "U"
 
 #From explorations remove any lengths above 600 (this removes three fish: 640, 804, and 999)
 #These are flagged within recfin as not being within max
+#Also removes 1 fish with NA length
 ca_bio_rec <- ca_bio_rec[which(ca_bio_rec$RECFIN_LENGTH_MM < 600), ]
 
 #Set AGENCY_WEIGHT to NA if they are > 4 kg or come from the imputed weight 
@@ -511,6 +513,16 @@ test <- ca_bio_rec[which(nchar(sub('.*\\.', '', ca_bio_rec$AGENCY_WEIGHT)) > 2),
 round(test$AGENCY_WEIGHT,4) - test$RECFIN_IMPUTED_WEIGHT_KG
 #Of these, none have the same agency weight as imputed weight. So keep all
 
+#Trip
+#Following the approach as was used for copper rockfish and canary rockfish in 2023
+#See discussion#34 - https://github.com/pfmc-assessments/CA_quillback_rockfish_2025/discussions/34
+#Can remove numeric identifier if no issue with confidentiality
+ca_bio_rec$tripID <- as.integer(as.factor(
+  paste0(ca_bio_rec$RECFIN_DATE, ca_bio_rec$COUNTY_NUMBER, 
+         ca_bio_rec$INTERVIEW_SITE, ca_bio_rec$AGENCY_WATER_AREA_NAME, 
+         ca_bio_rec$mode)
+  ))
+
 #Output basic bio data for later use for analysis and comps
 ca_bio_rec$source <- "recfin"
 ca_bio_rec$length_cm <- ca_bio_rec$RECFIN_LENGTH_MM/10
@@ -522,7 +534,8 @@ out_bio <- ca_bio_rec %>% dplyr::select("Year" = RECFIN_YEAR,
                                     mode,
                                     "disp" = IS_RETAINED,
                                     source,
-                                    SOURCE_CODE)
+                                    SOURCE_CODE,
+                                    tripID)
 #write.csv(out_bio, here("data","CAquillback_rec_bio.csv"), row.names = FALSE)
 
 
@@ -805,6 +818,16 @@ plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$lngth_flag)
 plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$wgt_flag))
 plot(ca_mrfss_bio$WGT, ca_mrfss_bio$LNGTH, col = factor(ca_mrfss_bio$wgt_flag == "measured" & ca_mrfss_bio$lngth_flag  == "measured"))
 
+#Trip
+#Following the approach as was used for copper rockfish and canary rockfish in 2023 but
+#since the number of trips is the same as when just using ID_CODE, just use ID_CODE 
+#See discussion#34 - https://github.com/pfmc-assessments/CA_quillback_rockfish_2025/discussions/34
+#Can remove numeric identifier if no issue with confidentiality
+length(unique(ca_mrfss_bio$ID_CODE))
+length(unique(paste0(ca_mrfss_bio$YEAR, ca_mrfss_bio$ID_CODE, ca_mrfss_bio$INTSITE,
+                     ca_mrfss_bio$AREA_X, ca_mrfss_bio$MODE_FX)))
+ca_mrfss_bio$tripID <- as.integer(as.factor(ca_mrfss_bio$ID_CODE))
+
 
 #Output basic bio data for later use for analysis and comps
 ca_mrfss_bio$source <- "mrfss"
@@ -818,7 +841,8 @@ out_mrfss_bio <- ca_mrfss_bio %>% dplyr::select("Year" = YEAR,
                                         disp,
                                         lngth_flag,
                                         wgt_flag,
-                                        source)
+                                        source,
+                                        tripID)
 #write.csv(out_mrfss_bio, here("data","CAquillback_mrfss_bio.csv"), row.names = FALSE)
 
 
@@ -912,23 +936,60 @@ ggsave(here('data_explore_figs',"mrfss_weight_area_density.png"),
 ## Deb Wilson-Vandenberg dataset 1987-1998 ----
 ########################-
 
-#To see if duplicates exist in 1997 and 1998 and process data
-#Copper rockfish 2023 assessment replaced 1997 and 1998 MRFSS PC data with Deb's samples
-#However, deb's samples are total length so need to do conversions to FL
+# Pull 2021 assessment file for deb length data.
+#dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/postSSC_request_data"
+#deb_bio = data.frame(read_excel(file.path(dir,"Quillback Rockfish Length Data from Central California Onboard Sampling_Jul12_2021.xlsx"), sheet = "Sheet1"))
 
-#Pull 2021 assessment file for deb length data.
-dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/postSSC_request_data"
-deb_bio = data.frame(read_excel(file.path(dir,"Quillback Rockfish Length Data from Central California Onboard Sampling_Jul12_2021.xlsx"), sheet = "Sheet1"))
+# This file was provided by CDFW in 2021 but does not have trip specific information. 
+# For the 2021 assessment we assumed number of fish per year equaled number of trips. 
+# The original data has trip info though so we should use that.
+
+# #--------------COMMENTING THIS SECTION OUT. USED R-32BIT TO PULL AND SAVE AS A CSV----------#
+#
+# #HAVE TO USE R-32BIT VERSION though and
+# #these files are confidential, so access is restricted.
+# #To avoid recopying the data, pull it from an existing location
+# 
+# library(RODBC)
+# 
+# if(Sys.getenv("USERNAME") == "Brian.Langseth") {
+#   deb_dir <- "//nwcfile.nmfs.local/Home/Brian.Langseth/Stock assessments/lingcod_2021/Lingcod_2021"
+#   save_dir <- "//nwcfile.nmfs.local/Home/Brian.Langseth/Stock assessments/CA_quillback_rockfish_2025"
+#   }
+# 
+# deb <- file.path(deb_dir, "data-raw", "CPFV-Onboard Data.mdb")
+# conDeb <- odbcConnectAccess(deb)
+# RODBC::sqlTables(conDeb)
+# deb.trip <- RODBC::sqlFetch(conDeb, "AllTrp")
+# deb.len <- RODBC::sqlFetch(conDeb, "Length")
+# deb.spc <- RODBC::sqlFetch(conDeb, "SppCode_4_Digit")
+# deb.port <- RODBC::sqlFetch(conDeb, "Port_Cmplx")
+# RODBC::odbcCloseAll()
+# 
+# #Add trip numbers and species names and county names. 
+# #Save as csv so dont have to deal with RODBC again
+# deb.data1 <- merge(deb.len, deb.trip, by = "TRIPNOSAMP")
+# deb.data2 <- merge(deb.data1, deb.spc, by = "SP")
+# deb.data3 <- merge(deb.data2, deb.port[,c("PORT", "PORTNAME", "COUNTY", "PORTCPLX")], by = "PORT")
+# #write.csv(deb.data3, file.path(save_dir, "data-raw", "debWV_lengths_AllSpecies.csv"), row.names = FALSE)
+#
+# #--------------END OF COMMENTED SECTION--------------#
+
+## Load and process deb data with quillback only
+
+deb_bio <- read.csv(here("data-raw", "debWV_lengths_AllSpecies.csv"), header = T) %>%
+  dplyr::filter(COMMON == "Quillback rockfish")
+
 table(deb_bio$FATE, useNA = "always")
 table(deb_bio$LANDING, useNA = "always")
 table(deb_bio$PORTNAME, useNA = "always")
 table(deb_bio$COUNTY, useNA = "always")
 
-#Assign County to codes in Deb's data to district from the lookup table. 
+#Assign Countys in Deb's data to district from the lookup table. 
 #Have to load two worksheets from the lookup table:
 #First to get the county number, second to assign county number to district.
-#Although county 23 (Humboldt) has one INTSITE that is assigned to Wine, Deb's data doesn't have that
-#level of detail, so assign all Humboldt samples to Redwood.
+#Although county 23 (Humboldt) has one INTSITE that is assigned to Wine, the port is Eureka
+#which is Redwood
 cty_lookup <- data.frame(read_excel(here("data-raw", "st_sub_reg_cnty_int_site_lookup_20200914.xlsx"), 
                                 sheet = "CNTY")) %>% dplyr::filter(ST == 6)
 lookup <- data.frame(read_excel(here("data-raw", "st_sub_reg_cnty_int_site_lookup_20200914.xlsx"), 
@@ -943,71 +1004,78 @@ deb_bio$area <- dplyr::case_when(deb_bio$cnty %in% unique(lookup[which(lookup$DI
                                  deb_bio$cnty %in% unique(lookup[which(lookup$DISTRICT_NUMBER == 5), "CNTY"]) ~ "Wine",
                                  TRUE ~ NA)
 
-#Simplify variables
-deb_bio$disp = "RETAINED" #all are "K" which is retained
-deb_bio$source = "Deb"
-deb_bio$length_cm = deb_bio$TL/10 #because in mm
-deb_bio$sex = "U"
-deb_bio$Year = as.numeric(deb_bio$Year)
-deb_bio$mode = "PC"
-deb_bio$weight_kg = NA
+## Simplify variables
+
+table(deb_bio$FATE) #all kept
+deb_bio$disp <- "RETAINED"
+deb_bio$source <- "deb"
+deb_bio$sex <- "U"
+deb_bio$mode <- "PC"
+deb_bio$weight_kg <- NA
+
+deb_bio$length_cm <- (9.075 + 0.965*deb_bio$TL)/10 #get to FL. From echeverria and lenarz 1984
+plot(deb_bio$length_cm-deb_bio$TL/10)
 
 
-##
-#Check for duplicates
-##
-dups1 <- ca_mrfss_bio %>% dplyr::filter(YEAR %in% c(1997:1998), mode == "PC")
-dups1$Month <- substr(dups1$ID_CODE, 10,11)
-dups1$Day <- substr(dups1$ID_CODE, 12,13)
-dups1 <- dups1 %>% dplyr::select(YEAR, Month, Day, T_LEN, LNGTH, CNTY)
-
-dups2 <- deb_bio %>% dplyr::filter(Year %in%  c(1997:1998)) %>% 
-  dplyr::select(Year, Month, Day, TL, cnty)
-
-#Plot lengths by day for each dataset 
-plot(dups1$Day, dups1$T_LEN) #MRFSS
-points(dups2$Day, dups2$TL, col = 2) #Deb data
-#There are some data that are different. These appear to be ones where T_LEN was not measured
-plot(dups1$Day, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN that are integers
-points(dups2$Day, dups2$TL, col = 2) #Deb data 
-
-#Combine to determine how many are duplicated
-dups1b <- dups1[which(dups1$T_LEN %% 1 == 0),] %>% 
-  dplyr::select(YEAR, Month, Day, T_LEN, CNTY) %>%
-  dplyr::rename(., Year = "YEAR", TL = "T_LEN", "cnty" = CNTY)
-dups1b$source = "mrfss"
-dups2$source = "deb"
-comb <- rbind(dups1b, dups2)
-test <- comb[order(comb$Year, comb$Month, comb$Day, comb$TL),]
-#There are four data points in deb that aren't in mrfss
-#      Year Month Day  TL cnty source
-# 123  1997    03  23 308   97    deb
-# 510  1997    04  19 302   97    deb
-# 610  1997    05  26 337   97    deb
-# 65   1998    04  11 260   97  mrfss
-# 74   1998    04  18 260   13    deb
-plot(dups2$Day, dups2$TL, col = 2) #Deb data 
-points(dups1$Day, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN that are integers
-
-#Check conversions from TL to FL within duplicated MRFSS data
-dups1$convertFL <- 9.075 + dups1$T_LEN*0.965
-plot(dups1$convertFL - dups1$LNGTH) #doesnt match up perfectly
-
-##
-#Output basic bio data for later use for analysis and comps
-##
-
-out_deb <- deb_bio %>% dplyr::select(Year,
+## Output basic bio data for later use for analysis and comps
+out_deb <- deb_bio %>% dplyr::select("Year" = YEAR,
                                      length_cm,
                                      weight_kg,
                                      sex,
                                      area,
                                      mode,
                                      disp,
-                                     source)
-out_deb$length_cm <-  9.075 + out_deb$length_cm * 0.965 #convert to FL based on Echeverria and Lenarz 1984
+                                     source,
+                                     "tripID" = AllTRPID)
 
 #write.csv(out_deb, here("data","CAquillback_deb_bio.csv"), row.names = FALSE)
+
+
+## Check for duplicates of MRFSS data
+
+dups1 <- ca_mrfss_bio %>% dplyr::filter(YEAR %in% c(1997:1998), mode == "PC")
+dups1$MONTH <- as.integer(substr(dups1$ID_CODE, 10,11))
+dups1$DAY <- as.integer(substr(dups1$ID_CODE, 12,13))
+dups1 <- dups1 %>% dplyr::select(YEAR, MONTH, DAY, T_LEN, LNGTH, CNTY)
+
+dups2 <- deb_bio %>% dplyr::filter(YEAR %in%  c(1997:1998)) %>% 
+  dplyr::select(YEAR, MONTH, DAY, TL, cnty)
+
+#Plot lengths by day for each dataset 
+plot(dups1$DAY, dups1$T_LEN) #MRFSS
+points(dups2$DAY, dups2$TL, col = 2) #Deb data
+#There are some data that are different. These appear to be ones where T_LEN was not measured
+plot(dups1$DAY, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN that are integers
+points(dups2$DAY, dups2$TL, col = 2) #Deb data 
+
+#Combine to determine how many are duplicated
+dups1b <- dups1[which(dups1$T_LEN %% 1 == 0),] %>% 
+  dplyr::select(YEAR, MONTH, DAY, T_LEN, CNTY) %>%
+  dplyr::rename(., TL = "T_LEN", "cnty" = CNTY)
+dups1b$source = "mrfss"
+dups2$source = "deb"
+comb <- rbind(dups1b, dups2)
+test <- comb[order(comb$YEAR, comb$MONTH, comb$DAY, comb$TL),]
+#There are four data points in deb that aren't in mrfss
+#The last one matches the length of a single data point in mrfss that isn't duplicated
+#My gess is that the day is different but that this fish is the same
+#      Year Month Day  TL cnty source
+# 123  1997    03  23 308   97    deb
+# 510  1997    04  19 302   97    deb
+# 610  1997    05  26 337   97    deb
+# 65   1998    04  11 260   97  mrfss
+# 74   1998    04  18 260   13    deb
+plot(dups2$DAY, dups2$TL, col = 2) #Deb data 
+points(dups1$DAY, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN that are integers
+
+#Check conversions from TL to FL within duplicated MRFSS data
+dups1$convertFL <- 9.075 + dups1$T_LEN*0.965
+plot(dups1$convertFL - dups1$LNGTH) #doesnt match up perfectly
+
+#Altogether the 1997 and 1998 appear duplicated. Use Deb data in these years to 
+#replace PC mode lengths
+
+
 
 
 ########################-
