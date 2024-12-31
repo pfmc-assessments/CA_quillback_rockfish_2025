@@ -1,61 +1,130 @@
 ##############################################################################################################
 #
-# 	Purpose: Evaluate copper rockfish discarding
-# 		by source, fishery, and across time.
+# 	Purpose: Evaluate quillback rockfish commercial discarding
 #
-#			  by Chantel Wetzel 
+#			  by Brian Langseth on December 31, 2024
+#       
+#       Copied from quillback_discard_exploration.R in the 2021 github repo
+#       https://github.com/pfmc-assessments/quillback_rockfish_2021/blob/master/code/quillback_discard_exploration.R
+#       and modified for 2025 assessment
+#
+#       Used in catches.R file
 #
 ##############################################################################################################
 
 library(dplyr)
-options(stringsAsFactors = FALSE)
+library(here)
+library(magrittr)
+#pak::pkg_install("pfmc-assessments/nwfscSurvey")
+library(nwfscSurvey)
 
-dir = "//nwcfile/FRAM/Assessments/CurrentAssessments/DataModerate_2021/Quillback_Rockfish/data/PacFIN Catch"
 
-#-----------------------------------------------------------------------------------
-# Load the GEMM - the GEMM includes information for commercial 
-#-----------------------------------------------------------------------------------
+########################-
+# Load the GEMM - the GEMM includes information for commercial discards ----
+########################-
+
 # The gemm splits data north and south of 40 10
-gemm_all = read.csv(file.path(dir, "GEMM_2019_8_15_2020.csv"))
+# Pulled from nwfscSurvey on December 31, 2024
+species = c("Quillback Rockfish", 
+            "Quillback Rockfish (California)", 
+            "Quillback Rockfish (Washington/Oregon)")
+gemm <- nwfscSurvey::pull_gemm(common_name = species)
+#Cant specify the dir because with three names the file cant save.
+#To run, run the function without a dir, and then manually save as a csv
+#write.csv(gemm, here("data-raw", "gemm_Quillback_rockfish_Dec_31_2024.csv"))
 
-#---------------------------------------------------------------------------------------------
-# Quillback rockfish in the GEMM data
-#---------------------------------------------------------------------------------------------
-gemm = gemm_all[gemm_all$Species == "Quillback Rockfish", ]
+
+########################-
+## Explore the data ---
+########################-
 
 # Remove the research removals -- 
 # Research removals are generally not included with commercial landings (although this does not need to be the case)
 # however, removing them here allows you to correctly calculate the discard rate based on commercial data only
 #gemm = gemm[!gemm$Sector %in% "Research", ] 
 
-aggregate(Landings~Sector, data = gemm, FUN = sum)
-aggregate(Discards~Sector, data = gemm, FUN = sum)
-aggregate(Discard.Mortality~Sector, data = gemm, FUN = sum)
+#Total discards are all discards, not dead discards
+plot(gemm$total_discard_mt - gemm$total_discard_with_mort_rates_applied_mt)
+plot(gemm$total_discard_and_landings_mt - 
+       gemm$total_discard_with_mort_rates_applied_and_landings_mt)
+#Use "total_discard_with_mort_rates_applied_and_landings_mt" as total
 
-gemm$grouped_sector = NA
-gemm$grouped_sector[gemm$Sector == "Washington Recreational"] = "wa_rec"
-gemm$grouped_sector[gemm$Sector == "California Recreational"] = "ca_rec"
-gemm$grouped_sector[gemm$Sector == "Oregon Recreational"] = "or_rec"
-gemm$grouped_sector[is.na(gemm$grouped_sector)] = "commercial"
+#But these dont seem to add up
+#TO DO: Figure out which are to do bused
+plot(gemm$total_discard_with_mort_rates_applied_and_landings_mt - gemm$total_discard_with_mort_rates_applied_mt- gemm$total_landings_mt)
 
-landings  = aggregate(Landings ~ Year + grouped_sector, data = gemm, drop = FALSE, FUN = sum)
-discards  = aggregate(Discards ~ Year + grouped_sector, data = gemm, drop = FALSE, FUN = sum)
-disc_mort = aggregate(Discard.Mortality ~ Year + grouped_sector, data = gemm, drop = FALSE, FUN = sum)
-all_dead  = aggregate(Mortality..Landings.and.Discard.Mortality. ~ Year + grouped_sector, data = gemm, drop = FALSE, FUN = sum)
 
-all = data.frame(Year = landings$Year,
-				 Area = landings$grouped_sector,
-				 Landings = landings$Landings,
-				 Discard = discards$Discards,
-				 Dead_Discard = disc_mort$Discard.Mortality,
-				 Tot_Dead = all_dead$Mortality..Landings.and.Discard.Mortality.)
+#"Quillback" occurs on midwater hake and research. These are small amounts...
+table(gemm$sector, gemm$species)
+table(gemm$year, gemm$species)
+gemm %>% 
+  dplyr::group_by(sector) %>% 
+  dplyr::filter(species == "Quillback Rockfish") %>%
+  dplyr::summarize(sum_tot_mort = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+                   sum_dis = round(sum(total_discard_mt),3),
+                   sum_dis_mort = round(sum(total_discard_with_mort_rates_applied_mt),3),
+                   sum_lan = round(sum(total_landings_mt),3)) %>%
+  mutate(., "dis_mort_rate" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
+  data.frame()
+#...compared to those with only Quillback Rockfish (California)
+#Note that discard mort rates are much higher for OA fixed gear than the Nearshore sector
+gemm %>% 
+  dplyr::group_by(sector) %>% 
+  dplyr::filter(species == "Quillback Rockfish (California)") %>%
+  dplyr::summarize(sum_tot_mort = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+                   sum_dis = round(sum(total_discard_mt),3),
+                   sum_dis_mort = round(sum(total_discard_with_mort_rates_applied_mt),3),
+                   sum_lan = round(sum(total_landings_mt),3)) %>%
+  mutate(., "dis_mort_rate" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
+  data.frame() 
 
-all[is.na(all)] = 0
 
-all$Discard_Mort_Rate = round(all[,"Dead_Discard"] / all[,"Tot_Dead"], 3)
-all[is.na(all)] = 0
+########################-
+## Process the data ---
+########################-
 
-#write.csv(all, file = file.path(dir, "quillback_gemm_mortality_and_discard.csv"), row.names = FALSE)
+#Use only Quillback Rockfish (California)
+gemm_ca <- gemm %>% dplyr::filter(species == "Quillback Rockfish (California)")
+
+#Add grouped sector combining various commercial sectors into one. 
+#Because this is only CA rockfish, the commercial component is the California component
+
+gemm_ca$grouped_sector = NA
+gemm_ca$grouped_sector[gemm_ca$sector == "California Recreational"] = "ca_rec"
+gemm_ca$grouped_sector[is.na(gemm_ca$grouped_sector)] = "ca_comm"
+table(gemm_ca$sector, gemm_ca$grouped_sector)
+
+#Produce aggregated numbers by grouped sector and calculated discard mortality rate
+gemm_ca %>%
+  dplyr::group_by(grouped_sector) %>% 
+  dplyr::summarize(Tot_Dead = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+                   Discard = round(sum(total_discard_mt),3),
+                   Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
+                   Landings = round(sum(total_landings_mt),3)) %>%
+  mutate(., "dis_mort_rate" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  data.frame()
+
+#Now do this by grouped sector and year
+all_yr <- gemm_ca %>%
+  dplyr::group_by(grouped_sector, year) %>% 
+  dplyr::summarize(Tot_Dead = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+                   Discard = round(sum(total_discard_mt),3),
+                   Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
+                   Landings = round(sum(total_landings_mt),3)) %>%
+  mutate(., "dis_mort_rate" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  data.frame() 
+
+#write.csv(all_yr, file = here("data", "CAquillback_gemm_mortality_and_discard.csv"), row.names = FALSE)
+
+
+
+
+
+## CONTINUE HERE
+
+
+
+
 
 #-----------------------------------------------------------------------------------
 # Load the WCGOP discard totals 
