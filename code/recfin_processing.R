@@ -971,13 +971,13 @@ ggsave(here('data_explore_figs',"mrfss_weight_area_density.png"),
 # deb.data1 <- merge(deb.len, deb.trip, by = "TRIPNOSAMP")
 # deb.data2 <- merge(deb.data1, deb.spc, by = "SP")
 # deb.data3 <- merge(deb.data2, deb.port[,c("PORT", "PORTNAME", "COUNTY", "PORTCPLX")], by = "PORT")
-# #write.csv(deb.data3, file.path(save_dir, "data-raw", "debWV_lengths_AllSpecies.csv"), row.names = FALSE)
+# #write.csv(deb.data3, file.path(save_dir, "data-raw", "CONFIDENTIAL_debWV_lengths_AllSpecies.csv"), row.names = FALSE)
 #
 # #--------------END OF COMMENTED SECTION--------------#
 
 ## Load and process deb data with quillback only
 
-deb_bio <- read.csv(here("data-raw", "debWV_lengths_AllSpecies.csv"), header = T) %>%
+deb_bio <- read.csv(here("data-raw", "CONFIDENTIAL_debWV_lengths_AllSpecies.csv"), header = T) %>%
   dplyr::filter(COMMON == "Quillback rockfish")
 
 table(deb_bio$FATE, useNA = "always")
@@ -1072,17 +1072,18 @@ points(dups1$DAY, dups1$T_LEN, col = (dups1$T_LEN %% 1 == 0)) #plots only T_LEN 
 dups1$convertFL <- 9.075 + dups1$T_LEN*0.965
 plot(dups1$convertFL - dups1$LNGTH) #doesnt match up perfectly
 
-#Altogether the 1997 and 1998 appear duplicated. Use Deb data in these years to 
-#replace PC mode lengths
+# Altogether the 1997 and 1998 appear duplicated. Use Deb data in these years to 
+# replace PC mode lengths from MRFSS
 
 
 
 
 ########################-
-## Miller and Gotshall 1957-1972 (Quillback lengths only for 1959-1960) ----
+## Miller and Gotshall 1957-1972 ----
 ########################-
 
-#Load the data - Table 3 is of lengths
+## Load the data - Table 3 is of lengths
+# Quillback lengths only for 1959-1960
 milgot_bio <- data.frame(read_excel(here("data-raw", "Miller_Gotshall_catch_length_data.xlsx"), sheet = "Table 3",
                                     col_types = c(rep("guess",7),"text")))
 
@@ -1094,14 +1095,16 @@ table(milgot_bio$Species)
 table(milgot_bio$Port)
 table(milgot_bio$other.notes..comments)
 
-#Process data
+
+## Process data
 
 #Retain only quillback lengths
 milgot_bio <- milgot_bio %>% dplyr::filter(Species == "QLBK")
 #Expand dataset so each row equals one length (will remove the count column)
 milgot_bio <- milgot_bio %>% tidyr::uncount(Count)
 
-#Simplify variables
+
+## Simplify variables
 
 milgot_bio$length_cm <- milgot_bio$Length..cm.
 milgot_bio$weight_kg <- NA
@@ -1122,42 +1125,46 @@ milgot_bio$source <- "MilGot"
 #year-month-port-mode combination is never larger than the number of possible
 #trips for that same combination. Suggest use number of unique
 #year-month-port-mode combinations instead of number of fish.
-#To do so will need to add month
 milgot_bio %>% dplyr::count(Year, Month, Port, mode)
+milgot_bio$tripID <- paste0(milgot_bio$Year, milgot_bio$Month,
+                            milgot_bio$Port, milgot_bio$mode)
 
 out_milgot <- milgot_bio %>% dplyr::select(Year,
-                                           Month,
                                            length_cm,
                                            weight_kg,
                                            sex,
                                            area,
                                            mode,
                                            disp,
-                                           source)
+                                           source,
+                                           tripID)
 
 
 ########################-
 ## Miller and Geibel 1959-1960 ----
 ########################-
 
-#Load the data
+## Load the data
+
 milgei_bio <- data.frame(read_excel(here("data-raw", "bio_quillback_rockfish_Miller_NorCal_Lengths_59_72.xlsx"), sheet = "Sheet1"))
 
 #Check variables
 table(milgei_bio$YEAR)
 table(milgei_bio$NUMBER_OF_FISH)
 table(milgei_bio$COAST_DIST)
+table(milgei_bio$Counties,milgei_bio$COAST_DIST) #Coast_dist must be district
 table(milgei_bio$MODE)
 table(milgei_bio$mode_description)
 table(milgei_bio$Counties)
 
-#Process data
+
+## Process data
 
 #Expand dataset so each row equals one length (will remove the count column)
 milgei_bio <- milgei_bio %>% tidyr::uncount(NUMBER_OF_FISH)
 
 
-#Simplify variables
+## Simplify variables
 
 milgei_bio$length_cm <- milgei_bio$LENGTH/10
 milgei_bio$weight_kg <- NA
@@ -1178,19 +1185,17 @@ milgei_bio$source <- "MilGei"
 #year-district-mode. Doesn't produce very many trips but this is the finest level
 #of detail with have
 milgei_bio %>% dplyr::count(YEAR, area, mode)
-
-#Add month so as to be able to combine with Miller and Gotshall
-milgei_bio$Month = NA
+milgei_bio$tripID <- paste0(milgei_bio$YEAR, milgei_bio$Counties, milgei_bio$mode)
 
 out_milgei <- milgei_bio %>% dplyr::select("Year" = YEAR,
-                                           Month,
                                            length_cm,
                                            weight_kg,
                                            sex,
                                            area,
                                            mode,
                                            disp,
-                                           source)
+                                           source,
+                                           tripID)
 
 #write.csv(rbind(out_milgot, out_milgei), here("data","CAquillback_historical_bio.csv"), row.names = FALSE)
 
@@ -1213,7 +1218,7 @@ ggplot(hist_bio, aes(y = length_cm*10, x = Year)) +
 ggplot(hist_bio, aes(y = length_cm*10, x = mode)) +
   geom_violin(aes(fill = mode))
 
-#Can really distinguish here. Not enough contrast other than for wine
+#Cant really distinguish here. Not enough contrast other than for wine
 ggplot(hist_bio, aes(y = length_cm*10, x = mode)) +
   geom_violin(aes(fill = mode)) +
   facet_wrap(~area)
@@ -1270,7 +1275,8 @@ ggplot(hist_bio, aes(x = length_cm*10)) +
 ## Geibel and Collier 1992-1998 ----
 ########################-
 
-#Load the data
+## Load the data
+
 geicol_bio <- data.frame(read.csv(here("data-raw", "Geibel_Collier_qlbk_lengths.csv")))
 
 
@@ -1283,7 +1289,8 @@ table(geicol_bio$COUNTY)
 table(geicol_bio$LENGTH)
 
 
-#Simplify variables
+## Simplify variables
+
 geicol_bio$length_cm <- geicol_bio$LENGTH/10
 geicol_bio$weight_kg <- NA
 
@@ -1297,26 +1304,28 @@ geicol_bio$disp <- "RETAINED"
 geicol_bio$source <- "GeiCol"
 
 #Get the number of trips from a combo of variables
-#There is no realy way to match the effort data to lengths from the same trip
+#There is no real way to match the effort data to lengths from the same trip
 #Fish on the same day and port could be from the same trip or not...
 geicol_bio %>% dplyr::count(YEAR, MONTH, DAY, PORT)
+geicol_bio$tripID <- paste0(geicol_bio$YEAR, geicol_bio$MONTH, 
+                            geicol_bio$DAY, geicol_bio$PORT)
 
 geicol_bio %>% dplyr::count(PORTNAME)
 
-#rename month
-geicol_bio$Month = geicol_bio$MONTH
+
 
 out_geicol <- geicol_bio %>% dplyr::select("Year" = YEAR,
-                                           Month,
                                            length_cm,
                                            weight_kg,
                                            sex,
                                            area,
                                            mode,
                                            disp,
-                                           source)
+                                           source,
+                                           tripID)
 #write.csv(out_geicol), here("data","CAquillback_historical_bio_skiff.csv"), row.names = FALSE)
 #Melissa - can merge this with other data if you'd like
+#Brian - I think we can keep this separate, much like Deb's data. 
 
 
 #################-
