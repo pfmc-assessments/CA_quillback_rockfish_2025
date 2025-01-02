@@ -22,15 +22,15 @@ library(nwfscSurvey)
 # Load the GEMM - the GEMM includes information for commercial discards ----
 ########################-
 
-# The gemm splits data north and south of 40 10
-# Pulled from nwfscSurvey on January 2, 2024
-species = c("Quillback Rockfish", 
-            "Quillback Rockfish (California)", 
-            "Quillback Rockfish (Washington/Oregon)")
-gemm <- nwfscSurvey::pull_gemm(common_name = species)
-#Cant specify the dir because with three names the file cant save.
-#To run, run the function without a dir, and then manually save as a csv
-#write.csv(gemm, here("data-raw", "gemm_Quillback_rockfish_Jan_2_2024.csv"), row.names = FALSE)
+# # The gemm splits data north and south of 40 10
+# # Pulled from nwfscSurvey on January 2, 2024
+# species = c("Quillback Rockfish", 
+#             "Quillback Rockfish (California)", 
+#             "Quillback Rockfish (Washington/Oregon)")
+# gemm <- nwfscSurvey::pull_gemm(common_name = species)
+# #Cant specify the dir because with three names the file cant save.
+# #To run, run the function without a dir, and then manually save as a csv
+# #write.csv(gemm, here("data-raw", "gemm_Quillback_rockfish_Jan_2_2024.csv"), row.names = FALSE)
 
 #Only need to run once, so can read directly from the saved file
 gemm <- read.csv(here("data-raw", "gemm_Quillback_rockfish_Jan_2_2024.csv"), header = T)
@@ -81,7 +81,10 @@ gemm %>%
 ########################-
 
 #Use only Quillback Rockfish (California) given that Quillback rockfish may not be california
-gemm_ca <- gemm %>% dplyr::filter(species == "Quillback Rockfish (California)")
+#Also exclude research catches since these are not commercial
+
+gemm_ca <- gemm %>% dplyr::filter(species == "Quillback Rockfish (California)") %>%
+  dplyr::filter(sector != "Research")
 
 #Add grouped sector combining various commercial sectors into one. 
 #Because this is only CA rockfish, the commercial component is the California component
