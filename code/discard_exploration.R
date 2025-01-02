@@ -8,7 +8,6 @@
 #       https://github.com/pfmc-assessments/quillback_rockfish_2021/blob/master/code/quillback_discard_exploration.R
 #       and modified for 2025 assessment
 #
-#       Used in catches.R file
 #
 ##############################################################################################################
 
@@ -24,24 +23,21 @@ library(nwfscSurvey)
 ########################-
 
 # The gemm splits data north and south of 40 10
-# Pulled from nwfscSurvey on December 31, 2024
+# Pulled from nwfscSurvey on January 2, 2024
 species = c("Quillback Rockfish", 
             "Quillback Rockfish (California)", 
             "Quillback Rockfish (Washington/Oregon)")
 gemm <- nwfscSurvey::pull_gemm(common_name = species)
 #Cant specify the dir because with three names the file cant save.
 #To run, run the function without a dir, and then manually save as a csv
-#write.csv(gemm, here("data-raw", "gemm_Quillback_rockfish_Dec_31_2024.csv"))
+#write.csv(gemm, here("data-raw", "gemm_Quillback_rockfish_Jan_2_2024.csv"), row.names = FALSE)
 
+#Only need to run once, so can read directly from the saved file
+gemm <- read.csv(here("data-raw", "gemm_Quillback_rockfish_Jan_2_2024.csv"), header = T)
 
 ########################-
 ## Explore the data ---
 ########################-
-
-# Remove the research removals -- 
-# Research removals are generally not included with commercial landings (although this does not need to be the case)
-# however, removing them here allows you to correctly calculate the discard rate based on commercial data only
-#gemm = gemm[!gemm$Sector %in% "Research", ] 
 
 #Total discards are all discards, not dead discards
 plot(gemm$total_discard_mt - gemm$total_discard_with_mort_rates_applied_mt)
@@ -50,11 +46,12 @@ plot(gemm$total_discard_and_landings_mt -
 #Use "total_discard_with_mort_rates_applied_and_landings_mt" as total
 
 #But these dont seem to add up
-#TO DO: Figure out which are to do bused
-plot(gemm$total_discard_with_mort_rates_applied_and_landings_mt - gemm$total_discard_with_mort_rates_applied_mt- gemm$total_landings_mt)
+#TO DO: Figure out which are to do used
+plot(gemm$total_discard_with_mort_rates_applied_and_landings_mt - gemm$total_discard_with_mort_rates_applied_mt - gemm$total_landings_mt)
 
 
-#"Quillback" occurs on midwater hake and research. These are small amounts...
+#"Quillback" occurs on midwater hake and research. These are small amounts, and Im not sure
+#if the research values are in California or not.
 table(gemm$sector, gemm$species)
 table(gemm$year, gemm$species)
 gemm %>% 
@@ -66,7 +63,7 @@ gemm %>%
                    sum_lan = round(sum(total_landings_mt),3)) %>%
   mutate(., "dis_mort_rate" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
   data.frame()
-#...compared to those with only Quillback Rockfish (California)
+#...compare to those with only Quillback Rockfish (California)
 #Note that discard mort rates are much higher for OA fixed gear than the Nearshore sector
 gemm %>% 
   dplyr::group_by(sector) %>% 
@@ -83,7 +80,7 @@ gemm %>%
 ## Process the data ---
 ########################-
 
-#Use only Quillback Rockfish (California)
+#Use only Quillback Rockfish (California) given that Quillback rockfish may not be california
 gemm_ca <- gemm %>% dplyr::filter(species == "Quillback Rockfish (California)")
 
 #Add grouped sector combining various commercial sectors into one. 
@@ -117,93 +114,62 @@ all_yr <- gemm_ca %>%
 #write.csv(all_yr, file = here("data", "CAquillback_gemm_mortality_and_discard.csv"), row.names = FALSE)
 
 
+##
+#Plot the values
+##
 
+ggplot(all_yr, aes(y = dis_mort_rate, x = year, colour = grouped_sector)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Discard Mortality Rate") +
+  ggtitle("GEMM discard mortality rate") + 
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"gemm_discard_mortality_grouped_sector.png"),
+       width = 6, height = 4)
 
-
-## CONTINUE HERE
-
-
-
-
-
-#-----------------------------------------------------------------------------------
-# Load the WCGOP discard totals 
-# Kayleigh suggested:
-# multiply by proportion of catch observed in an area compared to coastwide -- 
-# not the proportion discarded in a given area. To do that, I suggest calculating the 
-# proportion of observed catch (D+R) within each area (compared to coastwide) in each year. 
-# So, for example, for 2018 it might be 5% of observed in WA, 10% observed in OR, 
-# 40% observed N of Pt Conc, and 45% observed S of Pont Conc (adding up to 100% coastwide). 
-# We could then multiply the total discard from the GEMM by each of those area proportions to
-# estimate the discard in each area. We could also explore using the same method but with 
-# only observed discard rather than observed discard AND retained together.
-#-----------------------------------------------------------------------------------
-
-ncs = read.csv(file.path(dir, "quillback_OB_DisRatios_noboot_ncs_state_2020-10-16.csv"))
-cs = read.csv(file.path(dir,  "quillback_OB_DisRatios_noboot_cs_state_2020-10-16.csv"))
-
-ret_ncs = aggregate(Observed_RETAINED.MTS ~ ryear + State, data = ncs, drop = FALSE,FUN = sum)
-dis_ncs = aggregate(Observed_DISCARD.MTS  ~ ryear + State, data = ncs, drop = FALSE,FUN = sum)
-ret_cs  = aggregate(Observed_RETAINED.MTS ~ ryear + State, data = cs, drop = FALSE, FUN = sum)
-dis_cs  = aggregate(Observed_DISCARD.MTS  ~ ryear + State, data = cs, drop = FALSE,FUN = sum)
-ret_ncs[is.na(ret_ncs)] = dis_ncs[is.na(dis_ncs)] = ret_cs[is.na(ret_cs)] = dis_cs[is.na(dis_cs)] = 0
-
-tot_obs = data.frame(Year = sort(unique(ret_ncs$ryear)),
-					 ca = ret_ncs[which(ret_ncs$State == "CA"),3] + dis_ncs[which(dis_ncs$State == "CA"),3],
-					 or = ret_ncs[which(ret_ncs$State == "OR"),3] + dis_ncs[which(dis_ncs$State == "OR"),3],
-					 wa = ret_ncs[which(ret_ncs$State == "WA"),3] + dis_ncs[which(dis_ncs$State == "WA"),3])
-
-tot_obs[which(tot_obs$Year %in% ret_cs$ryear), "ca"] = tot_obs[which(tot_obs$Year %in% ret_cs$ryear), "ca"] +  
-					ret_cs[which(ret_cs$State == "CA"), 3] + dis_cs[which(dis_cs$State == "CA"), 3]
-tot_obs[which(tot_obs$Year %in% ret_cs$ryear), "or"] = tot_obs[which(tot_obs$Year %in% ret_cs$ryear), "or"] +  
-          ret_cs[which(ret_cs$State == "OR"), 3] + dis_cs[which(dis_cs$State == "OR"), 3]
-tot_obs[which(tot_obs$Year %in% ret_cs$ryear), "wa"] = tot_obs[which(tot_obs$Year %in% ret_cs$ryear), "wa"] +  
-					ret_cs[which(ret_cs$State == "WA"), 3] + dis_cs[which(dis_cs$State == "WA"), 3]	
-
-#Ratio of dead discards by state
-ratio = cbind(tot_obs$Year, tot_obs[,-1] / apply(tot_obs[,-1], 1, sum))
-
-#Dead discard values (mt) by state
-dead = data.frame(Year = tot_obs$Year,
-				  ca = ratio$ca * all[which(all$Area == "commercial"), "Dead_Discard"],
-				  or = ratio$or * all[which(all$Area == "commercial"), "Dead_Discard"],
-				  wa = ratio$wa * all[which(all$Area == "commercial"), "Dead_Discard"] ) 
-
-#write.csv(dead, file = file.path(dir, "quillback_commercial_discard.csv"), row.names = FALSE)
+#Compare to regular sector and year
+sec_yr <- gemm_ca %>%
+  dplyr::group_by(sector, year) %>% 
+  dplyr::summarize(Tot_Dead = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+                   Discard = round(sum(total_discard_mt),3),
+                   Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
+                   Landings = round(sum(total_landings_mt),3)) %>%
+  mutate(., "dis_mort_rate" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  data.frame() 
+#Only plot for the sectors that have more that 1% percentage of total mortality
+ggplot(sec_yr %>% dplyr::filter(sector %in% c("California Recreational",
+                                              "Directed P Halibut",
+                                              "Nearshore",
+                                              "OA Fixed Gear - Hook & Line")), 
+       aes(y = dis_mort_rate, x = year, colour = sector)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Discard Mortality Rate") +
+  ggtitle("GEMM discard mortality rate") + 
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"gemm_discard_mortality_sector.png"),
+       width = 6, height = 4)
 
 
 
 #-----------------------------------------------------------------------------------
-# Load the WCGOP discard totals by gear
-# Calculate ratio based on sum of fixed and trawl
+# WCGOP data below is not necessary
+# For 2021 assessment, needed these to divide out GEMM values by state
+# This cycle, Quillback Rockfish (California) parses these out already
 #-----------------------------------------------------------------------------------
 
-ncs = read.csv(file.path(dir, "quillback_OB_DisRatios_noboot_ncs_Gears_State_2020-11-17.csv"))
-cs = read.csv(file.path(dir,  "quillback_OB_DisRatios_noboot_cs_Gears_State_2020-11-17.csv"))
+# load(here("data-raw", "WCGOP", "CONFIDENTIAL_Observer_Catch_Data_2002_2022.Rdat"))
+# load(here("data-raw", "WCGOP", "CONFIDENTIAL_EMLogbook_Catch_Data_2022.Rdat"))
+# 
+# obquil <- OBCatch %>% dplyr::filter(species == "Quillback Rockfish")
+# emquil <- EMCatch %>% dplyr::filter(species == "Quillback Rockfish")
+# 
+# table(obquil$R_STATE, obquil$D_STATE) #Depart and return to CA
+# table(emquil$R_STATE, emquil$D_STATE) #Depart and return to CA
+# 
+# obquil <- OBCatch %>% dplyr::filter(species == "Quillback Rockfish",
+#                                     D_STATE == "CA")
+# emquil <- EMCatch %>% dplyr::filter(species == "Quillback Rockfish",
+#                                     D_STATE == "CA")
 
-ret_ncs = aggregate(Observed_RETAINED.MTS ~ ryear + State + gear2, data = ncs, drop = FALSE,FUN = sum)
-dis_ncs = aggregate(Observed_DISCARD.MTS  ~ ryear + State + gear2, data = ncs, drop = FALSE,FUN = sum)
-ret_cs  = aggregate(Observed_RETAINED.MTS ~ ryear + State + gear2, data = cs, drop = FALSE, FUN = sum)
-dis_cs  = aggregate(Observed_DISCARD.MTS  ~ ryear + State + gear2, data = cs, drop = FALSE,FUN = sum)
-ret_ncs[is.na(ret_ncs)] = dis_ncs[is.na(dis_ncs)] = ret_cs[is.na(ret_cs)] = dis_cs[is.na(dis_cs)] = 0
-
-tot_obs_fixed = data.frame(Year = sort(unique(ret_ncs$ryear)),
-                     ca = ret_ncs[which(ret_ncs$State == "CA" & ret_ncs$gear2 == "FixedGears"),4] + dis_ncs[which(dis_ncs$State == "CA" & dis_ncs$gear2 == "FixedGears"),4],
-                     or = ret_ncs[which(ret_ncs$State == "OR" & ret_ncs$gear2 == "FixedGears"),4] + dis_ncs[which(dis_ncs$State == "OR" & dis_ncs$gear2 == "FixedGears"),4],
-                     wa = ret_ncs[which(ret_ncs$State == "WA" & ret_ncs$gear2 == "FixedGears"),4] + dis_ncs[which(dis_ncs$State == "WA" & dis_ncs$gear2 == "FixedGears"),4])
-
-tot_obs_fixed[which(tot_obs_fixed$Year %in% ret_cs$ryear), "ca"] = tot_obs_fixed[which(tot_obs_fixed$Year %in% ret_cs$ryear), "ca"] +  
-  ret_cs[which(ret_cs$State == "CA" & ret_cs$gear2 == "FixedGears"), 4] + dis_cs[which(dis_cs$State == "CA" & dis_cs$gear2 == "FixedGears"), 4]
-tot_obs_fixed[which(tot_obs_fixed$Year %in% ret_cs$ryear), "or"] = tot_obs_fixed[which(tot_obs_fixed$Year %in% ret_cs$ryear), "or"] +  
-  ret_cs[which(ret_cs$State == "OR" & ret_cs$gear2 == "FixedGears"), 4] + dis_cs[which(dis_cs$State == "OR" & dis_cs$gear2 == "FixedGears"), 4]
-tot_obs_fixed[which(tot_obs_fixed$Year %in% ret_cs$ryear), "wa"] = tot_obs_fixed[which(tot_obs_fixed$Year %in% ret_cs$ryear), "wa"] +  
-  ret_cs[which(ret_cs$State == "WA" & ret_cs$gear2 == "FixedGears"), 4] + dis_cs[which(dis_cs$State == "WA" & dis_cs$gear2 == "FixedGears"), 4]	
-
-#Ratio of dead discards by state
-ratio_fixed = cbind(tot_obs_fixed$Year, tot_obs_fixed[,-1] / apply(tot_obs[,-1], 1, sum)) #need to use total sum to properly apportion discard from just fixed gears
-
-#Dead discard values (mt) by state
-dead_fixed = data.frame(Year = tot_obs_fixed$Year,
-                  ca = ratio_fixed$ca * all[which(all$Area == "commercial"), "Dead_Discard"],
-                  or = ratio_fixed$or * all[which(all$Area == "commercial"), "Dead_Discard"],
-                  wa = ratio_fixed$wa * all[which(all$Area == "commercial"), "Dead_Discard"] ) 
