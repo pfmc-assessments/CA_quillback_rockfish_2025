@@ -650,6 +650,18 @@ ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South")),
 ggsave(here('data_explore_figs',"recfin_weight_area_density.png"), 
        width = 6, height = 4)
 
+#Compare lengths to southern Oregon fish (also remove the two very large lengths near 900, and the one above 600)
+#This is 2021 data right now because dont have access to recfin data warehouse
+#TO DO: Update it with current data from Oregon. 
+or_bio_rec <- read.csv("U:/Stock assessments/quillback_rockish_2021_FRAM network files/Quillback_Rockfish/data/RecFIN Sample Data/Quillback_RecFIN_BIO-LW_2001-2020.csv") %>%
+  dplyr::filter(RecFIN.Port.Name %in% c("BROOKINGS", "GOLD BEACH", "PORT ORFORD")) %>%
+  dplyr::filter(RecFIN.Length.MM < 600)
+ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South")), 
+       aes(x = RECFIN_LENGTH_MM)) +
+  geom_density(aes(colour = area)) +
+  geom_density(aes(x = RecFIN.Length.MM, colour = RecFIN.Port.Name), data = or_bio_rec, linetype = 2)
+ggsave(here('data_explore_figs',"recfin_length_area_density_withOregon.png"), 
+       width = 6, height = 4)
 
 #-----------------------------------------------------------------------------#
 

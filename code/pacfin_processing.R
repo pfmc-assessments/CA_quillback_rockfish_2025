@@ -501,6 +501,18 @@ ggplot(bio, aes(color = group_port_NS, x = FISH_LENGTH)) +
 ggsave(here('data_explore_figs',"pacfin_length_port_group_density.png"), 
        width = 6, height = 4)
 
+#Compare to southern Oregon fish (mostly Orford)
+bioOR = bds.pacfin %>% 
+  dplyr::filter(AGENCY_CODE == "O") %>%
+  dplyr::filter(PACFIN_GROUP_PORT_CODE == "BRA")
+table(bioOR$PACFIN_PORT_NAME, bioOR$PACFIN_GROUP_PORT_CODE)
+ggplot(bio, aes(color = group_port_NS, x = FISH_LENGTH)) +
+  geom_density() +
+  geom_density(aes(color = PACFIN_PORT_NAME, x = FISH_LENGTH), data = bioOR, linetype = 2)
+ggsave(here('data_explore_figs',"pacfin_length_port_group_density_withOregon.png"), 
+       width = 6, height = 4)
+  
+    
 ##
 #by gear
 ## 
