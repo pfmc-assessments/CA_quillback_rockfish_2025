@@ -121,11 +121,12 @@ all_yr <- gemm_ca %>%
 #Plot the values
 ##
 
+#Amount of mortality due to dead discards
 ggplot(all_yr, aes(y = dis_mort_rate, x = year, colour = grouped_sector)) +
   geom_line() +
   xlab("Year") +
-  ylab("Discard Mortality Rate") +
-  ggtitle("GEMM discard mortality rate") + 
+  ylab("Dead Discard Proportion") +
+  ggtitle("GEMM proportion of mortality due to discard") + 
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"gemm_discard_mortality_grouped_sector.png"),
        width = 6, height = 4)
@@ -147,13 +148,27 @@ ggplot(sec_yr %>% dplyr::filter(sector %in% c("California Recreational",
        aes(y = dis_mort_rate, x = year, colour = sector)) +
   geom_line() +
   xlab("Year") +
-  ylab("Discard Mortality Rate") +
-  ggtitle("GEMM discard mortality rate") + 
+  ylab("Dead Discard Proportion") +
+  ggtitle("GEMM proportion of mortality due to discard") +
   theme_bw() + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"gemm_discard_mortality_sector.png"),
        width = 6, height = 4)
 
+#Amount of total mortality by sector and year
+ggplot(sec_yr %>% dplyr::filter(sector %in% c("California Recreational",
+                                              "Directed P Halibut",
+                                              "Nearshore",
+                                              "OA Fixed Gear - Hook & Line")), 
+       aes(y = Tot_Dead, x = year, colour = sector)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Metric tons") +
+  ggtitle("GEMM total mortality") +
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"gemm_discard_total_mortality_sector.png"),
+       width = 6, height = 4)
 
 
 #-----------------------------------------------------------------------------------
