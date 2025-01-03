@@ -15,6 +15,7 @@
 
 library(here)
 library(readxl)
+library(magrittr)
 
 #---------------------------------------------------------------------------------------------------------------#
 
@@ -49,9 +50,7 @@ ca_com_hist2 <- read.csv(here("data-raw", "ca_hist_commercial_1969_1980_ej.csv")
 ca_com_hist2$QLBKmt <- ca_com_hist2$Grand.Total/2204.62 
 
 
-##
-#Plot the data
-##
+## Plot the data
 
 ggplot(ca_com_hist, aes(y = QLBKmt, x = Year)) +
   geom_bar(position = "stack", stat = "identity") +
@@ -148,6 +147,41 @@ ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2021),][,c("tot_mt", "land_mt")] 
   alloc_val[alloc_val$year == 2021 & alloc_val$orig_allocated == "allocated",]$sum
 
 
+###
+# GEMM discard values ----
+###
+
+# Output from discard_exploration.R
+# Data from 2002-2023
+gemm <- read.csv(here("data", "CAquillback_gemm_mortality_and_discard.csv"))
+
+#How different are the gemm values from PacFIN
+plot(ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002, "LANDING_YEAR"],
+     ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002, "mtons"], 
+     type = "l", lwd = 3, xlab = "Year", ylab = "Metric tons")
+lines(gemm[gemm$grouped_sector == "ca_comm", "year"],
+      gemm[gemm$grouped_sector == "ca_comm", "Landings"], col = 2, lwd = 3)
+plot(ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002, "mtons"] - 
+       gemm[gemm$grouped_sector == "ca_comm", "Landings"])
+
+#How different are the gemm values from RecFIN
+#Landings
+plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "RECFIN_YEAR"],
+     ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "land_mt"], 
+     type = "l", lwd = 3, xlab = "Year", ylab = "Metric tons")
+lines(gemm[gemm$grouped_sector == "ca_rec", "year"],
+      gemm[gemm$grouped_sector == "ca_rec", "Landings"], col = 2, lwd = 3)
+plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "land_mt"] - 
+       gemm[gemm$grouped_sector == "ca_rec", "Landings"])
+#Discards
+plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "RECFIN_YEAR"],
+     ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "dis_mt"], 
+     type = "l", lwd = 3, xlab = "Year", ylab = "Metric tons")
+lines(gemm[gemm$grouped_sector == "ca_rec", "year"],
+      gemm[gemm$grouped_sector == "ca_rec", "Dead_Discard"], col = 2, lwd = 3)
+plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "dis_mt"] - 
+       gemm[gemm$grouped_sector == "ca_rec", "Dead_Discard"])
+
 #---------------------------------------------------------------------------------------------------------------#
 
 # Combine data into single overall catch data frame and output ----
@@ -181,6 +215,35 @@ ca_catch[ca_catch$Year %in% ca_com_hist$Year, "com_lan"] <- ca_com_hist$QLBKmt
 
 ca_catch[ca_catch$Year %in% ca_pacfin$LANDING_YEAR, "com_lan"] <- ca_pacfin$mtons
 
+## Fill in gaps
+
+##
+#Add commercial discards
+##
+
+#Add discards to pacfin years and sum for total
+
+ca_catch[ca_catch$Year %in% gemm[gemm$grouped_sector == "ca_comm",  "year"], "com_dis"] <-
+  gemm[gemm$grouped_sector == "ca_comm",  "Dead_Discard"]
+ca_catch[ca_catch$Year %in% gemm[gemm$grouped_sector == "ca_comm",  "year"], "com_tot"] <-
+  ca_catch[ca_catch$Year %in% gemm[gemm$grouped_sector == "ca_comm",  "year"], "com_lan"] +
+  ca_catch[ca_catch$Year %in% gemm[gemm$grouped_sector == "ca_comm",  "year"], "com_dis"]
+  
+#Add to historical years
+
+#First need historical proportion of total mortality that is discard 
+#Calculate from years 2002-2018
+hist_dis_prop <- sum(gemm[gemm$grouped_sector == "ca_comm" & gemm$year %in% c(2002:2018), "Dead_Discard"]) /
+  sum(gemm[gemm$grouped_sector == "ca_comm" & gemm$year %in% c(2002:2018), "Tot_Dead"])
+#Then calculate total...
+ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_tot"] <-
+  (ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]) /
+  (1-hist_dis_prop)
+#...and substract from total the landings to get discards
+ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_dis"] <-
+  ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_tot"] -
+  ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]
+        
 
 ##
 #Add historical recreational data
