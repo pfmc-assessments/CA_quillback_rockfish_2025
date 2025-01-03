@@ -1118,7 +1118,8 @@ milgot_bio <- milgot_bio %>% tidyr::uncount(Count)
 
 ## Simplify variables
 
-milgot_bio$length_cm <- milgot_bio$Length..cm.
+#Lengths are in TL. Convert to FL using conversion (in mm) from echeverria and lenarz 1984
+milgot_bio$length_cm <- (9.075 + 0.965 * milgot_bio$Length..cm. * 10)/10
 milgot_bio$weight_kg <- NA
 #Replace port with district
 milgot_bio$area <- dplyr::case_when(milgot_bio$Port == "Bodega Bay" ~ "Bay",
@@ -1178,7 +1179,8 @@ milgei_bio <- milgei_bio %>% tidyr::uncount(NUMBER_OF_FISH)
 
 ## Simplify variables
 
-milgei_bio$length_cm <- milgei_bio$LENGTH/10
+#Lengths are in TL. Convert to FL using conversion from echeverria and lenarz 1984
+milgei_bio$length_cm <- (9.075 + 0.965 * milgei_bio$LENGTH)/10
 milgei_bio$weight_kg <- NA
 #Replace port with district
 milgei_bio$area <- dplyr::case_when(milgei_bio$Counties == "DelNorte_Humboldt" ~ "Redwood",
@@ -1303,6 +1305,7 @@ table(geicol_bio$LENGTH)
 
 ## Simplify variables
 
+#According to report, measurements were as fork length
 geicol_bio$length_cm <- geicol_bio$LENGTH/10
 geicol_bio$weight_kg <- NA
 
