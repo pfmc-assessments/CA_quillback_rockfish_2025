@@ -1,4 +1,4 @@
-"grouped_sector","year","Tot_Dead","Discard","Dead_Discard","Landings","dis_mort_rate"
+"grouped_sector","year","Tot_Dead","Discard","Dead_Discard","Landings","dis_mort_prop"
 "ca_comm",2002,4.752,0.008,0.008,4.744,0.002
 "ca_comm",2003,1.97,0.04,0.04,1.929,0.02
 "ca_comm",2004,1.9,0.012,0.007,1.893,0.004

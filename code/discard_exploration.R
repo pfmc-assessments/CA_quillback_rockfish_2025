@@ -61,7 +61,7 @@ gemm %>%
                    sum_dis = round(sum(total_discard_mt),3),
                    sum_dis_mort = round(sum(total_discard_with_mort_rates_applied_mt),3),
                    sum_lan = round(sum(total_landings_mt),3)) %>%
-  mutate(., "dis_mort_rate" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
+  dplyr::mutate(., "dis_mort_prop" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
   data.frame()
 #...compare to those with only Quillback Rockfish (California)
 #Note that discard mort rates are much higher for OA fixed gear than the Nearshore sector
@@ -72,7 +72,7 @@ gemm %>%
                    sum_dis = round(sum(total_discard_mt),3),
                    sum_dis_mort = round(sum(total_discard_with_mort_rates_applied_mt),3),
                    sum_lan = round(sum(total_landings_mt),3)) %>%
-  mutate(., "dis_mort_rate" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
+  dplyr::mutate(., "dis_mort_prop" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
   data.frame() 
 
 
@@ -101,7 +101,7 @@ gemm_ca %>%
                    Discard = round(sum(total_discard_mt),3),
                    Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
                    Landings = round(sum(total_landings_mt),3)) %>%
-  mutate(., "dis_mort_rate" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  dplyr::mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
   data.frame()
 
 #Now do this by grouped sector and year
@@ -111,7 +111,7 @@ all_yr <- gemm_ca %>%
                    Discard = round(sum(total_discard_mt),3),
                    Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
                    Landings = round(sum(total_landings_mt),3)) %>%
-  mutate(., "dis_mort_rate" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  dplyr::mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
   data.frame() 
 
 #write.csv(all_yr, file = here("data", "CAquillback_gemm_mortality_and_discard.csv"), row.names = FALSE)
@@ -122,7 +122,7 @@ all_yr <- gemm_ca %>%
 ##
 
 #Amount of mortality due to dead discards
-ggplot(all_yr, aes(y = dis_mort_rate, x = year, colour = grouped_sector)) +
+ggplot(all_yr, aes(y = dis_mort_prop, x = year, colour = grouped_sector)) +
   geom_line() +
   xlab("Year") +
   ylab("Dead Discard Proportion") +
@@ -138,14 +138,14 @@ sec_yr <- gemm_ca %>%
                    Discard = round(sum(total_discard_mt),3),
                    Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
                    Landings = round(sum(total_landings_mt),3)) %>%
-  mutate(., "dis_mort_rate" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
   data.frame() 
 #Only plot for the sectors that have more that 1% percentage of total mortality
 ggplot(sec_yr %>% dplyr::filter(sector %in% c("California Recreational",
                                               "Directed P Halibut",
                                               "Nearshore",
                                               "OA Fixed Gear - Hook & Line")), 
-       aes(y = dis_mort_rate, x = year, colour = sector)) +
+       aes(y = dis_mort_prop, x = year, colour = sector)) +
   geom_line() +
   xlab("Year") +
   ylab("Dead Discard Proportion") +
