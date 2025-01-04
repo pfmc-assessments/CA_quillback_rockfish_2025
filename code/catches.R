@@ -24,7 +24,7 @@ library(magrittr)
 #---------------------------------------------------------------------------------------------------------------#
 
 ###
-# Historical commercial landings ---- 
+## Historical commercial landings ---- 
 ###
 
 # These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
@@ -75,7 +75,7 @@ ggsave(here('data_explore_figs',"hist_com_landings_scaled.png"),
 
 
 ###
-# PacFIN landings ----
+## PacFIN landings ----
 ###
 
 # Output from pacfin_processing.R
@@ -85,7 +85,7 @@ ca_pacfin <- read.csv(here("data", "CAquillback_pacfin_landings.csv"))
 
 
 ###
-# Historical recreational landings ----
+## Historical recreational landings ----
 ###
 
 # These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
@@ -105,15 +105,43 @@ ca_rec_hist_by_fleet <- data.frame(read_excel(here("data-raw", "2021spp.Rec.Nand
 ca_rec_hist$QLBKmt_pc <- ca_rec_hist_by_fleet$CPFV.tons
 ca_rec_hist$QLBKmt_pr <- ca_rec_hist_by_fleet$skiff.shore.tons
 
+
+## Plot the data
+
 plot(ca_rec_hist$Year, ca_rec_hist$QLBKmt_pr, type = "l", lwd = 3, 
      xlab = "Year", ylab = "Historical rec landings (mt)")
 lines(ca_rec_hist$Year, ca_rec_hist$QLBKmt_pc, lwd = 3, col = "green")
 legend("topleft", c("CPFV", "Skiff/Shore"), col = c(3, 1), lty = 1, lwd = 3, bty = "n")
 
+ca_rec_hist_wide <- ca_rec_hist %>% dplyr::select(c(Year, QLBKmt_pc, QLBKmt_pr)) %>%
+  tidyr::pivot_longer(cols = c("QLBKmt_pc", "QLBKmt_pr"), 
+                      names_to = c("mode"),
+                      values_to = "mt")
+
+ggplot(ca_rec_hist_wide, aes(y = mt, x = Year)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Landings (MT)") +
+  #scale_fill_manual(values = c("#00BA38", "#619CFF")) + #If break out by mode
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"hist_rec_landings.png"),
+       width = 6, height = 4)
+
+#Scaled to match scale of pacfin landings
+ggplot(ca_rec_hist_wide, aes(y = mt, x = Year)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Landings (MT)") +
+  #scale_fill_manual(values = c("#00BA38", "#619CFF")) + #If break out by mode
+  ylim(0,40) +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"hist_rec_landings_scaled.png"),
+       width = 6, height = 4)
+
 
 
 ###
-# RecFIN/MRFSS landings ----
+## RecFIN/MRFSS landings ----
 ###
 
 # Output from recfin_processing.R
@@ -148,7 +176,7 @@ ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2021),][,c("tot_mt", "land_mt")] 
 
 
 ###
-# GEMM discard values ----
+## GEMM discard values ----
 ###
 
 # Output from discard_exploration.R
@@ -182,15 +210,16 @@ lines(gemm[gemm$grouped_sector == "ca_rec", "year"],
 plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "dis_mt"] - 
        gemm[gemm$grouped_sector == "ca_rec", "Dead_Discard"])
 
+
 #---------------------------------------------------------------------------------------------------------------#
 
 # Combine data into single overall catch data frame and output ----
 
 #---------------------------------------------------------------------------------------------------------------#
 
-##
-#Create new data frame
-##
+###
+# Create new data frame
+###
 
 ca_catch <- data.frame("Year" = 1916:2024)
 ca_catch$com_tot <- NA
@@ -201,25 +230,30 @@ ca_catch$rec_lan <- NA
 ca_catch$rec_dis <- NA
 
 
-##
-#Add historical commercial data
-##
+###-----------------------###
+## Commercial data ----
+###-----------------------###
+
+
+###
+# Add historical commercial data
+###
 
 ca_com_hist <- rbind(ca_com_hist1, ca_com_hist2[c("Year","QLBKmt")])
 ca_catch[ca_catch$Year %in% ca_com_hist$Year, "com_lan"] <- ca_com_hist$QLBKmt
 
 
-##
-#Add pacfin data
-##
+###
+# Add pacfin data and fill in gaps
+###
 
 ca_catch[ca_catch$Year %in% ca_pacfin$LANDING_YEAR, "com_lan"] <- ca_pacfin$mtons
 
 ## Fill in gaps
 
-##
-#Add commercial discards
-##
+###
+# Add commercial discards
+###
 
 #Add discards to pacfin years and sum for total
 
@@ -243,35 +277,43 @@ ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 
 ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_dis"] <-
   ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_tot"] -
   ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]
-        
 
-##
-#Add historical recreational data
-##
+
+###-----------------------###
+## Recreational data ----
+###-----------------------###
+
+
+###
+# Add historical recreational data
+###
 
 ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_lan"] <- ca_rec_hist$QLBKmt
 
 
-##
-#Add MRFSS data
-##
+###
+# Add MRFSS data
+###
 
 #Do not add 1980 MRFSS value. Use the estimate from the historical reconstruction instead
 ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), "rec_tot"] <- 
   ca_rec_mrfss[!(ca_rec_mrfss$YEAR %in% 1980),]$tot_mt
 
 
-##
-#Add RecFIN data
-##
+###
+# Add RecFIN data
+###
 
 ca_catch[ca_catch$Year %in% ca_rec_recfin$RECFIN_YEAR, c("rec_tot", "rec_lan", "rec_dis")] <- 
   ca_rec_recfin[, c("tot_mt", "land_mt", "dis_mt")]
 
 
-##
-#Output final total removals file
-##
+#---------------------------------------------------------------------------------------------------------------#
+
+# Output final total removals file ----
+
+#---------------------------------------------------------------------------------------------------------------#
+
 
 #write.csv(round(ca_catch,3), file = file.path(here("data", "CAquillback_total_removals.csv")), row.names = FALSE)
 
