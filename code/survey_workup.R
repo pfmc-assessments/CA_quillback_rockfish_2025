@@ -52,10 +52,10 @@ research_catch <- research_catch %>% dplyr::filter(total_catch_numbers>0)
 ## Combine biological data for only CA (occurs in WCGBTS and 1 in Triennial)
 
 research_bio <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]], 
-                              Year, Length_cm, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, State) %>% 
+                              Year, Length_cm, Weight_kg, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, Tow, State) %>% 
   dplyr::bind_rows(trawl = ., 
                    triennial = dplyr::select(bio[[which(survey_names == "Triennial")]]$length_data, 
-                                             Year, Length_cm, Sex, Depth_m, Latitude_dd, Longitude_dd, State),
+                                             Year, Length_cm, Weight_kg, Sex, Depth_m, Latitude_dd, Longitude_dd, Tow, State),
                    .id = 'survey') %>%
   dplyr::filter(State == "CA")
 
@@ -67,3 +67,20 @@ research_bio <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]],
 ##Rename "plots" folder to something more understandable
 
 file.rename(here("data_explore_figs","plots"),here("data_explore_figs", "survey_figs"))
+
+
+## Output file for biological analysis
+
+research_bio$area = NA
+out_surveys <- research_bio %>% dplyr::select(Year, 
+                                              "length_cm" = Length_cm,
+                                              "weight_kg" = Weight_kg,
+                                              "sex" = Sex,
+                                              "age" = Age,
+                                              "depth_m" = Depth_m,
+                                              "Lat" = Latitude_dd,
+                                              "Lon" = Longitude_dd,
+                                              "source" = survey,
+                                              tripID = Tow)
+#write.csv(out_surveys, here("data","CAquillback_wcgbts_triennial_bio.csv"), row.names = FALSE)
+
