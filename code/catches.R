@@ -16,6 +16,7 @@
 library(here)
 library(readxl)
 library(magrittr)
+library(ggplot2)
 
 #---------------------------------------------------------------------------------------------------------------#
 
@@ -181,7 +182,15 @@ ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR %in% c(2021),][,c("tot_mt", "land_mt")] 
 
 # Output from discard_exploration.R
 # Data from 2002-2023
-gemm <- read.csv(here("data", "CAquillback_gemm_mortality_and_discard.csv"))
+gemm_sector <- read.csv(here("data", "CAquillback_gemm_mortality_and_discard.csv"))
+gemm <- gemm_sector %>%
+  dplyr::group_by(grouped_sector, year) %>% 
+  dplyr::summarize(Tot_Dead = round(sum(Tot_Dead),3),
+                   Discard = round(sum(Discard),3),
+                   Dead_Discard = round(sum(Dead_Discard),3),
+                   Landings = round(sum(Landings),3)) %>%
+  dplyr::mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  data.frame() 
 
 #How different are the gemm values from PacFIN
 plot(ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002, "LANDING_YEAR"],
@@ -193,7 +202,7 @@ plot(ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002, "mtons"] -
        gemm[gemm$grouped_sector == "ca_comm", "Landings"])
 
 #How different are the gemm values from RecFIN
-#Landings
+#Landings - 2020 and 2021 difference because of proxy and unallocated rockfish values
 plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "RECFIN_YEAR"],
      ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "land_mt"], 
      type = "l", lwd = 3, xlab = "Year", ylab = "Metric tons")
@@ -265,18 +274,22 @@ ca_catch[ca_catch$Year %in% gemm[gemm$grouped_sector == "ca_comm",  "year"], "co
   
 #Add to historical years
 
-#First need historical proportion of total mortality that is discard 
+#First need historical proportion of dead discards. Chose proportional to landings
 #Calculate from years 2002-2018
-hist_dis_prop <- sum(gemm[gemm$grouped_sector == "ca_comm" & gemm$year %in% c(2002:2018), "Dead_Discard"]) /
-  sum(gemm[gemm$grouped_sector == "ca_comm" & gemm$year %in% c(2002:2018), "Tot_Dead"])
-#Then calculate total...
-ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_tot"] <-
-  (ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]) /
-  (1-hist_dis_prop)
-#...and substract from total the landings to get discards
+hist_dis_prop <- sum(gemm_sector[gemm_sector$sector == "Nearshore" & 
+                                   gemm_sector$year %in% c(2002:2018), "Dead_Discard"]) /
+  sum(gemm_sector[gemm_sector$sector == "Nearshore" & 
+                    gemm_sector$year %in% c(2002:2018), "Landings"])
+
+#Then calculate dead discards...
 ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_dis"] <-
-  ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_tot"] -
+  (ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]) *
+  hist_dis_prop
+#...and total mortality
+ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_tot"] <-
+  ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_dis"] +
   ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]
+
 
 
 ###-----------------------###
