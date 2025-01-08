@@ -50,6 +50,7 @@ rsconnect/
 
 # ignore certain folders within structure
 data-raw/
+data_bio_process/
 literature/
 
 # ignore R project

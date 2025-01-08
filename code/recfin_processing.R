@@ -536,7 +536,7 @@ out_bio <- ca_bio_rec %>% dplyr::select("Year" = RECFIN_YEAR,
                                     source,
                                     SOURCE_CODE,
                                     tripID)
-#write.csv(out_bio, here("data","CAquillback_rec_bio.csv"), row.names = FALSE)
+#write.csv(out_bio, here("data_bio_process","CAquillback_rec_bio.csv"), row.names = FALSE)
 
 
 
@@ -855,7 +855,7 @@ out_mrfss_bio <- ca_mrfss_bio %>% dplyr::select("Year" = YEAR,
                                         wgt_flag,
                                         source,
                                         tripID)
-#write.csv(out_mrfss_bio, here("data","CAquillback_mrfss_bio.csv"), row.names = FALSE)
+#write.csv(out_mrfss_bio, here("data_bio_process","CAquillback_mrfss_bio.csv"), row.names = FALSE)
 
 
 #################-
@@ -1040,7 +1040,7 @@ out_deb <- deb_bio %>% dplyr::select("Year" = YEAR,
                                      source,
                                      "tripID" = AllTRPID)
 
-#write.csv(out_deb, here("data","CAquillback_deb_bio.csv"), row.names = FALSE)
+#write.csv(out_deb, here("data_bio_process","CAquillback_deb_bio.csv"), row.names = FALSE)
 
 
 ## Check for duplicates of MRFSS data
@@ -1211,7 +1211,7 @@ out_milgei <- milgei_bio %>% dplyr::select("Year" = YEAR,
                                            source,
                                            tripID)
 
-#write.csv(rbind(out_milgot, out_milgei), here("data","CAquillback_historical_bio.csv"), row.names = FALSE)
+#write.csv(rbind(out_milgot, out_milgei), here("data_bio_process","CAquillback_historical_bio.csv"), row.names = FALSE)
 
 
 #################-
@@ -1322,8 +1322,8 @@ geicol_bio$source <- "GeiCol"
 #There is no real way to match the effort data to lengths from the same trip
 #Fish on the same day and port could be from the same trip or not...
 geicol_bio %>% dplyr::count(YEAR, MONTH, DAY, PORT)
-geicol_bio$tripID <- paste0(geicol_bio$YEAR, geicol_bio$MONTH, 
-                            geicol_bio$DAY, geicol_bio$PORT)
+geicol_bio$tripID <- as.integer(as.factor(paste0(geicol_bio$YEAR, geicol_bio$MONTH, 
+                                                 geicol_bio$DAY, geicol_bio$PORT)))
 
 geicol_bio %>% dplyr::count(PORTNAME)
 
@@ -1338,7 +1338,7 @@ out_geicol <- geicol_bio %>% dplyr::select("Year" = YEAR,
                                            disp,
                                            source,
                                            tripID)
-#write.csv(out_geicol), here("data","CAquillback_historical_bio_skiff.csv"), row.names = FALSE)
+#write.csv(out_geicol, here("data_bio_process","CAquillback_historical_bio_skiff.csv"), row.names = FALSE)
 #Melissa - can merge this with other data if you'd like
 #Brian - I think we can keep this separate, much like Deb's data. 
 

@@ -432,7 +432,7 @@ out <- bio %>% dplyr::select("Year" = SAMPLE_YEAR,
                              "area" = PACFIN_GROUP_PORT_CODE,
                              disp,
                              source)
-#write.csv(out, here("data","CAquillback_com_bio.csv"), row.names = FALSE)
+#write.csv(out, here("data_bio_process","CAquillback_com_bio.csv"), row.names = FALSE)
 
 
 
