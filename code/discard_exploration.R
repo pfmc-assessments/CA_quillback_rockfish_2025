@@ -46,7 +46,10 @@ plot(gemm$total_discard_and_landings_mt -
 #Use "total_discard_with_mort_rates_applied_and_landings_mt" as total
 
 #But these dont seem to add up
-#TO DO: Figure out which are to do used
+#UPDATE: I talked with Kayleigh about these and she said there are some rounding issues, and 
+#also some specific adjustments Oregon does for some of their species. Research also is only
+#presented as total mortality. 
+#What I am using is appropriate
 plot(gemm$total_discard_with_mort_rates_applied_and_landings_mt - gemm$total_discard_with_mort_rates_applied_mt - gemm$total_landings_mt)
 
 
@@ -114,14 +117,24 @@ all_yr <- gemm_ca %>%
   dplyr::mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
   data.frame() 
 
-#write.csv(all_yr, file = here("data", "CAquillback_gemm_mortality_and_discard.csv"), row.names = FALSE)
+#And by sector and year (but keep grouped_sector in)
+sec_yr <- gemm_ca %>%
+  dplyr::group_by(sector, year, grouped_sector) %>% 
+  dplyr::summarize(Tot_Dead = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+                   Discard = round(sum(total_discard_mt),3),
+                   Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
+                   Landings = round(sum(total_landings_mt),3)) %>%
+  dplyr::mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
+  data.frame() 
+
+#write.csv(sec_yr, file = here("data", "CAquillback_gemm_mortality_and_discard.csv"), row.names = FALSE)
 
 
 ##
-#Plot the values
+#Plot the values - These are discard mort proportions (dead discard / total mort)
 ##
 
-#Amount of mortality due to dead discards
+#Amount of mortality due to dead discards by grouped sector
 ggplot(all_yr, aes(y = dis_mort_prop, x = year, colour = grouped_sector)) +
   geom_line() +
   xlab("Year") +
@@ -131,15 +144,6 @@ ggplot(all_yr, aes(y = dis_mort_prop, x = year, colour = grouped_sector)) +
 ggsave(here('data_explore_figs',"gemm_discard_mortality_grouped_sector.png"),
        width = 6, height = 4)
 
-#Compare to regular sector and year
-sec_yr <- gemm_ca %>%
-  dplyr::group_by(sector, year) %>% 
-  dplyr::summarize(Tot_Dead = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
-                   Discard = round(sum(total_discard_mt),3),
-                   Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
-                   Landings = round(sum(total_landings_mt),3)) %>%
-  mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
-  data.frame() 
 #Only plot for the sectors that have more that 1% percentage of total mortality
 ggplot(sec_yr %>% dplyr::filter(sector %in% c("California Recreational",
                                               "Directed P Halibut",
@@ -154,6 +158,12 @@ ggplot(sec_yr %>% dplyr::filter(sector %in% c("California Recreational",
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"gemm_discard_mortality_sector.png"),
        width = 6, height = 4)
+
+#Seems like changes started in 2022 (though OA fixed gear has no estimate in 2021)
+sec_yr %>% dplyr::filter(sector %in% c("Nearshore", "OA Fixed Gear - Hook & Line"),
+                         year %in% c(2018:2023)) %>%
+  dplyr::select(sector, year, Tot_Dead, Dead_Discard, dis_mort_prop)
+
 
 #Amount of total mortality by sector and year
 ggplot(sec_yr %>% dplyr::filter(sector %in% c("California Recreational",
