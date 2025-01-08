@@ -78,8 +78,8 @@ out_surveys <- research_bio %>% dplyr::select(Year,
                                               "sex" = Sex,
                                               "age" = Age,
                                               "depth_m" = Depth_m,
-                                              "Lat" = Latitude_dd,
-                                              "Lon" = Longitude_dd,
+                                              "lat" = Latitude_dd,
+                                              "lon" = Longitude_dd,
                                               "source" = survey,
                                               tripID = Tow)
 #write.csv(out_surveys, here("data","CAquillback_wcgbts_triennial_bio.csv"), row.names = FALSE)

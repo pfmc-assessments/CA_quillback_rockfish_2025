@@ -1,4 +1,4 @@
-"Year","length_cm","weight_kg","sex","age","depth_m","Lat","Lon","source","tripID"
+"Year","length_cm","weight_kg","sex","age","depth_m","lat","lon","source","tripID"
 2014,14,0.04,"M",2,87.1,37.82361111,-123.0825,"trawl",107
 2017,42,1.66,"M",33,80.1,40.34277778,-124.42888889,"trawl",97
 2014,40,1.38,"M",15,84.6,40.34416667,-124.43944444,"trawl",94
