@@ -1139,8 +1139,8 @@ milgot_bio$source <- "MilGot"
 #trips for that same combination. Suggest use number of unique
 #year-month-port-mode combinations instead of number of fish.
 milgot_bio %>% dplyr::count(Year, Month, Port, mode)
-milgot_bio$tripID <- paste0(milgot_bio$Year, milgot_bio$Month,
-                            milgot_bio$Port, milgot_bio$mode)
+milgot_bio$tripID <- as.integer(as.factor(
+  paste0(milgot_bio$Year, milgot_bio$Month, milgot_bio$Port, milgot_bio$mode)))
 
 out_milgot <- milgot_bio %>% dplyr::select(Year,
                                            length_cm,
@@ -1199,7 +1199,8 @@ milgei_bio$source <- "MilGei"
 #year-district-mode. Doesn't produce very many trips but this is the finest level
 #of detail with have
 milgei_bio %>% dplyr::count(YEAR, area, mode)
-milgei_bio$tripID <- paste0(milgei_bio$YEAR, milgei_bio$Counties, milgei_bio$mode)
+milgei_bio$tripID <- as.integer(as.factor(
+  paste0(milgei_bio$YEAR, milgei_bio$Counties, milgei_bio$mode)))
 
 out_milgei <- milgei_bio %>% dplyr::select("Year" = YEAR,
                                            length_cm,
@@ -1322,11 +1323,10 @@ geicol_bio$source <- "GeiCol"
 #There is no real way to match the effort data to lengths from the same trip
 #Fish on the same day and port could be from the same trip or not...
 geicol_bio %>% dplyr::count(YEAR, MONTH, DAY, PORT)
-geicol_bio$tripID <- as.integer(as.factor(paste0(geicol_bio$YEAR, geicol_bio$MONTH, 
-                                                 geicol_bio$DAY, geicol_bio$PORT)))
+geicol_bio$tripID <- as.integer(as.factor(
+  paste0(geicol_bio$YEAR, geicol_bio$MONTH, geicol_bio$DAY, geicol_bio$PORT)))
 
 geicol_bio %>% dplyr::count(PORTNAME)
-
 
 
 out_geicol <- geicol_bio %>% dplyr::select("Year" = YEAR,
