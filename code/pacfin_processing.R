@@ -12,6 +12,7 @@
 library(here)
 library(ggplot2)
 library(magrittr)
+#devtools::load_all("U:/Stock assessments/PacFIN.Utilities")
 #devtools::install_github("pfmc-assessments/PacFIN.Utilities")
 library(PacFIN.Utilities)
 library(gridExtra)
@@ -387,6 +388,21 @@ table(nolen$SAMPLE_ID) #coming from 5 different trips
 ##############################################################################-
 ## Process the data ----
 ##############################################################################-
+
+# #Run clean PacFIN to see how it processes the bio data. No bio data removed
+# bio_clean <- cleanPacFIN(Pdata = bio, CLEAN=TRUE, verbose=TRUE)
+# # N SAMPLE_TYPEs changed from M to S for special samples from OR: 0
+# # N not in keep_sample_type (SAMPLE_TYPE): 0
+# # N with SAMPLE_TYPE of NA: 0
+# # N not in keep_sample_method (SAMPLE_METHOD): 0
+# # N with SAMPLE_NO of NA: 0
+# # N without length: 146
+# # N without Age: 3096
+# # N without length and Age: 3096
+# # N sample weights not available for OR: 0
+# # N records: 3123
+# # N remaining if CLEAN: 3123
+# # N removed if CLEAN: 0
 
 #Simplify disposition to alive vs. dead
 #Only species marked alive have a condition code. Assume all others are dead.
