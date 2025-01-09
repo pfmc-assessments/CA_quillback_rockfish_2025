@@ -594,6 +594,16 @@ ggplot(ca_bio_rec %>% dplyr::filter(IS_RETAINED %in% c("RETAINED")),
 ggsave(here('data_explore_figs',"recfin_length_mode_density.png"), 
        width = 6, height = 4)
 
+#If compare add the total PC lengths with released fish included
+#Dashed line is with released fish kept in
+ggplot(ca_bio_rec %>% dplyr::filter(IS_RETAINED %in% c("RETAINED")),
+       aes(x = RECFIN_LENGTH_MM)) +
+  geom_density(aes(color = mode)) +
+  geom_density(data = ca_bio_rec %>% dplyr::filter(mode %in% c("PC")),
+               aes(x = RECFIN_LENGTH_MM, color = mode), lty = 2)
+ggsave(here('data_explore_figs',"recfin_length_mode_density_withReleased.png"), 
+       width = 6, height = 4)
+
 #Not obviously based on water area... 
 ggplot(ca_bio_rec %>% dplyr::filter(IS_RETAINED %in% c("RETAINED")),
        aes(x = RECFIN_LENGTH_MM)) +
