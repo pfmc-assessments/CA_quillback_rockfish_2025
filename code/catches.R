@@ -275,11 +275,11 @@ ca_catch[ca_catch$Year %in% gemm[gemm$grouped_sector == "ca_comm",  "year"], "co
 #Add to historical years
 
 #First need historical proportion of dead discards. Chose proportional to landings
-#Calculate from years 2002-2018
+#Calculate from years 2002-2021
 hist_dis_prop <- sum(gemm_sector[gemm_sector$sector == "Nearshore" & 
-                                   gemm_sector$year %in% c(2002:2018), "Dead_Discard"]) /
+                                   gemm_sector$year %in% c(2002:2021), "Dead_Discard"]) /
   sum(gemm_sector[gemm_sector$sector == "Nearshore" & 
-                    gemm_sector$year %in% c(2002:2018), "Landings"])
+                    gemm_sector$year %in% c(2002:2021), "Landings"])
 
 #Then calculate dead discards...
 ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_dis"] <-
