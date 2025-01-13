@@ -200,10 +200,11 @@ aggCatch <- catch %>%
 ## Plotting ----
 ################-
 
-ggplot(aggCatch, aes(y = mtons, x = LANDING_YEAR)) +
+ggplot(aggCatch %>% dplyr::filter(LANDING_YEAR < 2024), aes(y = mtons, x = LANDING_YEAR)) +
   geom_bar(position = "stack", stat = "identity") +
   xlab("Year") +
   ylab("Landings (MT)") +
+  ggtitle("PacFIN landings of quillback") + 
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"pacfin_landings.png"),
        width = 6, height = 4)
