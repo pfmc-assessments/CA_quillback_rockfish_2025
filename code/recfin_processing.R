@@ -356,6 +356,17 @@ ggplot(aggCatch_mrfss, aes(y = tot_mt, x = YEAR)) +
 ggsave(here('data_explore_figs',"mrfss_mortality.png"),
        width = 6, height = 4)
 
+# Plotting MRFSS and RecFIN catches together combined by fleet
+aggCatch_rec$YEAR <- aggCatch_rec$RECFIN_YEAR
+aggCatch_comb <- rbind(aggCatch_mrfss[,c("YEAR", "tot_mt")], aggCatch_rec[,c("YEAR", "tot_mt")])
+ggplot(aggCatch_comb, aes(y = tot_mt, x = YEAR)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Total mortality (MT)") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"rec_comb_mortality.png"),
+       width = 6, height = 4)
+
 #Compare current mortality with mortality from the 2021 assessment
 #These are the same
 plot(x = aggCatch_mrfss$YEAR, y = aggCatch_mrfss$tot_mt, type = "l", lwd = 2, col = "black")
