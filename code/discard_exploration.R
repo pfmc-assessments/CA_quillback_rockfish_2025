@@ -181,6 +181,21 @@ ggsave(here('data_explore_figs',"gemm_discard_total_mortality_sector.png"),
        width = 6, height = 4)
 
 
+#Breakdown of mortality (landings vs dead discards for the commercial fleet) 
+ggplot(sec_yr %>% 
+         tidyr::pivot_longer(cols = c("Tot_Dead", "Discard", "Dead_Discard", "Landings"), values_to = "mt") %>%
+         dplyr::filter(name %in% c("Landings", "Dead_Discard"),
+                       grouped_sector %in% c("ca_comm")),
+       aes(y = mt, x = year, fill = name)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Mortality (MT)") +
+  ggtitle("GEMM total commercial mortality") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"gemm_comm_mortality.png"),
+       width = 6, height = 4)
+
+
 #-----------------------------------------------------------------------------------
 # WCGOP data below is not necessary
 # For 2021 assessment, needed these to divide out GEMM values by state
