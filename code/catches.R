@@ -358,7 +358,8 @@ ggplot(ca_catch_long %>% dplyr::filter(type == "tot"), aes(y = mt, x = Year, fil
   geom_bar(position = "stack", stat = "identity") +
   xlab("Year") +
   ylab("Mortality (MT)") +
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                     legend.position = c(0.1, 0.7))
 ggsave(here('data_explore_figs',"ALL_landings.png"),
        width = 6, height = 4)
 
