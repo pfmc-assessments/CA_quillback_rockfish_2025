@@ -309,8 +309,8 @@ ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_lan"] <- ca_rec_hist$QLBKmt
 ###
 
 #Do not add 1980 MRFSS value. Use the estimate from the historical reconstruction instead
-ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), "rec_tot"] <- 
-  ca_rec_mrfss[!(ca_rec_mrfss$YEAR %in% 1980),]$tot_mt
+ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), c("rec_tot", "rec_lan", "rec_dis")] <- 
+  ca_rec_mrfss[!(ca_rec_mrfss$YEAR %in% 1980), c("tot_mt", "landEst_mt", "disEst_mt")]
 
 
 ###
@@ -319,6 +319,23 @@ ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), "r
 
 ca_catch[ca_catch$Year %in% ca_rec_recfin$RECFIN_YEAR, c("rec_tot", "rec_lan", "rec_dis")] <- 
   ca_rec_recfin[, c("tot_mt", "land_mt", "dis_mt")]
+
+
+###
+# Add historical recreational discards
+###
+
+#Calculate average from mrfss. Weight by catch - 1.1%
+ca_rec_hist_discard_rate <- sum(ca_rec_mrfss$disEst_mt, na.rm = TRUE) / 
+  sum(ca_rec_mrfss$landEst_mt, na.rm = TRUE)
+
+#Then calculate discards mortality...
+ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_dis"] <- ca_rec_hist_discard_rate *
+  ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_lan"]
+#...and sum for total mortality
+ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_tot"] <- 
+  ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_dis"] +
+  ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_lan"]
 
 
 #---------------------------------------------------------------------------------------------------------------#
@@ -330,6 +347,20 @@ ca_catch[ca_catch$Year %in% ca_rec_recfin$RECFIN_YEAR, c("rec_tot", "rec_lan", "
 
 #write.csv(round(ca_catch,3), file = file.path(here("data", "CAquillback_total_removals.csv")), row.names = FALSE)
 
+
+# Plot overall values
+ca_catch_long <- ca_catch %>% tidyr::pivot_longer(cols = -Year,
+                                                  names_to = c("fleet", "type"), 
+                                                  names_sep = "_",
+                                                  values_to = "mt")
+
+ggplot(ca_catch_long %>% dplyr::filter(type == "tot"), aes(y = mt, x = Year, fill = fleet)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Mortality (MT)") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"ALL_landings.png"),
+       width = 6, height = 4)
 
 
 
