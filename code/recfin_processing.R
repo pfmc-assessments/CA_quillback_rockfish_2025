@@ -335,12 +335,17 @@ aggAreaYr_mrfss <- ca_mrfss %>%
   data.frame()
 
 
-#Aggregate over years and output the catch time series
+#Aggregate over years and output the catch time series.
+
 aggCatch_mrfss <- ca_mrfss %>%
   dplyr::group_by(YEAR) %>%
-  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE)) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt, na.rm = TRUE),
+                   percB1 = sum(ESTHARV, na.rm = TRUE)/sum(ESTCLAIM + ESTHARV, na.rm = TRUE),
+                   percB1old = sum(TSP_HARV, na.rm = TRUE)/sum(TSPCLAIM + TSP_HARV, na.rm = TRUE),
+                   disEst_mt = percB1 * tot_mt,
+                   landEst_mt = tot_mt - disEst_mt) %>%
   data.frame()
-#write.csv(aggCatch_mrfss, here("data","CAquillback_mrfss_catches.csv"), row.names = FALSE)
+#write.csv(aggCatch_mrfss[,c("YEAR", "tot_mt", "disEst_mt", "landEst_mt")], here("data","CAquillback_mrfss_catches.csv"), row.names = FALSE)
 
 
 
@@ -403,6 +408,16 @@ ggplot(aggAreaYr_mrfss, aes(y = tot_mt, x = YEAR)) +
   scale_fill_discrete(labels = c("OCEAN (<= 3 MI)", "OCEAN (> 3 MI)", "INLAND", "UNK", "NA")) +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
+
+#Plot proportion of B1 in AB1
+png(here('data_explore_figs',"mrfss_discard_prop.png"),
+    width = 6, height = 4, units = "in", res = 300)
+plot(aggCatch_mrfss$YEAR, aggCatch_mrfss$percB1, type = "l", lwd = 3,
+     ylab = "Proportion of B1 in AB1", xlab = "Year", ylim = c(0, 0.12))
+lines(aggCatch_mrfss$YEAR, aggCatch_mrfss$percB1old, col = 2, lwd = 2)
+legend("topleft", c("ESTHARV / ESTHARV + ESTCLAIM", "TSP_HARV / TSP_HARV + TSPCLAIM"), 
+       bty = "n", col = c(1,2), lty = 1, cex = 0.8)
+dev.off()
 
 
 #-----------------------------------------------------------------------------#
