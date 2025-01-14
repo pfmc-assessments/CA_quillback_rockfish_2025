@@ -415,7 +415,7 @@ png(here('data_explore_figs',"mrfss_discard_prop.png"),
 plot(aggCatch_mrfss$YEAR, aggCatch_mrfss$percB1, type = "l", lwd = 3,
      ylab = "Proportion of B1 in AB1", xlab = "Year", ylim = c(0, 0.12))
 lines(aggCatch_mrfss$YEAR, aggCatch_mrfss$percB1old, col = 2, lwd = 2)
-legend("topleft", c("ESTHARV / ESTHARV + ESTCLAIM", "TSP_HARV / TSP_HARV + TSPCLAIM"), 
+legend("topleft", c("EST", "TSP"), 
        bty = "n", col = c(1,2), lty = 1, cex = 0.8)
 dev.off()
 
