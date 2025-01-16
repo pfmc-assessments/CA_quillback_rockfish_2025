@@ -15,6 +15,9 @@
 
 library(here)
 library(magrittr)
+#devtools::install_github("pfmc-assessments/nwfscDiag")
+library(nwfscDiag)
+library(ggplot2)
 
 
 #---------------------------------------------------------------------------------------------------------------#
@@ -41,6 +44,12 @@ table(bio_mrfss$Year, bio_mrfss$mode)
 
 ## Deb Wilson Vandenberg bds
 bio_deb <- read.csv(here("data_bio_process","CAquillback_deb_bio.csv"), header = TRUE)
+
+ggplot(bio_deb, aes(x = Year, y = length_cm, color = area)) +
+  geom_point() + 
+  facet_wrap(~area)
+ggsave(here('data_explore_figs',"deb_length_district.png"), 
+         width = 6, height = 4)
 
 ## Geibel and Collier bds
 bio_gc <- read.csv(here("data_bio_process","CAquillback_historical_bio_skiff.csv"), header = TRUE)
@@ -98,7 +107,8 @@ create_data_frame <- function(data_list, names = c("Year",
                                                    "disp",
                                                    "wgt_flag",
                                                    "lngth_flag",
-                                                   "source")){
+                                                   "source",
+                                                   "tripID")){
   
   all_data = NA
   for (a in 1:length(data_list)){
@@ -123,6 +133,20 @@ create_data_frame <- function(data_list, names = c("Year",
 data <- create_data_frame(input)
 #write.csv(data, here("data_bio_process", "CAquillback_ALL_bio.csv"), row.names = FALSE)
 
+
+
+## Create table of sample sizes and trips
+dataN <- data %>% dplyr::filter(source != "pacfin") %>%
+  dplyr::group_by(source, Year) %>% 
+  dplyr::summarize(Nfish = length(length_cm),
+                   Ntrip = length(unique(tripID))) %>%
+  tidyr::pivot_wider(names_from = source,
+                     values_from = c(Nfish, Ntrip),
+                     names_glue = "{source}_{.value}") %>%
+  dplyr::arrange(Year) %>%
+  data.frame()
+dataN[is.na(dataN)] <- 0
+#write.csv(dataN, here("data", "SampleSize_length_noPacFIN.csv"), row.names = FALSE)
 
 
 
@@ -157,3 +181,73 @@ for(Sex in c("F", "M")){
   mtext(side = 3, line = -1, adj = 0, paste("N =", length(data[find, "length_cm"])))
 }
 dev.off()
+
+
+##
+#Compare lengths by sex and source
+##
+
+ggplot(data, aes(x = length_cm, fill = sex)) +
+  geom_histogram(aes(y = after_stat(density)), binwidth = 2) +
+  ylab("Count") +
+  xlab("Length (cm)") +
+  xlim(0,65) + 
+  facet_wrap(~source, scales = "free") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+
+##
+#Plot length frequency plots by source and year in style of 2021 assessment
+##
+
+source("https://raw.githubusercontent.com/brianlangseth-NOAA/dataModerate_2021/refs/heads/quillback/R/len_freq_plot.R")
+source("https://raw.githubusercontent.com/brianlangseth-NOAA/dataModerate_2021/refs/heads/quillback/R/data_hist_plot.R")
+
+#Rename variables so can do length_freq_plot
+data$Source <- data$source
+data$Sex <- data$sex
+data$Length <- data$length_cm
+
+#Source 
+#Using length_freq_plot
+#Note Im combining the triennial and trawl surveys here
+data[which(data$source %in% c("trawl", "triennial")), "Source"] <- "NOAA surveys"
+length_freq_plot(dir = here("data_explore_figs", "bio_figs"), 
+                 data = data, xlim = NULL, ylim = NULL)
+#The length_freq_plot function creates its own plots file so I remove that directory
+file.rename(from = here("data_explore_figs", "bio_figs", "plots", "Length_by_Source.png"),
+            to = here("data_explore_figs", "bio_figs", "Length_by_Source.png"))
+unlink(here("data_explore_figs", "bio_figs", "plots"), recursive=TRUE)
+
+#Source
+#Using data_hist
+data$test <- "all"
+data_hist(dir = here("data_explore_figs", "bio_figs"), 
+          data = data, 
+          data_type = "Length", 
+          group_column = "test", 
+          fleet_column = "Source", 
+          ymax = NULL, 
+          do_abline = TRUE)
+#Now without the survey because we dont plan to apply those data as length comps
+data$test <- "all_noSurvey"
+data_hist(dir = here("data_explore_figs", "bio_figs"), 
+          data = data[which(!data$source %in% c("trawl", "triennial")), ], 
+          data_type = "Length", 
+          group_column = "test", 
+          fleet_column = "Source", 
+          ymax = NULL, 
+          do_abline = TRUE)
+
+#Year
+tmp = out[out$Source %in% unique(out$Source),]
+par(mar = c(4,4,2,7))
+plot(aggregate(tmp$Length, by = list(tmp$Year), FUN = mean), xlab = "Year", ylab = "mean Length (cm)", type = "b", lwd = 2)
+par(new=T)
+plot(aggregate(tmp$Length, by = list(tmp$Year), FUN = length), 
+     xlab = "", ylab = "", xaxt = "n", yaxt = "n", type = "l", lty = 2, lwd = 1)
+axis(4)
+mtext("Sample size", side = 4, line = 3)
+
+
+

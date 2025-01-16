@@ -543,6 +543,8 @@ ggplot(bio, aes(y = FISH_LENGTH, x = PACFIN_GEAR_CODE)) +
 ggplot(bio %>% dplyr::filter(PACFIN_GEAR_CODE %in% c("HKL", "LGL")),
        aes(x = FISH_LENGTH)) +
   geom_density(aes(colour = PACFIN_GEAR_CODE))
+ggsave(here('data_explore_figs',"pacfin_length_gear_density.png"), 
+       width = 6, height = 4)
 
 #By gear and port
 ggplot(bio, aes(y = FISH_LENGTH, x = PACFIN_GEAR_CODE)) +
@@ -552,12 +554,28 @@ ggplot(bio %>% dplyr::filter(PACFIN_GEAR_CODE %in% c("HKL", "LGL")),
        aes(x = FISH_LENGTH)) +
   geom_density(aes(colour = PACFIN_GEAR_CODE)) +
   facet_wrap(~PACFIN_GROUP_PORT_CODE)
+ggsave(here('data_explore_figs',"pacfin_length_gear_port_group_density.png"), 
+       width = 6, height = 4)
 #Seems like any "gear" difference is really a difference in area since
 #SFA and BDA which are smaller are from only one gear. Among CCA, where
 #both gears exist, the sizes are similar.
 
+#By gear and disposition
+table(bio$PACFIN_GEAR_CODE, bio$disp)
+ggplot(bio %>% dplyr::filter(PACFIN_GEAR_CODE %in% c("HKL", "LGL")),
+       aes(x = FISH_LENGTH)) +
+  geom_density(aes(colour = disp)) +
+  facet_wrap(~PACFIN_GEAR_CODE)
+ggsave(here('data_explore_figs',"pacfin_length_disposition_gear_density.png"), 
+       width = 6, height = 4)
 
-
+#breaking this out further continues to show that the difference between gears
+#is really due to differences in areas
+ggplot(bio %>% dplyr::filter(PACFIN_GEAR_CODE %in% c("HKL", "LGL")),
+       aes(x = FISH_LENGTH)) +
+  geom_density(aes(colour = PACFIN_GEAR_CODE, lty = disp)) +
+  facet_wrap(~ PACFIN_GROUP_PORT_CODE)
+#though there is a bit more dome-shapedness for alive fish than dead
 
 
 
