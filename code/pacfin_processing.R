@@ -458,7 +458,10 @@ p1 <- ggplot(bio, aes(y = FISH_LENGTH, x = SAMPLE_YEAR, color = disp)) +
   geom_point()
 p2 <- ggplot(bio, aes(x = FISH_LENGTH)) +
   geom_density(aes(colour = disp))
-#Doesn't seem to have differences between live and dead fish fishery
+p3 <- ggplot(bio %>% dplyr::filter(SAMPLE_YEAR %in% c(1999:2010)), aes(x = FISH_LENGTH)) +
+  geom_density(aes(colour = disp))
+#Doesn't seem to have differences between live and dead fish fishery either for all years, or
+#for just the years where both occur regularly
 
 grid.arrange(p1, p2, nrow = 2)
 g <- gridExtra::arrangeGrob(p1, p2, nrow=2) #generates g
