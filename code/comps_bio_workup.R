@@ -158,6 +158,16 @@ dataN[is.na(dataN)] <- 0
 
 dir.create(here("data_explore_figs", "bio_figs"))
 
+##
+#Overall recreational lengths
+##
+
+ggplot(data %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial")),
+       aes(y = length_cm, x = Year, color = source)) +
+  geom_point() +
+  ylab("Length (cm)")
+ggsave(here('data_explore_figs',"rec_length_allSources.png"), 
+       width = 6, height = 4)
 
 ##
 #Compare lengths of aged and unaged fish

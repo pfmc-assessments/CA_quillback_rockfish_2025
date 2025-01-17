@@ -520,8 +520,10 @@ ca_bio_rec$area <- dplyr::case_when(grepl("BAY AREA", ca_bio_rec$RECFIN_PORT_NAM
                                     TRUE ~ NA)
 
 #Sexes
-#There are five fish with sex codes. Set all to unidentified
-ca_bio_rec$sex <- "U"
+#There are five fish with sex codes.
+ca_bio_rec$sex <- dplyr::case_when(ca_bio_rec$RECFIN_SEX_CODE == "F" ~ "F",
+                                   ca_bio_rec$RECFIN_SEX_CODE == "M" ~ "M",
+                                   TRUE ~ "U")
 
 #From explorations remove any lengths above 600 (this removes three fish: 640, 804, and 999)
 #These are flagged within recfin as not being within max
@@ -642,6 +644,12 @@ ggplot(ca_bio_rec, aes(y = RECFIN_LENGTH_MM, x = mode)) +
   geom_violin(aes(fill = mode)) +
   facet_wrap(~area)
 ggsave(here('data_explore_figs',"recfin_length_mode_area_violin.png"), 
+       width = 6, height = 4)
+#as a density plot
+ggplot(ca_bio_rec, aes(x = RECFIN_LENGTH_MM)) +
+  geom_density(aes(color = mode)) +
+  facet_wrap(~area)
+ggsave(here('data_explore_figs',"recfin_length_mode_area_density.png"), 
        width = 6, height = 4)
 #Based on this, PC and PR are similar within each district. 
 #Therefore, the fact that PC is smaller than PR must mean that there are more PR
@@ -917,6 +925,11 @@ ggplot(ca_mrfss_bio, aes(y = LNGTH, x = mode)) +
   geom_violin(aes(fill = mode))
 ggsave(here('data_explore_figs',"mrfss_length_mode_violin.png"), 
        width = 6, height = 4)
+#by density now
+ggplot(ca_mrfss_bio, aes(x = LNGTH)) +
+  geom_density(aes(color = mode))
+ggsave(here('data_explore_figs',"mrfss_length_mode_density.png"), 
+       width = 6, height = 4)
 
 #Not much difference between PR and PC by mode other than in Redwood
 ggplot(ca_mrfss_bio, aes(y = LNGTH, x = mode)) +
@@ -933,7 +946,8 @@ table(ca_mrfss_bio$area, ca_mrfss_bio$mode) #More PR in redwood. Saw this in Rec
 ggplot(ca_mrfss_bio, aes(x = LNGTH)) +
   geom_density(aes(color = mode)) +
   facet_wrap(~area)
-
+ggsave(here('data_explore_figs',"mrfss_length_mode_area_density.png"), 
+       width = 6, height = 4)
 
 ##
 #By areas
