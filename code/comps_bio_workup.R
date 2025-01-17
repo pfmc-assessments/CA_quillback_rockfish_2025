@@ -45,12 +45,6 @@ table(bio_mrfss$Year, bio_mrfss$mode)
 ## Deb Wilson Vandenberg bds
 bio_deb <- read.csv(here("data_bio_process","CAquillback_deb_bio.csv"), header = TRUE)
 
-ggplot(bio_deb, aes(x = Year, y = length_cm, color = area)) +
-  geom_point() + 
-  facet_wrap(~area)
-ggsave(here('data_explore_figs',"deb_length_district.png"), 
-         width = 6, height = 4)
-
 ## Geibel and Collier bds
 bio_gc <- read.csv(here("data_bio_process","CAquillback_historical_bio_skiff.csv"), header = TRUE)
 
@@ -169,28 +163,16 @@ ggplot(data %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial")),
 ggsave(here('data_explore_figs',"rec_length_allSources.png"), 
        width = 6, height = 4)
 
+
 ##
-#Compare lengths of aged and unaged fish
+#Plot for deb data
 ##
 
-png(filename = here("data_explore_figs", "bio_figs", "Compare_Lengths_for_Aged_Unaged_Fish.png"), 
-    w = 7, h = 7, units = "in", pointsize = 12, res = 300)
-par(mfrow = c(2,2))
-for(Sex in c("F", "M")){
-  find = which(is.na(data$age) & data$sex == Sex)
-  hist(data[find, "length_cm"], xlim = c(0, 65),  xlab = "Length (cm)", 
-       col = ifelse(Sex == "F", alpha('red', 0.65), alpha('blue', 0.5)), main = paste0("Unaged Fish Lengths: ", Sex))
-  abline(v = median(data[find, "length_cm"], na.rm = TRUE), lty = 2, lwd = 3, col = 1)
-  mtext(side = 3, line = -1, adj = 0, paste("N =", length(data[find, "length_cm"])))
-}
-for(Sex in c("F", "M")){
-  find = which(!is.na(data$age) & data$sex == Sex)
-  hist(data[find, "length_cm"], , xlim = c(0, 65), xlab = "Length (cm)", 
-       col = ifelse(Sex == "F", alpha('red', 0.65), alpha('blue', 0.5)), main = paste0("Aged Fish Lengths: ", Sex))
-  abline(v = median(data[find, "length_cm"], na.rm = TRUE), lty = 2, lwd = 3, col = 1)
-  mtext(side = 3, line = -1, adj = 0, paste("N =", length(data[find, "length_cm"])))
-}
-dev.off()
+ggplot(bio_deb, aes(x = Year, y = length_cm, color = area)) +
+  geom_point() + 
+  facet_wrap(~area)
+ggsave(here('data_explore_figs',"deb_length_district.png"), 
+       width = 6, height = 4)
 
 
 ##
@@ -206,9 +188,7 @@ ggplot(data, aes(x = length_cm, fill = sex)) +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 
-##
-#Plot length frequency plots by source and year in style of 2021 assessment
-##
+#Plot these in style of 2021 assessment
 
 source("https://raw.githubusercontent.com/brianlangseth-NOAA/dataModerate_2021/refs/heads/quillback/R/len_freq_plot.R")
 source("https://raw.githubusercontent.com/brianlangseth-NOAA/dataModerate_2021/refs/heads/quillback/R/data_hist_plot.R")
@@ -249,15 +229,29 @@ data_hist(dir = here("data_explore_figs", "bio_figs"),
           ymax = NULL, 
           do_abline = TRUE)
 
-#Year
-tmp = out[out$Source %in% unique(out$Source),]
-par(mar = c(4,4,2,7))
-plot(aggregate(tmp$Length, by = list(tmp$Year), FUN = mean), xlab = "Year", ylab = "mean Length (cm)", type = "b", lwd = 2)
-par(new=T)
-plot(aggregate(tmp$Length, by = list(tmp$Year), FUN = length), 
-     xlab = "", ylab = "", xaxt = "n", yaxt = "n", type = "l", lty = 2, lwd = 1)
-axis(4)
-mtext("Sample size", side = 4, line = 3)
+
+##
+#Compare lengths of aged and unaged fish
+##
+
+png(filename = here("data_explore_figs", "bio_figs", "Compare_Lengths_for_Aged_Unaged_Fish.png"), 
+    w = 7, h = 7, units = "in", pointsize = 12, res = 300)
+par(mfrow = c(2,2))
+for(Sex in c("F", "M")){
+  find = which(is.na(data$age) & data$sex == Sex)
+  hist(data[find, "length_cm"], xlim = c(0, 65),  xlab = "Length (cm)", 
+       col = ifelse(Sex == "F", alpha('red', 0.65), alpha('blue', 0.5)), main = paste0("Unaged Fish Lengths: ", Sex))
+  abline(v = median(data[find, "length_cm"], na.rm = TRUE), lty = 2, lwd = 3, col = 1)
+  mtext(side = 3, line = -1, adj = 0, paste("N =", length(data[find, "length_cm"])))
+}
+for(Sex in c("F", "M")){
+  find = which(!is.na(data$age) & data$sex == Sex)
+  hist(data[find, "length_cm"], , xlim = c(0, 65), xlab = "Length (cm)", 
+       col = ifelse(Sex == "F", alpha('red', 0.65), alpha('blue', 0.5)), main = paste0("Aged Fish Lengths: ", Sex))
+  abline(v = median(data[find, "length_cm"], na.rm = TRUE), lty = 2, lwd = 3, col = 1)
+  mtext(side = 3, line = -1, adj = 0, paste("N =", length(data[find, "length_cm"])))
+}
+dev.off()
 
 
 
