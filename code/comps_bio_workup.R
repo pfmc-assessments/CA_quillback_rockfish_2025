@@ -176,6 +176,20 @@ ggsave(here('data_explore_figs',"deb_length_district.png"),
 
 
 ##
+#Plot for Geibel and Collier overlayed on MRFSS
+##
+ggplot(bio_gc, aes(x = length_cm, color = source)) +
+  geom_density() +
+  geom_density(aes(x = length_cm, color = source), 
+               data = bio_mrfss %>% dplyr::filter(area %in% "Redwood",
+                                                  mode %in% "PR",
+                                                  Year %in% c(1992:1998))) +
+  ggtitle("Length comparison of PR in Redwood: 1992-1998")
+ggsave(here('data_explore_figs',"GeiCol_length_comparison_mrfss_density.png"), 
+       width = 6, height = 4)
+
+
+##
 #Compare lengths by sex and source
 ##
 
