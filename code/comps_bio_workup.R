@@ -263,23 +263,26 @@ unlink(here("data_explore_figs", "bio_figs", "plots"), recursive=TRUE)
 
 #There are VERY few sexes so just include overall
 data_lw = data[-which(data$wgt_flag %in% "computed" | data$lngth_flag %in% "computed"),]
-table(out_lw$source)
-table(out_lw$sex)
+table(data_lw$source)
+table(data_lw$sex)
 
-lw_ests <- nwfscSurvey::estimate_weight_length(data = data_lw %>% dplyr::select(!c("Sex", "Source", "Length", "Weight")))
-pngfun(wd = here("data_explore_figs", "bio_figs"), file = "Length_Weight_withEsts.png", 
+lw_ests <- nwfscSurvey::estimate_weight_length(data = data_lw %>% dplyr::select(!c("Sex", "Source", "Length")))
+nwfscDiag::pngfun(wd = here("data_explore_figs", "bio_figs"), file = "Length_Weight_withEsts.png", 
        w = 7, h = 7, pt = 12)
-plot(out_lw$length_cm, out_lw$weight_kg, 
+plot(data_lw$length_cm, data_lw$weight_kg, 
      xlab = "Length (cm)", ylab = "Weight (kg)", main = "", 
-     ylim = c(0, max(out_lw$weight_kg, na.rm = TRUE)), xlim = c(0, max(out_lw$length_cm, na.rm = TRUE)), 
+     ylim = c(0, max(data_lw$weight_kg, na.rm = TRUE)), xlim = c(0, max(data_lw$length_cm, na.rm = TRUE)), 
      pch = 16)
-lens = 1:max(out_lw$length_cm, na.rm = TRUE)
+lens = 1:max(data_lw$length_cm, na.rm = TRUE)
 lines(lens, lw_ests[3, "A"] * lens ^ lw_ests[3, "B"], col = "red", lwd = 2, lty = 1)
 #2021 assessment relationship
 lines(lens, 1.963e-5 * lens ^ 3.02, col = "red", lwd = 2, lty = 3)
+#Include Oregon and Washington estimates from the WCGBTS (see survey_workup.R)
+lines(lens, 8.5602e-6 * lens ^ 3.22, col = "cyan", lwd = 2, lty = 3)
 leg = c("Estimate: 1.599e-5, b = 3.07",
-        "2021 assessment: 1.196e-5, b = 3.02")
-legend("topleft", bty = 'n', legend = leg, lty = c(1,2), col = c("red"), lwd = 2)
+        "2021 assessment: 1.196e-5, b = 3.02",
+        "Coastwide WCGBTS: 8.56e-6, b = 3.22")
+legend("topleft", bty = 'n', legend = leg, lty = c(1,2,2), col = c("red", "red", "cyan"), lwd = 2)
 dev.off()  
 
 

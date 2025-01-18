@@ -63,6 +63,11 @@ for(i in 1:length(survey_names)) {
 # NWFSC.Video 2.1
 # Triennial.Canada 97.131
 
+#Extent of WCGBTS sampling in CA
+#There are 6 total tows
+catch[[2]] %>% dplyr::filter(State == "CA", total_catch_numbers>0)
+
 save.image(file = file.path(here('data-raw'),"survey_pulls_Sept4.RData"))
+
 
 

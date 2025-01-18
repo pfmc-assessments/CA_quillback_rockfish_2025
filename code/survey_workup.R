@@ -63,6 +63,18 @@ research_bio <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]],
 #Commented out because already uploaded
 # nwfscSurvey::plot_bio_patterns(dir = here("data_explore_figs"), bio = research_bio, plot = 1)
 
+#Length weight estimates from all WCGBTS survey bio (Oregon and Washington included)
+# research_bio_all <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]], 
+#                               Year, Length_cm, Weight_kg, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, Tow, State) %>% 
+#   dplyr::bind_rows(trawl = ., 
+#                    triennial = dplyr::select(bio[[which(survey_names == "Triennial")]]$length_data, 
+#                                              Year, Length_cm, Weight_kg, Sex, Depth_m, Latitude_dd, Longitude_dd, Tow, State),
+#                    .id = 'survey')
+# lw_ests <- nwfscSurvey::estimate_weight_length(research_bio_all)
+#     sex median_intercept        SD            A        B
+# 1 female     7.276093e-06 0.1039742 7.315529e-06 3.270894
+# 2   male     7.940273e-06 0.1035328 7.982943e-06 3.249172
+# 3    all     8.560214e-06 0.1111789 8.613283e-06 3.226820
 
 ##Rename "plots" folder to something more understandable
 
