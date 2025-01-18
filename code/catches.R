@@ -364,5 +364,15 @@ ggsave(here('data_explore_figs',"ALL_landings.png"),
        width = 6, height = 4)
 
 
-
+ggplot(ca_catch_long %>% dplyr::filter(type %in% c("lan", "dis"), 
+                                       fleet == "rec",
+                                       Year %in% c(1980:2023)), aes(y = mt, x = Year, fill = type)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Mortality (MT)") +
+  scale_fill_manual(labels = c("Dead discards", "Landings"), values = c("#F8766D","#00BFC4")) +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                     legend.position = c(0.7, 0.7))
+ggsave(here('data_explore_figs',"rec_comb_mortality_with_discards.png"),
+       width = 6, height = 4)
 
