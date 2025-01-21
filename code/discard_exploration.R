@@ -16,6 +16,7 @@ library(here)
 library(magrittr)
 #pak::pkg_install("pfmc-assessments/nwfscSurvey")
 library(nwfscSurvey)
+library(ggplot2)
 
 
 ########################-
@@ -202,17 +203,117 @@ ggsave(here('data_explore_figs',"gemm_comm_mortality.png"),
 # This cycle, Quillback Rockfish (California) parses these out already
 #-----------------------------------------------------------------------------------
 
-# load(here("data-raw", "WCGOP", "CONFIDENTIAL_Observer_Catch_Data_2002_2022.Rdat"))
-# load(here("data-raw", "WCGOP", "CONFIDENTIAL_EMLogbook_Catch_Data_2022.Rdat"))
-# 
-# obquil <- OBCatch %>% dplyr::filter(species == "Quillback Rockfish")
-# emquil <- EMCatch %>% dplyr::filter(species == "Quillback Rockfish")
-# 
-# table(obquil$R_STATE, obquil$D_STATE) #Depart and return to CA
-# table(emquil$R_STATE, emquil$D_STATE) #Depart and return to CA
-# 
-# obquil <- OBCatch %>% dplyr::filter(species == "Quillback Rockfish",
-#                                     D_STATE == "CA")
-# emquil <- EMCatch %>% dplyr::filter(species == "Quillback Rockfish",
-#                                     D_STATE == "CA")
+load(here("data-raw", "WCGOP", "CONFIDENTIAL_Observer_Catch_Data_2002_2022.Rdat"))
+load(here("data-raw", "WCGOP", "CONFIDENTIAL_EMLogbook_Catch_Data_2022.Rdat"))
 
+obquil <- OBCatch %>% dplyr::filter(species == "Quillback Rockfish")
+emquil <- EMCatch %>% dplyr::filter(species == "Quillback Rockfish")
+
+table(obquil$R_STATE, obquil$D_STATE) #Depart and return to CA
+table(emquil$R_STATE, emquil$D_STATE) #Depart and return to CA
+
+obquil <- OBCatch %>% dplyr::filter(species == "Quillback Rockfish",
+                                    D_STATE == "CA")
+emquil <- EMCatch %>% dplyr::filter(species == "Quillback Rockfish",
+                                    D_STATE == "CA")
+
+
+#Nothing about length in EMLogbook
+table(emquil$SET_DEPTH)
+table(emquil$AVG_DEPTH)
+table(emquil$OBSERVED)
+table(emquil$CATCH_DISPOSITION)
+table(emquil$NetType)
+table(emquil$SRC)
+table(emquil$sector)
+table(emquil$gear)
+table(emquil$PACFIN_PORT_CODE)
+
+#Nothing about length in observer catch
+table(obquil$GEAR_TYPE)
+table(obquil$GEAR)
+table(obquil$gear)
+table(obquil$PCID)
+table(obquil$SET_DEPTH)
+table(obquil$AVG_DEPTH)
+table(obquil$CATCH_DISPOSITION)
+table(obquil$FISHERY)
+table(obquil$cs_sector)
+
+
+## Now try with biological data
+
+load(here("data-raw", "WCGOP", "CONFIDENTIAL_Observer_Biological_Data_2002_2022.Rdat"))
+
+bioquil <- OBBio2 %>% dplyr::filter(species == "Quillback Rockfish")
+
+table(bioquil$R_STATE.x, bioquil$D_STATE) #Depart and return to CA
+
+bioquil <- OBBio2 %>% dplyr::filter(species == "Quillback Rockfish",
+                                    D_STATE == "CA")
+
+table(bioquil$GEAR_TYPE)
+table(bioquil$TARGET)
+table(bioquil$D_PORT_GROUP)
+table(bioquil$R_PORT_GROUP)
+table(bioquil$SET_YEAR)
+table(bioquil$SET_DEPTH)
+table(bioquil$SET_DEPTH_UM)
+table(bioquil$AVG_DEPTH)
+table(bioquil$FISHERY)
+table(bioquil$CATCH_DISPOSITION) #D means discard
+table(bioquil$DISCARD_REASON)
+table(bioquil$SET_YEAR, bioquil$DISCARD_REASON) #most discards are in 2022
+table(bioquil$SET_YEAR, bioquil$D_PORT_GROUP) #Recent years are CC and EA
+table(bioquil$DISCARD_REASON, bioquil$D_PORT_GROUP) #Pretty even across ports
+table(bioquil$LENGTH)
+table(bioquil$LENGTH_UM)
+table(bioquil$SEX)
+table(bioquil$SPECIMEN_WEIGHT) #only 6 fish with weight
+table(bioquil$AGE)
+table(bioquil$sector)
+table(bioquil$gear)
+
+##
+# Plots
+##
+
+#Plots of lengths
+
+#Regulation is longer, but 'Market' sample size is 15 fish so not sure if relevant
+#Regulation is nearly all 2022 fish
+ggplot(bioquil %>% dplyr::filter(DISCARD_REASON %in% c("Market", "Regulation")), aes(x = LENGTH)) +
+       geom_density(aes(color = DISCARD_REASON)) +
+  ggtitle("WCGOP discard lengths - Reason equals market or regulation, All Years") 
+#If remove 2022 - then lengths are very different. Market and regulation are more simlar
+ggplot(bioquil %>% dplyr::filter(DISCARD_REASON %in% c("Market", "Regulation"),
+                                 SET_YEAR != 2022), aes(x = LENGTH)) +
+  geom_density(aes(color = DISCARD_REASON)) +
+  ggtitle("WCGOP discard lengths - Reason equals market or regulation, Not 2022") 
+
+#Plots for depth
+
+#No real pattern of discarding by depth nor size by depth
+ggplot(bioquil %>% dplyr::filter(DISCARD_REASON %in% c("Market", "Regulation")), 
+       aes(x = AVG_DEPTH, y = LENGTH)) +
+  geom_point(aes(color = DISCARD_REASON)) +
+  ggtitle("Discard length at set depth (fathoms)") 
+
+## Main conclusions:
+
+# There are 15 samples with discard designation of 'market'. These average around 30 cm. 
+# There are 260 samples with discard designation of 'regulation', and 247 of these are in 2022. These average around 40 cm.
+# Altogether, there are so few samples outside of 2022-regulation group.
+# The main take home is that recent discards do not appear to be of small fish. 
+
+
+wc <- ggplot(bioquil %>% dplyr::filter(DISCARD_REASON %in% c("Market", "Regulation")), aes(x = LENGTH)) + 
+  geom_density(aes(color = DISCARD_REASON)) +
+  ggtitle("WCGOP discard lengths - Reason equals market or regulation, All Years")
+wc
+wc + geom_density(data = out %>% dplyr::filter(Year == 2022), aes(x = length_cm, color = "black")) +
+  scale_colour_manual(labels = c("2022 PacFIN", "Market", "Regulation"), 
+                     values = c("#000000", "#F8766D", "#00BFC4"))
+wc + geom_density(data = out %>% dplyr::filter(Year < 2022), aes(x = length_cm, color = "black")) +
+  scale_colour_manual(labels = c("PacFIN < 2022", "Market", "Regulation"), 
+                      values = c("#000000", "#F8766D", "#00BFC4"))
