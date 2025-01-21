@@ -616,7 +616,8 @@ ggsave(here('data_explore_figs',"recfin_length_mode_violin.png"),
        width = 6, height = 4)
 
 #Released fish are only on PC mode, so repeat with only retained fish and use denisty
-ggplot(ca_bio_rec %>% dplyr::filter(IS_RETAINED %in% c("RETAINED")),
+ggplot(ca_bio_rec %>% dplyr::filter(IS_RETAINED %in% c("RETAINED"),
+                                    !is.na(mode)),
        aes(x = RECFIN_LENGTH_MM)) +
   geom_density(aes(color = mode))
 ggsave(here('data_explore_figs',"recfin_length_mode_density.png"), 
@@ -624,7 +625,8 @@ ggsave(here('data_explore_figs',"recfin_length_mode_density.png"),
 
 #If compare add the total PC lengths with released fish included
 #Dashed line is with released fish kept in
-ggplot(ca_bio_rec %>% dplyr::filter(IS_RETAINED %in% c("RETAINED")),
+ggplot(ca_bio_rec %>% dplyr::filter(IS_RETAINED %in% c("RETAINED"),
+                                    !is.na(mode)),
        aes(x = RECFIN_LENGTH_MM)) +
   geom_density(aes(color = mode)) +
   geom_density(data = ca_bio_rec %>% dplyr::filter(mode %in% c("PC")),
@@ -646,7 +648,7 @@ ggplot(ca_bio_rec, aes(y = RECFIN_LENGTH_MM, x = mode)) +
 ggsave(here('data_explore_figs',"recfin_length_mode_area_violin.png"), 
        width = 6, height = 4)
 #as a density plot
-ggplot(ca_bio_rec, aes(x = RECFIN_LENGTH_MM)) +
+ggplot(ca_bio_rec %>% dplyr::filter(!is.na(mode)), aes(x = RECFIN_LENGTH_MM)) +
   geom_density(aes(color = mode)) +
   facet_wrap(~area)
 ggsave(here('data_explore_figs',"recfin_length_mode_area_density.png"), 
@@ -681,7 +683,7 @@ ggsave(here('data_explore_figs',"recfin_length_area_mode.png"),
        width = 6, height = 4)
 
 #Density plots show larger fish in Redwood (and to an extent Wine) 
-ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South")), 
+ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South", NA)), 
        aes(x = RECFIN_LENGTH_MM)) +
   geom_density(aes(colour = area))
 ggsave(here('data_explore_figs',"recfin_length_area_density.png"), 
@@ -700,7 +702,7 @@ ggsave(here('data_explore_figs',"recfin_weight_area_density.png"),
 or_bio_rec <- read.csv("U:/Stock assessments/quillback_rockish_2021_FRAM network files/Quillback_Rockfish/data/RecFIN Sample Data/Quillback_RecFIN_BIO-LW_2001-2020.csv") %>%
   dplyr::filter(RecFIN.Port.Name %in% c("BROOKINGS", "GOLD BEACH", "PORT ORFORD")) %>%
   dplyr::filter(RecFIN.Length.MM < 600)
-ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South")), 
+ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South", NA)), 
        aes(x = RECFIN_LENGTH_MM)) +
   geom_density(aes(colour = area)) +
   geom_density(aes(x = RecFIN.Length.MM, colour = RecFIN.Port.Name), data = or_bio_rec, linetype = 2)
@@ -974,7 +976,7 @@ ggsave(here('data_explore_figs',"mrfss_length_area_mode.png"),
        width = 6, height = 4)
 
 #Density plots show larger fish in Redwood (and to an extent Wine) 
-ggplot(ca_mrfss_bio, aes(x = LNGTH)) +
+ggplot(ca_mrfss_bio %>% dplyr::filter(!is.na(area)), aes(x = LNGTH)) +
   geom_density(aes(colour = area))
 ggsave(here('data_explore_figs',"mrfss_length_area_density.png"), 
        width = 6, height = 4)

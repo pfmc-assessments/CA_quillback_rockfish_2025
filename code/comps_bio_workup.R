@@ -277,11 +277,13 @@ lens = 1:max(data_lw$length_cm, na.rm = TRUE)
 lines(lens, lw_ests[3, "A"] * lens ^ lw_ests[3, "B"], col = "red", lwd = 2, lty = 1)
 #2021 assessment relationship
 lines(lens, 1.963e-5 * lens ^ 3.02, col = "red", lwd = 2, lty = 3)
-#Include Oregon and Washington estimates from the WCGBTS (see survey_workup.R)
-lines(lens, 8.5602e-6 * lens ^ 3.22, col = "cyan", lwd = 2, lty = 3)
+# #Include Oregon and Washington estimates from the WCGBTS (see survey_workup.R)
+# lines(lens, 8.5602e-6 * lens ^ 3.22, col = "cyan", lwd = 2, lty = 3)
+# leg = c("Estimate: 1.599e-5, b = 3.07",
+#         "2021 assessment: 1.196e-5, b = 3.02",
+#         "Coastwide WCGBTS: 8.56e-6, b = 3.22")
 leg = c("Estimate: 1.599e-5, b = 3.07",
-        "2021 assessment: 1.196e-5, b = 3.02",
-        "Coastwide WCGBTS: 8.56e-6, b = 3.22")
+        "2021 assessment: 1.196e-5, b = 3.02")
 legend("topleft", bty = 'n', legend = leg, lty = c(1,2,2), col = c("red", "red", "cyan"), lwd = 2)
 dev.off()  
 
