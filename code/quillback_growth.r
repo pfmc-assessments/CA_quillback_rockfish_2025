@@ -64,38 +64,8 @@ ca %>%
     group_by(Sex) %>%
     tally() 
 
-
-age_df <- ca
-age_df$Age <- age_df$age
-age_df$Length_cm <- age_df$length_cm
-
-ages_all <- est_growth(
-  dir = NULL, 
-  dat = age_df, 
-  Par = data.frame(K = 0.13, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10),
-  sdFactor = 3)
-
-#check to see if any outside the 3 sds
-remove <- which(ages_all[,'length_cm'] > ages_all[,'Lhat_high'] | ages_all[,'length_cm'] < ages_all[,'Lhat_low'])
-ages_all[remove, ]
-
-#none
-plot(ages_all[remove, 'Age'], ages_all[remove, "Length_cm"], xlim = c(0,40), ylim = c(0, 50)) 
-clean_ages <- age_df
-
-length_age_ests_all <- est_growth(
-  dat = clean_ages, #age_df, 
-  return_df = FALSE,
-  Par = data.frame(K = 0.13, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-
-#save(length_age_ests_all, file = file.path(dir,"biology", 'length_at_age_ests_all.rdata'))
-
-length_age_ests_north <- est_growth(
-  dat = age_df[age_df$area == "north", ], 
-  return_df = FALSE,
-  Par = data.frame(K = 0.13, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-
-#jplot
+######Data plots
+#plot by faceted project
 ggplot(age_df, aes(y = length_cm, x = age, color = Sex)) +
 	geom_point(alpha = 0.1) + 
   theme_bw() + 
@@ -109,7 +79,126 @@ ggplot(age_df, aes(y = length_cm, x = age, color = Sex)) +
 	facet_grid(project~.) + 
 	xlab("Age") + ylab("Length (cm)") +
   scale_color_viridis_d()
-#ggsave(filename = file.path(dir, "biology", "plots", "age_at_length.png"),
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_by_project.png"),
+       width = 10, height = 8)
+
+#plot by faceted sex
+ggplot(age_df, aes(y = length_cm, x = age, color = project)) +
+	geom_point(alpha = 0.1) + 
+  theme_bw() + 
+  geom_jitter() + 
+  xlim(1, 60) + ylim(1, 60) +
+  theme(panel.grid.major = element_blank(), 
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 16),
+        strip.text.y = element_text(size = 16),
+         legend.text = element_text(size = 20),
+        panel.grid.minor = element_blank()) + 
+	facet_grid(rows = vars(Sex)) + 
+	xlab("Age") + ylab("Length (cm)") +
+  scale_color_viridis_d()
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex.png"),
+       width = 10, height = 8)
+
+
+#Plot just carcass and ccfrp sampling
+ca_1 <- ca %>% filter(project %in% c("Carcass Sampling", "CCFRP"))
+ggplot(ca_1, aes(y = length_cm, x = age, color = project)) +
+	geom_point(alpha = 0.1) + 
+  theme_bw() + 
+  geom_jitter() + 
+  xlim(1, 60) + ylim(1, 60) +
+  theme(panel.grid.major = element_blank(), 
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        strip.text.y = element_text(size = 14),
+        panel.grid.minor = element_blank()) + 
+	xlab("Age") + ylab("Length (cm)") +
+  scale_color_viridis_d()
+#ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_by_project.png"),
 #       width = 10, height = 8)
 
+#############################################
+#estimate growth
+#2021 estimate Linf = 43.04 k = .199 to = -0.067
+#2025 CA only est: 
+
+age_df <- ca
+age_df$Age <- age_df$age
+age_df$Length_cm <- age_df$length_cm
+age_df <- age_df %>% 
+filter(project != "Carcass Sampling")
+
+vb_est_all<- est_vbgrowth(
+  dir = NULL, 
+  dat = age_df, 
+  col_length = "length_cm",
+  col_age = "age",
+  init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+ ages_all
+ #        K       Linf         L0        CV0        CV1
+ #0.1782938 40.9971124  3.9225748  0.2262690  0.0649841
+
+#males only
+length_age_males <- est_vbgrowth(
+ dir = file.path(here(),"data-raw"),
+  dat = subset(age_df, Sex == 1), 
+  col_length = "length_cm",
+  col_age = "age",
+   init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+length_age_males
+#males
+#           K         Linf           L0          CV0          CV1
+# 0.131052985 41.724881311 13.105886995  0.192873891  0.006705831
+
+#females only
+length_age_females <- est_vbgrowth(
+ dir = file.path(here(),"data-raw"),
+  dat = subset(age_df, Sex == 2), 
+  col_length = "length_cm",
+  col_age = "age",
+   init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+length_age_females
+#females
+#           K         Linf           L0          CV0          CV1
+# 0.093386826 44.362969045 16.842822351  0.168755023  0.001117803
+
+##################################################
+#Get the predictions
+ages <- seq(0, 60, by = 0.2)
+vb_fn <- function(age, Linf, L0, k) {
+    #vec <- Linf * (1 - exp( -k * (age - t0)))
+    vec <- Linf - (Linf - L0) * exp(-age * k)
+    return(vec)
+}
+vb_fn2 <- function(age, Linf, t0, k) {
+    vec <- Linf * (1 - exp( -k * (age - t0)))
+   # vec <- Linf - (Linf - L0) * exp(-age * k)
+    return(vec)
+}
+preds1 <- data.frame(ages,
+                 fit = vb_fn(ages, Linf = vb_est_all[[3]][2], L0 = vb_est_all[[3]][3], k = vb_est_all[[3]][1]))
+
+preds2 <- data.frame(ages,
+                 fit = vb_fn2(ages,  Linf = 43.02, t0 = -0.067, k = 0.199))
+
+
+#Plot data with fit 
+ggplot() +
+	geom_jitter(data = age_df, aes(y = length_cm, x = age), alpha = .8) + 
+  geom_line(data = preds1, aes(y = fit, x = ages, colour = "CA data"), linewidth = 2) +
+  geom_line(data = preds2, aes(y = fit, x = ages, colour = "2021 est"), linewidth = 2) +
+  theme_bw() + 
+  xlim(0, 60) + ylim(0, 50) +
+  theme(panel.grid.major = element_blank(), 
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 16),
+        strip.text.y = element_text(size = 16),
+       legend.text = element_text(size = 20),
+        panel.grid.minor = element_blank()) + 
+	xlab("Age") + ylab("Length (cm)") +
+  scale_color_viridis_d() 
+
+#ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex.png"),
+#       width = 10, height = 8)
 
