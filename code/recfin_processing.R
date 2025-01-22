@@ -380,8 +380,8 @@ plot((merge(aggCatch_mrfss, catch_mrfss_2021, by.x = "YEAR", by.y = "Year") %>%
         dplyr::mutate("diff" = round(tot_mt - total_mt, 3)))$diff, x = c(1980:1989, 1993:2004))
 
 
-#By fleet type - total mortality
-ggplot(aggFleetYr_mrfss, aes(y = tot_mt, x = YEAR)) +
+#By fleet type - total mortality (Removing the other mode for plotting purposes)
+ggplot(aggFleetYr_mrfss %>% dplyr::filter(mode %in% c("PC", "PR")), aes(y = tot_mt, x = YEAR)) +
   geom_bar(position = "stack", stat = "identity", aes(fill = mode)) +
   xlab("Year") +
   ylab("Total mortality (MT)") +
@@ -389,9 +389,9 @@ ggplot(aggFleetYr_mrfss, aes(y = tot_mt, x = YEAR)) +
 ggsave(here('data_explore_figs',"mrfss_mortality_fleet.png"),
        width = 6, height = 4)
 
-# Plotting MRFSS and RecFIN catches together combined by fleet
+# Plotting MRFSS and RecFIN catches together combined by fleet (Removing the other mode for plotting purposes)
 aggFleetYr_comb <- rbind(aggFleetYr_mrfss, aggFleetYr[,c("mode", "YEAR", "tot_mt")])
-ggplot(aggFleetYr_comb, aes(y = tot_mt, x = YEAR)) +
+ggplot(aggFleetYr_comb %>% dplyr::filter(mode %in% c("PC", "PR")), aes(y = tot_mt, x = YEAR)) +
   geom_bar(position = "stack", stat = "identity", aes(fill = mode)) +
   xlab("Year") +
   ylab("Total mortality (MT)") +
