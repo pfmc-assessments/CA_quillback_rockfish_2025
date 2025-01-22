@@ -685,7 +685,8 @@ ggsave(here('data_explore_figs',"recfin_length_area_mode.png"),
 #Density plots show larger fish in Redwood (and to an extent Wine) 
 ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South", NA)), 
        aes(x = RECFIN_LENGTH_MM)) +
-  geom_density(aes(colour = area))
+  geom_density(aes(colour = area)) +
+  scale_colour_discrete(breaks = c("Redwood", "Wine", "Central", "Bay"))
 ggsave(here('data_explore_figs',"recfin_length_area_density.png"), 
        width = 6, height = 4)
 
@@ -705,7 +706,8 @@ or_bio_rec <- read.csv("U:/Stock assessments/quillback_rockish_2021_FRAM network
 ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South", NA)), 
        aes(x = RECFIN_LENGTH_MM)) +
   geom_density(aes(colour = area)) +
-  geom_density(aes(x = RecFIN.Length.MM, colour = RecFIN.Port.Name), data = or_bio_rec, linetype = 2)
+  geom_density(aes(x = RecFIN.Length.MM, colour = RecFIN.Port.Name), data = or_bio_rec, linetype = 2) +
+  scale_colour_discrete(breaks = c("PORT ORFORD", "GOLD BEACH", "BROOKINGS", "Redwood", "Wine", "Central", "Bay"))
 ggsave(here('data_explore_figs',"recfin_length_area_density_withOregon.png"), 
        width = 6, height = 4)
 
@@ -977,7 +979,8 @@ ggsave(here('data_explore_figs',"mrfss_length_area_mode.png"),
 
 #Density plots show larger fish in Redwood (and to an extent Wine) 
 ggplot(ca_mrfss_bio %>% dplyr::filter(!is.na(area)), aes(x = LNGTH)) +
-  geom_density(aes(colour = area))
+  geom_density(aes(colour = area)) +
+  scale_colour_discrete(breaks = c("Redwood", "Wine", "Central", "Bay"))
 ggsave(here('data_explore_figs',"mrfss_length_area_density.png"), 
        width = 6, height = 4)
 
