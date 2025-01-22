@@ -380,8 +380,8 @@ plot((merge(aggCatch_mrfss, catch_mrfss_2021, by.x = "YEAR", by.y = "Year") %>%
         dplyr::mutate("diff" = round(tot_mt - total_mt, 3)))$diff, x = c(1980:1989, 1993:2004))
 
 
-#By fleet type - total mortality
-ggplot(aggFleetYr_mrfss, aes(y = tot_mt, x = YEAR)) +
+#By fleet type - total mortality (Removing the other mode for plotting purposes)
+ggplot(aggFleetYr_mrfss %>% dplyr::filter(mode %in% c("PC", "PR")), aes(y = tot_mt, x = YEAR)) +
   geom_bar(position = "stack", stat = "identity", aes(fill = mode)) +
   xlab("Year") +
   ylab("Total mortality (MT)") +
@@ -389,9 +389,9 @@ ggplot(aggFleetYr_mrfss, aes(y = tot_mt, x = YEAR)) +
 ggsave(here('data_explore_figs',"mrfss_mortality_fleet.png"),
        width = 6, height = 4)
 
-# Plotting MRFSS and RecFIN catches together combined by fleet
+# Plotting MRFSS and RecFIN catches together combined by fleet (Removing the other mode for plotting purposes)
 aggFleetYr_comb <- rbind(aggFleetYr_mrfss, aggFleetYr[,c("mode", "YEAR", "tot_mt")])
-ggplot(aggFleetYr_comb, aes(y = tot_mt, x = YEAR)) +
+ggplot(aggFleetYr_comb %>% dplyr::filter(mode %in% c("PC", "PR")), aes(y = tot_mt, x = YEAR)) +
   geom_bar(position = "stack", stat = "identity", aes(fill = mode)) +
   xlab("Year") +
   ylab("Total mortality (MT)") +
@@ -685,7 +685,8 @@ ggsave(here('data_explore_figs',"recfin_length_area_mode.png"),
 #Density plots show larger fish in Redwood (and to an extent Wine) 
 ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South", NA)), 
        aes(x = RECFIN_LENGTH_MM)) +
-  geom_density(aes(colour = area))
+  geom_density(aes(colour = area)) +
+  scale_colour_discrete(breaks = c("Redwood", "Wine", "Central", "Bay"))
 ggsave(here('data_explore_figs',"recfin_length_area_density.png"), 
        width = 6, height = 4)
 
@@ -705,7 +706,8 @@ or_bio_rec <- read.csv("U:/Stock assessments/quillback_rockish_2021_FRAM network
 ggplot(ca_bio_rec %>% dplyr::filter(!area %in% c("South", NA)), 
        aes(x = RECFIN_LENGTH_MM)) +
   geom_density(aes(colour = area)) +
-  geom_density(aes(x = RecFIN.Length.MM, colour = RecFIN.Port.Name), data = or_bio_rec, linetype = 2)
+  geom_density(aes(x = RecFIN.Length.MM, colour = RecFIN.Port.Name), data = or_bio_rec, linetype = 2) +
+  scale_colour_discrete(breaks = c("PORT ORFORD", "GOLD BEACH", "BROOKINGS", "Redwood", "Wine", "Central", "Bay"))
 ggsave(here('data_explore_figs',"recfin_length_area_density_withOregon.png"), 
        width = 6, height = 4)
 
@@ -977,7 +979,8 @@ ggsave(here('data_explore_figs',"mrfss_length_area_mode.png"),
 
 #Density plots show larger fish in Redwood (and to an extent Wine) 
 ggplot(ca_mrfss_bio %>% dplyr::filter(!is.na(area)), aes(x = LNGTH)) +
-  geom_density(aes(colour = area))
+  geom_density(aes(colour = area)) +
+  scale_colour_discrete(breaks = c("Redwood", "Wine", "Central", "Bay"))
 ggsave(here('data_explore_figs',"mrfss_length_area_density.png"), 
        width = 6, height = 4)
 
