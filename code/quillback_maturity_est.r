@@ -51,7 +51,7 @@ with(data_cert, table(area, Functional_maturity))
 #all quillback from the "north" above 40-10 were mature
 
 ggplot(data_cert, aes(x = Length_cm, y = Functional_maturity)) +
-  geom_point()
+  geom_point(cex = 5, shape = 1 )
 
 
 ###########Biological Maturity###########
@@ -87,12 +87,23 @@ f <- function(x, a=coef(data.glm)[1], b=coef(data.glm)[2])
 with(obs.prop.df, plot(FL_2cm+1, obs.prop, 
                        xlim=c(0,50), bty='l', 
                        xlab="Fork Length [cm]", 
-                       ylab="Proportion Mature"))
+                       ylab="Proportion Mature", 
+                       main = "Predicted Proportion Mature",
+                       cex.lab = 2, cex.main = 2,
+                       cex.axis = 3))
 curve(f,0,50,add=TRUE)
 text(10,0.8,paste0("L50 = ",round(L50[[1]],2)))
 #dev.off()
 #----------------------------------------------------------------------------
-######Now what if we limit it to just Sept/Oct
+ggplot(data_cert, aes(x = Length_cm, y = Functional_maturity)) +
+  geom_point(cex = 6, shape = 1 ) +
+  theme_bw() +
+  theme(text=element_text(size=21)) +
+  geom_function( fun = f, xlim = c(0,50), lwd = 2, colour  = "red")
+
+
+
+######
 ggplot(data_cert, aes(x = Length_cm, 
                       color = Month,
                       fill = Month)) +
