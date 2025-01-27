@@ -261,6 +261,9 @@ ca_catch[ca_catch$Year %in% ca_pacfin$LANDING_YEAR, "com_lan"] <- ca_pacfin$mton
 
 ## Fill in gaps
 
+#Sampling occurred during 1981-1983, and in 1985. Therefore assume lack of samples mean 0 landings
+ca_catch[ca_catch$Year %in% c(1981:1983, 1985), "com_lan"] <- 0
+
 ###
 # Add commercial discards
 ###
