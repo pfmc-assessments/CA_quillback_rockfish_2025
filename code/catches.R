@@ -28,13 +28,13 @@ library(ggplot2)
 ## Historical commercial landings ---- 
 ###
 
-# These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
-file.copy(from = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/PacFIN Catch/ca_hist_commercial_1916_1968_ej_Feb2021_CAlandingsCaughtORWA.csv",
-          to = here("data-raw","ca_hist_commercial_1916_1968_ej_Feb2021_CAlandingsCaughtORWA.csv"),
-          overwrite = FALSE)
-file.copy(from = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/PacFIN Catch/ca_hist_commercial_1969_1980_ej.csv",
-          to = here("data-raw","ca_hist_commercial_1969_1980_ej.csv"),
-          overwrite = FALSE)
+# # These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
+# file.copy(from = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/PacFIN Catch/ca_hist_commercial_1916_1968_ej_Feb2021_CAlandingsCaughtORWA.csv",
+#           to = here("data-raw","ca_hist_commercial_1916_1968_ej_Feb2021_CAlandingsCaughtORWA.csv"),
+#           overwrite = FALSE)
+# file.copy(from = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/PacFIN Catch/ca_hist_commercial_1969_1980_ej.csv",
+#           to = here("data-raw","ca_hist_commercial_1969_1980_ej.csv"),
+#           overwrite = FALSE)
 
 # Historical 1916-1968 Landings (from EJ based on Ralston reconstruction) metric tons. 
 # Original 1916-1968 data have other and trawl gear, but trawl component very small relative to other.
@@ -89,10 +89,10 @@ ca_pacfin <- read.csv(here("data", "CAquillback_pacfin_landings.csv"))
 ## Historical recreational landings ----
 ###
 
-# These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
-file.copy(from = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/RecFIN Catch/ca_hist_recreational_1928_1980_ej.csv",
-          to = here("data-raw","ca_hist_recreational_1928_1980_ej.csv"),
-          overwrite = FALSE)
+# # These files are copied from the 2021 quillback archives, and then saved in the data-raw folder
+# file.copy(from = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/RecFIN Catch/ca_hist_recreational_1928_1980_ej.csv",
+#           to = here("data-raw","ca_hist_recreational_1928_1980_ej.csv"),
+#           overwrite = FALSE)
 
 # Historical 1928-1980 Landings metric tons
 # Use the value from this data file for 1980 because Ralston considered it more accurate than MRFSS
@@ -249,6 +249,7 @@ ca_catch$rec_dis <- NA
 ###
 
 ca_com_hist <- rbind(ca_com_hist1, ca_com_hist2[c("Year","QLBKmt")])
+ca_com_hist[is.na(ca_com_hist)] <- 0
 ca_catch[ca_catch$Year %in% ca_com_hist$Year, "com_lan"] <- ca_com_hist$QLBKmt
 
 
@@ -305,12 +306,31 @@ ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_lan"] <- ca_rec_hist$QLBKmt
 
 
 ###
-# Add MRFSS data
+# Add MRFSS data and fill in gaps
 ###
 
 #Do not add 1980 MRFSS value. Use the estimate from the historical reconstruction instead
 ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), c("rec_tot", "rec_lan", "rec_dis")] <- 
   ca_rec_mrfss[!(ca_rec_mrfss$YEAR %in% 1980), c("tot_mt", "landEst_mt", "disEst_mt")]
+
+## Fill in gaps
+
+#Fill in missing 1990-1992 years
+#If based on averages of nearby points
+plot(y = ca_rec_mrfss$tot_mt, x = ca_rec_mrfss$YEAR, type="b", ylab = "CA mrfss catch mt")
+average_vals <- c(mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1987:1989)], na.rm = T), #3 yr average before
+                  mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1987:1989, 1993:1995)], na.rm = T), #3 yr average before and after
+                  mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1993:1995)], na.rm = T)) #3 yr average after
+lines(y = average_vals, x = 1990:1992, col = 2, lwd = 3)
+# #If based on average of 1989 and 1993 (as was done for the 2021 assessment)
+# simp_avg <- mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1989, 1993)], na.rm = T)
+# lines(y = rep(simp_avg, 3) , x = 1990:1992, lwd = 3)
+# #If Based on linear interpolation between 1989 and 1993
+# impute_trend <- (ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1993), "tot_mt"] - ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1989), "tot_mt"]) / (1993-1989)
+# impute_vals <- ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1989), "tot_mt"] + 1:3*impute_trend
+# points(y = impute_catch_trend[, "tot_mt"], x = 1990:1992, pch=19, col=5)
+
+ca_catch[ca_catch$Year %in% c(1990:1992), "rec_tot"] <- average_vals
 
 
 ###
@@ -364,6 +384,8 @@ ggsave(here('data_explore_figs',"ALL_landings.png"),
        width = 6, height = 4)
 
 
+#Plot of rec (mrfss and recfin) landings and discards. 
+#This plot Does not include imputted values for 1990-1992
 ggplot(ca_catch_long %>% dplyr::filter(type %in% c("lan", "dis"), 
                                        fleet == "rec",
                                        Year %in% c(1980:2023)), aes(y = mt, x = Year, fill = type)) +
