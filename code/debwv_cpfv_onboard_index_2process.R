@@ -37,15 +37,19 @@ filter.num = 1
 
 quill <- subset(debwv, NUMENC>0)
 dim(quill)
+#282 observations
+sum(quill$NUMENC)
+#594 total quillback retained
 
 with(quill, table(REEFID, DISTRICT))
 with(quill, table(DISTRICT, YEAR))
-with(debwv, table(DISTRICT))
+with(quill, table(YEAR))
+with(quill, table(DISTRICT))/with(debwv, table(DISTRICT))
 
+#look at the percent positive by year and district
+with(quill, table(YEAR, DISTRICT))/with(debwv, table(YEAR, DISTRICT))
 
-#Read in data
-dim(subset(debwv, NUMENC>0))
-
+#Add initial values to dataframe of sample sizes
 #Add to filter dataframe
 data_filters$Samples[filter.num] = dim(debwv)[1]
 data_filters$Positive_Samples[filter.num] = dim(subset(debwv, NUMENC>0))[1]
@@ -87,18 +91,19 @@ debwv <- debwv %>% mutate_at(c('KEPT', 'DISCD', 'NUMENC','REEFID'), as.numeric)
 dim(subset(debwv, NUMENC>0))
 
 #Read in SuperReef info - assignments for quillback, but see how they match
+#reconsider for quillback and look at the REEFID - so few have quillback
 reef_info <- read.csv('SuperReefs.csv',header=T)
 reef_info_needed <- reef_info %>% 
-                  dplyr::select(ReefID,COPPDebRe, Area)  %>%
-                  rename(REEFID=ReefID,SuperReef = COPPDebRe) %>%
+                  dplyr::select(ReefID,QLBKDebRe, Area, Cnty_Major)  %>%
+                  rename(REEFID=ReefID,SuperReef = QLBKDebRe) %>%
                   group_by(REEFID, SuperReef) %>%
                   summarise(tot_Area = sum(Area)) 
 #Join super reefs to main data
 debwv <- dplyr::left_join(debwv, reef_info_needed, by = 'REEFID')
 
 
-#look at distributions of NUMENC over superreefs
-debwv %>% filter(NUMENC>0) %>% group_by(SuperReef) %>% summarise(NUMENC = sum(NUMENC))
+#look at distributions of NUMENC over reefs
+qlbk_reefs <- debwv %>% filter(NUMENC>0) %>% group_by(REEFID) %>% summarise(NUMENC = sum(NUMENC))
 
 
 #assign a column for presence
@@ -191,36 +196,38 @@ filter.num = filter.num + 1
 
 #Look at depth by SuperReef
 #png(filename = paste0(out.dir,'/Histogram of depth (fm) by reef.png'), width = 6, height = 6, units = "in", res = 600)
-ggplot(dat, aes(DEPTH, fill=SuperReef)) +
+ggplot(dat %>% filter(NUMENC>0), aes(DEPTH, fill=SuperReef)) +
   geom_histogram() + xlab("Depth (fm)") +ylab("Number of drifts")
-ggsave(file.path(out.dir,"depthfm_byreef.png"), width = 7, height = 7)
+ggsave(file.path(out.dir,"depthfm_byreef_pos.png"), width = 7, height = 7)
 
 #Look at positive depth
-dat %>% filter(NUMENC>0) %>% do(data.frame(quantile(.$DEPTH, seq(0,1,.01))))
+dat %>% filter(NUMENC>0) %>% do(data.frame(quantile(.$DEPTH, seq(0,1,.025))))
 #Look at depths with no quillback
-dat  %>% filter(NUMENC==0) %>% do(data.frame(quantile(.$DEPTH, seq(0,1,.01))))
+dat  %>% filter(NUMENC==0) %>% do(data.frame(quantile(.$DEPTH, seq(0,1,.025))))
 
 #REMOVE anything deeper than  meters (~60 fathoms)
  dat <- dat %>%
-   filter(DEPTH<=60) 
+   filter(DEPTH<=50, DEPTH >= 10) 
 # ########################################################################################################
 #Add to filter dataframe
 data_filters$Samples[filter.num] = dim(dat)[1]
 data_filters$Positive_Samples[filter.num] = dim(subset(dat, NUMENC>0))[1]
 data_filters$Filter[filter.num] = "Depth"
-data_filters$Description[filter.num] = 'Retain drifts < 60 fm'
+data_filters$Description[filter.num] = 'Retain drifts between 10-50 fm'
 filter.num = filter.num + 1
 ########################################################################################################
 #percent groundfish filter
- quantile(dat$percent_groundfish, seq(0,1,.025), na.rm=T)
+qlbk <- dat %>% filter(NUMENC > 0)
+quantile(qlbk$percent_groundfish, seq(0,1,.025), na.rm=T)
+pgfish <- quantile(dat$percent_groundfish, seq(0,1,.025), na.rm=T)
 
-dat <- dat %>% filter(percent_groundfish>=.715)
+dat <- dat %>% filter(percent_groundfish>= pgfish[[2]])
 # ########################################################################################################
 #Add to filter dataframe
 data_filters$Samples[filter.num] = dim(dat)[1]
 data_filters$Positive_Samples[filter.num] = dim(subset(dat, NUMENC>0))[1]
 data_filters$Filter[filter.num] = "Target"
-data_filters$Description[filter.num] = 'Retain trips with at least 71.5% groundfish catch (97.5% of trips)'
+data_filters$Description[filter.num] = 'Retain trips with at least 77.5% groundfish catch (97.5% of trips)'
 filter.num = filter.num + 1
 ########################################################################################################
 
@@ -238,7 +245,7 @@ ggsave(file = file.path(getwd(), "depth_by_reef.png"), width = 7, height = 7)
 
 dat = dat %>%
       mutate(DEPTH_bin = cut(DEPTH,
-                       breaks = c(10,20,30,40,50,60))) %>%
+                       breaks = c(10,20,30,40,50))) %>%
            mutate_at(vars(DEPTH_bin), as.factor)
            
            
@@ -257,48 +264,47 @@ with(dat, table(spp_present, SuperReef))
 #Look at reefs and species presence
 with(dat, table(spp_present, DISTRICT))
 
-#Find reefs that were fished, and encountered vermilion
-pos_copp_reefs <- dat %>% filter(NUMENC>0) %>% dplyr::select(SuperReef) %>% unique()
-reefs_fished <- dat %>% dplyr::select(SuperReef) %>% unique()
+#Find reefs that were fished, and encountered qlbk
+pos_qlbk_reefs <- dat %>% filter(NUMENC>0) %>% dplyr::select(REEFID) %>% unique()
+reefs_fished <- dat %>% dplyr::select(REEFID) %>% unique()
 #find reefs never fished
 reef_fished_info <- reef_info_needed %>%
-               mutate(reef_pos_copp = case_when(SuperReef %in% pos_copp_reefs$SuperReef ~ 'COPP_present')) %>%
-               mutate(reef_fished = case_when(SuperReef %in% reefs_fished$SuperReef ~ 'Fished'))
+               mutate(reef_pos_qlbk = case_when(REEFID %in% pos_qlbk_reefs$REEFID ~ 'QLBK_present')) %>%
+               mutate(reef_fished = case_when(REEFID %in% reefs_fished$REEFID ~ 'Fished'))
+View(reef_fished_info)
 
-
-#Count how many years a super reef was visited
+#Count how many years a reef was visited
 reef_years <- dat %>%
-              group_by(SuperReef) %>%
+              group_by(REEFID) %>%
               summarise(n_years = n_distinct(YEAR))
 
-#Count how many drifts on a super reef
+#Count how many drifts on a reef
 reef_drifts <- dat %>%
-              group_by(SuperReef) %>%
+              group_by(REEFID) %>%
               count(name="n_drifts")
 
 #join sample sizes to the same data frame
-with(dat, table(YEAR, SuperReef))
-with(dat %>% filter(NUMENC>0), table(YEAR, SuperReef))
+with(dat, table(YEAR, REEFID))
+with(dat %>% filter(NUMENC>0), table(YEAR, REEFID))
 #x11();with(reef_sample_size,plot(n_years, n_drifts))
 
-#############FILTER
- 
+
 #Look at the time spent on each reef
-reef_time <- dat %>%
-            group_by(SuperReef) %>%
-            summarise(timefished = sum(FISHTIME),totalanghrs = sum(ANGHRS)) 
+#reef_time <- dat %>%
+#            group_by(SuperReef) %>%
+#            summarise(timefished = sum(FISHTIME),totalanghrs = sum(ANGHRS)) #
 
-reef_areas <- reef_info %>% dplyr::select(ReefID, COPPDebRe, Area) %>%
-              group_by(COPPDebRe) %>%
-              summarise(total_area = sum(Area))
-colnames(reef_areas)[1] <- 'SuperReef'
+#reef_areas <- reef_info %>% dplyr::select(ReefID, QLBKDebRe, Area) %>%
+#              group_by(QLBKDebRe) %>%
+#              summarise(total_area = sum(Area))
+#colnames(reef_areas)[1] <- 'SuperReef'
 
 
-reef_sample_size <- inner_join(reef_years, reef_drifts)
-reef_sample_size <- inner_join(reef_sample_size, reef_time)
-reef_sample_size <- inner_join(reef_sample_size,reef_areas)
-write.csv(reef_sample_size, file = file.path(getwd(),"reef_sample_size.csv"), 
-          row.names = FALSE)
+#reef_sample_size <- inner_join(reef_years, reef_drifts)
+#reef_sample_size <- inner_join(reef_sample_size, reef_time)
+#reef_sample_size <- inner_join(reef_sample_size,reef_areas)
+#write.csv(reef_sample_size, file = file.path(getwd(),"reef_sample_size.csv"), 
+#          row.names = FALSE)
 
 
 
@@ -307,7 +313,8 @@ write.csv(reef_sample_size, file = file.path(getwd(),"reef_sample_size.csv"),
 #check for temporal coverage
 with(dat, table(SuperReef))
 with(dat, table(SuperReef,YEAR))
-round(with(subset(dat,NUMENC>0), table(SuperReef))/with(dat, table(SuperReef)),2)
+with(dat %>% filter(NUMENC>0), table(SuperReef,YEAR))
+
 
 
 #check for temporal coverage of positives
@@ -315,24 +322,64 @@ pos <- subset(dat, NUMENC>0)
 with(pos, table(SuperReef,YEAR))
 
 
-###NEED TO MODIFY THIS BC now using superreef and not
+###NEED TO MODIFY THIS BC now using reef ID
 #Combine some of the super reefs
 dat$SuperReef = as.factor(dat$SuperReef)
+########################################################################################################
+#SuperReef filter
+#remove Moss Landing to Conception
+reef.rm <- c("10_MossLanding_BigSur", "13_SLOCnty_Morro", "15_Morro_Conception")
+dat <- dat %>% filter(!SuperReef %in% reef.rm)
+# ########################################################################################################
+#Add to filter dataframe
+data_filters$Samples[filter.num] = dim(dat)[1]
+data_filters$Positive_Samples[filter.num] = dim(subset(dat, NUMENC>0))[1]
+data_filters$Filter[filter.num] = "Target"
+data_filters$Description[filter.num] = 'Remove trips south of Moss Landing'
+filter.num = filter.num + 1
+########################################################################################################
 
+#Look at the infividual reefs left
+with(dat, table(REEFID))
+with(dat %>% filter(NUMENC>0), table(REEFID))
 
+#remove reefs with at least 5  quillback
+qlbk_reef_min <- dat %>% 
+                filter(NUMENC>0) %>%
+                group_by(REEFID) %>%
+                summarise(ENC = sum(NUMENC))
+qlbk_reef_keep <- qlbk_reef_min %>%
+filter(ENC > 5)
+########################################################################################################
+#Finer scale filter of reefs
+#Remove reefs with less than 10 trips with quillback
 
- dat$MegaReef  <- dat$SuperReef %>% droplevels()
- dat = dat %>% mutate(MegaReef = case_when(
-               SuperReef %in% c('1_OR_SF') ~ 'OR_SF',
-               SuperReef %in% c('2_SF_MossLanding')~ 'SF_MossLanding',
-               SuperReef %in% c('10_MossLanding_BigSur') ~ 'MossLanding_BigSur',
-               SuperReef %in% c('13_SLOCnty_Morro', '15_Morro_Conception') ~ 'SLO_Conception'))
-                              
-                              
-levels(dat$MegaReef) <- c("OR_SF" ,"SF_MossLanding", "MossLanding_BigSur", "SLO_Conception")                             
+dat <- dat %>% filter(REEFID %in% qlbk_reef_keep$REEFID)
+# ########################################################################################################
 
-with(dat, table(MegaReef,YEAR))
-with(dat, table(MegaReef))
+# ########################################################################################################
+#Add to filter dataframe
+data_filters$Samples[filter.num] = dim(dat)[1]
+data_filters$Positive_Samples[filter.num] = dim(subset(dat, NUMENC>0))[1]
+data_filters$Filter[filter.num] = "Target"
+data_filters$Description[filter.num] = 'Remove reefs with fewer than 5 observed quillback'
+filter.num = filter.num + 1
+########################################################################################################
+
+#look at what's left
+with(dat, table(REEFID, YEAR))
+with(dat %>% filter(NUMENC>0), table(REEFID, YEAR))
+#5 is big reef off half moon bay
+#26, 136 are Farallons
+#40 and 49 are Mendocino, off Stillwell Point and Laguna Point near Ft Bragg
+
+#Whittle down to just the three locations
+dat <- dat %>%
+filter(SuperReef %in% c("2_Farallons", "1_Mendocino", "3_HalfMoonBay")) %>% droplevels
+with(dat %>% filter(NUMENC>0), table(SuperReef, YEAR))
+
+dat$MegaReef <- dat$SuperReef
+
 
 with(subset(dat, NUMENC>0),table(MegaReef))/with(dat, table(MegaReef))
 percent_pos_depth <- round(with(subset(dat, NUMENC>0),table(YEAR,MegaReef))/with(dat, table(YEAR,MegaReef)),2)
@@ -352,10 +399,10 @@ ggsave(file = file.path(getwd(), "cpue_by_reef.png"), height = 7, width = 7)
 round(with(subset(dat, NUMENC>0),table(YEAR,DEPTH_bin))/with(dat, table(YEAR,DEPTH_bin)),2)
 
 #Join MegaReef to ReefInfo table
-MegaReef_info <- dat %>% dplyr::select(SuperReef,MegaReef) %>% unique()
-aa = left_join(reef_areas, reef_fished_info)
-bb = left_join(aa, reef_sample_size)
-COPP_reef_info = left_join(bb, MegaReef_info)
+#MegaReef_info <- dat %>% dplyr::select(SuperReef,MegaReef) %>% unique()
+#aa = left_join(reef_areas, reef_fished_info)
+#bb = left_join(aa, reef_sample_size)
+#QLBK_reef_info = left_join(bb, MegaReef_info)
 
 
 
@@ -370,11 +417,10 @@ png(filename = paste0(out.dir,'/Average CPUE by Year and Region.png'), width = 6
 with(dat, interaction.plot(YEAR, MegaReef, CPUE,
                            col=1:7, lty=1, lwd=2, ylab="CPAH", ylim=c(0,.2), 
                            legend=F))
-legend("topright", legend=c("V1", "V2",
-                            "V3","V4"), lty=1, col=1:7)
+legend("topright", lty=1, col=1:7)
 dev.off()
 
-levels(dat$MegaReef) = c('V1','V2','V3','V4')
+
 #-------------------------------------------------------------------------------
 
 ggplot(dat, aes(x=as.factor(MegaReef), y = DEPTH, fill = MegaReef)) + 
@@ -385,30 +431,7 @@ ggplot(dat, aes(x=as.factor(MegaReef), y = DEPTH, fill = MegaReef)) +
 ggsave(file = file.path(getwd(), "depth_by_reef.png"), width = 7, height = 7)
 
 
-#Airthmetic area-weighted index
-CPUE_year_reef <- dat %>% group_by(MegaReef,YEAR) %>% summarise(Avg_CPUE = mean(CPUE)) %>% as.data.frame()
-
-MegaReef_Area <- COPP_reef_info %>% 
-                group_by(MegaReef) %>%  
-                summarise(reef_area = sum(tot_Area)) %>%
-                mutate(Percent_area = reef_area/sum(reef_area)) %>%
-                filter(!is.na(MegaReef))
-
-write.csv(MegaReef_Area,paste0(out.dir,'/COPP_megareefs.csv'))
-CPUE_year_reef = left_join(CPUE_year_reef, MegaReef_Area)
-
-MegaReef_Area <- reef_info
-Arithmetic_weighted_index = CPUE_year_reef %>% 
-  mutate(Weighted_val = Percent_area*Avg_CPUE) %>%
-  group_by(YEAR) %>%
-  mutate(Final_index = sum(Weighted_val)) %>%
-  dplyr::select(YEAR, Final_index) %>% unique()
-
-ggplot(Arithmetic_weighted_index, aes(YEAR, Final_index)) + geom_line()
-ggsave(file = file.path(out.dir,'/Area weighted arithmetic mean.png'))
-
-
-save(dat, data_filters, COPP_reef_info, file = file.path(dir,'COPP_filtered_data.RData'))
+save(dat, data_filters, file = file.path(dir,'QLBK_filtered_data.RData'))
 
 save.image(paste0(getwd(),'/Filtered_data_DebWV_onboard.RData'))
 
@@ -418,7 +441,7 @@ save.image(paste0(getwd(),'/Filtered_data_DebWV_onboard.RData'))
 #################################################3
 ##additional looks at the data
 
-pos <- subset(dat, NUMENC>0 )
+pos <- subset(dat, NUMENC>0)
 with(pos, table(REEFID))
 with(pos, table(YEAR))
 with(dat, table(REEFID))
@@ -445,3 +468,4 @@ geom_point()
 summary(dat$ANGHRS)
 summary(dat$FISHTIME)
 summary(dat$AVG_OBSANG)
+

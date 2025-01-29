@@ -1,6 +1,6 @@
 ################################################################################
 # Contains SQL connections to read Deb's onboard data
-#                         2025 assessments
+#                         2025 assessment of CA quillback rockfish
 #	
 # Written by Melissa Monk
 # Note - only Monterey samples in 1987
@@ -125,10 +125,10 @@ debwv %>%
 debwv <- debwv	%>%
 mutate(FISHTIME = SUM_FISHTIME,
 ANGHRS  = SUM_ANGHRS)
-#very few discards so this will be a retained fish only index
+#very few discards so keep them
 
 #look at the percent of trips and groundfish
-ggplot(debwv %>% filter(KEPT>0), aes(percent_groundfish, NUMENC)) + 
+ggplot(debwv %>% filter(NUMENC>0), aes(percent_groundfish, NUMENC)) + 
   geom_point() + xlab("Percent of trip catch groundfish") +
   ylab("Number of quillback encountered")
 ggsave(file.path(getwd(),"percent_gfish.png"))

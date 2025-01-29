@@ -1,7 +1,8 @@
 #############################################################################
-## DebVW index of abundance for copper rockfish for the 2023 assessment
-## Model selection and negative binonimial index
+## DebVW index of abundance for the 2025 CA quillback assessment
+## Model selection and index
 ## Melissa Monk
+## 1/28/2025
 #############################################################################
 
 rm(list = ls(all = TRUE))
@@ -20,18 +21,22 @@ library(MuMIn)
 library(here)
 library(glue)
 #species and area identifiers - eventually put in function
-pacfinSpecies <- 'COPP'
-speciesName <- "copper"
-modelArea = "north"
+pacfinSpecies <- 'QLBK'
+speciesName <- "quillback"
+modelArea = "California"
 indexName <-  "debwv_cpfv_onboard"
-#modelName = "area_weighted"
-# Set working directories
-dir <- file.path(here(),"data","rec_indices", indexName)
-setwd(dir)
 
-load("COPP_filtered_data.RData")
+
+# Set working directories
+data_dir <- "S:/quillback_rockfish_2025"
+dir <- file.path(data_dir, "data", "rec_indices", "debwv_cpfv_onboard")
+setwd(dir)
+out.dir <- out.dir <- file.path(here(),"data_explore_figs", "rec_indices","dwv_cpfv_onboard")
+
+#load data
+load("QLBK_filtered_data.RData")
 #load(file.path(here(),"data","rec_indices",indexName, 'COPP_filtered_data.RData'))
-r_code_location <- "C:/Users/melissa.monk/Documents/Github/copper_rockfish_2023/R"
+#r_code_location <- "C:/Users/melissa.monk/Documents/Github/copper_rockfish_2023/R"
 #-------------------------------------------------------------------------------
 covars <- c("year", "reef", "wave")
 #rename effort and catch columns
@@ -98,119 +103,6 @@ Model_selection
 
 
 #-------------------------------------------------------------------------------
-# Negative binomial
-### Negative binomial model
-## Fit the main effects model in STAN and save workspace
-#   start.time <- Sys.time()
-#   
-#   # use STAN to see how well 'best model' fits the data
-#   Dnbin <- stan_glm.nb(
-#     Target ~ year + wave + reef + depth ,
-#   offset = dat$logEffort,
-#   data = dat,
-# #  prior_intercept = normal(location = 0, scale = 10),
-# #  prior = normal(location = 0, scale = 10),
-# #  prior_aux = cauchy(0, 5),
-#   chains = 4,
-#   iter = 5000
-#   ) # iterations per chain
-#   Sys.time() - start.time
-# save(Dnbin, file = file.path(getwd(),"Dnbin.Rdata"))
-#   # nb Model checks
-#   # Create index
-#   yearvar <- "year"
-#   yrvec <- as.numeric(levels(droplevels(dat$year))) # years
-#   yrvecin <- as.numeric(levels(droplevels(dat$year))) # years
-# 
-#   # Create index
-#   ppnb <- posterior_predict(Dnbin, draws = 1000)
-#   inb <- plotindex_bayes(Dnbin, yrvec,
-#     backtrans = "exp", standardize = F,
-#     title = "negative binomial"
-#   )
-# 
-# 
-#   nbin.draws <- as.data.frame(Dnbin)
-#   nbin.yrs <- cbind.data.frame(nbin.draws[, 1], nbin.draws[, 1] + nbin.draws[, 2:length(yrvec)])
-#   colnames(nbin.yrs)[1] <- paste0(yearvar, yrvec[1])
-#   index.draws <- exp(nbin.yrs)
-# 
-# 
-#   # calculate the index and sd
-#   # logSD goes into the model
-#   Index <- apply(index.draws, 2, mean) # mean(x)
-#   SDIndex <- apply(index.draws, 2, sd) # sd(x)
-#   int95 <- apply(index.draws, 2, quantile, probs = c(0.025, 0.975))
-#   outdf <- cbind.data.frame(year = yrvec, Index, SDIndex, t(int95))
-#   # index draws already backtransformed
-#   outdf$logIndex <- log(outdf$Index)
-#   outdf$logmean <- apply(index.draws, 2, function(x) {
-#     mean(log(x))
-#   })
-#   outdf$logSD <- apply(index.draws, 2, function(x) {
-#     sd(log(x))
-#   })
-# 
-#   # add raw standardized index to outdf
-#   raw.cpue.year <- dat %>%
-#     group_by(year) %>%
-#     summarise(avg_cpue = mean(CPUE)) %>%
-#     mutate(std.raw.cpue = avg_cpue / mean(avg_cpue))
-# 
-#   outdf$stdzd.raw.cpue <- raw.cpue.year$std.raw.cpue
-#   outdf$stdzd.Index <- outdf$Index / mean(outdf$Index)
-#   # write csv
-#   save(outdf, file = file.path(out.dir,"negativebinomial_Index.RData"))
-# 
-#   ## pp_check
-#   prop_zero <- function(y) mean(y == 0)
-#   # figure of proportion zero
-#   figure_Dnbin_prop_zero <- pp_check(Dnbin, plotfun = "stat", stat = "prop_zero", binwidth = 0.01)
-#   figure_Dnbin_prop_zero
-# 
-#   ppc_stat_grouped(dat$Target, ppnb, group = dat$year, stat = "prop_zero")
-#   ggsave(paste0(plots.dir, "prop_zero_by_year.png"))
-#   
-#   # figure of mean and sd from model
-#   pp_check(Dnbin, plotfun = "stat_2d", stat = c("mean", "sd"))
-#   ggsave(paste0(plots.dir, "/negbin_pp_stat_mean_sd.png"))
-# 
-#   # boxplot of the posterior draws (light blue) compared to data (in dark blue)
-#   pp_check(Dnbin, plotfun = "boxplot", nreps = 10, notch = FALSE) +
-#     ggtitle("negative binomial model")
-# 
-#   # plot of mean and sd together  from posterior predictive
-#   ppc_stat_2d(y = dat$Target, yrep = ppnb, stat = c("mean", "sd")) + ggtitle("Negative Binomial")
-# 
-# 
-#   # find max mean and sd for plotting by year
-#   max_mean1 <- dat %>%
-#     group_by(year) %>%
-#     summarise(max_mean = mean(CPUE))
-#   max_mean <- max(max_mean1$max_mean)
-#   max_sd1 <- dat %>%
-#     group_by(year) %>%
-#     summarise(max_sd = max(sd(CPUE)))
-#   max_sd <- max(max_sd1$max_sd)
-#   figure.ppc.mean.by.year <- ppc_stat_grouped(
-#     y = dat$Target, yrep = ppnb,
-#     group = dat$year, binwidth = 1
-#   ) +
-#     ggtitle("Negative Binomial") +
-#     coord_cartesian(xlim = c(0, max_mean * 1.8))
-#   ggsave(paste0(plots.dir, "/negbin_pp_stat_mean_grouped.png"))
-# 
-#   figure.ppc.sd.by.year <- ppc_stat_grouped(
-#     y = dat$Target, yrep = ppnb,
-#     group = dat$year, stat = "sd",
-#     binwidth = 1
-#   ) +
-#     coord_cartesian(xlim = c(0, max_sd * 1.8))
-#   ggtitle("negative binomial")
-#   ggsave(paste0(plots.dir, "/negbin_pp_stat_sd_grouped.png"))
-# 
-  
-#-------------------------------------------------------------------------------
 #Also run as sdmtmb - looks very different - yikes!
   library(sdmTMB)
   library(tmbstan)
@@ -220,12 +112,11 @@ Model_selection
     year = unique(dat$year),
   #  wave = levels(dat$wave)[1], 
     reef = levels(dat$reef)[1],
-    depth = dat$depth[1],
-    depth_2 = dat$depth_2[1]
+    depth = dat$depth[1]
   )
   
   fit.nb <- sdmTMB(
-    Target ~ year  + reef + poly(depth, 2),
+    Target ~ year  + reef + depth,
     data = dat,
     offset = dat$logEffort,
     time = "year",
