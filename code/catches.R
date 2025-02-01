@@ -151,6 +151,11 @@ ggsave(here('data_explore_figs',"hist_rec_landings_scaled.png"),
 # MRFSS data from 1980-2004 (replace the 1980 value with historical 1980 value)
 ca_rec_mrfss <- read.csv(here("data", "CAquillback_mrfss_catches.csv"))
 
+# Add extra PC estimates for 1993-1995
+# Percentage calculated in recfin_processing.R as pc_rat = 0.7468163
+ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1993:1995), -1] <- (1 + pc_rat) *
+  ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1993:1995), -1]
+
 # RecFIN data from 2005-2023
 ca_rec_recfin <- read.csv(here("data", "CAquillback_recfin_catches.csv"))
 
