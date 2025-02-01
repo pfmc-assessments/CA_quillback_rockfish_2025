@@ -249,7 +249,7 @@ ggplot(ca, aes(y = length_cm, x = age, col = Sex)) +
                 fun = vb_fn,
                 args = list(Linf = vb_est_all$all_growth["Linf"], 
                             L0 = vb_est_all$all_growth["L0"],
-                            k = vb_est_all$all_growth["K"]))
+                            k = vb_est_all$all_growth["K"])) +
   xlab("Age") + ylab("Length (cm)")
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex_withFits.png"),
        width = 6, height = 8)
