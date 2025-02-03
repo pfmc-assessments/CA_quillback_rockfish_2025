@@ -38,14 +38,14 @@ load("QLBK_filtered_data.RData")
 #load(file.path(here(),"data","rec_indices",indexName, 'COPP_filtered_data.RData'))
 #r_code_location <- "C:/Users/melissa.monk/Documents/Github/copper_rockfish_2023/R"
 #-------------------------------------------------------------------------------
-covars <- c("year", "reef", "wave")
+covars <- c("year", "depth")
 #rename effort and catch columns
   dat <- dat %>%
     rename(Effort = ANGHRS) %>%
-    rename(Target = KEPT,
+    rename(Target = NUMENC,   #MAKE SURE YOU CHANGE IF YOU WANT KEPT ONLY
            year = YEAR,
            wave = WAVE,
-           depth = DEPTH,
+           depth = DEPTH_bin,
            cpue = CPUE) %>%
     mutate(reef = MegaReef) %>%
     mutate(logEffort = log(Effort)) %>%
@@ -57,6 +57,14 @@ covars <- c("year", "reef", "wave")
 Percent_pos <- as.data.frame(round(with(subset(dat, Target > 0), table(year)) /
   with(dat, table(year)), 2))
 Percent_pos
+
+with(subset(dat, Target > 0), table(year, reef)) / with(dat, table(year, reef))
+
+#sample size of total and positive by year
+with(subset(dat, Target > 0), table(year, reef))
+with(dat, table(year, reef))
+with(dat, table(year))
+with(subset(dat, Target > 0), table(year))
 
 #CPUE plot by reef 
 ggplot(dat %>% group_by(reef, year) %>% summarise(average_cpue = mean(cpue)), 
@@ -83,13 +91,13 @@ dat$depth_2 <- dat$depth^2
 #Model selection
 #full model - not using wave
 model.full <- MASS::glm.nb(
-  Target ~ year + reef + depth + depth_2 + offset(logEffort),
+  Target ~ year + depth  + offset(logEffort),
   data = dat,
   na.action = "na.fail")
 summary(model.full)
 anova(model.full)
 
-aa <- ggpredict(model.full, terms = "year", back.transform = TRUE)
+aa <- ggeffects::ggpredict(model.full, terms = "year", back.transform = TRUE)
 
 #MuMIn will fit all models and then rank them by AICc
 model.suite <- MuMIn::dredge(model.full,
@@ -106,17 +114,16 @@ Model_selection
 #Also run as sdmtmb - looks very different - yikes!
   library(sdmTMB)
   library(tmbstan)
-  #library(sdmTMBextra)
+ #library(sdmTMBextra)
 
   grid <- expand.grid(
     year = unique(dat$year),
-  #  wave = levels(dat$wave)[1], 
-    reef = levels(dat$reef)[1],
+  #  reef = levels(dat$reef)[1],
     depth = dat$depth[1]
   )
   
   fit.nb <- sdmTMB(
-    Target ~ year  + reef + depth,
+    Target ~ year  + depth,
     data = dat,
     offset = dat$logEffort,
     time = "year",
@@ -125,18 +132,20 @@ Model_selection
     family = nbinom2(link = "log"),
     control = sdmTMBcontrol(newton_loops = 1)) #not entirely sure what this does
   
-----------------------------------------------------------------
+#----------------------------------------------------------------
   # Load in some helper functions for processing and plotting the data
-  all <- list.files(file.path(r_code_location, "sdmTMB"))
-  for (a in 1:length(all)) { source(file.path(r_code_location, "sdmTMB", all[a]))}
+
+all <- list.files(file.path(here(), "code", "sdmTMB"))
+  
+  for (a in 1:length(all)) { source(file.path(here(), "code", "sdmTMB", all[a]))}
   
   #Get diagnostics and index for SS
   do_diagnostics(
-    dir = file.path(getwd(),"main_effects"), 
+    dir = file.path(getwd()), 
     fit = fit.nb)
   
   calc_index(
-    dir = file.path(getwd(),"main_effects"), 
+    dir = file.path(getwd()), 
     fit = fit.nb,
     grid = grid)
   
@@ -161,12 +170,10 @@ Model_selection
     dplyr::select(-`(Intercept)`) %>%
     mutate_at(vars(covars,"year","offset(logEffort)"), as.character) %>%
     mutate(across(c("logLik","AICc","delta"), round, 1)) %>%
-    replace_na(list( reef = "Excluded")) %>%
     mutate_at(c(covars,"year","offset(logEffort)"), 
               funs(stringr::str_replace(.,"\\+","Included"))) %>%
     rename(`Effort offset` = `offset(logEffort)`, 
-           `log-likelihood` = logLik,
-           `Depth squared` = depth_2) %>%
+           `log-likelihood` = logLik) %>%
     rename_with(stringr::str_to_title,-AICc)
  # View(out)
   write.csv(out, file = file.path(getwd(), "model_selection.csv"), row.names = FALSE)
@@ -192,56 +199,56 @@ Model_selection
   
 
   
-  fit <- sdmTMB(
-    Target ~ year  + reef + poly(depth, 2),
-    data = dat,
-    offset = dat$logEffort,
-    time = "year",
-    spatial="off",
-    spatiotemporal = "off",
-    family = delta_lognormal(),
-    control = sdmTMBcontrol(newton_loops = 1)
-  )
+#   fit <- sdmTMB(
+#     Target ~ year  + reef + poly(depth, 2),
+#     data = dat,
+#     offset = dat$logEffort,
+#     time = "year",
+#     spatial="off",
+#     spatiotemporal = "off",
+#     family = delta_lognormal(),
+#     control = sdmTMBcontrol(newton_loops = 1)
+#   )
   
-  index <- calc_index(
-    dir = file.path(getwd(), "deltalogn"), 
-    fit = fit,
-    grid = grid)
+#   index <- calc_index(
+#     dir = file.path(getwd(), "deltalogn"), 
+#     fit = fit,
+#     grid = grid)
   
-  do_diagnostics(
-    dir = file.path(getwd(),"deltalogn"), 
-    fit = fit)
+#   do_diagnostics(
+#     dir = file.path(getwd(),"deltalogn"), 
+#     fit = fit)
   
-  index$model <- modelName
-  indices <- rbind(indices, index)
-  loglike <- logLik(fit)
-  aic <- AIC(fit)
-  metrics <- rbind(metrics, c(name, loglike, aic))
+#   index$model <- modelName
+#   indices <- rbind(indices, index)
+#   loglike <- logLik(fit)
+#   aic <- AIC(fit)
+#   metrics <- rbind(metrics, c(name, loglike, aic))
   
-  #save(indices, file = file.path(dir, "all_indices.rdata"))  
-  #save(metrics, file = file.path(dir, "metrics.rdata"))
+#   #save(indices, file = file.path(dir, "all_indices.rdata"))  
+#   #save(metrics, file = file.path(dir, "metrics.rdata"))
   
-#Delta gamma
+# #Delta gamma
 
 
   
-  fit <- sdmTMB(
-    Target ~ year  + reef + poly(depth, 2),
-    data = dat,
-    offset = dat$logEffort,
-    time = "year",
-    spatial="off",
-    spatiotemporal = "off",
-    family = delta_gamma(),
-    control = sdmTMBcontrol(newton_loops = 1)
-  )
+#   fit <- sdmTMB(
+#     Target ~ year  + reef + poly(depth, 2),
+#     data = dat,
+#     offset = dat$logEffort,
+#     time = "year",
+#     spatial="off",
+#     spatiotemporal = "off",
+#     family = delta_gamma(),
+#     control = sdmTMBcontrol(newton_loops = 1)
+#   )
   
-  index <- calc_index(
-    dir = file.path(getwd(), "deltagamma"), 
-    fit = fit,
-    grid = grid)
+#   index <- calc_index(
+#     dir = file.path(getwd(), "deltagamma"), 
+#     fit = fit,
+#     grid = grid)
   
-  do_diagnostics(
-    dir = file.path(getwd(),"deltagamma"), 
-    fit = fit)
+#   do_diagnostics(
+#     dir = file.path(getwd(),"deltagamma"), 
+#     fit = fit)
   

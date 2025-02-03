@@ -245,7 +245,7 @@ ggsave(file = file.path(getwd(), "depth_by_reef.png"), width = 7, height = 7)
 
 dat = dat %>%
       mutate(DEPTH_bin = cut(DEPTH,
-                       breaks = c(10,20,30,40,50))) %>%
+                       breaks = c(0,20,30,40,50))) %>%
            mutate_at(vars(DEPTH_bin), as.factor)
            
            
