@@ -111,3 +111,36 @@ ggplot(data_cert, aes(x = Length_cm,
   facet_wrap(~Port, ncol = 1)
   
 with(data_cert, table(Month, Port))
+
+
+####E.J. did this all by hand to make sure the car package gave the correct 
+####answer
+# # get bits and pieces for delta method "by hand"
+# vcov(data.glm)
+# a <- coef(data.glm)[[1]]
+# b <- coef(data.glm)[[2]]
+# var.a <- vcov(data.glm)[1,1]
+# var.b <- vcov(data.glm)[2,2]
+# cov.ab <- vcov(data.glm)[2,1]
+# a
+# b
+# var.a
+# var.b
+# cov.ab
+# 
+# # first-order delta method for ratio of correlated random variables
+# e.first <- -a/b
+# v.first <- (a/b)^2 * (var.a/(a^2) + var.b/(b^2) - 2*cov.ab/(a*b))
+# s.first <- sqrt(v.first)
+# int.first.95 <- c(e.first - qnorm(0.975)*s.first, e.first + qnorm(0.975)*s.first)
+# e.first
+# v.first
+# s.first
+# int.first.95
+
+mid.len <- 1:50
+ohm3 <- -0.425; ohm4 <- 33.7
+mature.len <- 1 / (1 + exp((ohm3) * (mid.len-ohm4)))
+mature.len.alt <- 1 / (1 + exp((-0.60) * (mid.len-ohm4)))
+plot(mid.len, mature.len)
+lines(mid.len, mature.len.alt, col = 'green')
