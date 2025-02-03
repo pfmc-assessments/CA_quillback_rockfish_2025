@@ -382,6 +382,24 @@ ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_tot"] <-
 #Full version with discards and landings
 #write.csv(round(ca_catch,3), file = file.path(here("data", "CAquillback_total_removals.csv")), row.names = FALSE)
 
+# Commercial estimates:
+# 1916-1968 Ralston Reconstruction landings plus historical dead discard amount (0.25% of landings)
+# 1969-1980 CalCOM Reconstruction landings plus historical dead discard amount (0.25% of landings)
+# 1981-2001 PacFIN landings plus historical dead discard amount (0.25% of landings)
+# 2002-2023 PacFIN landings plus dead discards from GEMM for non-"California Recreational" sectors
+# 
+# Historical dead discard percentage (0.25%) is from the GEMM and is the proportion of dead discards (summed over years) to landings (summed over years) in the nearshore sector for 2002-2021. 
+# 
+# Recreational estimates:
+# 1928-1980 Ralston Reconstruction landings plus historical dead discard amount (1.1% of landings). Ralston value used for 1980 in place of MRFSS estimate. 
+# 1981-2004 MRFSS total mortality (WGT_AB1). Note that the 2004 CRFS catch estimate is located within the MRFSS dataset.
+# For 1993-1995 when PC sampling was not taking place, added estimate for PC based on overall average of PC estimates 1980-2004
+# For 1990-1992 when all sampling was not taking place, applied average of nearby years (averaged 1987-1989 for 1990, 1987-1989 and 1993-1995 for 1991, and 1993-1995 for 1992)
+# 2005-2023 CFRS total mortality
+# 
+# Historical dead discard percentage (1.1%) is from MRFSS and is the proportion of type B1 (ESTHARV; summed over years) to type A (ESTCLAIM + ESTHARV; summed over years) mortality for 1980-2004. 
+
+
 # Plot overall values
 ca_catch_long <- ca_catch %>% tidyr::pivot_longer(cols = -Year,
                                                   names_to = c("fleet", "type"), 
