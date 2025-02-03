@@ -330,17 +330,29 @@ aggFleetYr_mrfss <- ca_mrfss %>%
 aggFleetYr_mrfss_wider <- tidyr::pivot_wider(aggFleetYr_mrfss, 
                                              names_from = c(mode), values_from = tot_mt) %>%
   dplyr::arrange(YEAR) %>%  data.frame()
+aggFleetYr_mrfss_wider[is.na(aggFleetYr_mrfss_wider)] <- 0
 
+##Two ways to resolve, applying a ratio, or adding values
 #Plot the ratios - assume NA in years other than 1993-1995 are zero
 plot(aggFleetYr_mrfss_wider$PC/aggFleetYr_mrfss_wider$PR, x = aggFleetYr_mrfss_wider$YEAR,
-     ylab = "PC:PR", type = "b", main = "All years with data. \n So missing 1980, 1988, and 1993-1995")
+     ylab = "PC:PR", type = "b", main = "Ratio: All years with data. \n So missing 1980, 1988, and 1993-1995")
 aggFleetYr_mrfss_wider[is.na(aggFleetYr_mrfss_wider)] <- 0
 pc_rat <- mean((aggFleetYr_mrfss_wider$PC/aggFleetYr_mrfss_wider$PR)[aggFleetYr_mrfss_wider$YEAR %in% c(1980:1989,1996:2004)])
 pc_rat #0.7468163
 abline(h=pc_rat)
-aggFleetYr_mrfss_wider$PCextra <- 0
-aggFleetYr_mrfss_wider[aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995), "PCextra"] <-
+aggFleetYr_mrfss_wider$PCextraRatio <- 0
+aggFleetYr_mrfss_wider[aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995), "PCextraRatio"] <-
   pc_rat * aggFleetYr_mrfss_wider[aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995),"PR"]
+
+#Plot the values of PC - assume NA in years other than 1993-1995 are zero
+plot(aggFleetYr_mrfss_wider[!aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995),]$PC, 
+     x = aggFleetYr_mrfss_wider[!aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995),]$YEAR,
+     ylab = "PC mortality", xlab = "Year", type = "b", main = "Average: All years with data. \n So missing 1993-1995")
+pc_avg <- mean(aggFleetYr_mrfss_wider[!aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995),]$PC)
+pc_avg #2.460985
+abline(h = pc_avg)
+aggFleetYr_mrfss_wider$PCextraAvg <- 0
+aggFleetYr_mrfss_wider[aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995), "PCextraAvg"] <- pc_avg
 
 
 #Break out by water area
@@ -409,15 +421,23 @@ ggsave(here('data_explore_figs',"mrfss_mortality_fleet.png"),
        width = 6, height = 4)
 
 #By fleet type - if include added estimate of PC mortality in 1993:1995 based on PC:PR ratio in other years
-ggplot(aggFleetYr_mrfss_wider %>% tidyr::pivot_longer(., cols = c(PR, PC, OTH, PCextra), names_to = "mode") %>%
-         dplyr::filter(mode %in% c("PC", "PR", "PCextra")), aes(y = value, x = YEAR)) +
+ggplot(aggFleetYr_mrfss_wider %>% tidyr::pivot_longer(., cols = c(PR, PC, OTH, PCextraRatio), names_to = "mode") %>%
+         dplyr::filter(mode %in% c("PC", "PR", "PCextraRatio")), aes(y = value, x = YEAR)) +
   geom_bar(position = "stack", stat = "identity", aes(fill = mode)) +
   xlab("Year") +
   ylab("Total mortality (MT)") +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-ggsave(here('data_explore_figs',"mrfss_mortality_fleet_with_PCextra.png"),
+ggsave(here('data_explore_figs',"mrfss_mortality_fleet_with_PCextraRatio.png"),
        width = 6, height = 4)
-
+#If include added estimate of PC mortality in 1993:1995 based on average PC in other years
+ggplot(aggFleetYr_mrfss_wider %>% tidyr::pivot_longer(., cols = c(PR, PC, OTH, PCextraAvg), names_to = "mode") %>%
+         dplyr::filter(mode %in% c("PC", "PR", "PCextraAvg")), aes(y = value, x = YEAR)) +
+  geom_bar(position = "stack", stat = "identity", aes(fill = mode)) +
+  xlab("Year") +
+  ylab("Total mortality (MT)") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ggsave(here('data_explore_figs',"mrfss_mortality_fleet_with_PCextraAvg.png"),
+       width = 6, height = 4)
 
 # Plotting MRFSS and RecFIN catches together combined by fleet (Removing the other mode for plotting purposes)
 aggFleetYr_comb <- rbind(aggFleetYr_mrfss, aggFleetYr[,c("mode", "YEAR", "tot_mt")])
