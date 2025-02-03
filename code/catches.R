@@ -50,6 +50,9 @@ ca_com_hist2 <- read.csv(here("data-raw", "ca_hist_commercial_1969_1980_ej.csv")
 #Convert lbs to MT
 ca_com_hist2$QLBKmt <- ca_com_hist2$Grand.Total/2204.62 
 
+#Combine
+ca_com_hist <- rbind(ca_com_hist1, ca_com_hist2[c("Year","QLBKmt")])
+ca_com_hist[is.na(ca_com_hist)] <- 0
 
 ## Plot the data
 
@@ -248,8 +251,6 @@ ca_catch$rec_dis <- NA
 # Add historical commercial data
 ###
 
-ca_com_hist <- rbind(ca_com_hist1, ca_com_hist2[c("Year","QLBKmt")])
-ca_com_hist[is.na(ca_com_hist)] <- 0
 ca_catch[ca_catch$Year %in% ca_com_hist$Year, "com_lan"] <- ca_com_hist$QLBKmt
 
 
@@ -263,6 +264,7 @@ ca_catch[ca_catch$Year %in% ca_pacfin$LANDING_YEAR, "com_lan"] <- ca_pacfin$mton
 
 #Sampling occurred during 1981-1983, and in 1985. Therefore assume lack of samples mean 0 landings
 ca_catch[ca_catch$Year %in% c(1981:1983, 1985), "com_lan"] <- 0
+
 
 ###
 # Add commercial discards
@@ -318,6 +320,11 @@ ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), c(
 
 ## Fill in gaps
 
+# Add extra PC estimates for 1993-1995
+# Percentage calculated in recfin_processing.R as pc_rat = 0.7468163
+ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan", "rec_dis")] <- (1 + pc_rat) *
+  +   ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan", "rec_dis")]
+
 #Fill in missing 1990-1992 years
 #If based on averages of nearby points
 plot(y = ca_rec_mrfss$tot_mt, x = ca_rec_mrfss$YEAR, type="b", ylab = "CA mrfss catch mt")
@@ -331,9 +338,10 @@ lines(y = average_vals, x = 1990:1992, col = 2, lwd = 3)
 # #If Based on linear interpolation between 1989 and 1993
 # impute_trend <- (ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1993), "tot_mt"] - ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1989), "tot_mt"]) / (1993-1989)
 # impute_vals <- ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1989), "tot_mt"] + 1:3*impute_trend
-# points(y = impute_catch_trend[, "tot_mt"], x = 1990:1992, pch=19, col=5)
+# points(y = impute_vals, x = 1990:1992, pch=19, col=5)
 
 ca_catch[ca_catch$Year %in% c(1990:1992), "rec_tot"] <- average_vals
+
 
 
 ###
