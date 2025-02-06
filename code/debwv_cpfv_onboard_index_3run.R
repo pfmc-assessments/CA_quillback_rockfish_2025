@@ -14,7 +14,7 @@ library(ggplot2)
 library(grid)
 library(devtools)
 library(ggeffects)
-library(tidybayes)
+#library(tidybayes)
 library(gridExtra)
 library(fitdistrplus)
 library(MuMIn)
@@ -28,17 +28,17 @@ indexName <-  "debwv_cpfv_onboard"
 
 
 # Set working directories
-data_dir <- "S:/quillback_rockfish_2025"
-dir <- file.path(data_dir, "data", "rec_indices", "debwv_cpfv_onboard")
+dir <- file.path(here(), "data-raw", "rec_indices", "debwv_cpfv_onboard")
 setwd(dir)
-out.dir <- out.dir <- file.path(here(),"data_explore_figs", "rec_indices","dwv_cpfv_onboard")
+out.dir <- file.path(here(),"data_explore_figs", "rec_indices","dwv_cpfv_onboard")
+
 
 #load data
 load("QLBK_filtered_data.RData")
 #load(file.path(here(),"data","rec_indices",indexName, 'COPP_filtered_data.RData'))
 #r_code_location <- "C:/Users/melissa.monk/Documents/Github/copper_rockfish_2023/R"
 #-------------------------------------------------------------------------------
-covars <- c("year", "depth")
+covars <- c("year", "depth" ,"reef")
 #rename effort and catch columns
   dat <- dat %>%
     rename(Effort = ANGHRS) %>%
@@ -75,7 +75,7 @@ ggplot(dat %>% group_by(reef, year) %>% summarise(average_cpue = mean(cpue)),
                 colour = reef)) +
   xlab("Year") + ylab("Average CPUE") + ylim(c(0, .2)) + 
   scale_color_viridis_d()
-ggsave(file = file.path(getwd(),"average_cpue_by_reef.png"), width = 7, height = 7)
+ggsave(file = file.path(out.dir,"average_cpue_by_reef.png"), width = 7, height = 7)
 
 #cpue by depth
 ggplot(dat, aes(x = cpue, y = depth)) +
@@ -86,12 +86,12 @@ summary(dat$year)
 summary(dat$reef)
 summary(dat$depth)
 
-dat$depth_2 <- dat$depth^2
+
 
 #Model selection
 #full model - not using wave
 model.full <- MASS::glm.nb(
-  Target ~ year + depth  + offset(logEffort),
+  Target ~ year + depth + reef  + offset(logEffort),
   data = dat,
   na.action = "na.fail")
 summary(model.full)
@@ -118,7 +118,7 @@ Model_selection
 
   grid <- expand.grid(
     year = unique(dat$year),
-  #  reef = levels(dat$reef)[1],
+    reef = levels(dat$reef)[1],
     depth = dat$depth[1]
   )
   
@@ -144,11 +144,17 @@ all <- list.files(file.path(here(), "code", "sdmTMB"))
     dir = file.path(getwd()), 
     fit = fit.nb)
   
-  calc_index(
+  index.nb <- calc_index(
     dir = file.path(getwd()), 
     fit = fit.nb,
     grid = grid)
-  
+
+plot_indices(
+  dir = file.path(getwd()),
+  data = index.nb)
+
+
+
   #-------------------------------------------------------------------------------
   #Format data filtering table and the model selection table for document
   View(dataFilters)
@@ -190,9 +196,7 @@ all <- list.files(file.path(here(), "code", "sdmTMB"))
             file.path(getwd(),"percent_pos.csv"),
             row.names=FALSE)
   
-
-  
-  
+ 
   
 #Delta_models ------------------------------------------------------------------- 
 

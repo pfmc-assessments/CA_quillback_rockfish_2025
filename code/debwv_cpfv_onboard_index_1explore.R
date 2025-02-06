@@ -15,10 +15,9 @@ library(DBI)
 library(here)
 library(glue)
 
-data_dir <- "S:/quillback_rockfish_2025"
-dir <- file.path(data_dir, "data", "rec_indices", "debwv_cpfv_onboard")
+dir <- file.path(here(), "data-raw", "rec_indices", "debwv_cpfv_onboard")
 setwd(dir)
-setwd("S:\\quillback_rockfish_2025\\data\\rec_indices\\debwv_cpfv_onboard")
+
 # connect to all of the databases with windows authentication
 db_driver <- "SQL Server"
 swc_server <- "SWC-Estrella-S"
