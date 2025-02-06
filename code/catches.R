@@ -62,8 +62,8 @@ ggplot(ca_com_hist, aes(y = QLBKmt, x = Year)) +
   ylab("Landings (MT)") +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   geom_vline(xintercept = 1968.5, linetype = "dashed")
-ggsave(here('data_explore_figs',"hist_com_landings.png"),
-       width = 6, height = 4)
+# ggsave(here('data_explore_figs',"hist_com_landings.png"),
+#        width = 6, height = 4)
 
 #Scaled to match scale of pacfin landings
 ggplot(ca_com_hist, aes(y = QLBKmt, x = Year)) +
@@ -73,8 +73,8 @@ ggplot(ca_com_hist, aes(y = QLBKmt, x = Year)) +
   ylim(0,50) +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   geom_vline(xintercept = 1968.5, linetype = "dashed")
-ggsave(here('data_explore_figs',"hist_com_landings_scaled.png"),
-       width = 6, height = 4)
+# ggsave(here('data_explore_figs',"hist_com_landings_scaled.png"),
+#        width = 6, height = 4)
 
 
 
@@ -128,8 +128,8 @@ ggplot(ca_rec_hist_wide, aes(y = mt, x = Year)) +
   ylab("Landings (MT)") +
   #scale_fill_manual(values = c("#00BA38", "#619CFF")) + #If break out by mode
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-ggsave(here('data_explore_figs',"hist_rec_landings.png"),
-       width = 6, height = 4)
+# ggsave(here('data_explore_figs',"hist_rec_landings.png"),
+#        width = 6, height = 4)
 
 #Scaled to match scale of pacfin landings
 ggplot(ca_rec_hist_wide, aes(y = mt, x = Year)) +
@@ -139,8 +139,8 @@ ggplot(ca_rec_hist_wide, aes(y = mt, x = Year)) +
   #scale_fill_manual(values = c("#00BA38", "#619CFF")) + #If break out by mode
   ylim(0,40) +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-ggsave(here('data_explore_figs',"hist_rec_landings_scaled.png"),
-       width = 6, height = 4)
+# ggsave(here('data_explore_figs',"hist_rec_landings_scaled.png"),
+#        width = 6, height = 4)
 
 
 
@@ -321,27 +321,31 @@ ca_catch[(ca_catch$Year %in% ca_rec_mrfss$YEAR) & (!ca_catch$Year %in% 1980), c(
 ## Fill in gaps
 
 # Add extra PC estimates for 1993-1995
-# Percentage calculated in recfin_processing.R as pc_rat = 0.7468163
-ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan", "rec_dis")] <- (1 + pc_rat) *
-  +   ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan", "rec_dis")]
+# Values (either pc_rat or pc_avg) calculated in recfin_processing.R
+# Can apply ratio to landings and discards, but addition only to landings otherwise double counted
+# pc_rat = 0.7468163
+# ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_dis", "rec_lan")] <- (1 + pc_rat) * 
+#   ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_dis", "rec_lan")]
+pc_avg = 2.460985
+ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan")] <- pc_avg + 
+  ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan")]
 
 #Fill in missing 1990-1992 years
 #If based on averages of nearby points
-plot(y = ca_rec_mrfss$tot_mt, x = ca_rec_mrfss$YEAR, type="b", ylab = "CA mrfss catch mt")
-average_vals <- c(mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1987:1989)], na.rm = T), #3 yr average before
-                  mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1987:1989, 1993:1995)], na.rm = T), #3 yr average before and after
-                  mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1993:1995)], na.rm = T)) #3 yr average after
+plot(y = ca_catch[ca_catch$Year %in% c(1980:2004),]$rec_tot, x = 1980:2004, type="b", ylab = "CA mrfss catch mt for model")
+average_vals <- c(mean(ca_catch$rec_tot[ca_catch$Year %in% c(1987:1989)], na.rm = T), #3 yr average before
+                  mean(ca_catch$rec_tot[ca_catch$Year %in% c(1987:1989, 1993:1995)], na.rm = T), #3 yr average before and after
+                  mean(ca_catch$rec_tot[ca_catch$Year %in% c(1993:1995)], na.rm = T)) #3 yr average after
 lines(y = average_vals, x = 1990:1992, col = 2, lwd = 3)
-# #If based on average of 1989 and 1993 (as was done for the 2021 assessment)
-# simp_avg <- mean(ca_rec_mrfss$tot_mt[ca_rec_mrfss$YEAR %in% c(1989, 1993)], na.rm = T)
-# lines(y = rep(simp_avg, 3) , x = 1990:1992, lwd = 3)
-# #If Based on linear interpolation between 1989 and 1993
-# impute_trend <- (ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1993), "tot_mt"] - ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1989), "tot_mt"]) / (1993-1989)
-# impute_vals <- ca_rec_mrfss[ca_rec_mrfss$YEAR %in% c(1989), "tot_mt"] + 1:3*impute_trend
-# points(y = impute_vals, x = 1990:1992, pch=19, col=5)
+#If based on average of 1989 and 1993 (as was done for the 2021 assessment)
+simp_avg <- mean(ca_catch$rec_tot[ca_catch$Year %in% c(1989, 1993)], na.rm = T)
+lines(y = rep(simp_avg, 3) , x = 1990:1992, lwd = 3)
+#If Based on linear interpolation between 1989 and 1993
+impute_trend <- (ca_catch$rec_tot[ca_catch$Year %in% c(1993)] - ca_catch$rec_tot[ca_catch$Year %in% c(1989)]) / (1993-1989)
+impute_vals <- ca_catch$rec_tot[ca_catch$Year %in% c(1989)] + 1:3*impute_trend
+points(y = impute_vals, x = 1990:1992, pch=19, col=5)
 
 ca_catch[ca_catch$Year %in% c(1990:1992), "rec_tot"] <- average_vals
-
 
 
 ###
@@ -375,8 +379,25 @@ ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_tot"] <-
 
 #---------------------------------------------------------------------------------------------------------------#
 
-
+#Full version with discards and landings
 #write.csv(round(ca_catch,3), file = file.path(here("data", "CAquillback_total_removals.csv")), row.names = FALSE)
+
+# Commercial estimates:
+# 1916-1968 Ralston Reconstruction landings plus historical dead discard amount (0.25% of landings)
+# 1969-1980 CalCOM Reconstruction landings plus historical dead discard amount (0.25% of landings)
+# 1981-2001 PacFIN landings plus historical dead discard amount (0.25% of landings)
+# 2002-2023 PacFIN landings plus dead discards from GEMM for non-"California Recreational" sectors
+# 
+# Historical dead discard percentage (0.25%) is from the GEMM and is the proportion of total dead discards (summed over years) to total landings (summed over years) in the nearshore sector for 2002-2021.
+# 
+# Recreational estimates:
+# 1928-1980 Ralston Reconstruction landings plus historical dead discard amount (1.1% of landings). Ralston value used for 1980 in place of MRFSS estimate.
+# 1981-2004 MRFSS total mortality (WGT_AB1). Note that the 2004 CRFS catch estimate is located within the MRFSS dataset.
+# For 1993-1995 when PC sampling was not taking place, added estimate for PC based on overall average of PC estimates 1980-2004
+# For 1990-1992 when all sampling was not taking place, applied average of nearby years (averaged 1987-1989 for 1990, 1987-1989 and 1993-1995 for 1991, and 1993-1995 for 1992)
+# 2005-2023 CFRS total mortality
+
+Historical dead discard percentage (1.1%) is from MRFSS and is the proportion of total type B1 estimates (ESTHARV; summed over years) to total type A estimates (ESTCLAIM + ESTHARV; summed over years) for 1980-2004.
 
 
 # Plot overall values
@@ -396,7 +417,8 @@ ggsave(here('data_explore_figs',"ALL_landings.png"),
 
 
 #Plot of rec (mrfss and recfin) landings and discards. 
-#This plot Does not include imputted values for 1990-1992
+#This plot does not include imputted values for 1990-1992
+#but does include additional 1993-1995 PC landings
 ggplot(ca_catch_long %>% dplyr::filter(type %in% c("lan", "dis"), 
                                        fleet == "rec",
                                        Year %in% c(1980:2023)), aes(y = mt, x = Year, fill = type)) +
