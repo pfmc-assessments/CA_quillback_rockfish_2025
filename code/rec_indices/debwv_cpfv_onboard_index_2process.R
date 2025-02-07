@@ -19,7 +19,7 @@ library(glue)
 
 dir <- file.path(here(), "data-raw", "rec_indices", "debwv_cpfv_onboard")
 setwd(dir)
-out.dir <- file.path(here(),"data_explore_figs", "rec_indices","dwv_cpfv_onboard")
+out.dir <- file.path(here(),"data_explore_figs", "rec_indices","debwv_cpfv_onboard")
 #load data
 load("debwv_quillback_data.R")
 #####################################################################################
@@ -430,7 +430,7 @@ png(filename = paste0(out.dir,'/Average CPUE by Year and Region.png'), width = 6
 with(dat, interaction.plot(YEAR, MegaReef, CPUE,
                            col=1:7, lty=1, lwd=2, ylab="CPAH", ylim=c(0,.2), 
                            legend=F))
-legend("topright", lty=1, col=1:7)
+
 dev.off()
 
 
@@ -444,7 +444,7 @@ ggplot(dat, aes(x=as.factor(MegaReef), y = DEPTH, fill = MegaReef)) +
 ggsave(file = file.path(getwd(), "depth_by_reef.png"), width = 7, height = 7)
 
 
-save(dat, data_filters, file = file.path(dir,'QLBK_filtered_data.RData'))
+
 
 #save.image(paste0(getwd(),'/Filtered_data_DebWV_onboard.RData'))
 
@@ -482,3 +482,6 @@ summary(dat$ANGHRS)
 summary(dat$FISHTIME)
 summary(dat$AVG_OBSANG)
 dev.off()
+
+
+save(dat, data_filters, file = file.path(dir,'QLBK_filtered_data.RData'))
