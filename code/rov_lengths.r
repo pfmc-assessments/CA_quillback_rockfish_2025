@@ -172,7 +172,7 @@ len_dep_pivot <- len %>%
 #look at size by month
 ggplot(
   len, aes(x = StereoSize, y = dbin , fill = Month)) +
-  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  geom_density_ridges(show.legend = TRUE, alpha = .5, stat="identity", scale = 1) +
   xlab("Length") +
   ylab("Depth") +
   scale_fill_viridis_d() #+
@@ -183,3 +183,30 @@ ggsave(file = file.path(fig.dir, "length_by_monthanddepth.png"), width = 7, heig
 #where are all the fish <30cm really from
 smallfish <- len %>%
 filter(StereoSize <31)
+
+#see if a violin plot shows the same information due to the smoothing in geom_density_ridges
+ggplot(len, aes(x = dbin, y = StereoSize, fill = dbin)) +
+geom_violin() + 
+facet_grid(.~latbin)
+ggsave(file = file.path(fig.dir, "length_by_lat_depth_violin.png"), width = 15, height = 7)
+
+
+#Look at length by specific sites
+#Look at the depths sampled by year and latitude
+#constrain to 40 to 70 for depth
+ggplot(
+  len %>% filter(Depth>39, Depth <70),
+   aes(x = StereoSize, y = Location, fill = as.factor(Survey_Year))) +
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  scale_fill_viridis_d() #+
+##  facet_grid(.~Survey_Year)
+ggsave(file = file.path(fig.dir, "length_by_location_year_coredepths.png"), width = 7, height = 7)
+
+
+ggplot(
+  len %>% filter(Depth>39, Depth <70),
+   aes(x = StereoSize, y = Location, fill = as.factor(Survey_Year))) +
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  scale_fill_viridis_d() +
+ facet_grid(.~dbin)
+ggsave(file = file.path(fig.dir, "length_by_location_year_coredepths_bydepth.png"), width = 7, height = 7)
