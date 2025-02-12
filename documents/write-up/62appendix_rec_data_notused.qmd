@@ -1,0 +1,9 @@
+### CPFV Onboard Observer Index of Abundance {#onboard-cpfv-index}
+
+Can move this section later.
+
+
+There are two data sets containing fishing stop specific information on for the CPFV fleet.  The survey known as the Deb Wilson-Vandenberg survey was conducted by CDFW in California north of Poi survey, @reilly_onboard_1998. In 1999, CDFW began a statewide onboard observer survey of the CPFV fleet that became part of CRFS in 2004 [@monk_documentation_2014]. 
+
+These data sets were explore independently to develop indices of abundance. 
+
