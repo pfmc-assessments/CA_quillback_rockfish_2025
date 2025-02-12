@@ -6,7 +6,7 @@
 #			  by Brian Langseth 
 #
 #   Uses output from the following scripts
-#     comps_bio_workup.R
+#     comps_workup.R
 #
 #
 ##############################################################################################################
@@ -18,7 +18,7 @@ library(r4ss)
 
 
 ##
-#Read in output of summarized length data produced in comps_bio_workup.R
+#Read in output of summarized length data produced in comps_workup.R
 ##
 
 data <- read.csv(here("data_bio_process", "CAquillback_ALL_bio.csv"))

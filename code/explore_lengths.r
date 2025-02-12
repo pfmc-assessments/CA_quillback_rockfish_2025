@@ -2,8 +2,9 @@
 # This file is for exploration only - not SS input
 # length exploration for quillback 2025
 # 
-# Using the data bio process file from
-# Brian Langseth
+# Uses output from the length comp processing file
+#     comps_workup.R
+#
 # Melissa Monk 2/11/2025
 ###################################################
 
