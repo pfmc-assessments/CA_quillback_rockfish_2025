@@ -16,7 +16,7 @@ library(tidyr)
 library(ggplot2)
 library(ggridges)
 
-biodata <- read.csv(here("data-raw","data_bio_process", "CAquillback_ALL_bio.csv"))
+biodata <- read.csv(here("data_bio_process", "CAquillback_ALL_bio.csv"))
 str(biodata)
 fig.dir<- (here("data_explore_figs"))
 with(biodata, table(source))
@@ -81,7 +81,7 @@ ggplot(
   ylab("Year") +
   scale_fill_viridis_d() #+
 #  facet_grid(.~Survey_Year)
-ggsave(file = file.path(fig.dir, "length_by_mode_wcom_year.png"), width = 7, height = 7)
+ggsave(file = file.path(fig.dir, "rec_length_by_mode_year_wcom_ggridges.png"), width = 7, height = 7)
 
 
 year_mode <- bio %>%
@@ -104,6 +104,14 @@ ggplot(
   xlab("Length") +
   ylab("Year") +
   scale_fill_viridis_d()
+#Plots these by region
+ggplot(
+  recbio, aes(x = length_cm, y = as.factor(Year), fill = as.factor(mode))) +
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  xlab("Length") +
+  ylab("Year") +
+  facet_grid(.~region) +
+  scale_fill_viridis_d()
 
 #Look at lengths by individual fleet and time
 ggplot(
@@ -114,7 +122,7 @@ ggplot(
   facet_grid(.~ mode) +
   scale_fill_viridis_d()
 
-#by mode
+#by mode overall
 ggplot(bio %>% filter(source=="recfin"), aes(x = length_cm, fill = mode)) +
 geom_density(alpha = .5) +
 facet_grid(rows = vars(region))
@@ -129,7 +137,18 @@ ggplot(
   xlab("Length") +
   ylab("Year") +
   scale_fill_viridis_d()
-ggsave(file = file.path(fig.dir, "rec_length_by_year_mode.png"), width = 7, height = 7)
+ggsave(file = file.path(fig.dir, "rec_length_by_year_mode_ggridges.png"), width = 7, height = 7)
+
+#length by year mode and region
+ggplot(
+  recbio, aes(x = length_cm, y = Year, fill = mode)) +
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  xlab("Length") +
+  ylab("Year") +
+  facet_grid(~region) +
+  scale_fill_viridis_d()
+ggsave(file = file.path(fig.dir, "rec_length_by_year_mode_region_ggridges.png"), width = 7, height = 7)
+
 
 #length by year and region
 ggplot(
@@ -138,7 +157,7 @@ ggplot(
   xlab("Length") +
   ylab("Year") +
   scale_fill_viridis_d()
-ggsave(file = file.path(fig.dir, "rec_length_by_year_region.png"), width = 7, height = 7)
+ggsave(file = file.path(fig.dir, "rec_length_by_year_region_ggridges.png"), width = 7, height = 7)
 
 #length by year and region
 ggplot(
@@ -147,7 +166,7 @@ ggplot(
   xlab("Length") +
   ylab("Region") +
   scale_fill_viridis_d()
-ggsave(file = file.path(fig.dir, "rec_length_by_region_year.png"), width = 7, height = 7)
+ggsave(file = file.path(fig.dir, "rec_length_by_region_year_ggridges.png"), width = 7, height = 7)
 
 
 with(recbio, table(Year, region))
