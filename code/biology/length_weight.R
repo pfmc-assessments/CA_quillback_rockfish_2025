@@ -21,7 +21,7 @@ library(r4ss)
 #Read in output of summarized length data produced in comps_workup.R
 ##
 
-data <- read.csv(here("data_bio_process", "CAquillback_ALL_bio.csv"))
+data <- read.csv(here("data", "length_process_noShare", "CAquillback_ALL_bio.csv"))
 
 #Rename variables so can do length_weight_plot
 data$Source <- data$source

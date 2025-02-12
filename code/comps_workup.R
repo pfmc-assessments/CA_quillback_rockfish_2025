@@ -31,28 +31,28 @@ library(ggplot2)
 ##
 
 ## PacFIN bds
-bio_pacfin <- read.csv(here("data_bio_process","CAquillback_com_bio.csv"), header = TRUE)
+bio_pacfin <- read.csv(here("data","length_processed_noShare","CAquillback_com_bio.csv"), header = TRUE)
 
 ## RecFIN bds
-bio_recfin <- read.csv(here("data_bio_process","CAquillback_rec_bio.csv"), header = TRUE)
+bio_recfin <- read.csv(here("data","length_processed_noShare","CAquillback_rec_bio.csv"), header = TRUE)
 
 ## MRFSS bds
-bio_mrfss <- read.csv(here("data_bio_process","CAquillback_mrfss_bio.csv"), header = TRUE)
+bio_mrfss <- read.csv(here("data","length_processed_noShare","CAquillback_mrfss_bio.csv"), header = TRUE)
 #Remove 1997-1998 PC data because these are duplicated in Deb's data
 bio_mrfss <- bio_mrfss[-which(bio_mrfss$Year %in% c(1997,1998) & bio_mrfss$mode == "PC"),]
 table(bio_mrfss$Year, bio_mrfss$mode)
 
 ## Deb Wilson Vandenberg bds
-bio_deb <- read.csv(here("data_bio_process","CAquillback_deb_bio.csv"), header = TRUE)
+bio_deb <- read.csv(here("data","length_processed_noShare","CAquillback_deb_bio.csv"), header = TRUE)
 
 ## Geibel and Collier bds
-bio_gc <- read.csv(here("data_bio_process","CAquillback_historical_bio_skiff.csv"), header = TRUE)
+bio_gc <- read.csv(here("data","length_processed_noShare","CAquillback_historical_bio_skiff.csv"), header = TRUE)
 
 ## Miller and G* Historical bds
-bio_mg <- read.csv(here("data_bio_process","CAquillback_historical_bio.csv"), header = TRUE)
+bio_mg <- read.csv(here("data","length_processed_noShare","CAquillback_historical_bio.csv"), header = TRUE)
 
 ## Survey bds
-bio_survey <- read.csv(here("data_bio_process","CAquillback_wcgbts_triennial_bio.csv"), header = TRUE)
+bio_survey <- read.csv(here("data","length_processed_noShare","CAquillback_wcgbts_triennial_bio.csv"), header = TRUE)
 
 ## ROV bds
 bio_rov <- data.frame(NA)
@@ -125,7 +125,7 @@ create_data_frame <- function(data_list, names = c("Year",
 
 #Combine into a single data frame will all desired variables included
 data <- create_data_frame(input)
-#write.csv(data, here("data_bio_process", "CAquillback_ALL_bio.csv"), row.names = FALSE)
+#write.csv(data, here("data","length_processed_noShare", "CAquillback_ALL_bio.csv"), row.names = FALSE)
 
 
 #---------------------------------------------------------------------------------------------------------------#

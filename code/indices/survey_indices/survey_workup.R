@@ -94,5 +94,5 @@ out_surveys <- research_bio %>% dplyr::select(Year,
                                               "lon" = Longitude_dd,
                                               "source" = survey,
                                               tripID = Tow)
-#write.csv(out_surveys, here("data_bio_process","CAquillback_wcgbts_triennial_bio.csv"), row.names = FALSE)
+#write.csv(out_surveys, here("data","length_process_noShare","CAquillback_wcgbts_triennial_bio.csv"), row.names = FALSE)
 
