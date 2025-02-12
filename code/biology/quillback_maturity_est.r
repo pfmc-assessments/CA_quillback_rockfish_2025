@@ -19,10 +19,12 @@ library(here)
 library(car)
 library(ggplot2)
 
-dir<- file.path(here())
-setwd("C:/Users/melissa.monk/Documents/Stock_assessments/CA_quillback_2025")
+# dir<- file.path(here())
+# setwd("C:/Users/melissa.monk/Documents/Stock_assessments/CA_quillback_2025")
+# 
+# Quill.mat<-read.csv("Quillbackmaturity.csv")
 
-Quill.mat<-read.csv("Quillbackmaturity.csv")
+Quill.mat <- read.csv(here("data-raw", "Quillbackmaturity.csv"))
 data <- Quill.mat
 View(data)
 summary(as.factor(data$Certainty))
@@ -144,3 +146,35 @@ mature.len <- 1 / (1 + exp((ohm3) * (mid.len-ohm4)))
 mature.len.alt <- 1 / (1 + exp((-0.60) * (mid.len-ohm4)))
 plot(mid.len, mature.len)
 lines(mid.len, mature.len.alt, col = 'green')
+
+
+
+# ##
+# #Melissa Monk analyzed some Oregon fish too (all from Astoria), and found that a combined 
+# #maturity estimate is very similar. 
+# #Here is a snippet from her code sent to us via email on Jan 31, 2025. 
+# #We did not add here entire script because we dont ultimately use. 
+# ##
+#
+# Quill.matODFW<-read.csv(here("data-raw", "Quillbackmaturity_update.csv"))
+# QuillODFW.cert <- subset(Quill.matODFW,Certainty==1) ###Remove uncertain samples###
+# 
+# maturityfxnglm <- glm (maturity ~ 1 + length, 
+#                        data <-data.frame(length = QuillODFW.cert$Length_cm, 
+#                                          maturity <- QuillODFW.cert$Functional_maturity),
+#                        family = binomial(link ="logit"))
+# 
+# vector.fxn.MatGLM<-c(maturityfxnglm$coefficients)
+# A= vector.fxn.MatGLM[1]
+# B= vector.fxn.MatGLM[2]
+# sA<- summary(maturityfxnglm)$coef[1,2]
+# sB<-summary(maturityfxnglm)$coef[2,2]
+# r <- summary(maturityfxnglm, corr = TRUE)$correlation[1,2]
+# 
+# #Difference format of delta method but same answer as EJ's approach above
+# deltamethod <- ((sA^2)/(B^2))- ((2*A*sA*sB*r)/(B^3))+ (((A^2)*(sB^2))/(B^4))
+# deltamethod
+# 
+# -A/B #50% mat = 29.30 cm with Oregon and California samples
+# 1.96*sqrt(deltamethod) 
+# ###95% CI = 1.30##
