@@ -46,6 +46,7 @@ with(biodata, table(region, source))
 with(biodata, table(mode))
 summary(as.factor(biodata$mode))
 
+#replace NAs with COM for commercial
 biodata <- biodata %>%
 mutate_at(vars(mode), ~replace_na(., "COM"))
 
@@ -173,8 +174,9 @@ ggsave(file = file.path(fig.dir, "rec_length_by_region_year_ggridges.png"), widt
 with(recbio, table(Year, region))
 
 #summaries
+recbio <- bio %>% filter(!mode == "COM")
 length_summary <- recbio %>%
-group_by(Year, region, mode) %>%
+group_by(Year, region) %>%
 summarise(mean_lngth = mean(length_cm), 
           median_lngth = median(length_cm), 
           n = n())
@@ -182,3 +184,13 @@ View(length_summary)
 
 test <- length_summary %>% filter(n >29)
 View(test)
+
+#plot average lenght through time
+ggplot(length_summary, aes(x = Year, y = mean_lngth, fill = region, size = n)) +
+geom_point(shape = 21, , colour = "black", ) +  
+scale_fill_viridis_d() + geom_vline(xintercept = c(1999, 2002, 2017))
+ 
+#plot average lenght through time
+ggplot(length_summary %>% filter(Year >1998), aes(x = Year, y = mean_lngth, fill = region, size = n)) +
+geom_point(shape = 21, , colour = "black", ) +  
+scale_fill_viridis_d() + geom_vline(xintercept = c(1999, 2002, 2017))
