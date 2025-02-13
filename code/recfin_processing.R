@@ -354,6 +354,12 @@ abline(h = pc_avg)
 aggFleetYr_mrfss_wider$PCextraAvg <- 0
 aggFleetYr_mrfss_wider[aggFleetYr_mrfss_wider$YEAR %in% c(1993:1995), "PCextraAvg"] <- pc_avg
 
+##
+#Output fleet breakdown to send to CDFW for confirming mortality estimates
+#Include the 1980 estimate because its used for the average of PC in 1993-1995
+#This file was changed to an excel file for sending, and not pushed to github
+#write.csv(round(aggFleetYr_mrfss_wider[, c("YEAR", "OTH", "PC", "PR", "PCextraAvg")],3), here("data","CAquillback_mrfss_by_mode_catches_sentToCDFW.csv"), row.names = FALSE)
+##
 
 #Break out by water area
 aggArea_mrfss <- ca_mrfss %>%
