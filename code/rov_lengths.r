@@ -210,3 +210,126 @@ ggplot(
   scale_fill_viridis_d() +
  facet_grid(.~dbin)
 ggsave(file = file.path(fig.dir, "length_by_location_year_coredepths_bydepth.png"), width = 7, height = 7)
+
+
+##############################################################################################################
+##############################################################################################################
+#read in the file from 2023 that contains all quillback up to that point
+#look at course size vs stereo size
+#look at where stereo size isn't available
+#how many quillback by area/year don't have lengths
+
+alllengths <- read.csv(file.path(dir,"Quillback_ROV_2005-2021_11012023.csv"))
+alllengths <- alllengths %>% 
+filter(SurveyYear > 2013)
+
+#get a sum of all quillback observed
+counts <- alllengths %>%
+group_by(SurveyYear, Location) %>%
+summarise(qlbk_cnt = sum(Count)) %>%
+pivot_wider(names_from = SurveyYear, values_from = qlbk_cnt, values_fill = 0)
+with(alllengths, table(Location, SurveyYear))
+
+summary(alllengths$CoarseSize)
+summary(alllengths$SteroSize)
+
+#look at where the NAs are
+nolength <- alllengths %>%
+filter(is.na(CoarseSize))
+with(nolength, table(Location, SurveyYear))
+
+with(nolength, table(SurveyYear))/with(alllengths %>% filter(SurveyYear != 2016), table(SurveyYear))
+
+#Fraction of fish with NO lengths by year (stereo and coarse)
+#SurveyYear
+#      2014       2015       2019       2020       2021
+#0.09558824 0.11832061 0.03947368 0.11409396 0.06772908
+
+
+ggplot(alllengths, aes(x = CoarseSize, y = SteroSize)) +
+geom_jitter() + geom_abline()
+
+
+#remove the data with no lengths
+havelen <- alllengths %>%
+filter(!is.na(CoarseSize))
+
+summary(havelen$CoarseSize)
+summary(havelen$SteroSize)
+
+
+ggplot(havelen, aes(x = CoarseSize)) + geom_histogram() 
+ggplot(havelen %>% filter(is.na(SteroSize)), aes(x = CoarseSize)) + geom_histogram()
+
+havelen <- havelen %>%
+mutate(lbin = cut(CoarseSize, breaks = c(seq(0,60,5)))) %>%
+mutate(slbin = cut(SteroSize, breaks = c(seq(0,60,5)))) %>%
+droplevels()
+
+
+ with(havelen %>% filter(!is.na(SteroSize)), table(lbin)) / with(havelen %>% filter(is.na(SteroSize)), table(lbin))
+ with(havelen %>% filter(!is.na(SteroSize)), table(lbin)) / with(havelen, table(lbin))
+
+with(havelen, table(slbin))
+
+########################################################################################
+#How many quillback total are at each location in each year
+#How many quillback have stereo lengths at each location and year
+#How many quillback have only coarse lengths at each location and year
+
+#all data lengths
+loc_year <- alllengths %>%
+group_by(SurveyYear, Location) %>%
+summarise(qlbk_cnt = sum(Count)) %>%
+pivot_wider(names_from = SurveyYear, values_from = qlbk_cnt, values_fill = 0)
+
+#at least a coarse length
+loc_year_coarse_lengths <- alllengths  %>%
+filter(!is.na(CoarseSize)) %>%
+group_by(SurveyYear, Location) %>%
+summarise(qlbk_cnt = sum(Count)) %>%
+pivot_wider(names_from = SurveyYear, values_from = qlbk_cnt, values_fill = 0)
+
+
+#stereo lengths only
+loc_year_stereo_lengths <- alllengths  %>%
+filter(!is.na(SteroSize)) %>%
+group_by(SurveyYear, Location) %>%
+summarise(qlbk_cnt = sum(Count)) %>%
+pivot_wider(names_from = SurveyYear, values_from = qlbk_cnt, values_fill = 0)
+
+
+View(loc_year) 
+View(loc_year_coarse_lengths)
+View(loc_year_stereo_lengths) 
+
+
+with(lengths, table(Location, Survey_Year))
+with(lengths, table(Survey_Year))
+with(havelen, table(SurveyYear))
+
+#all data len - need to change the name of this table
+havelen = havelen %>%
+      mutate(dbin = cut(Depth,
+                       breaks = c(0,20,30,40,50,60,70,80,90,100))) %>%
+    mutate(latbin = cut(Lat, breaks = c(36,37,38,39,40,41,42))) %>%
+    mutate_at(vars(dbin,latbin), as.factor)
+
+#Look at the data with ggridges using the binned lat and depth
+ggplot(
+  havelen %>% filter(), aes(x = CoarseSize, y = latbin, fill = as.factor(SurveyYear))) +
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  xlab("Length") +
+  ylab("Location") +
+  scale_fill_viridis_d() #+
+#  facet_grid(.~Survey_Year)
+
+
+ggplot(
+  lengths, aes(x = StereoSize, y = latbin, fill = as.factor(SurveyYear))) + 
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  xlab("Length") +
+  ylab("Location") +
+  scale_fill_viridis_d()
+
+
