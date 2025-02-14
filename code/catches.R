@@ -396,8 +396,8 @@ ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_tot"] <-
 # For 1993-1995 when PC sampling was not taking place, added estimate for PC based on overall average of PC estimates 1980-2004
 # For 1990-1992 when all sampling was not taking place, applied average of nearby years (averaged 1987-1989 for 1990, 1987-1989 and 1993-1995 for 1991, and 1993-1995 for 1992)
 # 2005-2023 CFRS total mortality
-
-Historical dead discard percentage (1.1%) is from MRFSS and is the proportion of total type B1 estimates (ESTHARV; summed over years) to total type A estimates (ESTCLAIM + ESTHARV; summed over years) for 1980-2004.
+# 
+# Historical dead discard percentage (1.1%) is from MRFSS and is the proportion of total type B1 estimates (ESTHARV; summed over years) to total type A estimates (ESTCLAIM + ESTHARV; summed over years) for 1980-2004.
 
 
 # Plot overall values
