@@ -18,6 +18,8 @@ library(magrittr)
 #devtools::install_github("pfmc-assessments/nwfscDiag")
 library(nwfscDiag)
 library(ggplot2)
+#devtools::install_github("pfmc-assessments/nwfscSurvey")
+library(nwfscSurvey)
 
 
 #---------------------------------------------------------------------------------------------------------------#
@@ -183,6 +185,7 @@ ggsave(here('data_explore_figs',"deb_length_district.png"),
 ##
 #Plot for Geibel and Collier overlayed on MRFSS
 ##
+
 ggplot(bio_gc, aes(x = length_cm, color = source)) +
   geom_density() +
   geom_density(aes(x = length_cm, color = source), 
@@ -272,5 +275,112 @@ for(Sex in c("F", "M")){
 }
 dev.off()
 
+
+
+#---------------------------------------------------------------------------------------------------------------#
+
+# Generate composition data for use in SS3 ----
+
+#---------------------------------------------------------------------------------------------------------------#
+
+#Read in data so dont have to process script up to this point
+
+out <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.csv"))
+
+
+###########################-
+## Recreational comps ----
+###########################-
+
+dir.create(here("data", "forSS3"))
+length_bins <- seq(12, 66, 2)
+
+##
+#Basic. Output with both number of samples and number of trips
+##
+
+rec_out <- out %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial"))
+
+#rec_out$common_name <- "quillback" #needed if save to dir
+#rec_out$project <- "recreational" #needed if save to dir
+rec_out$trawl_id <- paste0(rec_out$source, rec_out$tripID) #trawl_id needed to calculate input_n for tows (trips) option.  
+
+#Run comps with total samples
+lfs_nsamp <-  nwfscSurvey::get_raw_comps(
+  data = rec_out, 
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("total_samples"),
+  month = 7,
+  fleet = "rec",
+  dir = NULL)
+
+#Now run comps with trips
+lfs <-  nwfscSurvey::get_raw_comps(
+  data = rec_out, 
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("tows"),
+  month = 7,
+  fleet = "rec",
+  dir = NULL)
+#add the number of samples from the comps with total samples as sample size
+rec_comps <- tibble::add_column(lfs$unsexed, "Nsamp" = lfs_nsamp$unsexed$input_n, .before = "input_n")
+
+#Output final comps in forSS3 folder
+write.csv(rec_comps, here("data", "forSS3", paste0("length_cm_unsexed_raw_", 
+                                                   length_bins[1], "_", tail(length_bins,1), 
+                                                   "_quillback_recreational.csv")), row.names = FALSE)
+
+
+##
+#Fleets as areas. Output with both number of samples and number of trips for fleets as areas
+##
+
+rec_out <- out %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial"))
+
+#rec_out$common_name <- "quillback" #needed if save to dir
+#rec_out$project <- "recreational" #needed if save to dir
+rec_out$trawl_id <- paste0(rec_out$source, rec_out$tripID) #trawl_id needed to calculate input_n for tows (trips) option.  
+
+fleets <- list("north" = c("Redwood", "Wine"),
+               "south" = c("Bay", "Central", "South"))
+rec_comps <- list()
+
+for(s in 1:length(fleets)){
+  
+  #Run comps with total samples
+  lfs_nsamp <-  nwfscSurvey::get_raw_comps(
+    data = rec_out %>% dplyr::filter(area %in% fleets[[s]]), 
+    comp_bins = length_bins,
+    comp_column_name = "length_cm",
+    two_sex_comps = FALSE,
+    input_n_method = c("total_samples"),
+    month = 7,
+    fleet = paste0("rec_", names(fleets)[s]),
+    dir = NULL)
+  
+  #Now run comps with trips
+  lfs <-  nwfscSurvey::get_raw_comps(
+    data = rec_out %>% dplyr::filter(area %in% fleets[[s]]), 
+    comp_bins = length_bins,
+    comp_column_name = "length_cm",
+    two_sex_comps = FALSE,
+    input_n_method = c("tows"),
+    month = 7,
+    fleet = paste0("rec_", names(fleets)[s]),
+    dir = NULL)
+  #add the number of samples from the comps with total samples as sample size
+  rec_comps[[s]] <- tibble::add_column(lfs$unsexed, "Nsamp" = lfs_nsamp$unsexed$input_n, .before = "input_n")
+
+}
+
+#Output final comps in forSS3 folder
+write.csv(dplyr::bind_rows(rec_comps), 
+          here("data", "forSS3", 
+               paste0("length_cm_unsexed_raw_", length_bins[1], "_", tail(length_bins,1), 
+                      "_quillback_recreational_FAA.csv")), row.names = FALSE)
 
 
