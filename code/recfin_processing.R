@@ -62,6 +62,20 @@ plot(ca_rec$SUM_RELEASED_DEAD_NUM/ca_rec$SUM_RELEASED_ALIVE_NUM)
 #Want the amount of releases that are dead over the total releases
 plot(ca_rec$SUM_RELEASED_DEAD_NUM/(ca_rec$SUM_RELEASED_ALIVE_NUM + ca_rec$SUM_RELEASED_DEAD_NUM))
 
+#However some records have numbers but do not have weights. 
+#Ashok made me aware of this
+which(ca_rec$SUM_RETAINED_MT == 0 & ca_rec$SUM_RETAINED_NUM > 0) #good for retained
+which(ca_rec$SUM_RELEASED_DEAD_MT == 0 & ca_rec$SUM_RELEASED_DEAD_NUM > 0) #not for released dead
+#There are 207 instances where the weight of released fish is not being included. Need weight for them
+sum(ca_rec[which(ca_rec$SUM_RELEASED_DEAD_MT == 0 & ca_rec$SUM_RELEASED_DEAD_NUM > 0),
+           "SUM_RELEASED_DEAD_NUM"])
+#Note that the actual number is more than those that Ashok pointed out (20 instances) because 
+#he looked only at instances where total mortality in mt was 0 and in numbers was > 0.
+#Also he used excel, which rounded 2 recorsd to 0 so really there should be only 18 instances
+which(ca_rec$SUM_TOTAL_MORTALITY_MT == 0 & ca_rec$SUM_RELEASED_DEAD_NUM > 0)
+sum(ca_rec[which(ca_rec$SUM_TOTAL_MORTALITY_MT == 0 & ca_rec$SUM_TOTAL_MORTALITY_NUM > 0),
+           "SUM_RELEASED_DEAD_NUM"])
+
 
 ########################-
 ## Process the data ----
@@ -78,6 +92,23 @@ ca_rec$district <- dplyr::case_when(grepl("Bay Area", ca_rec$DISTRICT_NAME) ~ "B
                                     grepl("Redwood", ca_rec$DISTRICT_NAME) ~ "Redwood",
                                     grepl("Wine", ca_rec$DISTRICT_NAME) ~ "Wine",
                                     grepl("South", ca_rec$DISTRICT_NAME) ~ "South")
+
+#Calculate mt for released_dead column for records with numbers but not weight.
+#Only care about released dead fish, so average weight based only on released dead fish
+#that had both weight and number
+avg_wgt_released <- 
+  sum(ca_rec[which(ca_rec$SUM_RELEASED_DEAD_MT > 0 & ca_rec$SUM_TOTAL_MORTALITY_NUM > 0), 
+             "SUM_RELEASED_DEAD_MT"]) / 
+  sum(ca_rec[which(ca_rec$SUM_RELEASED_DEAD_MT > 0 & ca_rec$SUM_TOTAL_MORTALITY_NUM > 0), 
+             "SUM_RELEASED_DEAD_NUM"])
+
+ca_rec$sum_released_dead_mt_adj <- ca_rec$SUM_RELEASED_DEAD_MT
+ca_rec[which(ca_rec$SUM_RELEASED_DEAD_MT == 0 & ca_rec$SUM_RELEASED_DEAD_NUM > 0), "sum_released_dead_mt_adj"] <-
+  avg_wgt_released *
+  ca_rec[which(ca_rec$SUM_RELEASED_DEAD_MT == 0 & ca_rec$SUM_RELEASED_DEAD_NUM > 0), "SUM_RELEASED_DEAD_NUM"]
+
+#Now add the new released_dead_mt values to the retained values to get a new total mortality
+ca_rec$tot_mt_adj <- ca_rec$sum_released_dead_mt_adj + ca_rec$SUM_RETAINED_MT
 
 
 ##Aggregate across variables. No checking of number is needed since these are public tables
@@ -133,13 +164,25 @@ aggTripType <- ca_rec %>%
                    land_mt = sum(SUM_RETAINED_MT))
 
 #Aggregate over years and output catch time series
+#This includes the adjustment for accounting records with numbers but not weight in mt
 aggCatch_rec <- ca_rec %>%
+  dplyr::group_by(RECFIN_YEAR) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt_adj),
+                   dis_mt = sum(sum_released_dead_mt_adj),
+                   land_mt = sum(SUM_RETAINED_MT)) %>%
+  data.frame()
+#write.csv(aggCatch_rec, here("data","CAquillback_recfin_catches.csv"), row.names = FALSE)
+
+#Aggregate over years and output catch time series without correcting 
+#for released dead fish that have numbers but not weight in mt
+#Im renaming this one so that I can more easily compare with the new adjusted one
+aggCatch_rec_unadj <- ca_rec %>%
   dplyr::group_by(RECFIN_YEAR) %>%
   dplyr::summarize(tot_mt = sum(SUM_TOTAL_MORTALITY_MT),
                    dis_mt = sum(SUM_RELEASED_DEAD_MT),
                    land_mt = sum(SUM_RETAINED_MT)) %>%
   data.frame()
-#write.csv(aggCatch_rec, here("data","CAquillback_recfin_catches.csv"), row.names = FALSE)
+
 
 
 #################-
@@ -165,11 +208,16 @@ ggsave(here('data_explore_figs',"recfin_mortality.png"),
        width = 6, height = 4)
 
 #Compare current mortality with mortality from the 2021 assessment
-#All very similar with greatest difference being slightly less catch in 2020 
-#and very slightly higher catch in 2006, 2008 and 2009 this time around
+#Apart from years where wgt = 0 adjustments made, all very similar. Slightly less catch 
+#in 2020 and very slightly higher catch in 2006, 2008 and 2009 this time around
 plot(x = aggCatch_rec$RECFIN_YEAR, y = aggCatch_rec$tot_mt, type = "l", lwd = 2, col = "black")
 lines(x = catch_recfin_2021$Year, y = catch_recfin_2021$CA_mort_mt, lty = 1, col = "green", lwd= 2)
 plot((merge(aggCatch_rec, catch_recfin_2021, by.x = "RECFIN_YEAR", by.y = "Year") %>% 
+        dplyr::mutate("diff" = round(tot_mt - CA_mort_mt, 3)))$diff, x = c(2005:2020))
+#original non-adjusted values
+plot(x = aggCatch_rec_unadj$RECFIN_YEAR, y = aggCatch_rec_unadj$tot_mt, type = "l", lwd = 2, col = "black")
+lines(x = catch_recfin_2021$Year, y = catch_recfin_2021$CA_mort_mt, lty = 1, col = "green", lwd= 2)
+plot((merge(aggCatch_rec_unadj, catch_recfin_2021, by.x = "RECFIN_YEAR", by.y = "Year") %>% 
         dplyr::mutate("diff" = round(tot_mt - CA_mort_mt, 3)))$diff, x = c(2005:2020))
 
 
@@ -219,6 +267,42 @@ ggplot(aggDistFleetYr, aes(y = tot_mt, x = RECFIN_YEAR)) +
   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(here('data_explore_figs',"recfin_mortality_district_fleet_percent.png"),
        width = 6, height = 4)
+
+
+#Differences in estimates when applying adjustment for records with 0 weight but positive number
+cbind("Year" = 2005:2023, "diff (mt)" = aggCatch_rec_unadj$tot_mt - aggCatch_rec$tot_mt)
+plot(aggCatch_rec$tot_mt - aggCatch_rec_unadj$tot_mt, type = "b", 
+     xlab = "Year", ylab = "Difference (mt)")
+
+aggCatch_rec_both <- aggCatch_rec_unadj %>% 
+  dplyr::mutate(., "add_dis" = aggCatch_rec$dis_mt - aggCatch_rec_unadj$dis_mt)
+ggplot(aggCatch_rec_both %>% tidyr::pivot_longer(cols = c(dis_mt, land_mt, add_dis)), 
+       aes(y = value, x = RECFIN_YEAR)) +
+  geom_bar(position = "stack", stat = "identity", aes(fill = name)) +
+  xlab("Year") +
+  ylab("Mortality (MT)") +
+  scale_fill_discrete(labels = c("Added discard", "Orig Discard", "Landings")) +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.title = element_blank())
+ggsave(here('data_explore_figs',"recfin_mortality_weight0_adj.png"),
+       width = 6, height = 4)
+
+#for checking average weight calcs
+dis_wgt <- ca_rec %>%
+  dplyr::group_by(RECFIN_YEAR) %>% 
+  dplyr::filter(SUM_RELEASED_DEAD_MT > 0 & SUM_TOTAL_MORTALITY_NUM > 0) %>%
+  dplyr::summarize(value = sum(SUM_RELEASED_DEAD_MT)/sum(SUM_RELEASED_DEAD_NUM))
+plot(dis_wgt)
+abline(h = avg_wgt_released)
+#Average weight changes somewhat over time but an overall average seems reasonable
+#we need to adjust entire years
+
+ret_wgt <- ca_rec %>%
+  dplyr::group_by(RECFIN_YEAR) %>% 
+  dplyr::filter(SUM_RETAINED_MT > 0 & SUM_RETAINED_NUM > 0) %>%
+  dplyr::summarize(value = sum(SUM_RETAINED_MT)/sum(SUM_RETAINED_NUM))
+plot(ret_wgt)
+abline(h = avg_wgt_released)
+#Retained weight is larger - so think its best to apply discarded weights
 
 
 
