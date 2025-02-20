@@ -20,6 +20,8 @@ library(nwfscDiag)
 library(ggplot2)
 #devtools::install_github("pfmc-assessments/nwfscSurvey")
 library(nwfscSurvey)
+#devtools::load_all("U:/Stock assessments/PacFIN.Utilities") #this is the new pacfintools
+library(pacfintools)
 
 
 #---------------------------------------------------------------------------------------------------------------#
@@ -125,7 +127,7 @@ create_data_frame <- function(data_list, names = c("Year",
   return (all_data)
 }
 
-#Combine into a single data frame will all desired variables included
+#Combine into a single data frame with all desired variables included
 data <- create_data_frame(input)
 #write.csv(data, here("data","length_processed_noShare", "CAquillback_ALL_bio.csv"), row.names = FALSE)
 
@@ -136,7 +138,7 @@ data <- create_data_frame(input)
 
 #---------------------------------------------------------------------------------------------------------------#
 
-## Create table of sample sizes and trips
+## Create table of sample sizes and trips for non-commercial sources
 dataN <- data %>% dplyr::filter(source != "pacfin") %>%
   dplyr::group_by(source, Year) %>% 
   dplyr::summarize(Nfish = length(length_cm),
@@ -148,6 +150,8 @@ dataN <- data %>% dplyr::filter(source != "pacfin") %>%
   data.frame()
 dataN[is.na(dataN)] <- 0
 #write.csv(dataN, here("data", "SampleSize_length_noPacFIN.csv"), row.names = FALSE)
+
+#The pacfin table of sample sizes is generated in the comp calcualtions for commercial
 
 
 
@@ -384,3 +388,92 @@ write.csv(dplyr::bind_rows(rec_comps),
                       "_quillback_recreational_FAA.csv")), row.names = FALSE)
 
 
+
+###########################-
+## Commercial comps ----
+###########################-
+
+##
+#Load in and setup the pacfin bio data and catch data
+##
+
+#Because want expanded comps need to set up via PacFIN.Utililties/pacfintools approach
+#as opposed to through the bio data file
+
+# PacFIN Commercial - 1978-2022
+load(here("data-raw", "PacFIN.QLBK.bds.11.Dec.2024.RData"))
+bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
+
+bio$disp <- "dead"
+bio[which(bio$PACFIN_CONDITION_CODE == "A"), "disp"] <- "alive"
+
+#Reogranized port group codes from North to South
+bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4BDA",
+                                       bio$PACFIN_GROUP_PORT_CODE == "BGA" ~ "3BGA",
+                                       bio$PACFIN_GROUP_PORT_CODE == "CCA" ~ "1CCA",
+                                       bio$PACFIN_GROUP_PORT_CODE == "ERA" ~ "2ERA",
+                                       bio$PACFIN_GROUP_PORT_CODE == "MNA" ~ "6MNA",
+                                       bio$PACFIN_GROUP_PORT_CODE == "MRA" ~ "7MRA",
+                                       bio$PACFIN_GROUP_PORT_CODE == "SFA" ~ "5SFA")
+
+#Remove the fish without lengths
+bio <- bio[which(!is.na(bio$FISH_LENGTH)),]
+
+#Clean the data to get in a format useful for comps
+bio_clean <- pacfintools::cleanPacFIN(Pdata = bio, CLEAN=TRUE, verbose=TRUE)
+bio_clean$fleet <- "com_lan" #Limited catch so combine HKL and TWL gears. Needs to make column in catch file
+# #Although there are some male and female records, most are U, and other datasets are unsexed. Set to U
+bio_clean$SEX <- "U"
+
+#Load in the current weight-at-length estimates by sex
+ua <- 1.599251e-5
+fa <- ma <- ua
+ub = 3.076563
+fb <- mb <- ub
+
+#Read in the catch file to base expansion on. 
+#Because have lengths in years where pacfin catch does not exist, 
+#use full commercial catch time seires 
+catch.file <- read.csv(here("data", "CAquillback_total_removals.csv")) %>%
+  dplyr::select(c("Year", "com_lan"))
+
+
+##
+# Basic expansions
+##
+
+Pdata_exp <- pacfintools::getExpansion_1(Pdata = bio_clean,
+                            fa = fa, fb = fb, ma = ma, mb = mb, ua = ua, ub = ub)
+plot(Pdata_exp$Expansion_Factor_1_L)
+
+Pdata_exp <- pacfintools::getExpansion_2(Pdata = Pdata_exp, 
+                            Catch = catch.file, 
+                            Units = "MT",
+                            maxExp = 0.95,
+                            stratification.cols = "fleet")
+plot(Pdata_exp$Expansion_Factor_2)
+
+Pdata_exp$Final_Sample_Size <- pacfintools::capValues(Pdata_exp$Expansion_Factor_1_L * Pdata_exp$Expansion_Factor_2, maxVal = 0.80)
+plot(Pdata_exp$Final_Sample_Size)
+
+Lcomps = pacfintools::getComps(Pdata_exp, Comps = "LEN")
+
+#If we want to apply the Stewart approach, need to add that manually. 
+#Based on the values described in the 2021 assessment, it would be
+Lcomps <- Lcomps %>% dplyr::mutate("effN" = ifelse(n_fish/n_tows < 44,
+                                         n_tows + 0.138 * n_fish, 
+                                         ifelse(n_fish/n_tows >= 44, 7.06 * n_tows, NA)))
+
+pacfintools::writeComps(inComps = Lcomps, 
+           fname = file.path(here("data", "forSS3", 
+                                  paste0("Lcomps_PacFIN_unsexed_expanded_", 
+                                         length_bins[1], "_", tail(length_bins,1),".csv"))),
+           comp_bins = length_bins,
+           column_with_input_n = "effN",
+           partition = 0, 
+           digits = 4)
+
+
+##-----------##
+## Fleets as areas expansions
+##-----------##
