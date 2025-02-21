@@ -79,12 +79,22 @@ plot(table(catch$LANDING_MONTH)) #summer is most common time period
 ## Process the data ----
 ##############################################################################-
 
-#Simplify disposition to alive vs. dead, and group gear codes together
+#Simplify disposition to alive vs. dead, and group ports together
 
 catch$disp <- "dead"
 catch[catch$DISPOSITION_CODE == "F", "disp"] <- "alive"
 
+#Use PACFIN_GROUP_CATCH_AREA_CODE to distinguish records with state wide port group (CA2)
+catch$faa <- dplyr::case_when(catch$PACFIN_GROUP_PORT_CODE %in% c("CCA", "ERA", "BGA") ~ "North",
+                              catch$PACFIN_GROUP_PORT_CODE %in% c("BDA", "SFA", "MNA", "MRA", "SBA", "LAA") ~ "South",
+                              catch$PACFIN_GROUP_PORT_CODE == "CA2" & 
+                               catch$PACFIN_GROUP_CATCH_AREA_CODE == "EK" ~ "North",
+                              catch$PACFIN_GROUP_PORT_CODE == "CA2" & 
+                               catch$PACFIN_GROUP_CATCH_AREA_CODE == "MT" ~ "South")
+
+
 #Break out by disposition
+
 aggDisp <- catch %>%
   dplyr::group_by(disp, LANDING_YEAR) %>%
   dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
@@ -171,6 +181,27 @@ aggPortDispN <- catch %>%
   dplyr::summarize(N = length(unique(DEALER_ID))) %>%
   data.frame()
 
+
+#Aggregate into fleets as areas
+
+aggFAAYear <- catch %>%
+  dplyr::group_by(faa, LANDING_YEAR) %>%
+  dplyr::summarize(sum = round(sum(LANDED_WEIGHT_MTONS),4)) %>%
+  tidyr::pivot_wider(names_from = "faa", values_from = "sum") %>% 
+  dplyr::arrange(LANDING_YEAR) %>%
+  data.frame() 
+
+#If we break out by fleets as areas there are confidentiality issues and oddly
+#individual is more restrictive than Vessel or Dealer
+aggFAAYearN <- catch %>%
+  dplyr::group_by(faa, LANDING_YEAR) %>%
+  dplyr::summarize(N = length(unique(VESSEL_NAME))) %>%
+  data.frame() 
+
+#Output faa catch time series, though this is confidential
+#write.csv(aggFAAYear[aggFAAYear$LANDING_YEAR %in% c(1984:2023),], here("data", "confidential_noShare", "CAquillback_pacfin_FAA_landings.csv"), row.names = FALSE)
+
+
 #Explore by sector
 #Ultimately not very helpful. Nearly all is nearshore and only reported since 2002
 #however discards may be different. 
@@ -194,6 +225,8 @@ aggCatch <- catch %>%
   data.frame() %>% 
   merge(., data.frame("LANDING_YEAR" = c(1984:2024)), by = "LANDING_YEAR", all = TRUE)
 #write.csv(aggCatch[aggCatch$LANDING_YEAR %in% c(1984:2023),], here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
+
+
 
 
 ################-
