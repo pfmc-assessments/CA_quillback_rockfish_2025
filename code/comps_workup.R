@@ -20,7 +20,7 @@ library(nwfscDiag)
 library(ggplot2)
 #devtools::install_github("pfmc-assessments/nwfscSurvey")
 library(nwfscSurvey)
-#devtools::load_all("U:/Stock assessments/PacFIN.Utilities") #this is the new pacfintools
+#devtools::install_github("pfmc-assessments/pacfintools")
 library(pacfintools)
 
 
@@ -400,7 +400,7 @@ write.csv(dplyr::bind_rows(rec_comps),
 #Because want expanded comps need to set up via PacFIN.Utililties/pacfintools approach
 #as opposed to through the bio data file
 
-# PacFIN Commercial - 1978-2022
+# PacFIN Commercial - 1978-2023
 load(here("data-raw", "PacFIN.QLBK.bds.11.Dec.2024.RData"))
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
@@ -438,8 +438,23 @@ catch.file <- read.csv(here("data", "CAquillback_total_removals.csv")) %>%
   dplyr::select(c("Year", "com_lan"))
 
 
+#Set up fleets by areas field and catch file 
+
+#There are no unknown areas so dont need further fields other than port group
+bio_clean$faa <- dplyr::case_when(bio_clean$PACFIN_GROUP_PORT_CODE %in% c("CCA", "ERA", "BGA") ~ "North", 
+                                  bio_clean$PACFIN_GROUP_PORT_CODE %in% c("BDA", "SFA", "MNA", "MRA") ~ "South")
+
+#Note that this only covers years in pacfin catch file. 
+#Right now I resolve this by only expanding lengths over this time period 
+catch.file.faa <- read.csv(here("data", "confidential_noShare", "CAquillback_pacfin_FAA_landings.csv")) %>%
+  tidyr::pivot_wider(names_from = "faa", values_from = "sum") %>%
+  dplyr::arrange(LANDING_YEAR) %>%
+  data.frame()
+catch.file.faa[is.na(catch.file.faa)] <- 0 #set NAs to 0
+
+
 ##
-# Basic expansions
+# Basic expansions. Output only with choice for input_n
 ##
 
 Pdata_exp <- pacfintools::getExpansion_1(Pdata = bio_clean,
@@ -474,6 +489,38 @@ pacfintools::writeComps(inComps = Lcomps,
            digits = 4)
 
 
-##-----------##
-## Fleets as areas expansions
-##-----------##
+##
+# Fleets as areas expansions.  Output only with choice for input_n
+##
+
+Pdata_exp_faa <- pacfintools::getExpansion_1(Pdata = bio_clean %>% 
+                                               dplyr::filter(year %in% catch.file.faa$LANDING_YEAR),
+                                         fa = fa, fb = fb, ma = ma, mb = mb, ua = ua, ub = ub)
+plot(Pdata_exp_faa$Expansion_Factor_1_L)
+
+Pdata_exp_faa <- pacfintools::getExpansion_2(Pdata = Pdata_exp_faa, 
+                                             Catch = catch.file.faa, 
+                                             Units = "MT",
+                                             maxExp = 0.95,
+                                             stratification.cols = "faa")
+plot(Pdata_exp_faa$Expansion_Factor_2)
+
+Pdata_exp_faa$Final_Sample_Size <- pacfintools::capValues(Pdata_exp_faa$Expansion_Factor_1_L * Pdata_exp_faa$Expansion_Factor_2, maxVal = 0.80)
+plot(Pdata_exp$Final_Sample_Size)
+
+Lcomps_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "LEN")
+
+#If we want to apply the Stewart approach, need to add that manually. 
+#Based on the values described in the 2021 assessment, it would be
+Lcomps_faa <- Lcomps_faa %>% dplyr::mutate("effN" = ifelse(n_fish/n_tows < 44,
+                                                           n_tows + 0.138 * n_fish,
+                                                           ifelse(n_fish/n_tows >= 44, 7.06 * n_tows, NA)))
+
+pacfintools::writeComps(inComps = Lcomps_faa, 
+                        fname = file.path(here("data", "forSS3", 
+                                               paste0("Lcomps_PacFIN_FAA_unsexed_expanded_", 
+                                                      length_bins[1], "_", tail(length_bins,1),".csv"))),
+                        comp_bins = length_bins,
+                        column_with_input_n = "effN",
+                        partition = 0, 
+                        digits = 4)
