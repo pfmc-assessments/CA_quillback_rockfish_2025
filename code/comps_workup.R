@@ -134,7 +134,7 @@ data <- create_data_frame(input)
 
 #---------------------------------------------------------------------------------------------------------------#
 
-# Tables ----
+## Tables ----
 
 #---------------------------------------------------------------------------------------------------------------#
 
@@ -157,7 +157,7 @@ dataN[is.na(dataN)] <- 0
 
 #---------------------------------------------------------------------------------------------------------------#
 
-# Plots ----
+## Plots ----
 
 #---------------------------------------------------------------------------------------------------------------#
 
@@ -287,23 +287,23 @@ dev.off()
 
 #---------------------------------------------------------------------------------------------------------------#
 
-#Read in data so dont have to process script up to this point
-
-out <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.csv"))
-
+dir.create(here("data", "forSS3"))
+length_bins <- seq(12, 66, 2)
 
 ###########################-
 ## Recreational comps ----
 ###########################-
 
-dir.create(here("data", "forSS3"))
-length_bins <- seq(12, 66, 2)
+#Read in data so dont have to process script up to this point
+
+out <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.csv"))
+
+rec_out <- out %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial"))
+
 
 ##
 #Basic. Output with both number of samples and number of trips
 ##
-
-rec_out <- out %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial"))
 
 #rec_out$common_name <- "quillback" #needed if save to dir
 #rec_out$project <- "recreational" #needed if save to dir
@@ -334,16 +334,14 @@ lfs <-  nwfscSurvey::get_raw_comps(
 rec_comps <- tibble::add_column(lfs$unsexed, "Nsamp" = lfs_nsamp$unsexed$input_n, .before = "input_n")
 
 #Output final comps in forSS3 folder
-write.csv(rec_comps, here("data", "forSS3", paste0("length_cm_unsexed_raw_", 
+write.csv(rec_comps, here("data", "forSS3", paste0("Lcomps_recreational_unsexed_raw_", 
                                                    length_bins[1], "_", tail(length_bins,1), 
-                                                   "_quillback_recreational.csv")), row.names = FALSE)
+                                                   ".csv")), row.names = FALSE)
 
 
 ##
 #Fleets as areas. Output with both number of samples and number of trips for fleets as areas
 ##
-
-rec_out <- out %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial"))
 
 #rec_out$common_name <- "quillback" #needed if save to dir
 #rec_out$project <- "recreational" #needed if save to dir
@@ -384,8 +382,8 @@ for(s in 1:length(fleets)){
 #Output final comps in forSS3 folder
 write.csv(dplyr::bind_rows(rec_comps), 
           here("data", "forSS3", 
-               paste0("length_cm_unsexed_raw_", length_bins[1], "_", tail(length_bins,1), 
-                      "_quillback_recreational_FAA.csv")), row.names = FALSE)
+               paste0("Lcomps_recreational_FAA_unsexed_raw_", length_bins[1], "_", tail(length_bins,1), 
+                      ".csv")), row.names = FALSE)
 
 
 
@@ -407,7 +405,7 @@ bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 bio$disp <- "dead"
 bio[which(bio$PACFIN_CONDITION_CODE == "A"), "disp"] <- "alive"
 
-#Reogranized port group codes from North to South
+#Reorganized port group codes from North to South
 bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4BDA",
                                        bio$PACFIN_GROUP_PORT_CODE == "BGA" ~ "3BGA",
                                        bio$PACFIN_GROUP_PORT_CODE == "CCA" ~ "1CCA",
