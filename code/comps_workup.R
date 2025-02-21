@@ -444,10 +444,7 @@ bio_clean$faa <- dplyr::case_when(bio_clean$PACFIN_GROUP_PORT_CODE %in% c("CCA",
 
 #Note that this only covers years in pacfin catch file. 
 #Right now I resolve this by only expanding lengths over this time period 
-catch.file.faa <- read.csv(here("data", "confidential_noShare", "CAquillback_pacfin_FAA_landings.csv")) %>%
-  tidyr::pivot_wider(names_from = "faa", values_from = "sum") %>%
-  dplyr::arrange(LANDING_YEAR) %>%
-  data.frame()
+catch.file.faa <- read.csv(here("data", "confidential_noShare", "CAquillback_pacfin_FAA_landings.csv"))
 catch.file.faa[is.na(catch.file.faa)] <- 0 #set NAs to 0
 
 
@@ -504,7 +501,7 @@ Pdata_exp_faa <- pacfintools::getExpansion_2(Pdata = Pdata_exp_faa,
 plot(Pdata_exp_faa$Expansion_Factor_2)
 
 Pdata_exp_faa$Final_Sample_Size <- pacfintools::capValues(Pdata_exp_faa$Expansion_Factor_1_L * Pdata_exp_faa$Expansion_Factor_2, maxVal = 0.80)
-plot(Pdata_exp$Final_Sample_Size)
+plot(Pdata_exp_faa$Final_Sample_Size)
 
 Lcomps_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "LEN")
 
