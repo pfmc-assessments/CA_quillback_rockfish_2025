@@ -21,7 +21,8 @@ library(ggplot2)
 #devtools::install_github("pfmc-assessments/nwfscSurvey")
 library(nwfscSurvey)
 #devtools::install_github("pfmc-assessments/pacfintools")
-library(pacfintools)
+devtools::load_all("U:/Stock assessments/PacFIN.Utilities")
+#library(pacfintools)
 
 
 #---------------------------------------------------------------------------------------------------------------#
@@ -468,20 +469,15 @@ plot(Pdata_exp$Final_Sample_Size)
 
 Lcomps = pacfintools::getComps(Pdata_exp, Comps = "LEN")
 
-#If we want to apply the Stewart approach, need to add that manually. 
-#Based on the values described in the 2021 assessment, it would be
-Lcomps <- Lcomps %>% dplyr::mutate("effN" = ifelse(n_fish/n_tows < 44,
-                                         n_tows + 0.138 * n_fish, 
-                                         ifelse(n_fish/n_tows >= 44, 7.06 * n_tows, NA)))
-
 pacfintools::writeComps(inComps = Lcomps, 
-           fname = file.path(here("data", "forSS3", 
-                                  paste0("Lcomps_PacFIN_unsexed_expanded_", 
+           fname = file.path(here("data", "forSS3",
+                                  paste0("Lcomps_PacFIN_unsexed_expanded_",
                                          length_bins[1], "_", tail(length_bins,1),".csv"))),
            comp_bins = length_bins,
-           column_with_input_n = "effN",
+           column_with_input_n = "n_stewart",
            partition = 0, 
-           digits = 4)
+           digits = 4,
+           verbose = TRUE)
 
 
 ##
@@ -505,17 +501,12 @@ plot(Pdata_exp_faa$Final_Sample_Size)
 
 Lcomps_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "LEN")
 
-#If we want to apply the Stewart approach, need to add that manually. 
-#Based on the values described in the 2021 assessment, it would be
-Lcomps_faa <- Lcomps_faa %>% dplyr::mutate("effN" = ifelse(n_fish/n_tows < 44,
-                                                           n_tows + 0.138 * n_fish,
-                                                           ifelse(n_fish/n_tows >= 44, 7.06 * n_tows, NA)))
-
 pacfintools::writeComps(inComps = Lcomps_faa, 
                         fname = file.path(here("data", "forSS3", 
                                                paste0("Lcomps_PacFIN_FAA_unsexed_expanded_", 
                                                       length_bins[1], "_", tail(length_bins,1),".csv"))),
                         comp_bins = length_bins,
-                        column_with_input_n = "effN",
+                        column_with_input_n = "n_stewart",
                         partition = 0, 
-                        digits = 4)
+                        digits = 4,
+                        verbose = TRUE)
