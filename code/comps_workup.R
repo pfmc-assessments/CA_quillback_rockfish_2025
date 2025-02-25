@@ -140,7 +140,7 @@ data <- create_data_frame(input)
 #---------------------------------------------------------------------------------------------------------------#
 
 ## Create table of sample sizes and trips for non-commercial sources
-dataN <- data %>% dplyr::filter(source != "pacfin") %>%
+dataN <- data %>%
   dplyr::group_by(source, Year) %>% 
   dplyr::summarize(Nfish = length(length_cm),
                    Ntrip = length(unique(tripID))) %>%
@@ -150,10 +150,7 @@ dataN <- data %>% dplyr::filter(source != "pacfin") %>%
   dplyr::arrange(Year) %>%
   data.frame()
 dataN[is.na(dataN)] <- 0
-#write.csv(dataN, here("data", "SampleSize_length_noPacFIN.csv"), row.names = FALSE)
-
-#The pacfin table of sample sizes is generated in the comp calcualtions for commercial
-
+#write.csv(dataN, here("data", "SampleSize_length.csv"), row.names = FALSE)
 
 
 #---------------------------------------------------------------------------------------------------------------#

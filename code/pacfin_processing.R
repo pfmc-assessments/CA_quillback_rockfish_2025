@@ -452,6 +452,11 @@ bio$group_port_NS <-  dplyr::case_when(bio$PACFIN_GROUP_PORT_CODE == "BDA" ~ "4B
                                           bio$PACFIN_GROUP_PORT_CODE == "MRA" ~ "7MRA",
                                           bio$PACFIN_GROUP_PORT_CODE == "SFA" ~ "5SFA")
 
+#Add tow id SAMPLE_NUMBER which is based on the default value for number of tows
+#within pacfintools get_comps()
+#Assign as a numeric value to remove identifying information
+bio$tow <- as.integer(as.factor(bio$SAMPLE_NUMBER))
+
 #Remove the fish without lengths
 bio <- bio[which(!is.na(bio$FISH_LENGTH)),]
 
@@ -465,8 +470,9 @@ out <- bio %>% dplyr::select("Year" = SAMPLE_YEAR,
                              "sex" = SEX_CODE,
                              "area" = PACFIN_GROUP_PORT_CODE,
                              disp,
-                             source)
-#write.csv(out, here("data","length_process_noShare","CAquillback_com_bio.csv"), row.names = FALSE)
+                             source,
+                             tripID = tow)
+#write.csv(out, here("data","length_processed_noShare","CAquillback_com_bio.csv"), row.names = FALSE)
 
 
 
