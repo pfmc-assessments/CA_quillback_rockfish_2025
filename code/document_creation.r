@@ -5,8 +5,9 @@
 # Missing Brian and also not sure it's all correct
 # Saving to a dummy downloads file for now
 
+install.packages("asar", repos = c("https://nmfs-ost.r-universe.dev", "https://cloud.r-project.org"))
 
-library(here)
+#library(here)
 
 #create a test working directory for now
 setwd("C:/Users/melissa.monk/Downloads/qlbk_test")
@@ -26,12 +27,12 @@ asar::convert_output(
 #create the template
 asar::create_template(
   format = "pdf",
-  office = "NWFSC",
+  office = "SWFSC",
   region = "California",
   species = "Quillback rockfish",
   spp_latin = "Sebastes maliger",
   year = 2025,
-  author = c("Brian J. Langseth", "Melissa H. Monk", "Julia Coates"),
+  author = c("Brian J. Langseth", "Melissa H. Monk", "Julia H. Coates"),
   include_affiliation = TRUE,
   simple_affiliation = FALSE,
   param_names = c("cf","rf"),

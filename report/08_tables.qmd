@@ -1,0 +1,13 @@
+## Tables 
+ 
+```{r} 
+#| label: 'set-rda-dir-tbls'
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| include: false
+library(flextable)
+
+rda_dir <- 'C:/Users/melissa.monk/Documents/GitHub/CA_quillback_rockfish_2025/models/0_0_1_2021base/report/rda_files'
+``` 
+

@@ -262,9 +262,10 @@ with(nolength, table(SurveyYear))/with(alllengths %>% filter(SurveyYear != 2016)
 #  0.09629630   0.11832061 0.03947368 0.11409396 0.06772908
 #2015 and 2020 have about 11% of all fish with no length data
 
-#look at stereo vs coarse length
-ggplot(alllengths, aes(x = CoarseSize, y = SteroSize)) +
-geom_jitter() + geom_abline()
+#look at stereo vs coarse length - facet_grid
+ggplot(alllengths, aes(x = SteroSize, y = CoarseSize)) +
+geom_jitter() + geom_abline()+
+facet_wrap(.~Location)
 ggsave(file = file.path(fig.dir, "stereo_vs_coarse_lengths.png"), width = 7, height = 7)
 
 #get the differences in stereo vs coarse
@@ -327,7 +328,7 @@ with(lenNewStereo, table(Survey_Year))
 with(havelen %>% filter(!is.na(SteroSize)), table(SurveyYear))
 #2014 2015 2019 2020 2021
 #   9    8   94  296  120
-# Mostly in 2014 and 2015; why are there more fish in the older 
+# Mostly in 2014 and 2015; why are there more fish in the older
 #data in 2020-2021 than the new data?
 
 
@@ -375,7 +376,7 @@ ggplot(
   xlab("Length") +
   ylab("Latitude Bin") +
   scale_fill_viridis_d() 
-ggsave(file = file.path(fig.dir, "coarselength_filtered_by_location_year_ggridges.png"), width = 7, height = 7)
+ggsave(file = file.path(fig.dir, "coarselength_filtered_by_lat_year_ggridges.png"), width = 7, height = 7)
 
 #look at stereo sizes
 ggplot(
@@ -385,15 +386,33 @@ ggplot(
   xlab("Length") +
   ylab("Latitude Bin") +
   scale_fill_viridis_d()
+ggsave(file = file.path(fig.dir, "newstereolength_filtered_by_lat_year_ggridges.png"), width = 7, height = 7)
+
+#Look at the coarse lengths data with ggridges using the location survey year
+ggplot(
+  havelen %>% filter(!SurveyYear %in% c(2016, 2019), Depth <70, Depth >20), 
+  aes(x = CoarseSize, y = Location, fill = as.factor(SurveyYear))) +
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  xlab("Length") +
+  ylab("Latitude Bin") +
+  scale_fill_viridis_d() 
+ggsave(file = file.path(fig.dir, "coarselength_filtered_by_location_year_ggridges.png"), width = 7, height = 7)
+
+#look at stereo sizes
+ggplot(
+   lenNewStereo %>% filter(!Survey_Year %in% c(2016, 2019), Depth <70, Depth >20), 
+    aes(x = StereoSize, y = Location, fill = as.factor(Survey_Year))) + 
+  geom_density_ridges(show.legend = TRUE, alpha = .5) +
+  xlab("Length") +
+  ylab("Latitude Bin") +
+  scale_fill_viridis_d()
 ggsave(file = file.path(fig.dir, "newstereolength_filtered_by_location_year_ggridges.png"), width = 7, height = 7)
-
-
 ###############################################################################################
 # Look at the stereo size distibution vs course size distribution
 #create a dataframe
 both_sizes <- havelen %>%
 filter(!is.na(SteroSize)) %>%
-dplyr::select(ID, latbin, Location, SurveyYear, CoarseSize, SteroSize) %>%
+dplyr::select(ID, latbin, dbin, Location, SurveyYear, CoarseSize, SteroSize) %>%
 pivot_longer(cols = c("CoarseSize", "SteroSize"), names_to = "LenType", values_to = "length") %>%
 droplevels()
 
@@ -408,14 +427,12 @@ droplevels()
 
 #now look at by year
 ggplot(
-  both_sizes, aes(x = length, y = latbin, fill = as.factor(LenType))) +
+  both_sizes, aes(x = length, y = lbin, fill = as.factor(LenType))) +
   geom_density_ridges(show.legend = TRUE, alpha = .5) +
   xlab("Length") +
-  ylab("Location") +
+  ylab("Latitude Bin") +
   scale_fill_viridis_d()
-with(both_sizes %>% filter(LenType == "CoarseSize"), table(latbin))
-
-
+ggsave(file = file.path(fig.dir, "stereo_vs_coarse_by_latitude_ggridges.png"), width = 7, height = 7)
 
 
 #####
@@ -426,3 +443,4 @@ with(both_sizes %>% filter(LenType == "CoarseSize"), table(latbin))
 # 39 - 40 Pt. Arena to Shelter Cove ALbion, MacKerricher, Noyo, Ten Mile, Tolo Bank
 # 40 - 41 Shelter Cove to Trinidad; Big Flat, Mattole Canyon, Sea Lion Gulch, South Cape M
 # 41 - 42 Trinidad to Oregon; Crescent Cirty, Point St. George, Reading Rock
+
