@@ -17,7 +17,7 @@ library(tidyr)
 library(ggplot2)
 library(ggridges)
 
-biodata <- read.csv(here("data", "length_process_noShare", "CAquillback_ALL_bio.csv"))
+biodata <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.csv"))
 str(biodata)
 fig.dir<- (here("data_explore_figs"))
 with(biodata, table(source))
