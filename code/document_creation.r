@@ -32,8 +32,8 @@ step1 <- asar::convert_output(
   output_file = "Report.sso",
   outdir = model.dir, # or wherever you saved the example output file
   model = "SS3",
-  file_save = TRUE,
-  savedir = model.dir,
+  file_save = FALSE,
+  savedir = report.dir,
   save_name = "ca_qlbk_std_output"
 )
 
@@ -42,7 +42,7 @@ step1 <- asar::convert_output(
 #Note that to do this you need to run Step 1 with file_save = FALSE
 stockplotr::exp_all_figs_tables(
   dat = step1,
-  rda_dir = model.dir,
+  rda_dir = report.dir,
   ref_line = "msy",
   ref_line_sb = "msy",
   indices_unit_label = ""
@@ -56,7 +56,9 @@ stockplotr::exp_all_figs_tables(
 # #This creates figure and table output to an rda at rda_dir, if not already done
 # #in step 2.
 # #This is currently set up to save (or read) the .rda results into (or from) the
-# #model's folder and save the report into the report directory folder
+# #documents folder as well as save the report into its own subfolder within
+# #the documents folder. Ive set this up so we dont have to rename the model
+# #results output or table/figure files when we make a change to the model
 # asar::create_template(
 #   format = "pdf",
 #   office = c("SWFSC", "NWFSC"),
@@ -69,11 +71,11 @@ stockplotr::exp_all_figs_tables(
 #   simple_affiliation = FALSE,
 #   param_names = c("cf","rf"),
 #   param_values = c("Commercial fleet", "Recreational fleet"),
-#   resdir = model.dir,
+#   resdir = report.dir,
 #   model_results = "ca_qlbk_std_output.csv",
 #   model = "SS3",
 #   file_dir = report.dir,
-#   rda_dir = model.dir,
+#   rda_dir = report.dir,
 #   end_year = 2024,
 #   ref_line = "msy",
 #   ref_line_sb = "msy",
@@ -87,7 +89,10 @@ stockplotr::exp_all_figs_tables(
 #model you will need to  
 #1. recreate the results file produced in step1. 
 #2. Edit the parameter 'output' in the file "SAR_C_Quillback_rockfish_skeleton" 
-#to reflect the different model location. 
+#to reflect the different model location. Currently, the model results overwrite
+#old results so this step is not needed. 
 #3. Recreate the rda files produced in step2. 
 #4. Edit the directory location within the figure and table report files.
+#Currently, the figure and table  results overwrite old files so this step is
+#not needed. 
 

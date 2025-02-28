@@ -61,7 +61,7 @@ bibliography:
 #| warning: false 
 #| eval: true 
 # load converted output from asar::convert_output() 
-output <- utils::read.csv('U:/Stock assessments/CA_quillback_rockfish_2025/models/0_0_1_2021base/ca_qlbk_std_output.csv') 
+output <- utils::read.csv('U:/Stock assessments/CA_quillback_rockfish_2025/documents/ca_qlbk_std_output.csv') 
 # Call reference points and quantities below 
 output <- output |> 
   dplyr::mutate(estimate = as.numeric(estimate), 
