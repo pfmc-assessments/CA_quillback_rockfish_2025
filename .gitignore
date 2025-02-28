@@ -114,5 +114,8 @@ ss3.std
 *.pdf
 _main.Rmd
 
+#but keep supporting files needed for report creation, mix of latex and png files
+!documents/report/support_files/*
+
 # Windows files
 *Thumbs.db
