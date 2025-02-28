@@ -1,9 +1,10 @@
+## Model Structure and Assumptions
+
 ### Modeling Platform and Structure
 
 <!-- Assessment program and its version used for the assessment (i.e., date executable program file was compiled), description of model structure, definitions of fleets and areas. Description of how the first year that is included in the model was selected and how the population state at the time is defined (e.g., B0, stable age structure). -->
 
 ### Balance of Realism and Parsimony
-
 
 
 #### Definition of Fleets and Areas {#fleets}
@@ -19,6 +20,7 @@
 
 <!-- Evidence of search for balance between model realism and parsimony. Key model assumptions and structural choices (e.g., asymptotic vs. domed selectivities, constant vs. time-varying selectivities). Summary of alternate model configurations that were examined but rejected. This is not required for an update assessment.### Bridging analysis -->
 
+#### Model Likelihood Components
 
 #### Data Weighting
 

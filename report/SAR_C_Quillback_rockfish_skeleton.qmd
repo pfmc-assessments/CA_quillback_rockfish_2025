@@ -61,7 +61,7 @@ bibliography:
 #| warning: false 
 #| eval: true 
 # load converted output from asar::convert_output() 
-output <- utils::read.csv('C:/Users/melissa.monk/Downloads/qlbk_test/ca_qlbk_std_output.csv') 
+output <- utils::read.csv('U:/Stock assessments/CA_quillback_rockfish_2025/models/0_0_1_2021base/ca_qlbk_std_output.csv') 
 # Call reference points and quantities below 
 output <- output |> 
   dplyr::mutate(estimate = as.numeric(estimate), 
@@ -156,6 +156,17 @@ Please cite this publication as:
 Langseth, B.J., M.H. Monk, J.H. Coates, 2025. Status of the Quillback rockfish stock in U.S. waters off the coast of California in 2025. Pacific Fishery Management Council, Portland, OR. Available from https://www.pcouncil.org/stock-assessments-and-fishery-evaluation-safe-documents/.
 
  {{< pagebreak >}} 
+ 
+```{r, results='asis'}
+#| label: 'disclaimer'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('01a_disclaimer.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
 
 ```{r, results='asis'}
 #| label: 'executive_summary'
@@ -189,68 +200,112 @@ cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
-
+ 
 ```{r, results='asis'}
-#| label: 'assessment-configuration'
+#| label: 'data-notused'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('04a_assessment-configuration.qmd', quiet = TRUE)
+a <- knitr::knit_child('03e_data_notused.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}}
+
+```{r, results='asis'}
+#| label: 'model-history'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('04a_model_history.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
 
 ```{r, results='asis'}
-#| label: 'assessment-results'
+#| label: 'model-structure'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('04b_assessment-results.qmd', quiet = TRUE)
+a <- knitr::knit_child('04b_model_structure.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+ 
+```{r, results='asis'}
+#| label: 'model-bridging'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('04c_model_bridging.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+ 
+```{r, results='asis'}
+#| label: 'model-results'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('04d_model_results.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+ 
+```{r, results='asis'}
+#| label: 'model-diagnostics'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('04e_model_diagnostics.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
 
 ```{r, results='asis'}
-#| label: 'assessment-sensitivity'
+#| label: 'model-sensitivity'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('04c_assessment-sensitivity.qmd', quiet = TRUE)
+a <- knitr::knit_child('04f_model-sensitivity.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}}
+ 
+```{r, results='asis'}
+#| label: 'uncertainties'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('04g_uncertainties.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}}
+
+```{r, results='asis'}
+#| label: 'management'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('05_management.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
 
 ```{r, results='asis'}
-#| label: 'assessment-benchmarks'
+#| label: 'research-needs'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('04d_assessment-benchmarks.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
-#| label: 'assessment-projections'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04e_assessment-projections.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
-#| label: 'discussion'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('05_discussion.qmd', quiet = TRUE)
+a <- knitr::knit_child('05b_research_needs.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
@@ -301,21 +356,32 @@ cat(a, sep = '\n')
  {{< pagebreak >}} 
 
 ```{r, results='asis'}
-#| label: 'notes'
+#| label: 'appendix'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('10_notes.qmd', quiet = TRUE)
+a <- knitr::knit_child('11_appendix.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
 
 ```{r, results='asis'}
-#| label: 'appendix'
+#| label: 'appendix-a'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('11_appendix.qmd', quiet = TRUE)
+a <- knitr::knit_child('11a_appendix_A.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'appendix-b'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('11b_appendix_B.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```

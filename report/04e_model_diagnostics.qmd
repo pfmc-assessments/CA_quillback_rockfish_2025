@@ -7,12 +7,6 @@ If possible, ranges depicting uncertainty should include at least three runs: (a
 
 <!-- Convergence status and convergence criteria for the base-run model (or proposed base run). Randomization of starting parameter value run (e.g., jitter) results or other evidence of search for global best estimates.  -->
 
-### Sensitivity Analyses
-
-<!-- Sensitivity to assumptions about model structure, i.e., model specification uncertainty.  -->
-
-<!-- Sensitivity to data set choice (e.g., using emphasis factors to selectively remove data sources) and weighting schemes (e.g., MacAllister & Ianelli weighting versus Francis weighting vs. Dirichlet weighting for compositional data), which may also include a consideration of recent patterns in recruitment.  -->
- 
 ### Retrospective Analysis
 
 <!-- Retrospective analysis, where the model is fitted to a series of shortened input data sets, with the most recent years of input data being dropped.  -->
@@ -22,7 +16,3 @@ If possible, ranges depicting uncertainty should include at least three runs: (a
 ### Likelihood Profiles
 
 <!-- Evaluation of model parameters. Likelihood profile for the base model over key parameters (typically natural morality, stock-recruit steepness, and equilibrium recruitment, or R0). The profile should indicate all likelihood values for individual components (e.g., indices by survey, compositional data for each type and fleet).   -->
-
-## Unresolved Problems and Major Uncertainties
-
-<!-- Describe any special issues (e.g., unbalanced or questionable data, missing survey data) that complicate scientific assessment, questions about the best model scenario. -->

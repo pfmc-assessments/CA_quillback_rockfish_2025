@@ -11,6 +11,12 @@
 
 <!-- Parameter uncertainty (variance estimation conditioned on a given model, estimation framework, data set choice, and weighting scheme). This element for evaluating uncertainty includes expressing uncertainty in derived outputs of the model and estimating CVs using appropriate methods (e.g., bootstrap, asymptotic methods, Bayesian approaches, such as MCMC).   -->
 
+#### Selectivity
+
+#### Catchability
+
+#### Stock-recruit Parameters
+
 ### Fits to the Data
 
 <!-- Residual analysis for the base-run configuration, e.g., residual plots, time series plots of observed and predicted values, etc.   -->
@@ -19,3 +25,6 @@
 
 <!-- Time-series of total biomass, summary biomass, and spawning biomass (and/or spawning output), depletion relative to B0, recruitment and fishing mortality (1-SPR) (or exploitation rate estimates if fishing mortality not available) (table and figures).  -->
 
+### Comparison of Base Model to Previous Assessments
+
+### Comparison with Similar Stocks and Species

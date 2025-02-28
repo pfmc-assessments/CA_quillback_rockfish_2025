@@ -1,5 +1,7 @@
 # Data
 
+## Data sources used in this assessment
+
 <!--- Provide temporal and spatial resolutions or sample size where appropriate for each of the subsections, below.--->
 
 ## Fishery-dependent data
@@ -12,7 +14,7 @@
 ### Discards
 
 
-### Biological data
+### Biological data (length compositions and age compositions)
 
 
 ### Abundance indices
