@@ -1,6 +1,0 @@
----
-title: "Stock assessment for California quillback rockfish (_Sebastes maliger_) using data through 2024"
-author: "Brian J Langseth, Melissa Monk"
-format: pdf
-editor: visual
----
