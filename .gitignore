@@ -103,7 +103,7 @@ ss3.r0*
 ss3.rep
 ss3.std
 
-# rmarkdown / latex files
+# rmarkdown / latex files / asar report files
 *.aux
 *.log
 *.out
@@ -113,6 +113,9 @@ ss3.std
 *.md
 *.pdf
 _main.Rmd
+*.toc
+*.lot
+*.lof
 
 #but keep supporting files needed for report creation, mix of latex and png files
 !documents/report/support_files/*
