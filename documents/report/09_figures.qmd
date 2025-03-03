@@ -5,7 +5,7 @@
 #| echo: false 
 #| warning: false 
 #| eval: true 
-rda_dir <- 'U:/Stock assessments/CA_quillback_rockfish_2025/documents/rda_files'
+rda_dir <- here::here("documents", "rda_files")
 ``` 
 
 ```{r} 

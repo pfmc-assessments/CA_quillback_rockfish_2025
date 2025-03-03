@@ -61,7 +61,7 @@ bibliography:
 #| warning: false 
 #| eval: true 
 # load converted output from asar::convert_output() 
-output <- utils::read.csv('U:/Stock assessments/CA_quillback_rockfish_2025/documents/ca_qlbk_std_output.csv') 
+output <- utils::read.csv(here::here("documents", "ca_qlbk_std_output.csv"))
 # Call reference points and quantities below 
 output <- output |> 
   dplyr::mutate(estimate = as.numeric(estimate), 
@@ -146,6 +146,9 @@ R0 <- output |>
   dplyr::filter(grepl('R0', label) | grepl('recruitment_virgin', label)) |> 
   dplyr::pull(estimate)
 # female SB (placeholder)
+
+# Add our own calls
+spp <- "quillback rockfish"
 
 ``` 
 
