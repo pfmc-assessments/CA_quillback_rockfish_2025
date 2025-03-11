@@ -257,15 +257,43 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
+### Update growth prior ----
+
+mod$ctl$Growth_Age_for_L1 <- 0
+
+#Growth curve from all individuals. Follows from quillback_growth.R
+vb_k <- 0.178
+vb_linf <- 40.997
+vb_l0 <- 3.922
+vb_cv0 <- 0.226
+vb_cv1 <- 0.065
+vb_prior <- 0
+
+mod$ctl$MG_parms['L_at_Amin_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(0, 10, vb_l0, vb_l0, 0, vb_prior, -9)
+mod$ctl$MG_parms['L_at_Amax_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(35, 50, vb_linf, vb_linf, 0, vb_prior, -9)
+mod$ctl$MG_parms['VonBert_K_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(0.03, 0.3, vb_k, vb_k, 0, vb_prior, -9)
+mod$ctl$MG_parms['CV_young_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(0.01, 0.5, vb_cv0, vb_cv0, 0, vb_prior, -9)
+mod$ctl$MG_parms['CV_old_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(0.01, 0.5, vb_cv1, vb_cv1, 0, vb_prior, -9)
+
+
 ### Update LW relationship ----
 
-### Update maturity ----
+lw_a <- 1.599251e-5
+lw_b <- 3.076563
+lw_prior <- 0
 
-l50_fxn <- 28.563 #-a/b
-l50_se <- 0.6 #se of -a/b
-slope_fxn <- -0.99996 #b (SS3 manual says this must be negative)
-slope_se <- 0.338 #se of b
-mat_prior <- 6 #making it normal
+mod$ctl$MG_parms['Wtlen_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(0, 0.1, lw_a, lw_a, 0, vb_prior, -9)
+mod$ctl$MG_parms['Wtlen_2_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(2, 4, lw_b, lw_b, 0, vb_prior, -9)
+
+
+### Update maturity ----
 
 #With updated data as of Feb 28, 2025
 l50_fxn <- 28.96 #-a/b
@@ -282,9 +310,15 @@ mod$ctl$MG_parms['Mat_slope_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', '
   
 ### Update fecundity ----
 
-### Update growth prior ----
+eggs_b <- 3.702
+eggs_a <- round((0.00007809 * 10^eggs_b)/1000000, 10)
+fec_prior <- 0 #turning off
 
-### Update ----
+mod$ctl$MG_parms['Eggs_alpha_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(-3, 3, eggs_a, eggs_a, 0, fec_prior, -9)
+mod$ctl$MG_parms['Eggs_beta_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(1, 7, eggs_b, eggs_b, 0, fec_prior, -9)
+
 
 
 
@@ -305,22 +339,6 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
-
-##
-#Comparison plots
-##
-
-xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
-                                      subdir = c('name1',
-                                                 'name2',
-                                                 new_name)))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('label for model 1',
-                                     'label for model 2',
-                                     'label for new model'),
-                    subplots = c(1,3), print = TRUE, plotdir = here('models', new_name))
-
-dev.off()
 
 
 r##########################################################################################-
