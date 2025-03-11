@@ -216,8 +216,6 @@ ggplot() +
 #       width = 10, height = 8)
 
 
-<<<<<<< HEAD
-=======
 #Plot data with fits by sex
 ggplot(ca, aes(y = length_cm, x = age, col = Sex)) +
   geom_point(alpha = 0.1) + 
@@ -256,6 +254,4 @@ ggplot(ca, aes(y = length_cm, x = age, col = Sex)) +
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex_withFits.png"),
        width = 6, height = 8)
 
-
->>>>>>> origin/main
 
