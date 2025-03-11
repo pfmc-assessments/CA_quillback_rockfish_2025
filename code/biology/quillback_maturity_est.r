@@ -24,14 +24,14 @@ library(ggplot2)
 # 
 # Quill.mat<-read.csv("Quillbackmaturity.csv")
 
-Quill.mat <- read.csv(here("data-raw", "Quillbackmaturity.csv"))
+Quill.mat <- read.csv(here("data-raw", "Quillbackmaturity_update02282025.csv"))
 data <- Quill.mat
 View(data)
 summary(as.factor(data$Certainty))
 
 
 # using 'certainty=1' data, functional maturity only
-#removes 7 quillback 
+#removes 17 quillback 
 data_cert <- data %>%
   filter(Certainty == 1, 
          !is.na(Certainty),
@@ -49,7 +49,7 @@ with(data_cert, table(area, Functional_maturity))
 #Functional_maturity
 #area   0  1
 #north  0  6
-#south 14 39
+#south 15 60
 #all quillback from the "north" above 40-10 were mature
 
 ggplot(data_cert, aes(x = Length_cm, y = Functional_maturity)) +

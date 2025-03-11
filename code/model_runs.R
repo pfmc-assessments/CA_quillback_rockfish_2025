@@ -28,6 +28,8 @@ library(tictoc)
 ####------------------------------------------------#
 
 new_name <- "model number_model name"
+old_name <- "model Number_model name"
+
 
 ##
 #Copy inputs
@@ -35,6 +37,7 @@ new_name <- "model number_model name"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
+               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -151,13 +154,14 @@ dev.off()
 
 
 ####------------------------------------------------#
-# 0_0_2_2025setup  ----
+## 0_0_2_2025setup  ----
 ####------------------------------------------------#
 
 # Change file names and comments to reflect a 2025 model
 
 new_name <- "0_0_2_2025setup"
 old_name <- "0_0_1_2021base"
+
 
 ##
 #Copy inputs
@@ -177,39 +181,116 @@ mod <- SS_read(here('models', new_name))
 ##
 
 ## Starter file
-
 #Change name for files
 mod$start$datfile <- "2025_ca_quillback.dat"
 mod$start$ctlfile <- "2025_ca_quillback.ctl"
 
 
-
-
+## Data file
 #Change comments in data file
 mod$dat$Comments[1] <- "#California Quillback Rockfish 2025 assessment Brian Langseth, Melissa Monk, Julia Coates"
 
-## Forecast file
+#Change inputs
+mod$dat$endyr <- 2024
 
+
+## Forecast file
 #Reset benchmark years which were previously hard code. -999 is first model year, 0 is last 
 mod$fore$Bmark_years <- c(-999,0, 0,0, 0,0, -999,0, -999,0) #start year and end year for all but selectivity (because of blocks) and relF
-mod$fore$Nforecastyrs <- 12
 mod$fore$Fcast_years <- c(0,0, -3,0, -999,0) #last year for selex, last three years for relF, full time series for average recruitment (though using fcast_rec_option = 0 ignores this)
 
-
-
-
+#Set up forecast even though not yet using
+mod$fore$Flimitfraction_m <- data.frame("Year" = 2025:2036, 
+                                        "Fraction" = get_buffer(c(2025:2036), sigma = 0.5, pstar = 0.45)[,2])
+mod$fore$FirstYear_for_caps_and_allocations <- 2027
+mod$fore$ForeCatch <- data.frame("Year" = rep(2025:2026, each = mod$dat$Nfleet),
+                                 "Seas" = 1,
+                                 "Fleet" = rep(1:mod$dat$Nfleet, 2),
+                                 "Catch or F" = 0)
 
 
 ##
 #Output files and run
 ##
 
-#Rename files for 2025
-file.rename(from = here('models', new_name, "2021_ca_quillback.dat"),
-            to = here('models', new_name, "2025_ca_quillback.dat"))
-file.rename(from = here('models', new_name, "2021_ca_quillback.ctl"),
-            to = here('models', new_name, "2025_ca_quillback.ctl"))
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
 
+#Because renamed files in starter, new file names are applied. Delete old ones
+file.remove(here('models', new_name, c("2021_ca_quillback.dat", 
+                                       "2021_ca_quillback.ctl")))
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+#Model runs
+
+
+
+####------------------------------------------------#
+## 0_1_0_updateBio  ----
+####------------------------------------------------#
+
+#Update biological relationships
+
+new_name <- "0_1_0_updateBio"
+old_name <- "0_0_2_2025setup"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               use_ss_new = TRUE,
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+### Update LW relationship ----
+
+### Update maturity ----
+
+l50_fxn <- 28.563 #-a/b
+l50_se <- 0.6 #se of -a/b
+slope_fxn <- -0.99996 #b (SS3 manual says this must be negative)
+slope_se <- 0.338 #se of b
+mat_prior <- 6 #making it normal
+
+#With updated data as of Feb 28, 2025
+l50_fxn <- 28.96 #-a/b
+l50_se <- 0.599 #se of -a/b
+slope_fxn <- -0.606 #b (SS3 manual says this must be negative)
+slope_se <- 0.121 #se of b
+mat_prior <- 6 #making it normal
+
+mod$ctl$MG_parms['Mat50%_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(25, 32, l50_fxn, l50_fxn, l50_se, mat_prior, -9)
+mod$ctl$MG_parms['Mat_slope_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
+  c(-0.5, -1.5, slope_fxn, slope_fxn, slope_se, mat_prior, -9)
+
+  
+### Update fecundity ----
+
+### Update growth prior ----
+
+### Update ----
+
+
+
+##
+#Output files and run
+##
 
 SS_write(mod,
          dir = here('models', new_name),
@@ -242,8 +323,7 @@ SSsummarize(xx) |>
 dev.off()
 
 
-
-##########################################################################################-
+r##########################################################################################-
 #                     ---- 2025 exploration runs ----
 ##########################################################################################-
 
