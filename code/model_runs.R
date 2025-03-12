@@ -267,6 +267,7 @@ m_prior <- 3 #log-normal
 mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(0.01, 0.15, m_init, round(log(m_init), 2), m_se, m_prior, 2)
 
+
 ### Update growth prior ----
 
 mod$ctl$Growth_Age_for_L1 <- 0
@@ -315,7 +316,7 @@ mat_prior <- 6 #making it normal
 mod$ctl$MG_parms['Mat50%_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(25, 32, l50_fxn, l50_fxn, l50_se, mat_prior, -9)
 mod$ctl$MG_parms['Mat_slope_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(-0.5, -1.5, slope_fxn, slope_fxn, slope_se, mat_prior, -9)
+  c(-1.0, 0, slope_fxn, slope_fxn, slope_se, mat_prior, -9)
 
   
 ### Update fecundity ----
