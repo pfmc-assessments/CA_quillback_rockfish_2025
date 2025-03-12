@@ -11,6 +11,9 @@
 #     recfin_processing.R
 #     catches.R
 #
+#   For age comps, non-commercial data were accessed from 
+#     age_length_cleanup.R
+#
 ##############################################################################################################
 
 library(here)
@@ -288,8 +291,9 @@ dev.off()
 dir.create(here("data", "forSS3"))
 length_bins <- seq(12, 66, 2)
 
+
 ###########################-
-## Recreational comps ----
+## Recreational Length comps ----
 ###########################-
 
 #Read in data so dont have to process script up to this point
@@ -382,6 +386,145 @@ write.csv(dplyr::bind_rows(rec_comps),
           here("data", "forSS3", 
                paste0("Lcomps_recreational_FAA_unsexed_raw_", length_bins[1], "_", tail(length_bins,1), 
                       ".csv")), row.names = FALSE)
+
+
+###########################-
+## Recreational Age comps ----
+###########################-
+
+#Pull "ca" from age_length_cleanup.R
+
+load(here("data-raw","all_ages_labeled.RData"))
+age_ca <- ca
+
+age_bins <- seq(1,60,1)
+
+#These are a mix of various rec projects and commercial and survey. For these entries
+#pull all non-commercial non-expanded comps for use as a "growth" fleet.
+#Do as marginals and CAAL, and do for CCFRP fleet separate, and included
+
+age_ca$fleet1 <- dplyr::case_when(age_ca$sample_type %in% c("Commercial") ~ "Com",
+                                  TRUE ~ "Growth")
+age_ca$fleet2 <- dplyr::case_when(grepl("CCFRP", age_ca$sample_type) ~ "CCFRP",
+                                  age_ca$sample_type %in% c("Commercial") ~ "Com",
+                                  TRUE ~ "other")
+
+
+#######-
+### Marginals ----
+#######-
+
+#For all non-commercial. Only use number of fish 
+
+afs_nsamp <-  nwfscSurvey::get_raw_comps(
+  data = age_ca %>% dplyr::filter(fleet1 == "Growth"), 
+  comp_bins = age_bins,
+  comp_column_name = "age",
+  two_sex_comps = FALSE,
+  input_n_method = c("total_samples"),
+  month = 7,
+  fleet = "growth",
+  dir = NULL)
+
+write.csv(afs_nsamp$unsexed, here("data", "forSS3", paste0("Acomps_noncommercial_all_unsexed_raw_", 
+                                                   age_bins[1], "_", tail(age_bins,1), 
+                                                   ".csv")), row.names = FALSE)
+
+
+#For non-commercial split by CCFRP and non-CCFRP. 
+#Only use number of fish
+
+##First for CCFRP
+afs_nsamp_ccfrp <-  nwfscSurvey::get_raw_comps(
+  data = age_ca %>% dplyr::filter(fleet2 == "CCFRP"), 
+  comp_bins = age_bins,
+  comp_column_name = "age",
+  two_sex_comps = FALSE,
+  input_n_method = c("total_samples"),
+  month = 7,
+  fleet = "growth ccfrp",
+  dir = NULL)
+
+write.csv(afs_nsamp_ccfrp$unsexed, here("data", "forSS3", paste0("Acomps_noncommercial_ccfrp_unsexed_raw_", 
+                                                   age_bins[1], "_", tail(age_bins,1), 
+                                                   ".csv")), row.names = FALSE)
+
+##Now for non-CCFRP
+afs_nsamp_nonccfrp <-  nwfscSurvey::get_raw_comps(
+  data = age_ca %>% dplyr::filter(fleet2 == "other"), 
+  comp_bins = age_bins,
+  comp_column_name = "age",
+  two_sex_comps = FALSE,
+  input_n_method = c("total_samples"),
+  month = 7,
+  fleet = "growth non-ccfrp",
+  dir = NULL)
+
+write.csv(afs_nsamp_nonccfrp$unsexed, 
+          here("data", "forSS3", paste0("Acomps_noncommercial_nonccfrp_unsexed_raw_", 
+                                        age_bins[1], "_", tail(age_bins,1), 
+                                        ".csv")), row.names = FALSE)
+
+
+#######-
+### Conditionals ----
+#######-
+
+#Since the model is one sex, set to U before doing CAAL
+age_ca$Sex <- "U"
+
+
+#For all non-commercial
+
+caal <-  nwfscSurvey::get_raw_caal(
+  data = age_ca %>% dplyr::filter(fleet1 == "Growth"), 
+  len_bins = length_bins,
+  age_bins = age_bins,
+  length_column_name = "length_cm",
+  age_column_name = "age",
+  month = 7,
+  fleet = "growthCAAL",
+  dir = NULL)
+
+write.csv(caal, here("data", "forSS3", paste0("CAAL_noncommercial_all_unsexed_",
+                                              length_bins[1], "_", tail(length_bins,1),
+                                              "_", age_bins[1], "_", tail(age_bins,1),
+                                              ".csv")), row.names = FALSE)
+
+
+#For non-commercial split by CCFRP and non-CCFRP 
+
+##First for CCFRP
+caal_ccfrp <-  nwfscSurvey::get_raw_caal(
+  data = age_ca %>% dplyr::filter(fleet2 == "CCFRP"), 
+  len_bins = length_bins,
+  age_bins = age_bins,
+  length_column_name = "length_cm",
+  age_column_name = "age",
+  month = 7,
+  fleet = "growthCAAL_ccfrp",
+  dir = NULL)
+
+write.csv(caal_ccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_ccfrp_unsexed_",
+                                              length_bins[1], "_", tail(length_bins,1),
+                                              "_", age_bins[1], "_", tail(age_bins,1),
+                                              ".csv")), row.names = FALSE)
+
+##Now for non-CCFRP
+caal_nonccfrp <-  nwfscSurvey::get_raw_caal(
+  data = age_ca %>% dplyr::filter(fleet2 == "other"), 
+  len_bins = length_bins,
+  age_bins = age_bins,
+  length_column_name = "length_cm",
+  age_column_name = "age",
+  month = 7,
+  fleet = "growthCAAL_ccfrp",
+  dir = NULL)
+
+write.csv(caal_nonccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_nonccfrp_unsexed_",
+                                                    length_bins[1], "_", tail(length_bins,1),
+                                                    "_", age_bins[1], "_", tail(age_bins,1),
+                                                    ".csv")), row.names = FALSE)
 
 
 
