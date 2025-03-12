@@ -5,14 +5,14 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-ost/ss3-source-code
 
-#_Start_time: Fri Dec 13 14:23:12 2024
+#_Start_time: Wed Mar 12 08:57:36 2025
 #_echo_input_data
-#California Quillback Rockfish 2021 assessment (Brian Langseth, Chantel Wetzel, Jason Cope)
+#California Quillback Rockfish 2025 assessment Brian Langseth, Melissa Monk, Julia Coates
 #C file created using an r4ss function
-#C file write time: 2024-12-13  14:10:39
+#C file write time: 2025-03-12  08:56:45
 #V3.30.23.1;_safe;_compile_date:_Dec  5 2024;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_13.2
 1916 #_StartYr
-2020 #_EndYr
+2024 #_EndYr
 1 #_Nseas
  12 #_months/season
 2 #_Nsubseasons (even number, minimum is 2)
@@ -147,6 +147,10 @@
 2018 1 1 2.72887 0.05
 2019 1 1 4.56461 0.05
 2020 1 1 4.36247 0.05
+2021 1 1 0 0.01
+2022 1 1 0 0.01
+2023 1 1 0 0.01
+2024 1 1 0 0.01
 -999 1 2 0 0.01
 1916 1 2 0 0.01
 1917 1 2 0 0.01
@@ -253,6 +257,10 @@
 2018 1 2 10.113 0.05
 2019 1 2 11.459 0.05
 2020 1 2 7.9734 0.05
+2021 1 2 0 0.01
+2022 1 2 0 0.01
+2023 1 2 0 0.01
+2024 1 2 0 0.01
 -9999 0 0 0 0
 #
 #_CPUE_and_surveyabundance_and_index_observations

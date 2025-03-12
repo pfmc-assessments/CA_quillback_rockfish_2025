@@ -1,0 +1,7 @@
+Warning 1 : catch is 0.0 in endyr; this can cause problem in the benchmark and forecast calculations. 
+Note 1 Information: Max data length bin: 50  < max pop len bins: 58; so will accumulate larger pop len bins
+Warning 2 : Final gradient: 1.48796e-05 is larger than final_conv: 1e-05
+Warning 3 Adjustment: setting positive forecast relF for forecast only fleet: 2
+Note 2 Information: A revised protocol for the Fcast_yr specification is available and recommended.
+Warning 4 Adjustment: setting positive forecast relF for forecast only fleet: 2
+ 4 warnings  and 2 notes 
