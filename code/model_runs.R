@@ -352,7 +352,201 @@ SS_plots(pp, plot = c(1:26))
 
 
 
-r##########################################################################################-
+####------------------------------------------------#
+## 0_2_0_updateData ----
+####------------------------------------------------#
+
+new_name <- "0_2_0_updateData"
+old_name <- "0_1_0_updateBio"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               use_ss_new = TRUE,
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+#Set up fleet converter to set up any com to fleet=1, and rec to fleet=2
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec")) %>%
+  dplyr::mutate(fleet_num = c("1", "2")) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+### Update catch time series -----
+
+catches <- read.csv(here("data", "CAquillback_total_removals.csv"))
+catches[is.na(catches)] <- 0
+
+updated.catch.df <- catches %>%
+  dplyr::select(c(Year, com_tot, rec_tot)) %>%
+  tidyr::pivot_longer(cols = -Year, names_to = 'fleet', values_to = 'catch', 
+                      names_pattern = '(.*)_') %>% #keep everything before _
+  dplyr::left_join(fleet.converter) %>%
+  dplyr::mutate(seas = 1, 
+                catch_se = 0.05) %>%
+  dplyr::select(year = Year, seas, fleet = fleet_num, catch, catch_se) %>%
+  dplyr::arrange(fleet, year) %>%
+  as.data.frame()
+
+mod$dat$catch <- updated.catch.df
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+
+####------------------------------------------------#
+## 0_2_1_updateCatch ----
+####------------------------------------------------#
+
+new_name <- "0_2_1_updateCatch"
+old_name <- "0_1_0_updateBio"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               use_ss_new = TRUE,
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+#Set up fleet converter to set up any com to fleet=1, and rec to fleet=2
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec")) %>%
+  dplyr::mutate(fleet_num = c("1", "2")) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+#Update catch time series
+
+catches <- read.csv(here("data", "CAquillback_total_removals.csv"))
+catches[is.na(catches)] <- 0
+
+updated.catch.df <- catches %>%
+  dplyr::select(c(Year, com_tot, rec_tot)) %>%
+  tidyr::pivot_longer(cols = -Year, names_to = 'fleet', values_to = 'catch', 
+                      names_pattern = '(.*)_') %>% #keep everything before _
+  dplyr::left_join(fleet.converter) %>%
+  dplyr::mutate(seas = 1, 
+                catch_se = 0.05) %>%
+  dplyr::select(year = Year, seas, fleet = fleet_num, catch, catch_se) %>%
+  dplyr::arrange(fleet, year) %>%
+  as.data.frame()
+
+mod$dat$catch <- updated.catch.df
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+# r4ss::run(dir = here('models', new_name), 
+#           exe = here('models/ss3_win.exe'), 
+#           extras = '-nohess',
+#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
+#           skipfinished = FALSE)
+
+
+####------------------------------------------------#
+## 0_2_1_updateComps ----
+####------------------------------------------------#
+
+new_name <- "0_2_2_updateComps"
+old_name <- "0_1_0_updateBio"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               use_ss_new = TRUE,
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+#Set up fleet converter to set up any com to fleet=1, and rec to fleet=2
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec")) %>%
+  dplyr::mutate(fleet_num = c("1", "2")) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+#Update comps
+
+#Length comps
+
+#Age comps
+
+
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+# r4ss::run(dir = here('models', new_name), 
+#           exe = here('models/ss3_win.exe'), 
+#           extras = '-nohess',
+#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
+#           skipfinished = FALSE)
+
+
+
+
+
+
+##########################################################################################-
 #                     ---- 2025 exploration runs ----
 ##########################################################################################-
 
