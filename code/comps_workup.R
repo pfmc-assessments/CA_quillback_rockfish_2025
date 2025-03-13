@@ -289,7 +289,7 @@ dev.off()
 #---------------------------------------------------------------------------------------------------------------#
 
 dir.create(here("data", "forSS3"))
-length_bins <- seq(12, 66, 2)
+length_bins <- seq(10, 50, 2)
 
 
 ###########################-
@@ -593,6 +593,8 @@ catch.file.faa[is.na(catch.file.faa)] <- 0 #set NAs to 0
 # Basic expansions. Output only with choice for input_n
 ##
 
+## Length comps
+
 Pdata_exp <- pacfintools::getExpansion_1(Pdata = bio_clean,
                             fa = fa, fb = fb, ma = ma, mb = mb, ua = ua, ub = ub)
 plot(Pdata_exp$Expansion_Factor_1_L)
@@ -620,9 +622,14 @@ pacfintools::writeComps(inComps = Lcomps,
            verbose = TRUE)
 
 
+## Age comps
+
+
 ##
 # Fleets as areas expansions.  Output only with choice for input_n
 ##
+
+## Length comps
 
 Pdata_exp_faa <- pacfintools::getExpansion_1(Pdata = bio_clean %>% 
                                                dplyr::filter(year %in% catch.file.faa$LANDING_YEAR),
@@ -650,3 +657,5 @@ pacfintools::writeComps(inComps = Lcomps_faa,
                         partition = 0, 
                         digits = 4,
                         verbose = TRUE)
+
+## Age comps
