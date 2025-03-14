@@ -29,7 +29,8 @@ library(readxl)
 ##
 
 # RecFIN Recreational - 2005-2023 Landings mtons
-ca_rec = read.csv(here("data-raw","RecFIN-CTE001-California-quillback-1990---2023_2.Oct.2024.csv"), header = T)
+#ca_rec = read.csv(here("data-raw","RecFIN-CTE001-California-quillback-1990---2023_2.Oct.2024.csv"), header = T)
+ca_rec = read.csv(here("data-raw","RecFIN-CTE001-California-quillback-1990---2024_14.Mar.2025.csv"), header = T)
 
 #Pull 2021 assessment values for comparison. These are recFIN landings + discards
 dir = "//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/6_non_confidential_data/output catch"
@@ -571,7 +572,8 @@ dev.off()
 ##
 
 # RecFIN Recreational - 2004-2023
-ca_bio_rec = read.csv(here("data-raw","RecFIN-SD501-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
+#ca_bio_rec = read.csv(here("data-raw","RecFIN-SD501-CALIFORNIA-quillback-1983---2023_2.Oct.2024.csv"), header = T)
+ca_bio_rec = read.csv(here("data-raw","RecFIN-SD501-CALIFORNIA-quillback-1983---2024_14.Mar.2025.csv"), header = T)
 
 # If pull the nonconfidential data (SD001) lose five fields, though the last is blank
 # [1] "RECFIN_DATE"      "COUNTY_NUMBER"    "INTERVIEW_SITE"  

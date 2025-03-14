@@ -58,16 +58,16 @@ for(i in 1:length(survey_names)) {
   print(paste(survey_names[i], sum(catch[[i]]$total_catch_wt_kg)))
 }
 # Triennial 72.697
-# NWFSC.Combo 231.31
+# NWFSC.Combo 253.16
 # NWFSC.Shelf 1.89
 # NWFSC.Video 2.1
 # Triennial.Canada 97.131
 
 #Extent of WCGBTS sampling in CA
-#There are 6 total tows
+#There are 7 total tows
 catch[[2]] %>% dplyr::filter(State == "CA", total_catch_numbers>0)
 
-save.image(file = file.path(here('data-raw'),"survey_pulls_Sept4.RData"))
+save.image(file = file.path(here('data-raw'),"survey_pulls_Mar14.RData"))
 
 
 

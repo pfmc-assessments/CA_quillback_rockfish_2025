@@ -10,7 +10,7 @@ library(here)
 library(ggplot2)
 library(magrittr)
 
-load(file = file.path(here('data-raw'),"survey_pulls_Sept4.RData"))
+load(file = file.path(here('data-raw'),"survey_pulls_Mar14.RData"))
 
 ## Calculate total research catches and plot
 
@@ -39,12 +39,13 @@ research_catch <- research_catch %>% dplyr::filter(total_catch_numbers>0)
 # 3  2013 CA    NWFSC.Co…                   1              0.08
 # 4  2014 CA    NWFSC.Co…                   4              4.1 
 # 5  2017 CA    NWFSC.Co…                   2              1.62
+# 6  2024 CA    NWFSC.Co…                  13             13.2 
 
 #Plot areas where caught (based on CPUE)
 #Commented out because already uploaded
-# nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[1]],State=="CA"), 
+# nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[1]],State=="CA"),
 #                         main = survey_names[1], plot = 1) #Tri
-# nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[2]],State=="CA"), 
+# nwfscSurvey::PlotMap.fn(dir = here("data_explore_figs"), dat = subset(catch[[2]],State=="CA"),
 #                         main = survey_names[2], plot = 1) #WCGBTS
 
 
@@ -64,17 +65,17 @@ research_bio <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]],
 # nwfscSurvey::plot_bio_patterns(dir = here("data_explore_figs"), bio = research_bio, plot = 1)
 
 #Length weight estimates from all WCGBTS survey bio (Oregon and Washington included)
-# research_bio_all <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]], 
-#                               Year, Length_cm, Weight_kg, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, Tow, State) %>% 
-#   dplyr::bind_rows(trawl = ., 
-#                    triennial = dplyr::select(bio[[which(survey_names == "Triennial")]]$length_data, 
+# research_bio_all <- dplyr::select(bio[[which(survey_names=="NWFSC.Combo")]],
+#                               Year, Length_cm, Weight_kg, Sex, Age, Depth_m, Latitude_dd, Longitude_dd, Tow, State) %>%
+#   dplyr::bind_rows(trawl = .,
+#                    triennial = dplyr::select(bio[[which(survey_names == "Triennial")]]$length_data,
 #                                              Year, Length_cm, Weight_kg, Sex, Depth_m, Latitude_dd, Longitude_dd, Tow, State),
 #                    .id = 'survey')
 # lw_ests <- nwfscSurvey::estimate_weight_length(research_bio_all)
 #     sex median_intercept        SD            A        B
-# 1 female     7.276093e-06 0.1039742 7.315529e-06 3.270894
-# 2   male     7.940273e-06 0.1035328 7.982943e-06 3.249172
-# 3    all     8.560214e-06 0.1111789 8.613283e-06 3.226820
+# 1 female     7.129077e-06 0.1012660 7.165724e-06 3.277415
+# 2   male     8.059974e-06 0.1026768 8.102573e-06 3.245560
+# 3    all     8.534889e-06 0.1088673 8.585618e-06 3.228356
 
 ##Rename "plots" folder to something more understandable
 

@@ -201,7 +201,7 @@ plot(ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002, "LANDING_YEAR"],
      type = "l", lwd = 3, xlab = "Year", ylab = "Metric tons")
 lines(gemm[gemm$grouped_sector == "ca_comm", "year"],
       gemm[gemm$grouped_sector == "ca_comm", "Landings"], col = 2, lwd = 3)
-plot(ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002, "mtons"] - 
+plot(ca_pacfin[ca_pacfin$LANDING_YEAR >= 2002 & ca_pacfin$LANDING_YEAR != 2024, "mtons"] - 
        gemm[gemm$grouped_sector == "ca_comm", "Landings"])
 
 #How different are the gemm values from RecFIN
@@ -211,7 +211,7 @@ plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "RECFIN_YEAR"],
      type = "l", lwd = 3, xlab = "Year", ylab = "Metric tons")
 lines(gemm[gemm$grouped_sector == "ca_rec", "year"],
       gemm[gemm$grouped_sector == "ca_rec", "Landings"], col = 2, lwd = 3)
-plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "land_mt"] - 
+plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002 & ca_rec_recfin$RECFIN_YEAR != 2024, "land_mt"] - 
        gemm[gemm$grouped_sector == "ca_rec", "Landings"])
 #Discards
 plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "RECFIN_YEAR"],
@@ -219,7 +219,7 @@ plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "RECFIN_YEAR"],
      type = "l", lwd = 3, xlab = "Year", ylab = "Metric tons")
 lines(gemm[gemm$grouped_sector == "ca_rec", "year"],
       gemm[gemm$grouped_sector == "ca_rec", "Dead_Discard"], col = 2, lwd = 3)
-plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002, "dis_mt"] - 
+plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002 & ca_rec_recfin$RECFIN_YEAR != 2024, "dis_mt"] - 
        gemm[gemm$grouped_sector == "ca_rec", "Dead_Discard"])
 
 
@@ -296,6 +296,10 @@ ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 
   ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_dis"] +
   ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]
 
+#Now add assumed dead discards to 2024. Assume the same amount as was in 2023
+
+ca_catch[ca_catch$Year == 2024, c("com_tot", "com_dis")] <- ca_catch[ca_catch$Year == 2023, "com_dis"]
+ca_catch[ca_catch$Year == 2024, "com_lan"] <- 0
 
 
 ###-----------------------###
@@ -387,7 +391,8 @@ ca_catch[ca_catch$Year %in% ca_rec_hist$Year, "rec_tot"] <-
 # 1969-1980 CalCOM Reconstruction landings plus historical dead discard amount (0.25% of landings)
 # 1981-2001 PacFIN landings plus historical dead discard amount (0.25% of landings)
 # 2002-2023 PacFIN landings plus dead discards from GEMM for non-"California Recreational" sectors
-# 
+# 2024 Commercial dead discards estimate taken from 2023. PacFIN landings were negligable so were removed
+#
 # Historical dead discard percentage (0.25%) is from the GEMM and is the proportion of total dead discards (summed over years) to total landings (summed over years) in the nearshore sector for 2002-2021.
 # 
 # Recreational estimates:
@@ -422,7 +427,7 @@ ggsave(here('data_explore_figs',"ALL_landings.png"),
 #but does include additional 1993-1995 PC landings
 ggplot(ca_catch_long %>% dplyr::filter(type %in% c("lan", "dis"), 
                                        fleet == "rec",
-                                       Year %in% c(1980:2023)), aes(y = mt, x = Year, fill = type)) +
+                                       Year %in% c(1980:2024)), aes(y = mt, x = Year, fill = type)) +
   geom_bar(position = "stack", stat = "identity") +
   xlab("Year") +
   ylab("Mortality (MT)") +

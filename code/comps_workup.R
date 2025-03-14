@@ -539,8 +539,8 @@ write.csv(caal_nonccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_noncc
 #Because want expanded comps need to set up via PacFIN.Utililties/pacfintools approach
 #as opposed to through the bio data file
 
-# PacFIN Commercial - 1978-2023
-load(here("data-raw", "PacFIN.QLBK.bds.11.Dec.2024.RData"))
+# PacFIN Commercial - 1978-2024
+load(here("data-raw", "PacFIN.QLBK.bds.14.Mar.2025.RData"))
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
 bio$disp <- "dead"

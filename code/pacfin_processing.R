@@ -22,8 +22,9 @@ library(gridExtra)
 # Load catch data ----
 
 #-----------------------------------------------------------------------------#
-# PacFIN Commercial - 1984-2023 Landings mtons
-load(here("data-raw", "PacFIN.QLBK.CompFT.11.Dec.2024.RData"))
+# PacFIN Commercial - 1984-2024 Landings mtons
+#load(here("data-raw", "PacFIN.QLBK.CompFT.11.Dec.2024.RData"))
+load(here("data-raw", "PacFIN.QLBK.CompFT.14.Mar.2025.RData"))
 catch = catch.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
 #Pull 2021 assessment values for comparison. These are pacFIN landings; no discards yet
@@ -199,7 +200,7 @@ aggFAAYearN <- catch %>%
   data.frame() 
 
 #Output faa catch time series, though this is confidential
-#write.csv(aggFAAYear[aggFAAYear$LANDING_YEAR %in% c(1984:2023),], here("data", "confidential_noShare", "CAquillback_pacfin_FAA_landings.csv"), row.names = FALSE)
+#write.csv(aggFAAYear[aggFAAYear$LANDING_YEAR %in% c(1984:2024),], here("data", "confidential_noShare", "CAquillback_pacfin_FAA_landings.csv"), row.names = FALSE)
 
 
 #Explore by sector
@@ -218,13 +219,16 @@ aggSectorYearN <- catch %>%
 
 #Aggregate catch by year and add in NA for any years without data
 #Use this as the most likely time series to start model with 
+#Note that there is only one record for 2024, which thus makes it confidential
+#Set landings in 2024 to zero
 
 aggCatch <- catch %>%
   dplyr::group_by(LANDING_YEAR) %>%
   dplyr::summarize(mtons = sum(LANDED_WEIGHT_MTONS)) %>%
   data.frame() %>% 
   merge(., data.frame("LANDING_YEAR" = c(1984:2024)), by = "LANDING_YEAR", all = TRUE)
-#write.csv(aggCatch[aggCatch$LANDING_YEAR %in% c(1984:2023),], here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
+aggCatch[aggCatch$LANDING_YEAR == 2024, "mtons"] <- NA
+#write.csv(aggCatch[aggCatch$LANDING_YEAR %in% c(1984:2024),], here("data","CAquillback_pacfin_landings.csv"), row.names = FALSE)
 
 
 
@@ -356,7 +360,9 @@ ggsave(here('data_explore_figs',"pacfin_landings_sector.png"),
 #-----------------------------------------------------------------------------#
 
 # PacFIN Commercial - 1978-2022
-load(here("data-raw", "PacFIN.QLBK.bds.11.Dec.2024.RData"))
+#load(here("data-raw", "PacFIN.QLBK.bds.11.Dec.2024.RData"))
+load(here("data-raw", "PacFIN.QLBK.bds.14.Mar.2025.RData"))
+
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
 ##############################################################################-
