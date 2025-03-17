@@ -465,6 +465,8 @@ write.csv(afs_nsamp_nonccfrp$unsexed,
                                         age_bins[1], "_", tail(age_bins,1), 
                                         ".csv")), row.names = FALSE)
 
+#Dont need FAA for the growth fleet so no faa marginal age comps
+
 
 #######-
 ### Conditionals ----
@@ -525,6 +527,8 @@ write.csv(caal_nonccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_noncc
                                                     length_bins[1], "_", tail(length_bins,1),
                                                     "_", age_bins[1], "_", tail(age_bins,1),
                                                     ".csv")), row.names = FALSE)
+
+#Dont need FAA for the growth fleet so no faa marginal age comps
 
 
 
@@ -607,10 +611,12 @@ Pdata_exp <- pacfintools::getExpansion_2(Pdata = Pdata_exp,
                             stratification.cols = "fleet")
 plot(Pdata_exp$Expansion_Factor_2)
 
-Pdata_exp$Final_Sample_Size <- pacfintools::capValues(Pdata_exp$Expansion_Factor_1_L * Pdata_exp$Expansion_Factor_2, maxVal = 0.80)
-plot(Pdata_exp$Final_Sample_Size)
+# Pdata_exp$Final_Sample_Size <- pacfintools::capValues(Pdata_exp$Expansion_Factor_1_L * Pdata_exp$Expansion_Factor_2, maxVal = 0.80)
+# plot(Pdata_exp$Final_Sample_Size)
 
-Lcomps = pacfintools::getComps(Pdata_exp, Comps = "LEN")
+Lcomps = pacfintools::getComps(Pdata_exp, 
+                               Comps = "LEN",
+                               weightid = "Final_Sample_Size_L")
 
 pacfintools::writeComps(inComps = Lcomps, 
            fname = file.path(here("data", "forSS3",
@@ -628,7 +634,9 @@ pacfintools::writeComps(inComps = Lcomps,
 age_bins <- seq(1,60,1)
 
 #Run the Pdata_exp lines from length comps. They are the same for age comps
-Acomps = pacfintools::getComps(Pdata_exp, Comps = "AGE")
+Acomps = pacfintools::getComps(Pdata_exp, 
+                               Comps = "AGE",
+                               weightid = "Final_Sample_Size_A")
 
 pacfintools::writeComps(inComps = Acomps, 
                         fname = file.path(here("data", "forSS3",
@@ -643,18 +651,23 @@ pacfintools::writeComps(inComps = Acomps,
 
 ## Conditional age comps
 
-Acomps_caal = pacfintools::getComps(Pdata_exp, Comps = "AAL")
+#CAAL for commercial data shouldnt apply expansions, the conditionals account 
+#for the sampling process. As such use nwfscSurvey::get_raw_caal
 
-pacfintools::writeComps(inComps = Acomps_caal, 
-                        fname = file.path(here("data", "forSS3",
-                                               paste0("CAAL_PacFIN_unsexed_expanded_",
-                                                      length_bins[1], "_", tail(length_bins,1), "_",
-                                                      age_bins[1], "_", tail(age_bins,1),".csv"))),
-                        comp_bins = age_bins,
-                        column_with_input_n = "n_stewart",
-                        partition = 0, 
-                        digits = 4,
-                        verbose = TRUE)
+pacfin_caal <-  nwfscSurvey::get_raw_caal(
+  data = bio_clean, 
+  len_bins = length_bins,
+  age_bins = age_bins,
+  length_column_name = "lengthcm", #can use this even though it floors to the nearest cm because doesn't affect binning
+  age_column_name = "Age",
+  month = 7,
+  fleet = "com",
+  dir = NULL)
+
+write.csv(pacfin_caal, here("data", "forSS3", paste0("CAAL_PacFIN_unsexed_",
+                                              length_bins[1], "_", tail(length_bins,1),
+                                              "_", age_bins[1], "_", tail(age_bins,1),
+                                              ".csv")), row.names = FALSE)
 
 
 
@@ -677,12 +690,17 @@ Pdata_exp_faa <- pacfintools::getExpansion_2(Pdata = Pdata_exp_faa,
                                              stratification.cols = "faa")
 plot(Pdata_exp_faa$Expansion_Factor_2)
 
-Pdata_exp_faa$Final_Sample_Size <- pacfintools::capValues(Pdata_exp_faa$Expansion_Factor_1_L * Pdata_exp_faa$Expansion_Factor_2, maxVal = 0.80)
-plot(Pdata_exp_faa$Final_Sample_Size)
+# Pdata_exp_faa$Final_Sample_Size <- pacfintools::capValues(Pdata_exp_faa$Expansion_Factor_1_L * Pdata_exp_faa$Expansion_Factor_2, maxVal = 0.80)
+# plot(Pdata_exp_faa$Final_Sample_Size)
 
-Lcomps_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "LEN")
+Lcomps_faa = pacfintools::getComps(Pdata_exp_faa,
+                                   strat = "faa",
+                                   Comps = "LEN",
+                                   weightid = "Final_Sample_Size_L")
 
-pacfintools::writeComps(inComps = Lcomps_faa, 
+Lcomps_faa$fleet <- Lcomps_faa$faa
+
+pacfintools::writeComps(inComps = Lcomps_faa[,names(Lcomps_faa) != "faa"], 
                         fname = file.path(here("data", "forSS3", 
                                                paste0("Lcomps_PacFIN_FAA_unsexed_expanded_", 
                                                       length_bins[1], "_", tail(length_bins,1),".csv"))),
@@ -692,12 +710,18 @@ pacfintools::writeComps(inComps = Lcomps_faa,
                         digits = 4,
                         verbose = TRUE)
 
+
 ## Marginal age comps
 
 #Run the Pdata_exp_faa lines from length comps. They are the same for age comps
-Acomps_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "AGE")
+Acomps_faa = pacfintools::getComps(Pdata_exp_faa, 
+                                   strat = "faa",
+                                   Comps = "AGE",
+                                   weightid = "Final_Sample_Size_A")
 
-pacfintools::writeComps(inComps = Acomps_faa, 
+Acomps_faa$fleet <- Acomps_faa$faa
+
+pacfintools::writeComps(inComps = Acomps_faa[,names(Lcomps_faa) != "faa"], 
                         fname = file.path(here("data", "forSS3", 
                                                paste0("Acomps_PacFIN_FAA_unsexed_expanded_", 
                                                       age_bins[1], "_", tail(age_bins,1),".csv"))),
@@ -707,17 +731,41 @@ pacfintools::writeComps(inComps = Acomps_faa,
                         digits = 4,
                         verbose = TRUE)
 
+
 ## Conditional age comps
 
-Acomps_caal_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "AAL")
+#CAAL for commercial data shouldnt apply expansions, the conditionals account 
+#for the sampling process. As such use nwfscSurvey::get_raw_caal
 
-pacfintools::writeComps(inComps = Acomps_caal_faa, 
-                        fname = file.path(here("data", "forSS3", 
-                                               paste0("CAAL_PacFIN_FAA_unsexed_expanded_",
-                                                      length_bins[1], "_", tail(length_bins,1), "_",
-                                                      age_bins[1], "_", tail(age_bins,1),".csv"))),
-                        comp_bins = age_bins,
-                        column_with_input_n = "n_stewart",
-                        partition = 0, 
-                        digits = 4,
-                        verbose = TRUE)
+#There are no ages in the south so assign CAAL to the northern fleet
+table(bio_clean$year, bio_clean$faa, is.na(bio_clean$Age))
+
+for(s in unique(bio_clean$faa)){
+  
+  pacfin_caal_faa <- NA
+  
+  pacfin_caal_faa <- nwfscSurvey::get_raw_caal(
+    data = bio_clean %>% dplyr::filter(faa %in% s), 
+    len_bins = length_bins,
+    age_bins = age_bins,
+    length_column_name = "lengthcm", #can use this even though it floors to the nearest cm because doesn't affect binning
+    age_column_name = "Age",
+    month = 7,
+    fleet = s,
+    dir = NULL)
+  
+  com_comps_faa[[which(unique(bio_clean$faa) == s)]] <- pacfin_caal_faa
+}
+
+write.csv(com_comps_faa, here("data", "forSS3", paste0("CAAL_PacFIN_FAA_unsexed_",
+                                                     length_bins[1], "_", tail(length_bins,1),
+                                                     "_", age_bins[1], "_", tail(age_bins,1),
+                                                     ".csv")), row.names = FALSE)
+
+
+
+
+
+
+
+
