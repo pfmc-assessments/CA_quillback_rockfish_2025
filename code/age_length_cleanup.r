@@ -1,7 +1,9 @@
 ###############################################################
 # Script clean up the available age at length data for quillback
 # rockfish for the 2025 California stock assessment
-#
+# Also cleaned up and produces 2 files for ageing error
+# One that includes Oregon data and one that excludes OR double
+# reads
 #Author: Melissa Monk SWFSC
 #      2/28/2025
 ###############################################################
@@ -27,7 +29,7 @@ dim(qlbk)
 
 #check how many by source
 summary(as.factor(qlbk$source))
-#  CA NWFSC    OR 
+#  CA   NWFSC    OR 
 # 1083   199  1076
 
 #remove Oregon
@@ -43,7 +45,6 @@ bio = pull_bio(
 ca_bottomtrawl <- bio %>%
           filter(Latitude_dd < 42, 
           !is.na(Age)) %>%
-
           unique()
 with(ca_bottomtrawl, table(Year, Age))
 
@@ -97,3 +98,51 @@ ca %>%
 
 
 save(ca, file =  here("data-raw","all_ages_labeled.RData"))
+
+####################################################################################################
+# Double reads
+
+dubreadsdir <- here("data-raw", "ageing_error")
+#read in double reads
+#Patrick McDonald and Jamie Hale 
+dubreads <- read.csv(file.path(dubreadsdir,"QLBK_Double_Reads.csv"))
+dubreads <- dubreads %>% dplyr::select(-c(date_aged, date_sent)) %>% unique()#drops duplicates
+#716
+
+#keep oregon but remove possible double reads
+ca_or_bottomtrawl <- bio %>%
+          filter(!is.na(Age)) %>%
+          unique()
+
+ca_or_dubreads <- dubreads %>%
+filter(case_when (
+       (source == "NWFSC" & specimen_id %in% ca_or_bottomtrawl$Otosag_id) ~ T,
+       source == "CA" ~ T,
+       source == "OR" ~ T,
+       T ~ F))
+#have 713 double reads now
+
+# save the file as reader 1 and reader 1
+ca_or_csv <- ca_or_dubreads %>%
+rename(Reader1 = age_best, Reader2 = double_read_age) %>%
+dplyr::select(c(Reader1, Reader2))
+
+write.csv(ca_or_csv, 
+file =  here("data-raw", "ageing_error","QLBK_DoubleReads_CA_OR.csv"), row.names = F)
+
+
+###################################################################################
+#remove oregon and possible duplicates
+ca_dubreads <- dubreads %>%
+filter(case_when (
+       (source == "NWFSC" & specimen_id %in% ca_bottomtrawl$Otosag_id) ~ T,
+       source == "CA" ~ T,
+       T ~ F))
+#418 now
+
+# save the file as reader 1 and reader 1
+ca_csv <- ca_dubreads %>%
+rename(Reader1 = age_best, Reader2 = double_read_age) %>%
+dplyr::select(c(Reader1, Reader2))
+
+write.csv(ca_csv, file =  here("data-raw", "ageing_error","QLBK_DoubleReads_CA.csv"), row.names = F)
