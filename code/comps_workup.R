@@ -142,7 +142,7 @@ data <- create_data_frame(input)
 
 #---------------------------------------------------------------------------------------------------------------#
 
-## Create table of sample sizes and trips for non-commercial sources
+## Create table of sample sizes and trips lengths
 dataN <- data %>%
   dplyr::group_by(source, Year) %>% 
   dplyr::summarize(Nfish = length(length_cm),
@@ -154,6 +154,20 @@ dataN <- data %>%
   data.frame()
 dataN[is.na(dataN)] <- 0
 #write.csv(dataN, here("data", "SampleSize_length.csv"), row.names = FALSE)
+
+
+## Create table of sample sizes and trips ages for non-growth fleet sources
+dataN_age <- data %>% dplyr::filter(!is.na(age)) %>%
+  dplyr::group_by(source, Year) %>% 
+  dplyr::summarize(Nfish = length(age),
+                   Ntrip = length(unique(tripID))) %>%
+  tidyr::pivot_wider(names_from = source,
+                     values_from = c(Nfish, Ntrip),
+                     names_glue = "{source}_{.value}") %>%
+  dplyr::arrange(Year) %>%
+  data.frame()
+dataN_age[is.na(dataN_age)] <- 0
+#write.csv(dataN_age, here("data", "SampleSize_age.csv"), row.names = FALSE)
 
 
 #---------------------------------------------------------------------------------------------------------------#
@@ -544,7 +558,7 @@ write.csv(caal_nonccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_noncc
 #as opposed to through the bio data file
 
 # PacFIN Commercial - 1978-2024
-load(here("data-raw", "PacFIN.QLBK.bds.14.Mar.2025.RData"))
+load(here("data-raw", "PacFIN.QLBK.bds.17.Mar.2025.RData"))
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
 bio$disp <- "dead"
@@ -721,7 +735,7 @@ Acomps_faa = pacfintools::getComps(Pdata_exp_faa,
 
 Acomps_faa$fleet <- Acomps_faa$faa
 
-pacfintools::writeComps(inComps = Acomps_faa[,names(Lcomps_faa) != "faa"], 
+pacfintools::writeComps(inComps = Acomps_faa[,names(Acomps_faa) != "faa"], 
                         fname = file.path(here("data", "forSS3", 
                                                paste0("Acomps_PacFIN_FAA_unsexed_expanded_", 
                                                       age_bins[1], "_", tail(age_bins,1),".csv"))),
@@ -739,6 +753,8 @@ pacfintools::writeComps(inComps = Acomps_faa[,names(Lcomps_faa) != "faa"],
 
 #There are no ages in the south so assign CAAL to the northern fleet
 table(bio_clean$year, bio_clean$faa, is.na(bio_clean$Age))
+
+com_comps_faa <- list()
 
 for(s in unique(bio_clean$faa)){
   
@@ -761,11 +777,3 @@ write.csv(com_comps_faa, here("data", "forSS3", paste0("CAAL_PacFIN_FAA_unsexed_
                                                      length_bins[1], "_", tail(length_bins,1),
                                                      "_", age_bins[1], "_", tail(age_bins,1),
                                                      ".csv")), row.names = FALSE)
-
-
-
-
-
-
-
-

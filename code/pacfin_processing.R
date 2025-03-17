@@ -361,7 +361,7 @@ ggsave(here('data_explore_figs',"pacfin_landings_sector.png"),
 
 # PacFIN Commercial - 1978-2022
 #load(here("data-raw", "PacFIN.QLBK.bds.11.Dec.2024.RData"))
-load(here("data-raw", "PacFIN.QLBK.bds.14.Mar.2025.RData"))
+load(here("data-raw", "PacFIN.QLBK.bds.17.Mar.2025.RData"))
 
 bio = bds.pacfin %>% dplyr::filter(AGENCY_CODE == "C")
 
@@ -440,8 +440,8 @@ table(nolen$SAMPLE_ID) #coming from 5 different trips
 # # N without Age: 3096
 # # N without length and Age: 3096
 # # N sample weights not available for OR: 0
-# # N records: 3123
-# # N remaining if CLEAN: 3123
+# # N records: 3126
+# # N remaining if CLEAN: 3126
 # # N removed if CLEAN: 0
 
 #Simplify disposition to alive vs. dead
