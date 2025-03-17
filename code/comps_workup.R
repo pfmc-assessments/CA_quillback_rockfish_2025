@@ -395,7 +395,7 @@ write.csv(dplyr::bind_rows(rec_comps),
 #Pull "ca" from age_length_cleanup.R
 
 load(here("data-raw","all_ages_labeled.RData"))
-age_ca <- ca
+age_ca <- ca %>% dplyr::filter(year < 2025) #remove the 2025 samples
 
 age_bins <- seq(1,60,1)
 
