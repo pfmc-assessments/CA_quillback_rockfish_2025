@@ -389,7 +389,7 @@ write.csv(dplyr::bind_rows(rec_comps),
 
 
 ###########################-
-## Recreational Age comps ----
+## Recreational (Growth fleet) Age comps ----
 ###########################-
 
 #Pull "ca" from age_length_cleanup.R
@@ -589,9 +589,10 @@ catch.file.faa <- read.csv(here("data", "confidential_noShare", "CAquillback_pac
 catch.file.faa[is.na(catch.file.faa)] <- 0 #set NAs to 0
 
 
-##
-# Basic expansions. Output only with choice for input_n
-##
+####
+### Basic expansions ----
+### Output only with choice for input_n 
+####
 
 ## Length comps
 
@@ -622,12 +623,45 @@ pacfintools::writeComps(inComps = Lcomps,
            verbose = TRUE)
 
 
-## Age comps
+## Marginal age comps
+
+age_bins <- seq(1,60,1)
+
+#Run the Pdata_exp lines from length comps. They are the same for age comps
+Acomps = pacfintools::getComps(Pdata_exp, Comps = "AGE")
+
+pacfintools::writeComps(inComps = Acomps, 
+                        fname = file.path(here("data", "forSS3",
+                                               paste0("Acomps_PacFIN_unsexed_expanded_",
+                                                      age_bins[1], "_", tail(age_bins,1),".csv"))),
+                        comp_bins = age_bins,
+                        column_with_input_n = "n_stewart",
+                        partition = 0, 
+                        digits = 4,
+                        verbose = TRUE)
 
 
-##
-# Fleets as areas expansions.  Output only with choice for input_n
-##
+## Conditional age comps
+
+Acomps_caal = pacfintools::getComps(Pdata_exp, Comps = "AAL")
+
+pacfintools::writeComps(inComps = Acomps_caal, 
+                        fname = file.path(here("data", "forSS3",
+                                               paste0("CAAL_PacFIN_unsexed_expanded_",
+                                                      length_bins[1], "_", tail(length_bins,1), "_",
+                                                      age_bins[1], "_", tail(age_bins,1),".csv"))),
+                        comp_bins = age_bins,
+                        column_with_input_n = "n_stewart",
+                        partition = 0, 
+                        digits = 4,
+                        verbose = TRUE)
+
+
+
+####
+### Fleets as areas expansions ----
+### Output only with choice for input_n 
+####
 
 ## Length comps
 
@@ -658,4 +692,32 @@ pacfintools::writeComps(inComps = Lcomps_faa,
                         digits = 4,
                         verbose = TRUE)
 
-## Age comps
+## Marginal age comps
+
+#Run the Pdata_exp_faa lines from length comps. They are the same for age comps
+Acomps_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "AGE")
+
+pacfintools::writeComps(inComps = Acomps_faa, 
+                        fname = file.path(here("data", "forSS3", 
+                                               paste0("Acomps_PacFIN_FAA_unsexed_expanded_", 
+                                                      age_bins[1], "_", tail(age_bins,1),".csv"))),
+                        comp_bins = age_bins,
+                        column_with_input_n = "n_stewart",
+                        partition = 0, 
+                        digits = 4,
+                        verbose = TRUE)
+
+## Conditional age comps
+
+Acomps_caal_faa = pacfintools::getComps(Pdata_exp_faa, Comps = "AAL")
+
+pacfintools::writeComps(inComps = Acomps_caal_faa, 
+                        fname = file.path(here("data", "forSS3", 
+                                               paste0("CAAL_PacFIN_FAA_unsexed_expanded_",
+                                                      length_bins[1], "_", tail(length_bins,1), "_",
+                                                      age_bins[1], "_", tail(age_bins,1),".csv"))),
+                        comp_bins = age_bins,
+                        column_with_input_n = "n_stewart",
+                        partition = 0, 
+                        digits = 4,
+                        verbose = TRUE)
