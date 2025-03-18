@@ -131,6 +131,22 @@ sec_yr <- gemm_ca %>%
 #write.csv(sec_yr, file = here("data", "CAquillback_gemm_mortality_and_discard.csv"), row.names = FALSE)
 
 
+# #And by sector and year (but keep grouped_sector in) for FAA
+# #This is by N/S of 40'10 which we ultimately aren't going to use since it 
+# #doesn't capture Bragg in the north
+# gemm_ca$faa <- dplyr::case_when(grepl("North", gemm_ca$grouping) ~ "North",
+#                                 grepl("South", gemm_ca$grouping) ~ "South")
+# sec_yr_faa <- gemm_ca %>%
+#   dplyr::group_by(sector, year, grouped_sector, faa) %>% 
+#   dplyr::summarize(Tot_Dead = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+#                    Discard = round(sum(total_discard_mt),3),
+#                    Dead_Discard = round(sum(total_discard_with_mort_rates_applied_mt),3),
+#                    Landings = round(sum(total_landings_mt),3)) %>%
+#   dplyr::mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
+#   data.frame() 
+# #write.csv(sec_yr_faa, file = here("data", "CAquillback_gemm_mortality_and_discard_FAA.csv"), row.names = FALSE)
+
+
 ##
 #Plot the values - These are discard mort proportions (dead discard / total mort)
 ##
