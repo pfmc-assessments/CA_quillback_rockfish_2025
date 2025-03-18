@@ -196,10 +196,12 @@ ggsave(paste0(dir, "/Average CPUE by year and site.png"),
 with(dat, table(year, site))
 with(dat, table(year, area))
 with(dat %>% filter(cpue >0), table(year, area))
-percent_pos <-round(with(subset(dat, Target > 0), table(area, site)) / with(dat, table(area, site)), 2)
+percent_pos <-round(with(subset(dat, Target > 0), table(year, siteName)) / with(dat, table(year, siteName)), 2)
 write.csv(percent_pos, file.path(dir, "percent_pos.csv"))
 
-round(with(subset(dat, Target > 0), table(site)) / with(dat, table(site)), 2)
+with(dat.nofn %>% filter(Target > 0) %>% droplevels(), table(year, siteName))
+with(dat.nofn %>% droplevels(), table(year, siteName))
+
 
 
 #-------------------------------------------------------------------------------
