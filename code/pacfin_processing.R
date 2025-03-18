@@ -102,6 +102,7 @@ aggDisp <- catch %>%
   data.frame()
 #Breaking out by dealer, name, and ID (Dealer is most restrictive)
 #shows 1994 and 1995 alive has < 3
+#Note that in 2023 vessel_name is all NA
 aggDispN <- catch %>%
   dplyr::group_by(disp, LANDING_YEAR) %>%
   dplyr::summarize(N = length(unique(DEALER_ID))) %>%
@@ -218,7 +219,7 @@ aggSectorYearN <- catch %>%
 
 
 #Aggregate catch by year and add in NA for any years without data
-#Use this as the most likely time series to start model with 
+#Use this as the most likely time series to start model with
 #Note that there is only one record for 2024, which thus makes it confidential
 #Set landings in 2024 to zero
 
