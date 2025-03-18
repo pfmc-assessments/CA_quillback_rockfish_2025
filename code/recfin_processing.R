@@ -94,6 +94,13 @@ ca_rec$district <- dplyr::case_when(grepl("Bay Area", ca_rec$DISTRICT_NAME) ~ "B
                                     grepl("Wine", ca_rec$DISTRICT_NAME) ~ "Wine",
                                     grepl("South", ca_rec$DISTRICT_NAME) ~ "South")
 
+#Districts broken down as fleets as areas
+ca_rec$faa <- dplyr::case_when(ca_rec$district == "Bay" ~ "South",
+                               ca_rec$district == "Central" ~ "South",
+                               ca_rec$district == "Redwood" ~ "North",
+                               ca_rec$district == "Wine" ~ "North",
+                               ca_rec$district == "South" ~ "South")
+
 #Calculate mt for released_dead column for records with numbers but not weight.
 #Only care about released dead fish, so average weight based only on released dead fish
 #that had both weight and number
@@ -148,6 +155,17 @@ aggDistFleetYr <- ca_rec %>%
                    dis_mt = sum(SUM_RELEASED_DEAD_MT),
                    land_mt = sum(SUM_RETAINED_MT)) %>%
   data.frame()
+
+
+#Break out by fleets as areas (based on district)
+#This includes the adjustment for accounting records with numbers but not weight in mt
+aggFAAYr <- ca_rec %>%
+  dplyr::group_by(faa, RECFIN_YEAR) %>%
+  dplyr::summarize(tot_mt = sum(tot_mt_adj),
+                   dis_mt = sum(sum_released_dead_mt_adj),
+                   land_mt = sum(SUM_RETAINED_MT)) %>%
+  data.frame()
+#write.csv(aggFAAYr, here("data","CAquillback_recfin_catches_FAA.csv"), row.names = FALSE)
 
 
 #Break out by water area

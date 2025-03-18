@@ -76,3 +76,5 @@ leg = c("Estimate: 1.599e-5, b = 3.07",
         "2021 assessment: 1.963e-5, b = 3.02")
 legend("topleft", bty = 'n', legend = leg, lty = c(1,2,2), col = c("red", "red", "cyan"), lwd = 2)
 dev.off()  
+
+#write.csv(lw_ests, here("data", "lw_ests.csv"), row.names = FALSE)
