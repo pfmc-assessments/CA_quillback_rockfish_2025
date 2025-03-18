@@ -583,9 +583,10 @@ bio_clean$fleet <- "com_lan" #Limited catch so combine HKL and TWL gears. Needs 
 bio_clean$SEX <- "U"
 
 #Load in the current weight-at-length estimates by sex
-ua <- 1.599251e-5
+lwests <- read.csv(here("data", "lw_ests.csv"))
+ua <- lwests[lwests$sex == "all", "A"]
 fa <- ma <- ua
-ub = 3.076563
+ub = lwests[lwests$sex == "all", "B"]
 fb <- mb <- ub
 
 #Read in the catch file to base expansion on. 
