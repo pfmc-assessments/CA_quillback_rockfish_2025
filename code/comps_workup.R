@@ -603,8 +603,11 @@ bio_clean$faa <- dplyr::case_when(bio_clean$PACFIN_GROUP_PORT_CODE %in% c("CCA",
 
 #Note that this only covers years in pacfin catch file. 
 #Right now I resolve this by only expanding lengths over this time period 
-catch.file.faa <- read.csv(here("data", "confidential_noShare", "CAquillback_pacfin_FAA_landings.csv"))
-catch.file.faa[is.na(catch.file.faa)] <- 0 #set NAs to 0
+catch.file.faa <- read.csv(here("data", "confidential_noShare", "CAquillback_total_removals_faa.csv")) %>%
+  dplyr::select(c("Year", "com_lan_North", "com_lan_South")) %>%
+  dplyr::rename("LANDING_YEAR" = Year,
+                "North" = com_lan_North, 
+                "South" = com_lan_South)
 
 
 ####
