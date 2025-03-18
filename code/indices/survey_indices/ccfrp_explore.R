@@ -160,11 +160,24 @@ dat <- dat %>%
   rename(site = site.x)
 
 
-#DO NOT use these length cart blanche if your species has a forked tail!
+#DO NOT use these lengths carte blanche if your species has a forked tail!
 lengths <- catches %>%
-  filter(!is.na(lengthcm),
-         speciesCode == ccfrpSpeciesCode)
+  filter(speciesCode == ccfrpSpeciesCode)
 lengths <- inner_join(lengths, drifts_trip_area, by = "driftID")
+
+summary(lengths$Fork.Length..mm.)
+summary(lengths$Total.Length..mm.)
+
+
+lengths <- lengths %>%
+   mutate(Forklengthcm = Fork.Length..mm./10,
+       length_cm = coalesce(lengthcm, Forklengthcm)) %>%
+       filter(!is.na(length_cm))
+  
+
+
+summary(lengths$Fork.Length..mm.)
+summary(lengths$Total.Length..mm.)
 #-------------------------------------------------------------------------------
 #look at depth data
 summary(dat$startDepthft)

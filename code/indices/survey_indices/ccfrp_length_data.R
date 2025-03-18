@@ -5,6 +5,8 @@
 # 					
 #
 ##################################################################################################
+rm(list = ls(all = TRUE))
+graphics.off()
 
 library(here)
 library(dplyr)
@@ -14,184 +16,90 @@ library(nwfscSurvey)
 # branch on github.
 library(ggplot2)
 
-dir <- file.path(here(), "data", "survey_indices", "ccfrp")
+dir <- file.path(here(), "data-raw", "ccfrp")
 
 # Load in data from various sources
 # CRFS 2017-2024 - all areas
-len <- read.csv(file.path(dir, "south", "CCFRP_lengths.csv"))
+len <- read.csv(file.path(dir,  "CCFRP_lengths.csv"))
 # The lengths have already been filtered based on the retained records 
+len$depth_m <- len$mean_start_depth_ft/3.281
+len <- len %>% mutate(depth_bin_m = cut(depth_m, breaks = c(17,30,40,50)))
+len$depth_bin_m <- as.factor(len$depth_bin_m)
+summary(as.factor(len$depth_bin_m))
+#look at depth
+#10m bins
+summary(len$mean_start_depth_ft)
 
 
 ggplot(len) +
-  geom_bar(aes(x = lengthcm, colour = site)) +
-  #geom_density(aes(x = lengthcm, color = site)) +
-  facet_wrap("year")
+  geom_boxplot(aes(y = length_cm, colour = as.factor(year))) +
+  facet_wrap('name')
 
+ggplot(len) +
+  geom_boxplot(aes(y = length_cm, colour = as.factor(depth_bin_m))) 
+
+ggplot(len) +
+  geom_boxplot(aes(y = length_cm, colour = depth_bin_m)) +
+  facet_wrap('name')
+
+with(len, table(year, name))
+
+ggplot(len, aes(x = mean_start_depth_ft, y = length_cm)) +
+geom_point()
+
+ggplot(len, aes(x = release_depth, y = length_cm)) +
+geom_jitter(alpha = 0.5)
+
+#remove the Farallons from initial length comps
+len.nofn <- len %>%
+filter(!grepl("FN", gridCellID))
 
 
 #===============================================================================
 # Sample size calculation and input N
 #===============================================================================
 
-
-sample_by_group <- len %>%
-  dplyr::group_by(year, area, name, site) %>%
+sample_by_group <- len.nofn %>%
+  dplyr::group_by(year, name, site) %>%
   dplyr::summarise(
     drifts = length(unique(driftID)),
-    n = length(lengthcm))
+    n = length(length_cm))
 
-colnames(sample_by_group) <- c("Year", "Area", "Location", "Site", "Drifts", "Lengths")
-write.csv(sample_by_group[sample_by_group$Area == "north", colnames(sample_by_group) != "Area"],
-          file = file.path(dir, "north", "forSS", "north_ccfrp_samples_location_sites.csv"), row.names = FALSE)
+colnames(sample_by_group) <- c("Year", "Location", "Site", "Drifts", "Lengths")
+write.csv(sample_by_group,
+          file = file.path(dir,  "ccfrp_samples_location_sites.csv"), row.names = FALSE)
 
-write.csv(sample_by_group[sample_by_group$Area == "south", colnames(sample_by_group) != "Area"],
-          file = file.path(dir, "south", "forSS", "south_ccfrp_samples_location_sites.csv"), row.names = FALSE)
-
-
-sample_by_group <- len %>%
-  dplyr::group_by(year, area, site) %>%
-  dplyr::summarise(
-    drifts = length(unique(driftID)),
-    n = length(lengthcm))
-
-colnames(sample_by_group) <- c("Year", "Area",  "Site", "Drifts", "Lengths")
-write.csv(sample_by_group[sample_by_group$Area == "north", colnames(sample_by_group) != "Area"],
-          file = file.path(dir, "north", "forSS", "north_ccfrp_samples_sites.csv"), row.names = FALSE)
-
-write.csv(sample_by_group[sample_by_group$Area == "south", colnames(sample_by_group) != "Area"],
-          file = file.path(dir, "south", "forSS", "south_ccfrp_samples_sites.csv"), row.names = FALSE)
-
-# Read in the age data frame to add
-# The ages did not come back with identifiers to link back to the length or drift data that I could see
-load(file = here("data", "ages", "formatted_age_files", "ccfrp_ages.rdata"))
-samples <- ccfrp_ages %>%
-  dplyr::group_by(year, area) %>%
-  dplyr::summarise(
-    n = length(age))
-
-samples_len <- len %>%
-  dplyr::group_by(year, area) %>%
-  dplyr::summarise(
-    drifts = length(unique(driftID)),
-    n = length(lengthcm))
-
-all <- left_join(samples_len, samples, by = c("year", "area"))
-
-colnames(all) <- c("Year", "Area", "Drifts", "Lengths", "Ages")
-all$Ages[is.na(all$Ages)] <- 0
-write.csv(all[all$Area == "north", colnames(all) != "Area"],
-          file = file.path(dir, "north", "forSS", "north_ccfrp_drifts_length_ages.csv"), row.names = FALSE)
-
-write.csv(all[all$Area == "south", colnames(all) != "Area"],
-          file = file.path(dir, "south", "forSS", "south_ccfrp_drifts_length_ages.csv"), row.names = FALSE)
 
 #===============================================================================
 # Process the Lengths
 #===============================================================================
-length_bins <- seq(10, 54, 2)
+length_bins <- seq(10, 50, by = 2)
 
-len$sex[!len$sex %in% c("F", "M")] <- "U"
+#len <- len %>% mutate(len_bins = cut(length_cm, breaks = seq(9,51, by = 2)))
+#Assign all to have unknown sex since we are not using a sex specific model
+len.nofn$Sex <- "U"
 
-ccfrp_ages %>% group_by(area, year) %>%
-  reframe(
-    females = sum(sex == "F"),
-    males = sum(sex == "M"),
-    unsexed = sum(sex == "U")
-  )
+#len.nofn <- len.nofn %>% rename(Length_cm = length_cm, Year = year)
+len_final <- len.nofn %>%
+   dplyr::rename(Length_cm = length_cm, Year = year) %>%
+dplyr::select(fishID, driftID, gridCellID, Length_cm, Sex, Year)
+len_final$Sex <- as.factor(len_final$Sex)
 
-len %>% group_by(area, year) %>%
-  filter(year >= 2017) %>%
-  reframe(
-    females = sum(sex == "F"),
-    males = sum(sex == "M"),
-    unsexed = sum(sex == "U")
-  )  
+ n <- len_final %>%
+   dplyr::group_by(Year) %>%
+   dplyr::summarise(
+     drifts = length(unique(driftID)))
 
-# There are no sexes recorded for these lengths so set all to unsexed
-table(len$year, len$sex, len$site, useNA = "always")
-# Since there are only 41æ sexed lengths across all years in the north and that the sexed fish
-# by area (ref/mpa) varies which creates challenges in weighting the composition data going to
-# set all to unsexed.
-len$sex <- "U"
-len$age <- NA
+#This is missin one of the lengths and can't figure out why- it's in 2022 in the 38-39 bin
+ lfs <- UnexpandedLFs.fn(
+        dir = file.path(dir),
+        sex = 0,    #Sex has to be set to 0 if you have all unsexed fish
+        datL = len_final,
+        lgthBins = length_bins,
+        partition = 0,
+        fleet = "ccfrp",
+        month = 7)
 
-# There is only one sexed length in the south data (in spite of the ages having a sex)
-#len$sex[len$sex %in% c("F", "M") & len$area == "south"] <- "U"
-#len$sex_group <- "U"
-#len$sex_group[len$sex %in% c("F", "M")] <- "B"
+lfs$comps[, "Nsamp"] <- n$drifts
 
-n <- len %>%
-  dplyr::group_by(year, area, site) %>%
-  dplyr::summarise(
-    drifts = length(unique(driftID)))
-
-# North First
-lfs_mpa <-  UnexpandedLFs.fn(
-  datL = len[len$area == "north" & len$site == "MPA", ], 
-  lgthBins = length_bins,
-  partition = 0, 
-  fleet = 5, 
-  month = 7)
-
-#mpa_sexed <- lfs_mpa$sexed
-mpa_unsexed <- lfs_mpa$unsexed
-mpa_unsexed[,"InputN"] <- n[n$area == "north" & n$site == "MPA", 'drifts']
-#mpa_sexed[,"InputN"] <- n[n$area == "north" & n$site == "MPA" & n$sex_group == "B", 'drifts']
-
-lfs_ref <-  UnexpandedLFs.fn(
-  datL = len[len$area == "north" & len$site == "REF", ], 
-  lgthBins = length_bins,
-  partition = 0, 
-  fleet = 5, 
-  month = 7)
-#ref_sexed <- lfs_ref$sexed
-ref_unsexed <- lfs_ref$unsexed
-ref_unsexed[,"InputN"] <- n[n$area == "north" & n$site == "REF", 'drifts']
-#ref_sexed[,"InputN"] <- n[n$area == "north" & n$site == "REF" & n$sex_group == "B", 'drifts']
-
-
-protect_n <- 0.20; open_n <- 1 - protect_n
-ind <- 6:ncol(ref_unsexed)
-tmp <- mpa_unsexed[, ind] * protect_n + ref_unsexed[, ind] * open_n
-#tmp_sexed <- mpa_sexed[, ind] * protect_n + ref_sexed[, ind] * open_n
-
-first <- 2:(length(length_bins) + 1)
-second <- (length(length_bins) + 2):ncol(tmp)
-# This is for unsexed composition data only - sexed you would want to to calc the
-# proportions across the whole row
-lfs <- cbind(round(100 * tmp[, first] / apply(tmp[, first], 1, sum), 4), 
-             round(100 * tmp[, second] / apply(tmp[, second], 1, sum), 4))
-out <- cbind(ref_unsexed[, 1:5], floor(tmp[,1]), lfs)
-write.csv(out, file = file.path(dir, "north", "forSS", "ccfrp_north_weighted_length_comps_unsexed.csv"), row.names = FALSE)
-
-
-# South ================================================================
-lfs_mpa <-  UnexpandedLFs.fn(
-  datL = len[len$area == "south" & len$site == "MPA", ], 
-  lgthBins = length_bins,
-  partition = 0, 
-  fleet = 5, 
-  month = 7)$unsexed
-lfs_mpa[,"InputN"] <- n[n$area == "south" & n$site == "MPA", 'drifts']
-
-lfs_ref <-  UnexpandedLFs.fn(
-  datL = len[len$area == "south" & len$site == "REF", ], 
-  lgthBins = length_bins,
-  partition = 0, 
-  fleet = 5, 
-  month = 7)$unsexed
-lfs_ref[,"InputN"] <- n[n$area == "south" & n$site == "REF", 'drifts']
-
-protect_s <- 0.08; open_s <- 1 - protect_s
-ind <- 6:ncol(lfs_mpa)
-tmp <- lfs_mpa[, ind] * protect_s + lfs_ref[, ind] * open_s
-
-first <- 2:(length(length_bins) + 1)
-second <- (length(length_bins) + 2):ncol(tmp)
-# This is for unsexed composition data only - sexed you would want to to calc the
-# proportions across the whole row
-lfs <- cbind(round(100 * tmp[, first] /  apply(tmp[, first], 1, sum), 4), 
-             round(100 * tmp[, second] / apply(tmp[, second], 1, sum), 4))
-out <- cbind(lfs_ref[,1:5], floor(tmp[,1]), lfs)
-write.csv(out, file = file.path(dir, "south", "forSS", "ccfrp_south_weighted_length_comps_unsexed.csv"), row.names = FALSE)
-
+write.csv(lfs$comps, file = file.path(dir, "ccfrp_noFN_length_comps_unsexed.csv"), row.names = FALSE)

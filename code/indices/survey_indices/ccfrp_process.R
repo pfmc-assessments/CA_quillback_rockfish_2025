@@ -196,21 +196,33 @@ ggsave(paste0(dir, "/Average CPUE by year and site.png"),
 with(dat, table(year, site))
 with(dat, table(year, area))
 with(dat %>% filter(cpue >0), table(year, area))
-percent_pos <-round(with(subset(dat, Target > 0), table(year, siteName)) / with(dat, table(year, siteName)), 2)
-write.csv(percent_pos, file.path(dir, "percent_pos.csv"))
-
-with(dat.nofn %>% filter(Target > 0) %>% droplevels(), table(year, siteName))
-with(dat.nofn %>% droplevels(), table(year, siteName))
-
+#percent_pos <-round(with(subset(dat, Target > 0), table(year, siteName)) / with(dat, table(year, siteName)), 2)
+#write.csv(percent_pos, file.path(dir, "percent_pos.csv"))
 
 
 #-------------------------------------------------------------------------------
+#get the average depth per cell
+length(unique(dat$gridCellID)) #83 cells retained
+summary(lengths$Depth.Released..ft.)
+cell_dat <- dat %>% 
+group_by(gridCellID) %>%
+summarise(mean_start_depth_ft = mean(startDepthft, na.rm=T), 
+         median_end_depth_ft = mean(endDepthft, na.rm = T))
+
+
 #write out length data
 target_lengths <- lengths %>%
-dplyr::select(fishID, driftID, lengthcm, sex, speciesCode, monitoringGroup, name, 
+dplyr::select(fishID, driftID, gridCellID, sex, speciesCode, monitoringGroup, name, length_cm, Depth.Released..ft.,
               site.x, tripID, year, name) %>%
-rename(site = site.x) %>%
+rename(site = site.x, 
+       release_depth = Depth.Released..ft.) %>%
 filter(driftID %in% dat$driftID)
+
+target_lengths <- inner_join(target_lengths, cell_dat)
+
+with(target_lengths, table(year, site))
+with(lengths, table(year, site.x))
+
 
 save(target_lengths, file = file.path(dir,"CCFRP_lengths.RData"))
 write.csv(target_lengths,  

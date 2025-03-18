@@ -200,21 +200,22 @@ Model_selection
 
 grid <- expand.grid(
   year = unique(dat.nofn$year),
+  MPAorREF = levels(dat.nofn$MPAorREF)[1],
   siteName = levels(dat.nofn$siteName)[1])
 
-grid2 <- NULL
-for (a in 1:25){
-  grid2 <- rbind(grid2, grid[grid$siteName == "Bodega Head", ])
-}
-for (a in 1:25){
-  grid2 <- rbind(grid2, grid[grid$siteName == "South Cape Mendocino", ])
-}
-for (a in 1:25){
-  grid2 <- rbind(grid2, grid[grid$siteName == "Sewarts Point", ])
-}
-for (a in 1:25){
-  grid2 <- rbind(grid2, grid[grid$siteName == "Ten Mile", ])
-}
+# grid2 <- NULL
+# for (a in 1:25){
+#   grid2 <- rbind(grid2, grid[grid$siteName == "Bodega Head", ])
+# }
+# for (a in 1:25){
+#   grid2 <- rbind(grid2, grid[grid$siteName == "South Cape Mendocino", ])
+# }
+# for (a in 1:25){
+#   grid2 <- rbind(grid2, grid[grid$siteName == "Sewarts Point", ])
+# }
+# for (a in 1:25){
+#   grid2 <- rbind(grid2, grid[grid$siteName == "Ten Mile", ])
+# }
 
 
 fit.deltalogn <- sdmTMB(
@@ -229,13 +230,20 @@ fit.deltalogn <- sdmTMB(
 
 do_diagnostics(
   dir = file.path(dir), 
-  fit = fit.nb,
+  fit = fit.deltalogn,
   plot_resid = FALSE)
 
-calc_index(
+index <- calc_index(
   dir = file.path(dir), 
-  fit = fit.nb,
+  fit = fit.deltalogn,
   grid = grid)
+
+
+  format_index(index = index,
+    dir = file.path(dir),
+    month = 7,
+    fleet = NA
+  )
 
 
 #########################################################################################################
