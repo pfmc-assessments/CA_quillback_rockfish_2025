@@ -275,11 +275,12 @@ mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'P
 mod$ctl$Growth_Age_for_L1 <- 0
 
 #Growth curve from all individuals. Follows from quillback_growth.R
-vb_k <- 0.178
-vb_linf <- 40.997
-vb_l0 <- 3.922
-vb_cv0 <- 0.226
-vb_cv1 <- 0.065
+vb_ests <- read.csv(here("data", "vonb_ests.csv"))
+vb_k <- vb_ests[vb_ests$X == "K", "ests"]
+vb_linf <- vb_ests[vb_ests$X == "Linf", "ests"]
+vb_l0 <- vb_ests[vb_ests$X == "L0", "ests"]
+vb_cv0 <- vb_ests[vb_ests$X == "CV0", "ests"]
+vb_cv1 <- vb_ests[vb_ests$X == "CV1", "ests"]
 vb_prior <- 0
 
 mod$ctl$MG_parms['L_at_Amin_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
