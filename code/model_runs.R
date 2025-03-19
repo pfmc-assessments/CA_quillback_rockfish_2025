@@ -498,6 +498,7 @@ lcomps.df <- dplyr::bind_rows(com.lengths, rec.lengths)
 
 mod$dat$lencomp <- lcomps.df
 
+
 # Age comps
 
 mod$dat$agebin_vector <- seq(1, 60, by = 1)
@@ -510,6 +511,12 @@ mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
 #Requires length bins to be set to the length bin index, so need to change CAAL
 #to reflect bin index. Could set this to 3 and keep length bins as is (i.e. as lengths)
 
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
 growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_10_50_1_60.csv")) %>%
   dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
   dplyr::mutate(ageerr = 1) %>%
@@ -517,7 +524,7 @@ growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_1
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 
-mod$dat$agecomp <- growth.CAAL
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
 
 
 
@@ -724,6 +731,12 @@ mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
 #Requires length bins to be set to the length bin index, so need to change CAAL
 #to reflect bin index. Could set this to 3 and keep length bins as is (i.e. as lengths)
 
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
 growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_10_50_1_60.csv")) %>%
   dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
   dplyr::mutate(ageerr = 1) %>%
@@ -731,7 +744,7 @@ growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_1
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
   
-mod$dat$agecomp <- growth.CAAL
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
 
 
 ##
