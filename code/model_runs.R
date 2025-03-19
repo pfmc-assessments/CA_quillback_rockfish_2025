@@ -407,6 +407,8 @@ r4ss::run(dir = here('models', new_name),
 ## 0_2_0_updateData ----
 ####------------------------------------------------#
 
+# Update model data for all types of data
+
 new_name <- "0_2_0_updateData"
 old_name <- "0_1_0_updateBio"
 
@@ -427,11 +429,29 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-#Set up fleet converter to set up any com to fleet=1, and rec to fleet=2
+#Update fleet information for model, lengths, ages, and indices
+mod$dat$Nfleets <- 5
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Growth"),
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_CCFRP"),
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_ROV"))
+mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$len_info[1,],
+                          "CA_CCFRP" = mod$dat$len_info[1,],
+                          "CA_ROV" = mod$dat$len_info[1,])
+mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$age_info[1,])
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
+                          "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
+                          "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
+                          "CA_ROV" = c("fleet" = 5, "units" = 1, "errtype" = 0, "SD_report" = 0))
 
 fleet.converter <- mod$dat$fleetinfo %>%
-  dplyr::mutate(fleet = c("com", "rec")) %>%
-  dplyr::mutate(fleet_num = c("1", "2")) %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
   dplyr::select(fleetname, fleet, fleet_num)
 
 
@@ -458,30 +478,6 @@ mod$dat$catch <- updated.catch.df
 
 ### Update comps --------------------------------
 
-
-# We need to change fleet structure because we are adding CAAL for growth fleet
-
-mod$dat$Nfleets <- 3
-mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
-                             "fleetname" = "CA_Growth"))
-mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
-                          "CA_Growth" = mod$dat$len_info[1,])
-mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
-                          "CA_Growth" = mod$dat$age_info[1,])
-mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
-                          "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0))
-
-#Set up fleet converter to set up any com to fleet=1, rec to fleet=2, growth = fleet=3
-
-fleet.converter <- mod$dat$fleetinfo %>%
-  dplyr::mutate(fleet = c("com", "rec", "growth")) %>%
-  dplyr::mutate(fleet_num = c(1, 2, 3)) %>%
-  dplyr::select(fleetname, fleet, fleet_num)
-
-
-## Now update composition data
-
 # Length comps
 
 mod$dat$use_lencomp <- 1 #already 1 but useful to set
@@ -501,7 +497,6 @@ rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_unsexed_raw_
 lcomps.df <- dplyr::bind_rows(com.lengths, rec.lengths) 
 
 mod$dat$lencomp <- lcomps.df
-
 
 # Age comps
 
@@ -526,6 +521,42 @@ mod$dat$agecomp <- growth.CAAL
 
 
 
+### Update indices --------------------------------
+
+#CCFRP
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "ccfrp") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+#PR dockside
+pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "rec") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
+
+
+## Add necessary composition data for indices
+
+#CCFRP - these use number of fish as sample sizes
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(ccfrp.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
+
+
+
 ##
 #Output files and run
 ##
@@ -546,6 +577,8 @@ SS_write(mod,
 ####------------------------------------------------#
 ## 0_2_1_updateCatch ----
 ####------------------------------------------------#
+
+# Update model inputs for catch only
 
 new_name <- "0_2_1_updateCatch"
 old_name <- "0_1_0_updateBio"
@@ -612,6 +645,8 @@ SS_write(mod,
 ####------------------------------------------------#
 ## 0_2_1_updateComps ----
 ####------------------------------------------------#
+
+# Update model data for only comp data (does not include comps for indices)
 
 new_name <- "0_2_2_updateComps"
 old_name <- "0_1_0_updateBio"
@@ -719,6 +754,8 @@ SS_write(mod,
 ## 0_2_3_updateIndices ----
 ####------------------------------------------------#
 
+# Update model data for indices (also includes comps for indices)
+
 new_name <- "0_2_3_updateIndices"
 old_name <- "0_1_0_updateBio"
 
@@ -739,7 +776,66 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
+## Add fleets for indices. Keep fleet structure from 0_2_2_updateComps
 
+mod$dat$Nfleets <- 5
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Growth"),
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_CCFRP"),
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_ROV"))
+mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$len_info[1,],
+                          "CA_CCFRP" = mod$dat$len_info[1,],
+                          "CA_ROV" = mod$dat$len_info[1,])
+mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$age_info[1,])
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
+                          "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
+                          "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
+                          "CA_ROV" = c("fleet" = 5, "units" = 1, "errtype" = 0, "SD_report" = 0))
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+## Add index data
+
+#CCFRP
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "ccfrp") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+#PR dockside
+pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "rec") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
+
+
+## Add necessary composition data for indices
+
+#CCFRP - these use number of fish as sample sizes
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(ccfrp.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
 
 
 ##
