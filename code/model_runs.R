@@ -296,19 +296,19 @@ mod$ctl$MG_parms['CV_old_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_
 
 ### Update LW relationship ----
 
-lw_a <- 1.599251e-5
-lw_b <- 3.076563
+lw_ests <- read.csv(here("data", "lw_ests.csv"))
+lw_a <- lw_ests[lw_ests$sex == "all", "A"]
+lw_b <- lw_ests[lw_ests$sex == "all", "B"]
 lw_prior <- 0
 
 mod$ctl$MG_parms['Wtlen_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0, 0.1, lw_a, lw_a, 0, vb_prior, -9)
+  c(0, 0.1, lw_a, lw_a, 0, lw_prior, -9)
 mod$ctl$MG_parms['Wtlen_2_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(2, 4, lw_b, lw_b, 0, vb_prior, -9)
+  c(2, 4, lw_b, lw_b, 0, lw_prior, -9)
 
 
 ### Update maturity ----
 
-#With updated data as of Feb 28, 2025
 l50_fxn <- 28.96 #-a/b
 l50_se <- 0.599 #se of -a/b
 slope_fxn <- -0.606 #b (SS3 manual says this must be negative)

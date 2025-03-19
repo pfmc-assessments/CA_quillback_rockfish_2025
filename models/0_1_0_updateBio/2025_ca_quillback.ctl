@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-03-12  08:58:17
+#C file write time: 2025-03-19  08:20:04
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -32,7 +32,7 @@
 0 #_natM_type:_0=1Parm; 1=N_breakpoints;_2=Lorenzen;_3=agespecific;_4=agespec_withseasinterpolate;_5=Maunder_M;_6=Age-range_Lorenzen
 #_no additional input for selected M option; read 1P per morph
 1 # GrowthModel: 1=vonBert with L1&L2; 2=Richards with L1&L2; 3=age_specific_K_incr; 4=age_specific_K_decr;5=age_specific_K_each; 6=NA; 7=NA; 8=growth cessation
-0 #_Age(post-settlement)_for_L1;linear growth below this
+1 #_Age(post-settlement)_for_L1;linear growth below this
 999 #_Growth_Age_for_L2 (999 to use as Linf)
 0.01 #_exponential decay for growth above maxage (value should approx initial Z; -999 replicates 3.24; -998 to not allow growth above maxage)
 0 #_placeholder for future growth feature
@@ -53,8 +53,8 @@
 0.03	 0.3	      0.178	      0.178	    0	0	-9	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
 0.01	 0.5	      0.226	      0.226	    0	0	-9	0	0	0	0	0	0	0	#_CV_young_Fem_GP_1  
 0.01	 0.5	      0.065	      0.065	    0	0	-9	0	0	0	0	0	0	0	#_CV_old_Fem_GP_1    
-   0	 0.1	1.59925e-05	1.59925e-05	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_1_Fem_GP_1   
-   2	   4	    3.07656	    3.07656	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_2_Fem_GP_1   
+   0	 0.1	1.57769e-05	1.57769e-05	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_1_Fem_GP_1   
+   2	   4	    3.08018	    3.08018	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_2_Fem_GP_1   
   25	  32	      28.96	      28.96	0.599	6	-9	0	0	0	0	0	0	0	#_Mat50%_Fem_GP_1    
   -1	   0	     -0.606	     -0.606	0.121	6	-9	0	0	0	0	0	0	0	#_Mat_slope_Fem_GP_1 
   -3	   3	  3.932e-07	  3.932e-07	    0	0	-9	0	0	0	0	0	0	0	#_Eggs_alpha_Fem_GP_1
