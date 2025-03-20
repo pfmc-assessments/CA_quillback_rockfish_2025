@@ -171,7 +171,6 @@ old_name <- "0_0_1_2021base"
 #Use ss_new inputs so have commonality with other SS3 models
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -227,8 +226,6 @@ r4ss::run(dir = here('models', new_name),
           extras = '-nohess',
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
-
-#Model runs
 
 
 
