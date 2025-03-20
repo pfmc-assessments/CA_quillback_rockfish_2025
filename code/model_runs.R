@@ -284,7 +284,7 @@ vb_cv1 <- vb_ests[vb_ests$X == "CV1", "ests"]
 vb_prior <- 0
 
 mod$ctl$MG_parms['L_at_Amin_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0, 10, vb_l0, vb_l0, 0, vb_prior, -9)
+  c(0, 20, vb_l0, vb_l0, 0, vb_prior, -9)
 mod$ctl$MG_parms['L_at_Amax_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(35, 50, vb_linf, vb_linf, 0, vb_prior, -9)
 mod$ctl$MG_parms['VonBert_K_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
@@ -292,7 +292,7 @@ mod$ctl$MG_parms['VonBert_K_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', '
 mod$ctl$MG_parms['CV_young_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(0.01, 0.5, vb_cv0, vb_cv0, 0, vb_prior, -9)
 mod$ctl$MG_parms['CV_old_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0.01, 0.5, vb_cv1, vb_cv1, 0, vb_prior, -9)
+  c(0.001, 0.5, vb_cv1, vb_cv1, 0, vb_prior, -9)
 
 
 ### Update LW relationship ----
