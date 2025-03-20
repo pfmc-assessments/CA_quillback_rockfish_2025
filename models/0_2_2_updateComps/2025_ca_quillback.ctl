@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-03-19  15:54:01
+#C file write time: 2025-03-20  08:19:12
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -47,20 +47,20 @@
 #
 #_growth_parms
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env_var&link	dev_link	dev_minyr	dev_maxyr	dev_PH	Block	Block_Fxn
-0.01	0.15	  0.0862314	      -2.74	 0.31	3	 2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
-   0	  10	    15.6622	    15.6622	    0	0	-9	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
-  35	  50	    42.9016	    42.9016	    0	0	-9	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
-0.03	 0.3	   0.111904	   0.111904	    0	0	-9	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
-0.01	 0.5	   0.171467	   0.171467	    0	0	-9	0	0	0	0	0	0	0	#_CV_young_Fem_GP_1  
-0.01	 0.5	 0.00371156	 0.00371156	    0	0	-9	0	0	0	0	0	0	0	#_CV_old_Fem_GP_1    
-   0	 0.1	1.57769e-05	1.57769e-05	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_1_Fem_GP_1   
-   2	   4	    3.08018	    3.08018	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_2_Fem_GP_1   
-  25	  32	      28.96	      28.96	0.599	6	-9	0	0	0	0	0	0	0	#_Mat50%_Fem_GP_1    
-  -1	   0	     -0.606	     -0.606	0.121	6	-9	0	0	0	0	0	0	0	#_Mat_slope_Fem_GP_1 
-  -3	   3	  3.932e-07	  3.932e-07	    0	0	-9	0	0	0	0	0	0	0	#_Eggs_alpha_Fem_GP_1
-   1	   7	      3.702	      3.702	    0	0	-9	0	0	0	0	0	0	0	#_Eggs_beta_Fem_GP_1 
-   0	   1	          1	          1	    0	0	-9	0	0	0	0	0	0	0	#_CohortGrowDev      
-0.01	0.99	        0.5	        0.5	  0.5	0	-9	0	0	0	0	0	0	0	#_FracFemale_GP_1    
+ 0.01	0.15	     0.0643	      -2.74	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
+    0	  20	    15.6622	    15.6622	    0	0	-9	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
+   35	  50	    42.9016	    42.9016	    0	0	-9	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
+ 0.03	 0.3	   0.111904	   0.111904	    0	0	-9	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
+ 0.01	 0.5	   0.171467	   0.171467	    0	0	-9	0	0	0	0	0	0	0	#_CV_young_Fem_GP_1  
+0.001	 0.5	 0.00371156	 0.00371156	    0	0	-9	0	0	0	0	0	0	0	#_CV_old_Fem_GP_1    
+    0	 0.1	1.57769e-05	1.57769e-05	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_1_Fem_GP_1   
+    2	   4	    3.08018	    3.08018	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_2_Fem_GP_1   
+   25	  32	      28.96	      28.96	0.599	6	-9	0	0	0	0	0	0	0	#_Mat50%_Fem_GP_1    
+   -1	   0	     -0.606	     -0.606	0.121	6	-9	0	0	0	0	0	0	0	#_Mat_slope_Fem_GP_1 
+   -3	   3	  4.216e-08	  4.216e-08	    0	0	-9	0	0	0	0	0	0	0	#_Eggs_alpha_Fem_GP_1
+    1	   7	       4.44	       4.44	    0	0	-9	0	0	0	0	0	0	0	#_Eggs_beta_Fem_GP_1 
+    0	   1	          1	          1	    0	0	-9	0	0	0	0	0	0	0	#_CohortGrowDev      
+ 0.01	0.99	        0.5	        0.5	  0.5	0	-9	0	0	0	0	0	0	0	#_FracFemale_GP_1    
 #_no timevary MG parameters
 #
 #_seasonal_effects_on_biology_parms
@@ -72,11 +72,11 @@
 0 # 0/1 to use steepness in initial equ recruitment calculation
 0 # future feature: 0/1 to make realized sigmaR a function of SR curvature
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn # parm_name
-   1	 20	4.64382	   3	    5	0	  1	0	0	0	0	0	0	0	#_SR_LN(R0)  
- 0.2	  1	   0.72	0.72	0.158	2	 -7	0	0	0	0	0	0	0	#_SR_BH_steep
-0.15	0.9	    0.6	 0.6	  0.2	0	-99	0	0	0	0	0	0	0	#_SR_sigmaR  
-  -2	  2	      0	   0	    2	0	-99	0	0	0	0	0	0	0	#_SR_regime  
-   0	  0	      0	   0	    0	0	-99	0	0	0	0	0	0	0	#_SR_autocorr
+   1	 20	3.7953	   3	    5	0	  1	0	0	0	0	0	0	0	#_SR_LN(R0)  
+ 0.2	  1	  0.72	0.72	0.158	2	 -7	0	0	0	0	0	0	0	#_SR_BH_steep
+0.15	0.9	   0.6	 0.6	  0.2	0	-99	0	0	0	0	0	0	0	#_SR_sigmaR  
+  -2	  2	     0	   0	    2	0	-99	0	0	0	0	0	0	0	#_SR_regime  
+   0	  0	     0	   0	    0	0	-99	0	0	0	0	0	0	0	#_SR_autocorr
 #_no timevary SR parameters
 1 #do_recdev:  0=none; 1=devvector (R=F(SSB)+dev); 2=deviations (R=F(SSB)+dev); 3=deviations (R=R0*dev; dev2=R-f(SSB)); 4=like 3 with sum(dev2) adding penalty
 1978 # first year of main recr_devs; early devs can preceed this era
@@ -128,15 +128,15 @@
 #
 #_SizeSelex
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
- 15	50	 37.8738	   36	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Commercial(1)  
+ 15	50	 37.5612	   36	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Commercial(1)  
  -7	 7	-1.27382	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Commercial(1)  
--10	10	 4.53497	    5	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Commercial(1)  
+-10	10	  4.5311	    5	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Commercial(1)  
 -10	10	  -0.517	4.718	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Commercial(1)  
 -20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Commercial(1)  
 -10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Commercial(1)  
- 15	50	 32.9435	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Recreational(2)
+ 15	50	 32.7407	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Recreational(2)
  -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Recreational(2)
--10	10	 3.84694	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Recreational(2)
+-10	10	 3.83984	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Recreational(2)
 -10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Recreational(2)
 -20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
 -10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)
