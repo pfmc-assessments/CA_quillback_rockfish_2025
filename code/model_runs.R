@@ -324,9 +324,9 @@ mod$ctl$MG_parms['Mat_slope_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', '
   
 ### Update fecundity ----
 
-eggs_b <- 3.702
-eggs_a <- round((0.00007809 * 10^eggs_b)/1000000, 10)
-fec_prior <- 0 #turning off
+eggs_b <- 4.440
+eggs_a <- 4.216e-08
+fec_prior <- 0
 
 mod$ctl$MG_parms['Eggs_alpha_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(-3, 3, eggs_a, eggs_a, 0, fec_prior, -9)
