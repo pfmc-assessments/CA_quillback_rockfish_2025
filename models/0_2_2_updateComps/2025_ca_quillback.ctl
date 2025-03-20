@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-03-20  08:19:12
+#C file write time: 2025-03-20  08:51:13
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -72,11 +72,11 @@
 0 # 0/1 to use steepness in initial equ recruitment calculation
 0 # future feature: 0/1 to make realized sigmaR a function of SR curvature
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn # parm_name
-   1	 20	3.7953	   3	    5	0	  1	0	0	0	0	0	0	0	#_SR_LN(R0)  
- 0.2	  1	  0.72	0.72	0.158	2	 -7	0	0	0	0	0	0	0	#_SR_BH_steep
-0.15	0.9	   0.6	 0.6	  0.2	0	-99	0	0	0	0	0	0	0	#_SR_sigmaR  
-  -2	  2	     0	   0	    2	0	-99	0	0	0	0	0	0	0	#_SR_regime  
-   0	  0	     0	   0	    0	0	-99	0	0	0	0	0	0	0	#_SR_autocorr
+   1	 20	   3	   3	    5	0	  1	0	0	0	0	0	0	0	#_SR_LN(R0)  
+ 0.2	  1	0.72	0.72	0.158	2	 -7	0	0	0	0	0	0	0	#_SR_BH_steep
+0.15	0.9	 0.6	 0.6	  0.2	0	-99	0	0	0	0	0	0	0	#_SR_sigmaR  
+  -2	  2	   0	   0	    2	0	-99	0	0	0	0	0	0	0	#_SR_regime  
+   0	  0	   0	   0	    0	0	-99	0	0	0	0	0	0	0	#_SR_autocorr
 #_no timevary SR parameters
 1 #do_recdev:  0=none; 1=devvector (R=F(SSB)+dev); 2=deviations (R=F(SSB)+dev); 3=deviations (R=R0*dev; dev2=R-f(SSB)); 4=like 3 with sum(dev2) adding penalty
 1978 # first year of main recr_devs; early devs can preceed this era
@@ -128,15 +128,15 @@
 #
 #_SizeSelex
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
- 15	50	 37.5612	   36	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Commercial(1)  
+ 15	50	   42.09	   36	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Commercial(1)  
  -7	 7	-1.27382	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Commercial(1)  
--10	10	  4.5311	    5	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Commercial(1)  
+-10	10	  4.6084	    5	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Commercial(1)  
 -10	10	  -0.517	4.718	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Commercial(1)  
 -20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Commercial(1)  
 -10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Commercial(1)  
- 15	50	 32.7407	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Recreational(2)
+ 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Recreational(2)
  -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Recreational(2)
--10	10	 3.83984	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Recreational(2)
+-10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Recreational(2)
 -10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Recreational(2)
 -20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
 -10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)

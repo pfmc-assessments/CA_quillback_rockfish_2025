@@ -415,7 +415,6 @@ old_name <- "0_1_0_updateBio"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -593,7 +592,6 @@ old_name <- "0_1_0_updateBio"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -661,7 +659,6 @@ old_name <- "0_1_0_updateBio"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -775,7 +772,6 @@ old_name <- "0_1_0_updateBio"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
