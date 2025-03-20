@@ -245,7 +245,6 @@ old_name <- "0_0_2_2025setup"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
