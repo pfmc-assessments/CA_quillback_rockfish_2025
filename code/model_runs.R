@@ -350,56 +350,6 @@ SS_plots(pp, plot = c(1:26))
 
 
 ####------------------------------------------------#
-## 0_1_1_updateInputs ----
-####------------------------------------------------#
-
-# Update model inputs based on new decisions
-
-new_name <- "0_1_1_updateInputs"
-old_name <- "0_1_0_updateBio"
-
-
-##
-#Copy inputs
-##
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               use_ss_new = TRUE,
-               overwrite = TRUE)
-
-mod <- SS_read(here('models', new_name))
-
-
-##
-#Make Changes
-##
-
-# Change accumulator age
-mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
-
-# Change minimum population bin size
-mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
-
-
-##
-#Output files and run
-##
-
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
-
-
-
-
-####------------------------------------------------#
 ## 0_2_0_updateData ----
 ####------------------------------------------------#
 
@@ -857,6 +807,54 @@ SS_write(mod,
 #           show_in_console = TRUE, #comment out if you dont want to watch model iterations
 #           skipfinished = FALSE)
 
+
+
+####------------------------------------------------#
+## 0_4_0_updateInputs ----
+####------------------------------------------------#
+
+# Update model inputs based on new decisions
+
+new_name <- "0_3_0_updateInputs"
+old_name <- "0_2_0_updateData"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               use_ss_new = TRUE,
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Change accumulator age
+mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
+
+# Change minimum population bin size
+mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 ##########################################################################################-
