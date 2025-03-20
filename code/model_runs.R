@@ -37,7 +37,6 @@ old_name <- "model Number_model name"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -810,12 +809,77 @@ SS_write(mod,
 
 
 ####------------------------------------------------#
-## 0_4_0_updateInputs ----
+## 0_3_1_udpateSelex ----
 ####------------------------------------------------#
 
-# Update model inputs based on new decisions
+#Update selectivity blocks
 
-new_name <- "0_3_0_updateInputs"
+new_name <- "0_3_1_blockSelex"
+old_name <- "0_2_0_updateData"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Add selectivity blocks
+mod$ctl$size_selex_types
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c('name1',
+                                                 'name2',
+                                                 new_name)))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('label for model 1',
+                                     'label for model 2',
+                                     'label for new model'),
+                    subplots = c(1,3), print = TRUE, plotdir = here('models', new_name))
+
+dev.off()
+
+
+
+####------------------------------------------------#
+## 0_4_1_updateInputs ----
+####------------------------------------------------#
+
+# Update model inputs based on new decisions from earlier versions
+
+new_name <- "0_4_1_updateInputs"
 old_name <- "0_2_0_updateData"
 
 
@@ -855,6 +919,55 @@ r4ss::run(dir = here('models', new_name),
           extras = '-nohess',
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
+
+
+####------------------------------------------------#
+## 0_4_2_fixWarnings ----
+####------------------------------------------------#
+
+# Make changes to fix warnings
+
+new_name <- "0_4_2_fixWarnings"
+old_name <- "0_4_1_updateInputs"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               use_ss_new = TRUE,
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Change accumulator age
+mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
+
+# Change minimum population bin size
+mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
 
 
 ##########################################################################################-
