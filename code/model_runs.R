@@ -267,7 +267,7 @@ m_se <- 0.31
 m_prior <- 3 #log-normal
 
 mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0.01, 0.15, m_init, round(log(m_init), 2), m_se, m_prior, 2)
+  c(0.01, 0.15, m_init, round(log(m_init), 2), m_se, m_prior, -2)
 
 
 ### Update growth prior ----
