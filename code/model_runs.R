@@ -593,7 +593,7 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_2_1_updateComps ----
+## 0_2_2_updateComps ----
 ####------------------------------------------------#
 
 # Update model data for only comp data (does not include comps for indices)
@@ -618,15 +618,17 @@ mod <- SS_read(here('models', new_name))
 ##
 
 # We need to change fleet structure because we are adding CAAL for growth fleet
+# Because the growth fleet doesn't have index values we dont change CPUEinfo
 
 mod$dat$Nfleets <- 3
 mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
                              "fleetname" = "CA_Growth"))
 mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
                           "CA_Growth" = mod$dat$len_info[1,])
 mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
                           "CA_Growth" = mod$dat$age_info[1,])
+mod$dat$age_info$combine_M_F <- 0
 mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
                           "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0))
 
@@ -665,7 +667,8 @@ mod$dat$lencomp <- lcomps.df
 
 mod$dat$agebin_vector <- seq(1, 60, by = 1)
 mod$dat$N_agebins <- length(mod$dat$agebin_vector)
-mod$dat$ageerror <- mod$dat$ageerror[, 1:(max(mod$dat$agebin_vector) + 1)]
+#Ageing error is up to max age so dont need to reduce to number of data age bins
+#mod$dat$ageerror <- mod$dat$ageerror[, 1:(max(mod$dat$agebin_vector) + 1)]
 
 mod$dat$age_info$combine_M_F <- c(0, 0, 0) #dont compress males with females
 
@@ -687,6 +690,31 @@ growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_1
   as.data.frame()
   
 mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
+
+
+# Now change the selectivity tables....
+
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, #set to match that of the other fleets
+                                  "CA_Growth" = mod$ctl$size_selex_types[1,])
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of the other fleets
+                                 "CA_Growth" = mod$ctl$age_selex_types[1,])
+
+#...and length selectivity parameterization 
+#Set the new fleets selectivity to be the same as the rec fleet for now
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms,
+                                  mod$ctl$size_selex_parms[7:12,])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |> 
+  as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
+  unlist()
+
+rownames(mod$ctl$size_selex_parms) <- selex_names
 
 
 ##
