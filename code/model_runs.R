@@ -776,6 +776,7 @@ mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other flee
                           "CA_Growth" = mod$dat$age_info[1,],
                           "CA_CCFRP" = mod$dat$age_info[1,],
                           "CA_ROV" = mod$dat$age_info[1,])
+mod$dat$age_info$combine_M_F <- 0
 mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
                           "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
                           "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
@@ -893,11 +894,11 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name),
-#           exe = here('models/ss3_win.exe'),
-#           extras = '-nohess',
-#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
-#           skipfinished = FALSE)
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
