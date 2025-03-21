@@ -2,19 +2,52 @@
 
 Testing adding in an introduction for `r params$species`. There is currently no read of parameters for child documents.
 
+This assessment reports the status of the `r spp` (*Sebastes maliger*) stock off the coast of California through 2024. The California stock of quillback rockfish was defined in 202x.
+
 <!-- Scientific name, distribution, the basis for the choice of stock structure, including regional differences in life history or other biological characteristics that should form the basis of management units. A map showing the scope of the assessment and depicting boundaries for fisheries or data collection strata.  -->
 
 ## Life History
 
-<!-- Important features of life history that affect management (e.g., migration, sexual dimorphism, bathymetric demography).   -->
+`r Spp` have historically been a part of both commercial and recreational fisheries throughout its range. `r Spp` are a demersal, relatively nearshore species within the subgenus *Pteropodus.*  The body coloring of adult `r spp` is brown with yellow to orange blotching and light-colored dorsal saddle patches [@loveetal_2002]. As their name suggests, `r spp` have long dorsal fin spines with deeply incised membranes.
+The availability of life history information for quillback rockfish in California is sparse and a number of studies were undertaken after the 2021 data-moderate quillback rockfish assessment to estimate growth, maturity and fecundity.
+
+The core range of `r spp` is relatively large from central California to the Gulf of Alaska, with `r spp` also found in Puget Sound. `r Spp` range from the sub-tidal (as juveniles) to depths of around 274 m [@love_rockfishes_2002]. `r Spp` are commonly found in waters less than 100 m  inhabiting both low and high relief complex rocky habitat [@love_probably_1996]. Adult `r spp` have high site fidelity as adults. An acoustic telemetry study displaced quillback rockfish 500 m from the capture location and all returned to the original capture site within 30 days [@matthews_1990_telemetric]. 
+
+The diets of `r spp` consist primarily of benthic and pelagic crustaceans and fish [@Murie_diet_1995]. 
+
+Limited studies have evaluated genetic variation in `r spp` across the U.S. West Coast. Genetic work has revealed significant differences between Puget Sound and coastal stocks of `r spp` [@seeb_gene_1998; @Stoutetal_DPS_2001], however Seeb [-@seeb_gene_1998] did not find significant differentiation in populations of `r spp` between coastal Washington and Alaska. 
+
+`r Spp` are a long-lived rockfish with the oldest aged specimen at 95 years from British Columbia [@loveetal_2002; @YamanakaandLacko_rockfish_2001]. FROG additiona max aged fish `r Spp` was determined to have a vulnerability (V = 2.22) of major concern in a productivity susceptibility analysis [@cope_approach_2011]. This analysis calculated species specific vulnerability scores based on two dimensions: productivity characterized by the life history, and susceptibility characterized by how the stock is likely affected by the fishery in question.
+
 
 ## Ecosystem considerations
 
-<!-- Ecosystem considerations that include relevant information on how environmental drivers, prey, competition, predation, and/or (habitat requirements/preferences may affect stock’s status, vital rates (growth, survival, productivity, recruitment), or range and distribution. Ecosystem considerations may also include how these factors, cross-FMP interactions with other fisheries and human social dynamics that may affect the stock (e.g., reliance and dependence by fishing communities, non-target species constraining harvest rates). The length and depth of this section will depend on availability of information from published studies and Integrated Ecosystem Assessment reports, expertise of the STAT, and whether ecosystem factors contribute quantitative information to the assessment. This is not required for an update assessment if a citation to the previous assessment is provided.  -->
+This stock assessment does not explicitly incorporate trophic interactions, habitat factors or environmental factors into the assessment model, but a brief description of likely or potential ecosystem considerations is provided below.
+
+As with most other rockfish and groundfish in the California Current, recruitment or cohort (year-class) strength appears to be highly variable for `r spp`, with only a modest apparent relationship to estimated levels of spawning output. Oceanographic and ecosystem factors are widely recognized to be key drivers of recruitment variability for most species of groundfish, as well as most elements of California Current food webs. Empirical estimates of recruitment from pelagic juvenile rockfish surveys have been used to inform incoming year class strength for some of these stocks, however `r spp` are not encountered in these surveys. 
 
 ## Fishery description
+copied from the 2021 assessment and will continue editing week of 3/24 (mhm)
+`r Spp` off the coast of `r state` is caught in both the recreational and commercial fisheries.
+### Commercial
 
-<!-- Important features of current fishery and relevant history of fishery.  -->
+ Recreational removals are the largest source of fishing mortality and represent approximately 70 percent of the total removals of `r spp` across all years (Table \ref{tab:allcatches} and Figure \ref{fig:catch}). The majority of the commercial landings for `r spp` occurred between 1990 and 2008, and apart from 1945-1946, in 1984, and in the last four years, commercial landings for `r spp` have been less than 2 mt per year. 
+ [@Milleretal_2014]
+
+Prior to the development of the live-fish market in the 1980s, commercial catches of `r spp` were relatively low, and `r spp` were often landed dead for a relatively low ex-vessel price per pound. Most fish were caught using hook and line gear, though some were caught using traps, gill nets, and in some instances, trawl gear. Trawling within three miles of shore, where most of their habitat is found, has been prohibited since 1953, and gill nets were banned within three miles of shore in 1994. Whether from directed effort in the nearshore or as incidental catch while targeting other more valuable stocks such as lingcod, catches were below 0.5 mt from 1916 to 1980, with the exception of four of five years from 1944-1948.
+
+With the development and expansion of the nearshore live-fish fishery during the late 1980s and early 1990s, new entrants in this open access fishery were drawn by premium ex-vessel prices for live fish, resulting in over-capitalization of the fishery. Since 2002, the California Department of Fish and Wildlife (CDFW) has managed 19 nearshore species in accordance with Nearshore Fisheries Management Plan [@Wilson-Vandenbergetal_2014]. In 2003, the CDFW implemented a Nearshore Restricted Access Permit system, including a requirement of a Deeper Nearshore Fishery Species Permit to retain `r spp`, with the overall goal of reducing the number of participants to a more sustainable level, and with permit issuance based on historical landings history by a retrospective qualifying date. The result was a reduction in permits issued, from 1,127 in 1999 to 505 in 2003, greatly reducing catch levels. In addition, reduced trip limits, seasonal closures in March and April and depth restrictions were implemented to address bycatch of overfished species and associated constraints from these species low ACLs.
+ 
+As overfished shelf rockfish have rebuilt, resumed access to deeper depths has been allowed for Nearshore Permit holders as well as open access fisheries. While depth restrictions for waters deeper than 75 fm were implemented in 2019 south of Point Conception where yelloweye rockfish are uncommon, access in constrained north of Point Conception where, since 2003, depth restrictions at a range of depths starting between 20 and 40 fm, depending on the management area, have prohibited fishing in deeper waters (see separately provided Regulation History addendum). 
+
+As open access fisheries are allowed to retain shelf rockfish species co-occurring with nearshore rockfish species within the open depths, there is growing concern regarding increased encounters by non-permit holders and greater discard mortality from bycatch in deeper depths given that discard mortality is 100% in depths greater than 30 fm. This is of particular concern given both increased trip limits for shelf rockfish species and less constraining depth restrictions allow increased access to these species, as well as drive increased participation in the open access fishery, and therefore increased total mortality. In addition, coverage rates for observers from the WCGOP on small vessels participating in these fisheries provide limited data to inform bycatch rates. Under National Standard 8, reduction of bycatch is a priority and increased observer coverage rates would improve data on discards as the open access fishery for shelf rockfish expands.
+
+### Recreational
+
+The California recreational fishery in the early part of the 1900s was focused on nearshore waters and closer to ports, but expanded further from port and into deeper depths over time. Prior to the groundfish fishery disaster being declared in 2000, there was no time or areas closures for fishing groundfish. During this period, access to deeper depths led to effort being spread over a larger area and filled bag limits with a greater diversity of species from the shelf as well as the nearshore. This resulted in lower catch rates for nearshore rockfish relative to the period after 2000 when depth restrictions at a range of depths starting between 20 to 50 fm were put in place in various management areas north of Point Conception where `r spp` are commonly found. This shift of effort into the nearshore kept catch levels high for nearshore rockfish, including `r spp` (Figure \ref{fig:catch}), despite greatly reduced seasons. While the part of the stock that was available to the fishery in shallower depths was subject to higher fishing effort, the remainder of the stock was subject to reduced fishing effort during more than a decade of depth restrictions in waters deeper than 20 to 30 fm that were put in place to facilitate rebuilding of yelloweye rockfish. 
+
+As the yelloweye rockfish stock continues to rebuild, depth restrictions are expected to lessen, increasing access to more of the habitat for `r spp`. Once fishing is allowed in waters up to 60 fm, effort for `r spp` may decrease as overall effort shifts to the shelf and away from waters where `r spp` are most prevalent. Marine Protected Areas (MPAs) instituted between 2003 and 2012 now encompass 20-30% of the rocky reef habitat within 3 miles of shore in state waters.
+
 
 ## Management History
 
@@ -26,6 +59,6 @@ Summary of management history (e.g., changes in mesh sizes, trip limits, or othe
 
 <!-- Management performance, including a table or tables comparing Overfishing Limit (OFL), Acceptable Biological Catch (ABC), Annual Catch Limit (ACL), landings, and catch (i.e., landings plus discard) for each area and year. Groundfish assessments that estimate dead discarded catch must include a disclaimer noting that total mortality estimates from the WCGOP and from the stock assessment may differ due to the use of different methods. Investigation into how these methods differ is beyond the scope of a benchmark assessment. The rationale for modeling discard mortality can also be provided. This should be included in all update assessments.  -->
 
-## Fisheries off Canada and Alaska
+## Foreign Fisheries
 
-<!-- Description of fisheries for this species off Canada, Alaska and/or Mexico, including references to any recent assessments of those stocks extending beyond the Council’s jurisdiction. STATs are strongly encouraged to include a summary of catches and estimates of stock size and stock status for the most recent ten years if such information can be assembled without excessive difficulty. This is not required for an update assessment.    -->
+`r Spp` does not extend south to Mexico and given that the stock is defined as California only we did not consider the fisheries in Alaska or Canada. 
