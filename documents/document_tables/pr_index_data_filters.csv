@@ -1,0 +1,8 @@
+Filter,Description,Samples,Positive Samples
+District,District > 2,175272,4164
+Year,Remove 2020 due to COVID & 2023 due to rule change,167001,3995
+Interview Site,"Remove Sites <=5 Quillback, Add Remaining SLO County Sites to District 4",138483,3982
+Areas fished,Retain trips occuring in ocean areas,132408,3982
+Gear,Retain trips with primary gear of hook-and-line or troll,124190,3846
+Months fished,Remove Jan-March; recreational rockfish fishery closed,123984,3846
+Stephens-MacCall,Remove predicted false negatives,6527,3846
