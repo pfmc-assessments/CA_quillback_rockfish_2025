@@ -593,6 +593,101 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
+## 0_2_3_updateComps_oldFleets ----
+####------------------------------------------------#
+
+# Update model data for only comp data (does not include comps for indices) but
+# only do so with existing fleet structure (dont add growth fleet comps)
+
+new_name <- "0_2_2_updateComps_oldFleets"
+old_name <- "0_1_0_updateBio"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+#Set up fleet converter to set up any com to fleet=1, rec to fleet=2, growth = fleet=3
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec")) %>%
+  dplyr::mutate(fleet_num = c(1, 2)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+## Update comps
+
+# Length comps
+
+mod$dat$use_lencomp <- 1 #already 1 but useful to set
+mod$dat$lbin_vector <- seq(10, 50, by = 2)
+mod$dat$N_lbins <- length(mod$dat$lbin_vector)
+
+com.lengths <- read.csv(here("data", "forSS3", "Lcomps_PacFIN_unsexed_expanded_10_50.csv")) %>%
+  dplyr::mutate(fleet = "com") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+lcomps.df <- dplyr::bind_rows(com.lengths, rec.lengths) 
+
+mod$dat$lencomp <- lcomps.df
+
+
+# Age comps
+
+mod$dat$agebin_vector <- seq(1, 60, by = 1)
+mod$dat$N_agebins <- length(mod$dat$agebin_vector)
+#Ageing error is up to max age so dont need to reduce to number of data age bins
+#mod$dat$ageerror <- mod$dat$ageerror[, 1:(max(mod$dat$agebin_vector) + 1)]
+
+mod$dat$age_info$combine_M_F <- 0 #dont compress males with females
+
+mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
+#Requires length bins to be set to the length bin index, so need to change CAAL
+#to reflect bin index. Could set this to 3 and keep length bins as is (i.e. as lengths)
+
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+mod$dat$agecomp <- com.CAAL
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+
+####------------------------------------------------#
 ## 0_2_3_updateComps_withNew ----
 ####------------------------------------------------#
 
