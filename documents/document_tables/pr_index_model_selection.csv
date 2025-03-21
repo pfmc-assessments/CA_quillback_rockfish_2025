@@ -1,0 +1,13 @@
+District,Month,Wave3,Year,Year:District,Effort Offset,Df,Log-Likelihood,AICc,Delta
+Included,Included,Excluded,Included,Included,Included,63,-9820.6,19768.4,0
+Included,Included,Included,Included,Included,Included,63,-9820.6,19768.4,0
+Included,Excluded,Included,Included,Included,Included,57,-9832,19779.1,10.7
+Included,Excluded,Excluded,Included,Included,Included,55,-9856.2,19823.4,55.1
+Included,Included,Excluded,Included,Excluded,Included,29,-9922.8,19903.8,135.4
+Included,Included,Included,Included,Excluded,Included,29,-9922.8,19903.8,135.4
+Included,Excluded,Included,Included,Excluded,Included,23,-9938.8,19923.9,155.5
+Included,Excluded,Excluded,Included,Excluded,Included,21,-9962.9,19968,199.6
+Excluded,Included,Excluded,Included,Excluded,Included,27,-10016.1,20086.5,318.1
+Excluded,Included,Included,Included,Excluded,Included,27,-10016.1,20086.5,318.1
+Excluded,Excluded,Included,Included,Excluded,Included,21,-10039.4,20121,352.6
+Excluded,Excluded,Excluded,Included,Excluded,Included,19,-10064.8,20167.8,399.4
