@@ -1,9 +1,9 @@
-##########################################################################################
+##########################################################################################-
 #
 # Model runs for 2025 California Quillback Rockfish 
 #   By: Brian Langseth, Melissa Monk, Julia Coates
 #
-##########################################################################################
+##########################################################################################-
 #Alternative to devtools if it doesn't work on your machine
 #pak::pkg_install("pfmc-assessments/PEPtools")
 #pak::pkg_install("r4ss/r4ss") #Version 1.50.0
@@ -516,8 +516,8 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name), 
-#           exe = here('models/ss3_win.exe'), 
+# r4ss::run(dir = here('models', new_name),
+#           exe = here('models/ss3_win.exe'),
 #           extras = '-nohess',
 #           show_in_console = TRUE, #comment out if you dont want to watch model iterations
 #           skipfinished = FALSE)
@@ -697,11 +697,11 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name),
-#           exe = here('models/ss3_win.exe'),
-#           extras = '-nohess',
-#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
-#           skipfinished = FALSE)
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
@@ -734,18 +734,20 @@ mod <- SS_read(here('models', new_name))
 
 mod$dat$Nfleets <- 5
 mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
                              "fleetname" = "CA_Growth"),
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
                              "fleetname" = "CA_CCFRP"),
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
                              "fleetname" = "CA_ROV"))
 mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
                           "CA_Growth" = mod$dat$len_info[1,],
                           "CA_CCFRP" = mod$dat$len_info[1,],
                           "CA_ROV" = mod$dat$len_info[1,])
 mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
-                          "CA_Growth" = mod$dat$age_info[1,])
+                          "CA_Growth" = mod$dat$age_info[1,],
+                          "CA_CCFRP" = mod$dat$age_info[1,],
+                          "CA_ROV" = mod$dat$age_info[1,])
 mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
                           "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
                           "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
@@ -781,7 +783,40 @@ pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
 mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
 
 
-## Add necessary composition data for indices
+## Add q setup for surveys with index data
+
+#Base the number on fleetinfo and any fishery fleets with CPUE data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets, 
+                                                  fleet.converter[cpuefleets, "fleetname"], 
+                                                  sep = "_"))
+
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = -1,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets, 
+                                                fleet.converter[cpuefleets, "fleetname"], 
+                                                sep = "_"))
+
+
+## Add composition data for indices
 
 #CCFRP - these use number of fish as sample sizes
 ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
@@ -790,6 +825,36 @@ ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps
 names(ccfrp.lengths) <- names(mod$dat$lencomp)
 
 mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
+
+#Now change the selectivity tables....
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, #set to match that of the other fleets
+                                 "CA_Growth" = mod$ctl$size_selex_types[1,],
+                                 "CA_CCFRP" = mod$ctl$size_selex_types[1,],
+                                 "CA_ROV" = mod$ctl$size_selex_types[1,])
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of the other fleets
+                                 "CA_Growth" = mod$ctl$age_selex_types[1,],
+                                 "CA_CCFRP" = mod$ctl$age_selex_types[1,],
+                                 "CA_ROV" = mod$ctl$age_selex_types[1,])
+
+#...and length selectivity parameterization 
+#Set the new fleets selectivity to be the same as the rec fleet for now
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms,
+                                  mod$ctl$size_selex_parms[7:12,],
+                                  mod$ctl$size_selex_parms[7:12,],
+                                  mod$ctl$size_selex_parms[7:12,])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |>
+  as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
+  unlist()
+
+rownames(mod$ctl$size_selex_parms) <- selex_names
+
 
 
 ##
@@ -800,8 +865,8 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name), 
-#           exe = here('models/ss3_win.exe'), 
+# r4ss::run(dir = here('models', new_name),
+#           exe = here('models/ss3_win.exe'),
 #           extras = '-nohess',
 #           show_in_console = TRUE, #comment out if you dont want to watch model iterations
 #           skipfinished = FALSE)

@@ -1,6 +1,6 @@
 #California Quillback Rockfish 2025 assessment Brian Langseth, Melissa Monk, Julia Coates
 #C file created using an r4ss function
-#C file write time: 2025-03-20  08:51:13
+#C file write time: 2025-03-20  08:47:07
 #
 1916 #_styr
 2024 #_endyr
@@ -11,14 +11,11 @@
 -1 #_Nsexes
 90 #_Nages
 1 #_N_areas
-5 #_Nfleets
+2 #_Nfleets
 #_fleetinfo
 #_type	surveytiming	area	units	need_catch_mult	fleetname
 1	-1	1	1	0	CA_Commercial  	#_1
 1	-1	1	1	0	CA_Recreational	#_2
-3	-1	1	1	0	CA_Growth      	#_3
-3	-1	1	1	0	CA_CCFRP       	#_4
-3	-1	1	1	0	CA_ROV         	#_5
 #_Catch data
 #_year	season	fleet	catch	catch_se
  1916	1	1	 0.01597773	0.05	#_1         
@@ -227,39 +224,9 @@
 #_fleet	units	errtype	SD_report
 1	1	0	0	#_CA_Commercial  
 2	1	0	0	#_CA_Recreational
-3	1	0	0	#_CA_Growth      
-4	0	0	0	#_CA_CCFRP       
-5	1	0	0	#_CA_ROV         
 #
 #_CPUE_data
-#_year	seas	index	obs	se_log
- 2004	7	2	  0.21702139	 0.16410198	#_1         
- 2005	7	2	  0.34182023	0.099835298	#_2         
- 2006	7	2	  0.40301984	0.078953113	#_3         
- 2007	7	2	  0.37685866	0.085410832	#_4         
- 2008	7	2	  0.29988581	 0.10253535	#_5         
- 2009	7	2	   0.3038211	0.097091171	#_6         
- 2010	7	2	  0.22401171	 0.15490813	#_7         
- 2011	7	2	  0.23462941	 0.13247514	#_8         
- 2012	7	2	  0.31790517	 0.11711831	#_9         
- 2013	7	2	  0.24022964	 0.12368018	#_10        
- 2014	7	2	   0.2056469	 0.12948766	#_11        
- 2015	7	2	  0.23437115	0.098236009	#_12        
- 2016	7	2	  0.30111497	0.093472634	#_13        
- 2017	7	2	  0.19714986	0.085245607	#_14        
- 2018	7	2	  0.18883389	0.086525946	#_15        
- 2019	7	2	  0.23406141	0.082659756	#_16        
- 2021	7	2	  0.25063074	0.093843052	#_17        
- 2022	7	2	  0.18516352	0.091874529	#_18        
- 2017	7	4	0.0028276783	 0.25800909	#_19        
- 2018	7	4	0.0031355853	  0.1991388	#_20        
- 2019	7	4	0.0017076667	 0.25484629	#_21        
- 2020	7	4	0.0024923061	 0.24127563	#_22        
- 2021	7	4	0.0022295295	 0.24120519	#_23        
- 2022	7	4	0.0035359947	 0.20373617	#_24        
- 2023	7	4	0.0036449627	  0.1889994	#_25        
- 2024	7	4	0.0021620302	 0.22743189	#_26        
--9999	0	0	           0	          0	#_terminator
+-9999 1 1 1 1 # terminator
 0 #_N_discard_fleets
 #_discard_units (1=same_as_catchunits(bio/num); 2=fraction; 3=numbers)
 #_discard_errtype:  >0 for DF of T-dist(read CV below); 0 for normal with CV; -1 for normal with se; -2 for lognormal
@@ -283,9 +250,6 @@
 #_mintailcomp	addtocomp	combine_M_F	CompressBins	CompError	ParmSelect	minsamplesize
 -1	1e-04	0	0	0	0	0.01	#_CA_Commercial  
 -1	1e-04	0	0	0	0	0.01	#_CA_Recreational
--1	1e-04	0	0	0	0	0.01	#_CA_Growth      
--1	1e-04	0	0	0	0	0.01	#_CA_CCFRP       
--1	1e-04	0	0	0	0	0.01	#_CA_ROV         
 21 #_N_lbins
 #_lbin_vector
 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 #_lbin_vector
@@ -361,14 +325,6 @@
  2017	1	2	0	0	456	0	    0	0	    0	     0	     1	     2	     5	    18	    38	    47	    28	    35	    36	    75	    65	    52	    40	     9	     4	     1	#_67        
  2018	1	2	0	0	419	0	    0	0	    0	     0	     0	     0	     1	     7	    24	    38	    41	    38	    38	    60	    68	    60	    32	    10	     2	     0	#_68        
  2019	1	2	0	0	463	0	    0	0	    0	     0	     0	     0	     1	     5	    11	    40	    49	    54	    55	    66	    56	    71	    39	    13	     2	     1	#_69        
- 2017	7	4	0	0	 28	0	    0	0	    0	     0	     0	     0	     2	     2	     2	     2	     3	     0	     5	     5	     4	     7	     4	     1	     1	     0	#_70        
- 2018	7	4	0	0	 53	0	    0	3	    2	     1	     0	     0	     2	     1	     4	     2	     5	     4	     0	    12	    15	     9	    11	     2	     1	     0	#_71        
- 2019	7	4	0	0	 30	0	    0	0	    0	     0	     0	     0	     0	     0	     1	     1	     3	     4	     0	     7	    12	     4	     4	     2	     1	     0	#_72        
- 2020	7	4	0	0	 33	0	    0	0	    1	     1	     0	     4	     3	     1	     0	     0	     3	     4	     2	     3	     6	     9	     2	     2	     0	     0	#_73        
- 2021	7	4	0	0	 34	0	    0	1	    1	     2	     1	     4	     5	     1	     2	     5	     2	     5	     1	     3	     6	     7	     3	     2	     0	     0	#_74        
- 2022	7	4	0	0	 50	0	    0	0	    0	     0	     1	     5	    10	     9	     3	     5	     2	     2	     4	     6	     7	    14	     5	     2	     0	     0	#_75        
- 2023	7	4	0	0	 56	0	    0	1	    2	     2	     4	     4	    23	    20	     7	     4	     4	     8	     4	     4	     6	     6	     2	     1	     0	     0	#_76        
- 2024	7	4	0	0	 39	0	    0	0	    0	     0	     0	     1	     2	     6	    11	     4	     5	     4	     2	     3	     6	     7	     4	     0	     0	     0	#_77        
 -9999	0	0	0	0	  0	0	    0	0	    0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	     0	#_terminator
 90 #_N_agebins
 #
@@ -385,7 +341,6 @@
 #_mintailcomp	addtocomp	combine_M_F	CompressBins	CompError	ParmSelect	minsamplesize
 -1	1e-04	1	0	0	0	1	#_CA_Commercial  
 -1	1e-04	1	0	0	0	1	#_CA_Recreational
--1	1e-04	1	0	0	0	1	#_CA_Growth      
 2 #_Lbin_method: 1=poplenbins; 2=datalenbins; 3=lengths
  #_combine males into females at or below this bin number
 #_X.9999	X0	X0.1	X0.2	X0.3	X0.4	X0.5	X0.6	X0.7	X0.8	X0.9	X0.10	X0.11	X0.12	X0.13	X0.14	X0.15	X0.16	X0.17	X0.18	X0.19	X0.20	X0.21	X0.22	X0.23	X0.24	X0.25	X0.26	X0.27	X0.28	X0.29	X0.30	X0.31	X0.32	X0.33	X0.34	X0.35	X0.36	X0.37	X0.38	X0.39	X0.40	X0.41	X0.42	X0.43	X0.44	X0.45	X0.46	X0.47	X0.48	X0.49	X0.50	X0.51	X0.52	X0.53	X0.54	X0.55	X0.56	X0.57	X0.58	X0.59	X0.60	X0.61	X0.62	X0.63	X0.64	X0.65	X0.66	X0.67	X0.68	X0.69	X0.70	X0.71	X0.72	X0.73	X0.74	X0.75	X0.76	X0.77	X0.78	X0.79	X0.80	X0.81	X0.82	X0.83	X0.84	X0.85	X0.86	X0.87	X0.88	X0.89	X0.90	X0.91	X0.92	X0.93	X0.94	X0.95	X0.96	X0.97
