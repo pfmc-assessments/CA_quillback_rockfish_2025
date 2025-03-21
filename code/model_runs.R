@@ -376,18 +376,21 @@ mod <- SS_read(here('models', new_name))
 #Update fleet information for model, lengths, ages, and indices
 mod$dat$Nfleets <- 5
 mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
                              "fleetname" = "CA_Growth"),
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
                              "fleetname" = "CA_CCFRP"),
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
                              "fleetname" = "CA_ROV"))
 mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
                           "CA_Growth" = mod$dat$len_info[1,],
                           "CA_CCFRP" = mod$dat$len_info[1,],
                           "CA_ROV" = mod$dat$len_info[1,])
 mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
-                          "CA_Growth" = mod$dat$age_info[1,])
+                          "CA_Growth" = mod$dat$age_info[1,],
+                          "CA_CCFRP" = mod$dat$age_info[1,],
+                          "CA_ROV" = mod$dat$age_info[1,])
+mod$dat$age_info$combine_M_F <- 0
 mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
                           "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
                           "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
@@ -438,18 +441,20 @@ rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_unsexed_raw_
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 
-lcomps.df <- dplyr::bind_rows(com.lengths, rec.lengths) 
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(ccfrp.lengths) <- names(com.lengths)
 
-mod$dat$lencomp <- lcomps.df
+mod$dat$lencomp <-dplyr::bind_rows(com.lengths, rec.lengths, ccfrp.lengths)
 
 
 # Age comps
 
 mod$dat$agebin_vector <- seq(1, 60, by = 1)
 mod$dat$N_agebins <- length(mod$dat$agebin_vector)
-mod$dat$ageerror <- mod$dat$ageerror[, 1:(max(mod$dat$agebin_vector) + 1)]
-
-mod$dat$age_info$combine_M_F <- 0 #dont compress males with females
+#Ageing error is up to max age so dont need to reduce to number of data age bins
+#mod$dat$ageerror <- mod$dat$ageerror[, 1:(max(mod$dat$agebin_vector) + 1)]
 
 mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
 #Requires length bins to be set to the length bin index, so need to change CAAL
@@ -469,6 +474,37 @@ growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_1
   as.data.frame()
 
 mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
+
+
+# Now change the selectivity tables....
+
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, #set to match that of the other fleets
+                                  "CA_Growth" = mod$ctl$size_selex_types[1,],
+                                  "CA_CCFRP" = mod$ctl$size_selex_types[1,],
+                                  "CA_ROV" = mod$ctl$size_selex_types[1,])
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of the other fleets
+                                 "CA_Growth" = mod$ctl$age_selex_types[1,],
+                                 "CA_CCFRP" = mod$ctl$age_selex_types[1,],
+                                 "CA_ROV" = mod$ctl$age_selex_types[1,])
+
+#...and length selectivity parameterization 
+#Set the new fleets selectivity to be the same as the rec fleet for now
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms,
+                                  mod$ctl$size_selex_parms[7:12,],
+                                  mod$ctl$size_selex_parms[7:12,],
+                                  mod$ctl$size_selex_parms[7:12,])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |> 
+  as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
+  unlist()
+
+rownames(mod$ctl$size_selex_parms) <- selex_names
 
 
 
@@ -492,20 +528,40 @@ pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
                 "index" = fleet) %>%
   as.data.frame()
 
-
 mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
 
 
-## Add necessary composition data for indices
+# Add q setup for surveys with index data
 
-#CCFRP - these use number of fish as sample sizes
-ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
-  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
-  as.data.frame()
-names(ccfrp.lengths) <- names(mod$dat$lencomp)
+#Base the number on fleetinfo and any fishery fleets with CPUE data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets, 
+                                                  fleet.converter[cpuefleets, "fleetname"], 
+                                                  sep = "_"))
 
-mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
-
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = -1,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets, 
+                                                fleet.converter[cpuefleets, "fleetname"], 
+                                                sep = "_"))
 
 
 ##
@@ -516,12 +572,11 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name),
-#           exe = here('models/ss3_win.exe'),
-#           extras = '-nohess',
-#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
-#           skipfinished = FALSE)
-
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
