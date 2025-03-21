@@ -449,7 +449,7 @@ mod$dat$agebin_vector <- seq(1, 60, by = 1)
 mod$dat$N_agebins <- length(mod$dat$agebin_vector)
 mod$dat$ageerror <- mod$dat$ageerror[, 1:(max(mod$dat$agebin_vector) + 1)]
 
-mod$dat$age_info$combine_M_F <- c(0, 0, 0) #dont compress males with females
+mod$dat$age_info$combine_M_F <- 0 #dont compress males with females
 
 mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
 #Requires length bins to be set to the length bin index, so need to change CAAL
@@ -593,7 +593,7 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_2_3_updateComps_oldFleets ----
+## 0_2_2_updateComps_oldFleets ----
 ####------------------------------------------------#
 
 # Update model data for only comp data (does not include comps for indices) but
@@ -765,8 +765,6 @@ mod$dat$agebin_vector <- seq(1, 60, by = 1)
 mod$dat$N_agebins <- length(mod$dat$agebin_vector)
 #Ageing error is up to max age so dont need to reduce to number of data age bins
 #mod$dat$ageerror <- mod$dat$ageerror[, 1:(max(mod$dat$agebin_vector) + 1)]
-
-mod$dat$age_info$combine_M_F <- c(0, 0, 0) #dont compress males with females
 
 mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
 #Requires length bins to be set to the length bin index, so need to change CAAL
