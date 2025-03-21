@@ -415,12 +415,13 @@ age_bins <- seq(1,60,1)
 
 #These are a mix of various rec projects and commercial and survey. For these entries
 #pull all non-commercial non-expanded comps for use as a "growth" fleet.
+#Note that what is labelled here as SWFSC boxed is actually commercial samples (all 2007)
 #Do as marginals and CAAL, and do for CCFRP fleet separate, and included
 
-age_ca$fleet1 <- dplyr::case_when(age_ca$sample_type %in% c("Commercial") ~ "Com",
+age_ca$fleet1 <- dplyr::case_when(age_ca$sample_type %in% c("Commercial", "Unknown") ~ "Com",
                                   TRUE ~ "Growth")
 age_ca$fleet2 <- dplyr::case_when(grepl("CCFRP", age_ca$sample_type) ~ "CCFRP",
-                                  age_ca$sample_type %in% c("Commercial") ~ "Com",
+                                  age_ca$sample_type %in% c("Commercial", "Unknown") ~ "Com",
                                   TRUE ~ "other")
 
 

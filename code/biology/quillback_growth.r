@@ -139,6 +139,7 @@ vb_est_all<- est_vbgrowth(
 vb_est_all$all_growth
  #        K       Linf         L0        CV0        CV1
  #0.1782938 40.9971124  3.9225748  0.2262690  0.0649841
+#write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
 
 #males only
 length_age_males <- est_vbgrowth(

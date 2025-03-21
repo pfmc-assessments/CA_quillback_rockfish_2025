@@ -1,9 +1,9 @@
-##########################################################################################
+##########################################################################################-
 #
 # Model runs for 2025 California Quillback Rockfish 
 #   By: Brian Langseth, Melissa Monk, Julia Coates
 #
-##########################################################################################
+##########################################################################################-
 #Alternative to devtools if it doesn't work on your machine
 #pak::pkg_install("pfmc-assessments/PEPtools")
 #pak::pkg_install("r4ss/r4ss") #Version 1.50.0
@@ -37,7 +37,6 @@ old_name <- "model Number_model name"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -171,7 +170,6 @@ old_name <- "0_0_1_2021base"
 #Use ss_new inputs so have commonality with other SS3 models
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -228,8 +226,6 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-#Model runs
-
 
 
 ####------------------------------------------------#
@@ -248,7 +244,6 @@ old_name <- "0_0_2_2025setup"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -267,7 +262,7 @@ m_se <- 0.31
 m_prior <- 3 #log-normal
 
 mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0.01, 0.15, m_init, round(log(m_init), 2), m_se, m_prior, 2)
+  c(0.01, 0.15, m_init, round(log(m_init), 2), m_se, m_prior, -2)
 
 
 ### Update growth prior ----
@@ -275,15 +270,16 @@ mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'P
 mod$ctl$Growth_Age_for_L1 <- 0
 
 #Growth curve from all individuals. Follows from quillback_growth.R
-vb_k <- 0.178
-vb_linf <- 40.997
-vb_l0 <- 3.922
-vb_cv0 <- 0.226
-vb_cv1 <- 0.065
+vb_ests <- read.csv(here("data", "vonb_ests.csv"))
+vb_k <- vb_ests[vb_ests$X == "K", "ests"]
+vb_linf <- vb_ests[vb_ests$X == "Linf", "ests"]
+vb_l0 <- vb_ests[vb_ests$X == "L0", "ests"]
+vb_cv0 <- vb_ests[vb_ests$X == "CV0", "ests"]
+vb_cv1 <- vb_ests[vb_ests$X == "CV1", "ests"]
 vb_prior <- 0
 
 mod$ctl$MG_parms['L_at_Amin_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0, 10, vb_l0, vb_l0, 0, vb_prior, -9)
+  c(0, 20, vb_l0, vb_l0, 0, vb_prior, -9)
 mod$ctl$MG_parms['L_at_Amax_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(35, 50, vb_linf, vb_linf, 0, vb_prior, -9)
 mod$ctl$MG_parms['VonBert_K_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
@@ -291,24 +287,24 @@ mod$ctl$MG_parms['VonBert_K_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', '
 mod$ctl$MG_parms['CV_young_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(0.01, 0.5, vb_cv0, vb_cv0, 0, vb_prior, -9)
 mod$ctl$MG_parms['CV_old_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0.01, 0.5, vb_cv1, vb_cv1, 0, vb_prior, -9)
+  c(0.001, 0.5, vb_cv1, vb_cv1, 0, vb_prior, -9)
 
 
 ### Update LW relationship ----
 
-lw_a <- 1.599251e-5
-lw_b <- 3.076563
+lw_ests <- read.csv(here("data", "lw_ests.csv"))
+lw_a <- lw_ests[lw_ests$sex == "all", "A"]
+lw_b <- lw_ests[lw_ests$sex == "all", "B"]
 lw_prior <- 0
 
 mod$ctl$MG_parms['Wtlen_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(0, 0.1, lw_a, lw_a, 0, vb_prior, -9)
+  c(0, 0.1, lw_a, lw_a, 0, lw_prior, -9)
 mod$ctl$MG_parms['Wtlen_2_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
-  c(2, 4, lw_b, lw_b, 0, vb_prior, -9)
+  c(2, 4, lw_b, lw_b, 0, lw_prior, -9)
 
 
 ### Update maturity ----
 
-#With updated data as of Feb 28, 2025
 l50_fxn <- 28.96 #-a/b
 l50_se <- 0.599 #se of -a/b
 slope_fxn <- -0.606 #b (SS3 manual says this must be negative)
@@ -323,9 +319,9 @@ mod$ctl$MG_parms['Mat_slope_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', '
   
 ### Update fecundity ----
 
-eggs_b <- 3.702
-eggs_a <- round((0.00007809 * 10^eggs_b)/1000000, 10)
-fec_prior <- 0 #turning off
+eggs_b <- 4.440
+eggs_a <- 4.216e-08
+fec_prior <- 0
 
 mod$ctl$MG_parms['Eggs_alpha_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'PR_type', 'PHASE')] <-
   c(-3, 3, eggs_a, eggs_a, 0, fec_prior, -9)
@@ -353,58 +349,10 @@ SS_plots(pp, plot = c(1:26))
 
 
 ####------------------------------------------------#
-## 0_1_1_updateInputs ----
-####------------------------------------------------#
-
-# Update model inputs based on new decisions
-
-new_name <- "0_1_1_updateInputs"
-old_name <- "0_1_0_updateBio"
-
-
-##
-#Copy inputs
-##
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               use_ss_new = TRUE,
-               overwrite = TRUE)
-
-mod <- SS_read(here('models', new_name))
-
-
-##
-#Make Changes
-##
-
-# Change accumulator age
-mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
-
-# Change minimum population bin size
-mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
-
-
-##
-#Output files and run
-##
-
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
-
-
-
-
-####------------------------------------------------#
 ## 0_2_0_updateData ----
 ####------------------------------------------------#
+
+# Update model data for all types of data
 
 new_name <- "0_2_0_updateData"
 old_name <- "0_1_0_updateBio"
@@ -416,7 +364,6 @@ old_name <- "0_1_0_updateBio"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -426,11 +373,29 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-#Set up fleet converter to set up any com to fleet=1, and rec to fleet=2
+#Update fleet information for model, lengths, ages, and indices
+mod$dat$Nfleets <- 5
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Growth"),
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_CCFRP"),
+                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_ROV"))
+mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$len_info[1,],
+                          "CA_CCFRP" = mod$dat$len_info[1,],
+                          "CA_ROV" = mod$dat$len_info[1,])
+mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$age_info[1,])
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
+                          "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
+                          "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
+                          "CA_ROV" = c("fleet" = 5, "units" = 1, "errtype" = 0, "SD_report" = 0))
 
 fleet.converter <- mod$dat$fleetinfo %>%
-  dplyr::mutate(fleet = c("com", "rec")) %>%
-  dplyr::mutate(fleet_num = c("1", "2")) %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
   dplyr::select(fleetname, fleet, fleet_num)
 
 
@@ -456,30 +421,6 @@ mod$dat$catch <- updated.catch.df
 
 
 ### Update comps --------------------------------
-
-
-# We need to change fleet structure because we are adding CAAL for growth fleet
-
-mod$dat$Nfleets <- 3
-mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
-                           c("type" = 3, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
-                             "fleetname" = "CA_Growth"))
-mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
-                          "CA_Growth" = mod$dat$len_info[1,])
-mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
-                          "CA_Growth" = mod$dat$age_info[1,])
-mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
-                          "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0))
-
-#Set up fleet converter to set up any com to fleet=1, rec to fleet=2, growth = fleet=3
-
-fleet.converter <- mod$dat$fleetinfo %>%
-  dplyr::mutate(fleet = c("com", "rec", "growth")) %>%
-  dplyr::mutate(fleet_num = c(1, 2, 3)) %>%
-  dplyr::select(fleetname, fleet, fleet_num)
-
-
-## Now update composition data
 
 # Length comps
 
@@ -514,6 +455,12 @@ mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
 #Requires length bins to be set to the length bin index, so need to change CAAL
 #to reflect bin index. Could set this to 3 and keep length bins as is (i.e. as lengths)
 
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
 growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_10_50_1_60.csv")) %>%
   dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
   dplyr::mutate(ageerr = 1) %>%
@@ -521,7 +468,43 @@ growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_1
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 
-mod$dat$agecomp <- growth.CAAL
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
+
+
+
+### Update indices --------------------------------
+
+#CCFRP
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "ccfrp") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+#PR dockside
+pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "rec") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
+
+
+## Add necessary composition data for indices
+
+#CCFRP - these use number of fish as sample sizes
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(ccfrp.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
 
 
 
@@ -533,8 +516,8 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name), 
-#           exe = here('models/ss3_win.exe'), 
+# r4ss::run(dir = here('models', new_name),
+#           exe = here('models/ss3_win.exe'),
 #           extras = '-nohess',
 #           show_in_console = TRUE, #comment out if you dont want to watch model iterations
 #           skipfinished = FALSE)
@@ -546,6 +529,8 @@ SS_write(mod,
 ## 0_2_1_updateCatch ----
 ####------------------------------------------------#
 
+# Update model inputs for catch only
+
 new_name <- "0_2_1_updateCatch"
 old_name <- "0_1_0_updateBio"
 
@@ -556,7 +541,6 @@ old_name <- "0_1_0_updateBio"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -600,17 +584,19 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name), 
-#           exe = here('models/ss3_win.exe'), 
-#           extras = '-nohess',
-#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
-#           skipfinished = FALSE)
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
 ####------------------------------------------------#
 ## 0_2_1_updateComps ----
 ####------------------------------------------------#
+
+# Update model data for only comp data (does not include comps for indices)
 
 new_name <- "0_2_2_updateComps"
 old_name <- "0_1_0_updateBio"
@@ -622,7 +608,6 @@ old_name <- "0_1_0_updateBio"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -688,6 +673,12 @@ mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
 #Requires length bins to be set to the length bin index, so need to change CAAL
 #to reflect bin index. Could set this to 3 and keep length bins as is (i.e. as lengths)
 
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
 growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_10_50_1_60.csv")) %>%
   dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
   dplyr::mutate(ageerr = 1) %>%
@@ -695,7 +686,175 @@ growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_1
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
   
-mod$dat$agecomp <- growth.CAAL
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+
+####------------------------------------------------#
+## 0_2_3_updateIndices ----
+####------------------------------------------------#
+
+# Update model data for indices (also includes comps for indices)
+
+new_name <- "0_2_3_updateIndices"
+old_name <- "0_1_0_updateBio"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+## Add fleets for indices. Keep fleet structure from 0_2_2_updateComps
+
+mod$dat$Nfleets <- 5
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Growth"),
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_CCFRP"),
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_ROV"))
+mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$len_info[1,],
+                          "CA_CCFRP" = mod$dat$len_info[1,],
+                          "CA_ROV" = mod$dat$len_info[1,])
+mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$age_info[1,],
+                          "CA_CCFRP" = mod$dat$age_info[1,],
+                          "CA_ROV" = mod$dat$age_info[1,])
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
+                          "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
+                          "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
+                          "CA_ROV" = c("fleet" = 5, "units" = 1, "errtype" = 0, "SD_report" = 0))
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+## Add index data
+
+#CCFRP
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "ccfrp") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+#PR dockside
+pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "rec") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
+
+
+## Add q setup for surveys with index data
+
+#Base the number on fleetinfo and any fishery fleets with CPUE data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets, 
+                                                  fleet.converter[cpuefleets, "fleetname"], 
+                                                  sep = "_"))
+
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = -1,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets, 
+                                                fleet.converter[cpuefleets, "fleetname"], 
+                                                sep = "_"))
+
+
+## Add composition data for indices
+
+#CCFRP - these use number of fish as sample sizes
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(ccfrp.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
+
+#Now change the selectivity tables....
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, #set to match that of the other fleets
+                                 "CA_Growth" = mod$ctl$size_selex_types[1,],
+                                 "CA_CCFRP" = mod$ctl$size_selex_types[1,],
+                                 "CA_ROV" = mod$ctl$size_selex_types[1,])
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of the other fleets
+                                 "CA_Growth" = mod$ctl$age_selex_types[1,],
+                                 "CA_CCFRP" = mod$ctl$age_selex_types[1,],
+                                 "CA_ROV" = mod$ctl$age_selex_types[1,])
+
+#...and length selectivity parameterization 
+#Set the new fleets selectivity to be the same as the rec fleet for now
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms,
+                                  mod$ctl$size_selex_parms[7:12,],
+                                  mod$ctl$size_selex_parms[7:12,],
+                                  mod$ctl$size_selex_parms[7:12,])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |>
+  as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
+  unlist()
+
+rownames(mod$ctl$size_selex_parms) <- selex_names
+
 
 
 ##
@@ -715,11 +874,78 @@ SS_write(mod,
 
 
 ####------------------------------------------------#
-## 0_2_3_updateIndices ----
+## 0_3_1_udpateSelex ----
 ####------------------------------------------------#
 
-new_name <- "0_2_3_updateIndices"
-old_name <- "0_1_0_updateBio"
+#Update selectivity blocks
+
+new_name <- "0_3_1_blockSelex"
+old_name <- "0_2_0_updateData"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Add selectivity blocks
+mod$ctl$size_selex_types
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c('name1',
+                                                 'name2',
+                                                 new_name)))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('label for model 1',
+                                     'label for model 2',
+                                     'label for new model'),
+                    subplots = c(1,3), print = TRUE, plotdir = here('models', new_name))
+
+dev.off()
+
+
+
+####------------------------------------------------#
+## 0_4_1_updateInputs ----
+####------------------------------------------------#
+
+# Update model inputs based on new decisions from earlier versions
+
+new_name <- "0_4_1_updateInputs"
+old_name <- "0_2_0_updateData"
 
 
 ##
@@ -738,7 +964,11 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
+# Change accumulator age
+mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
 
+# Change minimum population bin size
+mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
 
 
 ##
@@ -749,11 +979,59 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name), 
-#           exe = here('models/ss3_win.exe'), 
-#           extras = '-nohess',
-#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
-#           skipfinished = FALSE)
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+####------------------------------------------------#
+## 0_4_2_fixWarnings ----
+####------------------------------------------------#
+
+# Make changes to fix warnings
+
+new_name <- "0_4_2_fixWarnings"
+old_name <- "0_4_1_updateInputs"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               use_ss_new = TRUE,
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Change accumulator age
+mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
+
+# Change minimum population bin size
+mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
