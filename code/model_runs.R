@@ -584,11 +584,11 @@ SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
 
-# r4ss::run(dir = here('models', new_name), 
-#           exe = here('models/ss3_win.exe'), 
-#           extras = '-nohess',
-#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
-#           skipfinished = FALSE)
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
