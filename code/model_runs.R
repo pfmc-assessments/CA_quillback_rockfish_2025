@@ -593,12 +593,13 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_2_2_updateComps ----
+## 0_2_3_updateComps_withNew ----
 ####------------------------------------------------#
 
-# Update model data for only comp data (does not include comps for indices)
+# Update model data for only comp data (does not include comps for indices) but
+# include comp data for new fleet (growth fleet)
 
-new_name <- "0_2_2_updateComps"
+new_name <- "0_2_3_updateComps_withNew"
 old_name <- "0_1_0_updateBio"
 
 
