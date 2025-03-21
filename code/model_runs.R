@@ -734,12 +734,12 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_2_3_updateIndices ----
+## 0_2_4_updateIndices ----
 ####------------------------------------------------#
 
 # Update model data for indices (also includes comps for indices)
 
-new_name <- "0_2_3_updateIndices"
+new_name <- "0_2_4_updateIndices"
 old_name <- "0_1_0_updateBio"
 
 
