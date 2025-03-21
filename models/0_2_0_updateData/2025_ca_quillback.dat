@@ -1,6 +1,6 @@
 #California Quillback Rockfish 2025 assessment Brian Langseth, Melissa Monk, Julia Coates
 #C file created using an r4ss function
-#C file write time: 2025-03-20  08:51:12
+#C file write time: 2025-03-21  13:33:05
 #
 1916 #_styr
 2024 #_endyr
@@ -16,9 +16,9 @@
 #_type	surveytiming	area	units	need_catch_mult	fleetname
 1	-1	1	1	0	CA_Commercial  	#_1
 1	-1	1	1	0	CA_Recreational	#_2
-3	-1	1	1	0	CA_Growth      	#_3
-3	-1	1	1	0	CA_CCFRP       	#_4
-3	-1	1	1	0	CA_ROV         	#_5
+3	1 	1	1	0	CA_Growth      	#_3
+3	1 	1	1	0	CA_CCFRP       	#_4
+3	1 	1	1	0	CA_ROV         	#_5
 #_Catch data
 #_year	season	fleet	catch	catch_se
  1916	1	1	 0.015	0.05	#_1         
@@ -410,15 +410,17 @@
 #
 #_ageing_error
 1 #_N_ageerror_definitions
-#_age0	age1	age2	age3	age4	age5	age6	age7	age8	age9	age10	age11	age12	age13	age14	age15	age16	age17	age18	age19	age20	age21	age22	age23	age24	age25	age26	age27	age28	age29	age30	age31	age32	age33	age34	age35	age36	age37	age38	age39	age40	age41	age42	age43	age44	age45	age46	age47	age48	age49	age50	age51	age52	age53	age54	age55	age56	age57	age58	age59	age60
-  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	#_1
-0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	#_2
+#_age0	age1	age2	age3	age4	age5	age6	age7	age8	age9	age10	age11	age12	age13	age14	age15	age16	age17	age18	age19	age20	age21	age22	age23	age24	age25	age26	age27	age28	age29	age30	age31	age32	age33	age34	age35	age36	age37	age38	age39	age40	age41	age42	age43	age44	age45	age46	age47	age48	age49	age50	age51	age52	age53	age54	age55	age56	age57	age58	age59	age60	age61	age62	age63	age64	age65	age66	age67	age68	age69	age70	age71	age72	age73	age74	age75	age76	age77	age78	age79	age80	age81	age82	age83	age84	age85	age86	age87	age88	age89	age90
+  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	  -1	#_1
+0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.01	#_2
 #
 #_age_info
 #_mintailcomp	addtocomp	combine_M_F	CompressBins	CompError	ParmSelect	minsamplesize
 -1	1e-04	0	0	0	0	1	#_CA_Commercial  
 -1	1e-04	0	0	0	0	1	#_CA_Recreational
 -1	1e-04	0	0	0	0	1	#_CA_Growth      
+-1	1e-04	0	0	0	0	1	#_CA_CCFRP       
+-1	1e-04	0	0	0	0	1	#_CA_ROV         
 2 #_Lbin_method: 1=poplenbins; 2=datalenbins; 3=lengths
  #_combine males into females at or below this bin number
 #_year	month	fleet	sex	partition	ageerr	Lbin_lo	Lbin_hi	input_n	u1	u2	u3	u4	u5	u6	u7	u8	u9	u10	u11	u12	u13	u14	u15	u16	u17	u18	u19	u20	u21	u22	u23	u24	u25	u26	u27	u28	u29	u30	u31	u32	u33	u34	u35	u36	u37	u38	u39	u40	u41	u42	u43	u44	u45	u46	u47	u48	u49	u50	u51	u52	u53	u54	u55	u56	u57	u58	u59	u60
