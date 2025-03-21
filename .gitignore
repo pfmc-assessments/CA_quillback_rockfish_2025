@@ -66,6 +66,7 @@ literature/
 !data_explore_figs/*.png
 #and those within subfolders of exploratory figures
 !data_explore_figs/**/*.png
+!documents/document_figures/*.png
 
 
 # ignore stock synthesis files
