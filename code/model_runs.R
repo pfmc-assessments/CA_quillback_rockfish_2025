@@ -446,7 +446,12 @@ ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps
   as.data.frame()
 names(ccfrp.lengths) <- names(com.lengths)
 
-mod$dat$lencomp <-dplyr::bind_rows(com.lengths, rec.lengths, ccfrp.lengths)
+rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+mod$dat$lencomp <-dplyr::bind_rows(com.lengths, rec.lengths, ccfrp.lengths, rov.lengths)
 
 
 # Age comps
@@ -510,7 +515,6 @@ rownames(mod$ctl$size_selex_parms) <- selex_names
 
 ### Update indices --------------------------------
 
-#CCFRP
 ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
   dplyr::mutate(fleet = "ccfrp") %>%
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
@@ -519,7 +523,6 @@ ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>
                 "index" = fleet) %>%
   as.data.frame()
 
-#PR dockside
 pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
   dplyr::mutate(fleet = "rec") %>%
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
@@ -528,7 +531,13 @@ pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
                 "index" = fleet) %>%
   as.data.frame()
 
-mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
+rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index, rov_index)
 
 
 # Add q setup for surveys with index data
@@ -957,8 +966,15 @@ pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
                 "index" = fleet) %>%
   as.data.frame()
 
+#ROV
+rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
 
-mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index)
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index, rov_index)
 
 
 ## Add q setup for surveys with index data
@@ -996,11 +1012,19 @@ mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
 
 ## Add composition data for indices
 
-#CCFRP - these use number of fish as sample sizes
+#CCFRP
+#these use number of fish as sample sizes
 ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 names(ccfrp.lengths) <- names(mod$dat$lencomp)
+
+#ROV
+rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(rov.lengths) <- names(mod$dat$lencomp)
 
 mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
 

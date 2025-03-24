@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-03-21  12:04:24
+#C file write time: 2025-03-24  10:30:48
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -115,11 +115,13 @@
 #_fleet	link	link_info	extra_se	biasadj	float  #  fleetname
     2	1	0	0	0	0	#_2_CA_Recreational
     4	1	0	0	0	0	#_4_CA_CCFRP       
+    5	1	0	0	0	0	#_5_CA_ROV         
 -9999	0	0	0	0	0	#_terminator       
 #_Q_parms(if_any);Qunits_are_ln(q)
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
 -25	25	0	0	1	0	-1	0	0	0	0	0	0	0	#_LnQ_base_2_CA_Recreational
 -25	25	0	0	1	0	-1	0	0	0	0	0	0	0	#_LnQ_base_4_CA_CCFRP       
+-25	25	0	0	1	0	-1	0	0	0	0	0	0	0	#_LnQ_base_5_CA_ROV         
 #_no timevary Q parameters
 #
 #_size_selex_patterns
