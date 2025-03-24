@@ -1079,9 +1079,9 @@ r4ss::run(dir = here('models', new_name),
 ## 0_3_1_udpateSelex ----
 ####------------------------------------------------#
 
-#Update selectivity blocks
+#Update selectivity initialization
 
-new_name <- "0_3_1_blockSelex"
+new_name <- "0_3_1_updateSelex"
 old_name <- "0_2_0_updateData"
 
 
@@ -1118,25 +1118,96 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-pp <- SS_output(here('models', new_name))
-SS_plots(pp, plot = c(1:26))
+
+
+####------------------------------------------------#
+## 0_3_2_udpateSelexBlocks ----
+####------------------------------------------------#
+
+#Update selectivity blocks
+
+new_name <- "0_3_2_updateSelexBlocks"
+old_name <- "0_2_0_updateData"
 
 
 ##
-#Comparison plots
+#Copy inputs
 ##
 
-xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
-                                      subdir = c('name1',
-                                                 'name2',
-                                                 new_name)))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('label for model 1',
-                                     'label for model 2',
-                                     'label for new model'),
-                    subplots = c(1,3), print = TRUE, plotdir = here('models', new_name))
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
 
-dev.off()
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Add selectivity blocks
+mod$ctl$size_selex_types
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+
+####------------------------------------------------#
+## 0_3_3_addAgeErr ----
+####------------------------------------------------#
+
+#Add new ageing error matrix
+
+new_name <- "0_3_3_addAgeErr"
+old_name <- "0_2_0_updateData"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Add ageing error matrix
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
 
 
 
@@ -1169,8 +1240,12 @@ mod <- SS_read(here('models', new_name))
 # Change accumulator age
 mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
 
+#WOULD NEED TO CHANGE AGEING ERROR AT THIS POINT TOO
+
 # Change minimum population bin size
 mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
+
+#MAY NOT NEED TO DO THIS GIVEN NEW GROWTH PATTERN
 
 
 ##
