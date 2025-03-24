@@ -31,7 +31,7 @@ dat <- dat %>%
         filter(!is.na(SS1_COUNT))
 
 
-#my guess: get the number of eggs per gram, average the two samples and then multiple by the gonad weight
+#get the number of eggs per gram, average the two samples and then multiple by the gonad weight
 dat <- dat %>% 
     mutate(fec_samp1 = SS1_COUNT/SS1_WEIGHT_G, 
             fec_samp2 = SS2_COUNT/SS2_WEIGHT_G) %>%
@@ -47,12 +47,12 @@ ggplot(dat, aes(length_cm, OVERALL_TOTAL_WEIGHT_G)) + geom_point(size = 10)
 ggplot(dfo.dat, aes(length_cm, somatic_weight))  + geom_point(size = 10)
 
 add_curve <- function(plot, i){
-        return(plot + stat_function(aes(x = 30:40), function(x) {3.93e-07*x^3.7 }))
+        return(plot + stat_function(aes(x = 30:40), function(x) {3.93e-07*x^3.7 })) #
 }
 
 ej_Est <- function(x) {3.93e-07*x^3.7 }
 #look at the data
-ggplot(dat, aes(x = length_cm, y = fec_mil)) + 
+ggplot(dat, aes(x = length_cm, y = fec_mil, xmin = 0, xmax = 42)) + 
 geom_point(size = 10) + geom_line(stat = 'function', fun = ej_Est, color = "blue")
 
 
@@ -75,7 +75,7 @@ x <- seq(28,46, by = 1)
 
 # plot the data and the model fits; E.J.'s and the new one
 ca_est <- function(x) {alpha.ca.mod*x^beta.ca.mod}
-ggplot(dat, aes(x = length_cm, y = fec_mil, colour = PORT)) + 
+ggplot(dat, aes(x = length_cm, y = fec_mil, colour = PORT,  xmin = 0, xmax = 42)) + 
 geom_point(size = 5) + #geom_line(stat = 'function', fun = ej_Est, color = "blue") +
 geom_line(stat = 'function', fun = ca_est, color = "red")
 
