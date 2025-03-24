@@ -1100,8 +1100,77 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-# Add selectivity blocks
-mod$ctl$size_selex_types
+# Set up selectivity parameterization according following guidance in
+# best practices handbook (section 2.7.3). Handbook can be found at 
+# https://github.com/pfmc-assessments/pfmc_assessment_handbook 
+
+selex_new <- mod$ctl$size_selex_parms
+
+#since all PR_types are zero these aren't used, just set to any number
+selex_new$PR_SD <- 0 
+selex_new$PRIOR <- 0
+
+# Fix three parameters of double normal
+# -999 for p5 and p6 means set control to p3 and p4
+selex_new$INIT[grep('P_2', rownames(selex_new))] <- -15
+selex_new$INIT[grep('P_5', rownames(selex_new))] <- -999
+selex_new$INIT[grep('P_6', rownames(selex_new))] <- -999
+selex_new$PHASE[grep('P_2', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_5', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_6', rownames(selex_new))] <- -9
+
+# calculate initial values for p1, p3, p4 for each fleet
+selex_modes <- mod$dat$lencomp |>
+  dplyr::arrange(fleet) |>
+  dplyr::group_by(fleet) |>
+  dplyr::summarise(dplyr::across(l10:l50, ~ sum(Nsamp*.x)/sum(Nsamp))) |> 
+  tidyr::pivot_longer(cols = -fleet, names_to = 'len_bin', values_to = 'dens') |>
+  tidyr::separate(col = len_bin, into = c('sex', 'length'), sep = 1) |> #with unsexed sex is just "l"
+  dplyr::group_by(fleet, sex) |> 
+  dplyr::summarise(mode = length[which.max(dens)]) |>
+  dplyr::summarise(mode = mean(as.numeric(mode))) |>
+  dplyr::mutate(asc.slope = log(8*(mode - 12)),
+                desc.slope = log(8*(66-mode)))
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |>
+  as.list()
+
+# Parameter 1
+p1.ind <- grep('P_1', rownames(selex_new))
+selex_new$LO[p1.ind] <- 11 #midpoint of first bin
+selex_new$HI[p1.ind] <- 51 #midpoint of last bin
+selex_new$PHASE[p1.ind] <- 4
+#Only update the mode for fleets we have length data for
+p1.ind.2 <- intersect(
+  grep('P_1', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p1.ind.2] <- purrr::map(selex_fleets, 
+                                     ~ selex_modes$mode[selex_modes$fleet == fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |> 
+  unlist()
+
+
+### P_3
+p3.ind <- grep('P_3', rownames(selex_new))
+selex_new$PHASE[p3.ind] <- 5
+selex_new$LO[p3.ind] <- 0
+selex_new$HI[p3.ind] <- 9
+selex_new$INIT[p3.ind] <- purrr::map(selex_fleets, 
+                                     ~ selex_modes$asc.slope[selex_modes$FltSvy == 
+                                                               fleet.converter$fleet[fleet.converter$fleetname == 
+                                                                                       .x]]) |>
+  unlist()
+
+### P_4
+p4.ind <- grep('P_4', rownames(selex_new))
+selex_new$PHASE[p4.ind] <- 5
+selex_new$LO[p4.ind] <- 0
+selex_new$HI[p4.ind] <- 9
+selex_new$INIT[p4.ind] <- purrr::map(selex_fleets, 
+                                     ~ selex_modes$desc.slope[selex_modes$FltSvy == 
+                                                                fleet.converter$fleet[fleet.converter$fleetname == 
+                                                                                        .x]]) |>
+  unlist()
 
 
 ##
