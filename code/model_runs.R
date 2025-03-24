@@ -1268,6 +1268,9 @@ mod <- SS_read(here('models', new_name))
 ##
 
 # Add ageing error matrix
+ageerr <- read.csv(here("data", "forSS3", "Ageing_error_B01S11_forSS.csv"))
+
+mod$dat$ageerror <- ageerr
 
 
 ##
