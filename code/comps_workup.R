@@ -63,7 +63,7 @@ bio_mg <- read.csv(here("data","length_processed_noShare","CAquillback_historica
 bio_survey <- read.csv(here("data","length_processed_noShare","CAquillback_wcgbts_triennial_bio.csv"), header = TRUE)
 
 ## ROV bds
-bio_rov <- data.frame(NA)
+bio_rov <- read.csv(here("data", "length_processed_noShare", "CAquillback_rov_bio.csv"), header = TRUE)
 
 
 ##
@@ -782,3 +782,56 @@ write.csv(com_comps_faa, here("data", "forSS3", paste0("CAAL_PacFIN_FAA_unsexed_
                                                      length_bins[1], "_", tail(length_bins,1),
                                                      "_", age_bins[1], "_", tail(age_bins,1),
                                                      ".csv")), row.names = FALSE)
+
+
+
+###########################-
+## ROV Length comps ----
+###########################-
+
+#Read in data so dont have to process script up to this point
+
+out <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.csv"))
+
+rov_out <- out %>% dplyr::filter(source %in% c("ROV"))
+
+
+##
+#Basic. Output with both number of samples and number of transects
+##
+
+#rov_out$common_name <- "quillback" #needed if save to dir
+#rov_out$project <- "recreational" #needed if save to dir
+rov_out$trawl_id <- rov_out$tripID #trawl_id needed to calculate input_n for tows (trips) option.  
+
+#Run comps with total samples
+lfs_nsamp <-  nwfscSurvey::get_raw_comps(
+  data = rov_out, 
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("total_samples"),
+  month = 7,
+  fleet = "rov",
+  dir = NULL)
+
+#Now run comps with trips
+lfs <-  nwfscSurvey::get_raw_comps(
+  data = rov_out, 
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("tows"),
+  month = 7,
+  fleet = "rov",
+  dir = NULL)
+#add the number of samples from the comps with total samples as sample size
+rov_comps <- tibble::add_column(lfs$unsexed, "Nsamp" = lfs_nsamp$unsexed$input_n, .before = "input_n")
+
+#Output final comps in forSS3 folder
+write.csv(rov_comps, here("data", "forSS3", paste0("Lcomps_rov_unsexed_raw_", 
+                                                   length_bins[1], "_", tail(length_bins,1), 
+                                                   ".csv")), row.names = FALSE)
+
+#Dont need FAA for ROV fleet so no faa length comps
+
