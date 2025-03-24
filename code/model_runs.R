@@ -1152,24 +1152,32 @@ selex_new$INIT[p1.ind.2] <- purrr::map(selex_fleets,
 
 ### P_3
 p3.ind <- grep('P_3', rownames(selex_new))
-selex_new$PHASE[p3.ind] <- 5
-selex_new$LO[p3.ind] <- 0
+selex_new$LO[p3.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
 selex_new$HI[p3.ind] <- 9
-selex_new$INIT[p3.ind] <- purrr::map(selex_fleets, 
-                                     ~ selex_modes$asc.slope[selex_modes$FltSvy == 
-                                                               fleet.converter$fleet[fleet.converter$fleetname == 
-                                                                                       .x]]) |>
+selex_new$PHASE[p3.ind] <- 5
+#Only update the mode for fleets we have length data for
+p3.ind.2 <- intersect(
+  grep('P_3', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p3.ind.2] <- purrr::map(selex_fleets, 
+                                     ~ selex_modes$asc.slope[selex_modes$fleet == 
+                                                               fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
   unlist()
 
 ### P_4
 p4.ind <- grep('P_4', rownames(selex_new))
-selex_new$PHASE[p4.ind] <- 5
-selex_new$LO[p4.ind] <- 0
+selex_new$LO[p4.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
 selex_new$HI[p4.ind] <- 9
-selex_new$INIT[p4.ind] <- purrr::map(selex_fleets, 
-                                     ~ selex_modes$desc.slope[selex_modes$FltSvy == 
-                                                                fleet.converter$fleet[fleet.converter$fleetname == 
-                                                                                        .x]]) |>
+selex_new$PHASE[p4.ind] <- 5
+#Only update the mode for fleets we have length data for
+p4.ind.2 <- intersect(
+  grep('P_4', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p4.ind.2] <- purrr::map(selex_fleets, 
+                                     ~ selex_modes$desc.slope[selex_modes$fleet == 
+                                                                fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
   unlist()
 
 
