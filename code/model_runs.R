@@ -1337,13 +1337,13 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_3_3_addAgeErr ----
+## 0_4_1_addAgeErr ----
 ####------------------------------------------------#
 
 #Add new ageing error matrix
 
-new_name <- "0_3_3_addAgeErr"
-old_name <- "0_2_0_updateData"
+new_name <- "0_4_1_addAgeErr"
+old_name <- "0_3_3_updateSelexBlocks"
 
 
 ##
@@ -1382,6 +1382,58 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+
+
+####------------------------------------------------#
+## 0_4_2_addVarAdj ----
+####------------------------------------------------#
+
+#Add variance adjustment factors for comp data and reset all to one
+
+new_name <- "0_4_2_addVarAdj"
+old_name <- "0_4_1_addAgeErr"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Add variance adjustment for each comp data set
+varadj_len <- data.frame("factor" = 4, 
+                         fleet = unique(mod$dat$lencomp$fleet), 
+                         value = 1,
+                         row.names = paste0("Len_", fleet.converter[unique(mod$dat$lencomp$fleet), "fleetname"]))
+varadj_age <- data.frame("factor" = 5,
+                         fleet = unique(mod$dat$agecomp$fleet), 
+                         value = 1,
+                         row.names = paste0("Age_", fleet.converter[unique(mod$dat$agecomp$fleet), "fleetname"]))
+mod$ctl$Variance_adjustment_list <- dplyr::bind_rows(varadj_len, varadj_age)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
