@@ -1437,6 +1437,73 @@ r4ss::run(dir = here('models', new_name),
 
 
 
+####------------------------------------------------#
+## 0_5_1_fixWarnings ----
+####------------------------------------------------#
+
+# Make changes to fix warnings
+
+new_name <- "0_5_1_fixWarnings"
+old_name <- "0_4_2_addVarAdj"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+# Increase R0 initial to avoid 1st iteration warnings
+
+mod$ctl$SR_parms["SR_LN(R0)", c("INIT", "PRIOR")] <- 5
+
+
+# Use new forecast formatting to avoid warning
+
+# Type 10 is selectivity, currently set to equal the last year
+# Type 11 is relF, currently set to be the last three years
+# Type 12 is recruitment, currently set to be all years
+mod$fore$Fcast_selex <- -12345
+mod$fore$Fcast_years <- data.frame("MG_type" = c(10, 11, 12),
+                                   "method" = c(1, 1, 1),
+                                   "st_year" = c(0, -3, -999),
+                                   "end_year" = c(0, 0, 0),
+                                   row.names = c("#_Fcast_years1",
+                                                 "#_Fcast_years2",
+                                                 "#_Fcast_years3"))
+
+
+# Adjust selectivity block format to avoid warnings about endyr being past retroyr
+
+# The new forecast formating overrides the timevarying blocking so can reset time blocks
+mod$ctl$Block_Design <- list(c(2003, 2013, 2014, 2021, 2022, 2024), #commercial fleet
+                             c(2001, 2016, 2017, 2022, 2023, 2024)) #recreational fleet
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+
 
 ####------------------------------------------------#
 ## 0_4_1_updateInputs ----
@@ -1454,7 +1521,6 @@ old_name <- "0_2_0_updateData"
 
 copy_SS_inputs(dir.old = here('models', old_name), 
                dir.new = here('models', new_name),
-               use_ss_new = TRUE,
                overwrite = TRUE)
 
 mod <- SS_read(here('models', new_name))
@@ -1490,52 +1556,7 @@ r4ss::run(dir = here('models', new_name),
           skipfinished = FALSE)
 
 
-####------------------------------------------------#
-## 0_4_2_fixWarnings ----
-####------------------------------------------------#
 
-# Make changes to fix warnings
-
-new_name <- "0_4_2_fixWarnings"
-old_name <- "0_4_1_updateInputs"
-
-
-##
-#Copy inputs
-##
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               use_ss_new = TRUE,
-               overwrite = TRUE)
-
-mod <- SS_read(here('models', new_name))
-
-
-##
-#Make Changes
-##
-
-# Change accumulator age
-mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
-
-# Change minimum population bin size
-mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
-
-
-##
-#Output files and run
-##
-
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
 
 
 
