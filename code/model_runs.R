@@ -1232,10 +1232,9 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-#Set selectivities for age and length of growth fleet to 1 for all sizes (type 0)
+# Set selectivities of growth fleet to 1 for all lengths (type = 0) 
+# and 1 for ages > 0 (type = 10)
 mod$ctl$size_selex_types[grep("CA_Growth", rownames(mod$ctl$size_selex_types)),] <-
-  c(0, 0, 0, 0)
-mod$ctl$age_selex_types[grep("CA_Growth", rownames(mod$ctl$age_selex_types)),] <-
   c(0, 0, 0, 0)
 
 # Selectivity type 0 does not require selectivity parameters so remove
