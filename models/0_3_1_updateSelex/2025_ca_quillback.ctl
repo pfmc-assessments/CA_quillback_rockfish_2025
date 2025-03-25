@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-03-24  13:31:43
+#C file write time: 2025-03-25  10:18:25
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -142,36 +142,36 @@
 #
 #_SizeSelex
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
- 15	50	   42.09	   36	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Commercial(1)  
- -7	 7	-1.27382	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Commercial(1)  
--10	10	  4.6084	    5	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Commercial(1)  
--10	10	  -0.517	4.718	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Commercial(1)  
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Commercial(1)  
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Commercial(1)  
- 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Recreational(2)
- -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Recreational(2)
--10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Recreational(2)
--10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Recreational(2)
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)
- 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Growth(3)      
- -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Growth(3)      
--10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Growth(3)      
--10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Growth(3)      
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Growth(3)      
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Growth(3)      
- 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_CCFRP(4)       
- -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_CCFRP(4)       
--10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_CCFRP(4)       
--10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_CCFRP(4)       
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_CCFRP(4)       
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_CCFRP(4)       
- 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_ROV(5)         
- -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_ROV(5)         
--10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_ROV(5)         
--10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_ROV(5)         
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_ROV(5)         
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_ROV(5)         
+ 11	51	     36	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Commercial(1)  
+-20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Commercial(1)  
+  0	 9	 5.2575	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Commercial(1)  
+  0	 9	5.48064	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Commercial(1)  
+-20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Commercial(1)  
+-10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Commercial(1)  
+ 11	51	     34	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Recreational(2)
+-20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Recreational(2)
+  0	 9	5.17048	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Recreational(2)
+  0	 9	5.54518	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Recreational(2)
+-20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
+-10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)
+ 11	51	  34.79	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Growth(3)      
+-20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Growth(3)      
+  0	 9	 4.1429	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Growth(3)      
+  0	 9	 -0.207	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Growth(3)      
+-20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Growth(3)      
+-10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Growth(3)      
+ 11	51	     42	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_CCFRP(4)       
+-20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_CCFRP(4)       
+  0	 9	5.48064	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_CCFRP(4)       
+  0	 9	 5.2575	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_CCFRP(4)       
+-20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_CCFRP(4)       
+-10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_CCFRP(4)       
+ 11	51	     32	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_ROV(5)         
+-20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_ROV(5)         
+  0	 9	5.07517	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_ROV(5)         
+  0	 9	 5.6058	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_ROV(5)         
+-20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_ROV(5)         
+-10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_ROV(5)         
 #_AgeSelex
 #_No age_selex_parm
 #_no timevary selex parameters

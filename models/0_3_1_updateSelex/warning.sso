@@ -1,8 +1,8 @@
 Note 1 Information: Max data length bin: 50  < max pop len bins: 58; so will accumulate larger pop len bins
-Warning 1 : 1st iteration warning: ssb(endyr)/ssb(styr)= 4.01211e-05; suggest start with larger R0 to get near 0.4; or use depletion fleet option
-Warning 2 : 1st iteration warning: catch logL > 50% total logL; check configuration; suggest start with larger R0
-Warning 3 : Final gradient: 0.000468876 is larger than final_conv: 1e-05
-Warning 4 : poor convergence in Fmsy, final dy/dy2= -0.00329557
+Warning 1 : parameter init value is less than parameter min -0.207 < 0 for parm: 16; search for <now check> in echoinput.sso for parm_type
+Warning 2 : 1st iteration warning: ssb(endyr)/ssb(styr)= 2.83558e-06; suggest start with larger R0 to get near 0.4; or use depletion fleet option
+Warning 3 : Final gradient: 0.209604 is larger than final_conv: 1e-05
+Warning 4 : poor convergence in Fmsy, final dy/dy2= -0.00390789
 Note 2 Information: A revised protocol for the Fcast_yr specification is available and recommended.
-Note 3 Information:  N parameters that are on or within 1% of min-max bound: 3; check results, variance may be suspect
+Note 3 Information:  N parameters that are on or within 1% of min-max bound: 5; check results, variance may be suspect
  4 warnings  and 3 notes 

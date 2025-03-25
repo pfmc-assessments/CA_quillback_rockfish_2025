@@ -1100,6 +1100,11 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
 # Set up selectivity parameterization according following guidance in
 # best practices handbook (section 2.7.3). Handbook can be found at 
 # https://github.com/pfmc-assessments/pfmc_assessment_handbook 
@@ -1118,6 +1123,8 @@ selex_new$INIT[grep('P_6', rownames(selex_new))] <- -999
 selex_new$PHASE[grep('P_2', rownames(selex_new))] <- -9
 selex_new$PHASE[grep('P_5', rownames(selex_new))] <- -9
 selex_new$PHASE[grep('P_6', rownames(selex_new))] <- -9
+selex_new$LO[grep('P_2', rownames(selex_new))] <- -20
+selex_new$HI[grep('P_2', rownames(selex_new))] <- 20
 
 # calculate initial values for p1, p3, p4 for each fleet
 selex_modes <- mod$dat$lencomp |>
@@ -1180,6 +1187,9 @@ selex_new$INIT[p4.ind.2] <- purrr::map(selex_fleets,
                                                                 fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
   unlist()
 
+#Set new selectivity parameters
+mod$ctl$size_selex_parms <- selex_new
+
 
 ##
 #Output files and run
@@ -1198,13 +1208,13 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_3_2_udpateSelexBlocks ----
+## 0_3_2_growthSelex ----
 ####------------------------------------------------#
 
-#Update selectivity blocks
+#Change growth fleet selectivity to constant
 
-new_name <- "0_3_2_updateSelexBlocks"
-old_name <- "0_2_0_updateData"
+new_name <- "0_3_2_growthSelex"
+old_name <- "0_3_1_updateSelex"
 
 
 ##
@@ -1222,8 +1232,7 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-# Add selectivity blocks
-mod$ctl$size_selex_types
+
 
 
 ##
