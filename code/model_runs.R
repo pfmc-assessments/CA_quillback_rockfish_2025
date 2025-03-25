@@ -1259,6 +1259,84 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
+## 0_3_3_udpateSelexBlocks ----
+####------------------------------------------------#
+
+#Update selectivity blocks
+
+new_name <- "0_3_3_updateSelexBlocks"
+old_name <- "0_3_2_growthSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Add selectivity blocks, one each for recreational and commercial
+# Setting the end year to -2 sets the forecast selectivity to be the final year,
+# otherwise it would get reset to the base selectivity block
+mod$ctl$N_Block_Designs <- 2
+mod$ctl$blocks_per_pattern <- c(3, 3)
+mod$ctl$Block_Design <- list(c(2003, 2013, 2014, 2021, 2022, -2), #commercial fleet
+                             c(2001, 2016, 2017, 2022, 2023, -2)) #recreational fleet
+
+### Add block indicators into selectivity table
+# Block = number of block to use, Block_Fxn = 2 means replace parameters 
+selex_new <- mod$ctl$size_selex_parms
+
+selex_new[intersect(grep("Commercial", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block")] <- 1
+selex_new[intersect(grep("Commercial", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block_Fxn")] <- 2
+selex_new[intersect(grep("Recreational", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block")] <- 2
+selex_new[intersect(grep("Recreational", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block_Fxn")] <- 2
+
+mod$ctl$size_selex_parms <- selex_new
+
+
+### Time varying selectivity table
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+
+####------------------------------------------------#
 ## 0_3_3_addAgeErr ----
 ####------------------------------------------------#
 
