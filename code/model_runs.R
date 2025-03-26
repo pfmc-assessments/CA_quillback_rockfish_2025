@@ -1582,26 +1582,48 @@ r4ss::run(dir = here('models', new_name),
 #                     ---- 2025 exploration runs ----
 ##########################################################################################-
 
-###
-#Brian model
-###
+# Fits to comps are pretty poor. Explore ways to improve these
 
-lots of awesome stuff being done
+####------------------------------------------------#
+## 1_0_1_improveCompFits ----
+####------------------------------------------------#
 
-here
+# Explore ways to improve comp fits
 
-and here
-
-
-and then here
+new_name <- "1_0_1_improveCompFits"
+old_name <- "0_5_1_fixWarnings"
 
 
+##
+#Copy inputs
+##
 
-1600 is the best
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
 
 
 
 
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
 
