@@ -587,6 +587,9 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
 
 
 ####------------------------------------------------#
@@ -1076,7 +1079,7 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_3_1_udpateSelex ----
+## 0_3_1_updateSelex ----
 ####------------------------------------------------#
 
 #Update selectivity initialization
@@ -1108,6 +1111,7 @@ fleet.converter <- mod$dat$fleetinfo %>%
 # Set up selectivity parameterization according following guidance in
 # best practices handbook (section 2.7.3). Handbook can be found at 
 # https://github.com/pfmc-assessments/pfmc_assessment_handbook 
+# Useful to also use this tool: https://connect.fisheries.noaa.gov/ss3-helper/
 
 selex_new <- mod$ctl$size_selex_parms
 
@@ -1205,6 +1209,9 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
 
 
 ####------------------------------------------------#
@@ -1255,6 +1262,9 @@ r4ss::run(dir = here('models', new_name),
           extras = '-nohess',
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
 
 
 
@@ -1333,6 +1343,9 @@ r4ss::run(dir = here('models', new_name),
           extras = '-nohess',
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
 
 
 
@@ -1435,6 +1448,8 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
 
 
 ####------------------------------------------------#
