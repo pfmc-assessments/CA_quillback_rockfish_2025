@@ -1817,6 +1817,60 @@ SS_plots(pp, plot = c(1:26))
 #is still really poor. 
 
 
+####------------------------------------------------#
+## 1_0_4_unfixQ ----
+####------------------------------------------------#
+
+# Catchabilities are fixed at 1. Relax these are rerun. See if that improves
+
+new_name <- "1_0_4_unfixQ"
+old_name <- "1_0_1_ccfrpSelexLogistic"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+# Upweight
+mod$ctl$N_lambdas <- 1
+mod$ctl$lambdas <- data.frame("like_comp" = 4, 
+                              "fleet" = 4,
+                              "phase" = 1,
+                              "value" = 10,
+                              "sizefreq_method" = 1)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#Upweighting the lambda doesn't do as well as changing variance model run. 
+
+
+
 ###
 #111
 ###
