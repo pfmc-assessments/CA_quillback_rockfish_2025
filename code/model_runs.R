@@ -1521,13 +1521,13 @@ r4ss::run(dir = here('models', new_name),
 
 
 ####------------------------------------------------#
-## 0_4_1_updateInputs ----
+## 0_5_2_updateInputs ----
 ####------------------------------------------------#
 
-# Update model inputs based on new decisions from earlier versions
+# Update model inputs based on errors or inaccuracies of decisions from earlier models
 
-new_name <- "0_4_1_updateInputs"
-old_name <- "0_2_0_updateData"
+new_name <- "0_5_2_updateInputs"
+old_name <- "0_5_1_fixWarnings"
 
 
 ##
@@ -1545,15 +1545,20 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-# Change accumulator age
-mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
+# # Change accumulator age
+# mod$dat$Nages <- 80 #reduce from 90. Probably could set lower, but model runs ok
+# 
+# #WOULD NEED TO CHANGE AGEING ERROR AT THIS POINT TOO
+# 
+# # Change minimum population bin size
+# mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
+# 
+# #MAY NOT NEED TO DO THIS GIVEN NEW GROWTH PATTERN
 
-#WOULD NEED TO CHANGE AGEING ERROR AT THIS POINT TOO
+# Change ROV units from biomass to numbers
+mod$dat$CPUEinfo["CA_ROV", "units"] <- 0
 
-# Change minimum population bin size
-mod$dat$minimum_size <- 2 #L0 is just under 4 so need next smallest bin, which is 2
 
-#MAY NOT NEED TO DO THIS GIVEN NEW GROWTH PATTERN
 
 
 ##
