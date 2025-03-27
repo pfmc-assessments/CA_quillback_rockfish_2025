@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-03-25  15:26:47
+#C file write time: 2025-03-27  11:04:34
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -50,9 +50,9 @@
 #_growth_parms
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env_var&link	dev_link	dev_minyr	dev_maxyr	dev_PH	Block	Block_Fxn
  0.01	0.15	     0.0643	      -2.74	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
-    0	  20	    15.6622	    15.6622	    0	0	-9	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
-   35	  50	    42.9016	    42.9016	    0	0	-9	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
- 0.03	 0.3	   0.111904	   0.111904	    0	0	-9	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
+    0	  20	    15.6622	    15.6622	    0	0	 3	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
+   35	  50	    42.9016	    42.9016	    0	0	 3	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
+ 0.03	 0.3	   0.111904	   0.111904	    0	0	 3	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
  0.01	 0.5	   0.171467	   0.171467	    0	0	-9	0	0	0	0	0	0	0	#_CV_young_Fem_GP_1  
 0.001	 0.5	 0.00371156	 0.00371156	    0	0	-9	0	0	0	0	0	0	0	#_CV_old_Fem_GP_1    
     0	 0.1	1.57769e-05	1.57769e-05	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_1_Fem_GP_1   
@@ -159,7 +159,7 @@
  11	51	     42	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_CCFRP(4)       
 -20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_CCFRP(4)       
   0	 9	5.48064	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_CCFRP(4)       
-  0	 9	 5.2575	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_CCFRP(4)       
+  0	20	     15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_CCFRP(4)       
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_CCFRP(4)       
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_CCFRP(4)       
  11	51	     32	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_ROV(5)         
@@ -210,8 +210,10 @@
 #
 1 #_maxlambdaphase
 1 #_sd_offset; must be 1 if any growthCV, sigmaR, or survey extraSD is an estimated parameter
-# read 0 changes to default Lambdas (default value is 1.0)
--9999 0 0 0 0 # terminator
+# read 1 changes to default Lambdas (default value is 1.0)
+#_like_comp	fleet	phase	value	sizefreq_method
+    4	4	1	10	1	#_1         
+-9999	0	0	 0	0	#_terminator
 #
 0 # 0/1 read specs for more stddev reporting
 #

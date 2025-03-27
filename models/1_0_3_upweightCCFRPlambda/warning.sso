@@ -1,0 +1,9 @@
+Note 1 Information: Max data length bin: 50  < max pop len bins: 58; so will accumulate larger pop len bins
+Warning 1 : At least one block pattern ends in endyr. Check the output parameter value time series to see if the values in forecast years are as intended.
+Warning 2 : Final gradient: 8.10355 is larger than final_conv: 1e-05
+Warning 3 : poor convergence in Fmsy, final dy/dy2= -0.0876281
+Warning 4 : Fmsy/mey is >3x of Fspr are you sure?  check for convergence 
+Warning 5 : Forecast F capped by max possible F from control file3.5
+Warning 6 : Reminder: Number of lambdas !=0.0 and !=1.0:  1
+Note 2 Information:  N parameters that are on or within 1% of min-max bound: 6; check results, variance may be suspect
+ 6 warnings  and 2 notes 

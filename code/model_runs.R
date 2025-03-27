@@ -1578,10 +1578,8 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-
-
-
-
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
 
 
 
@@ -1593,13 +1591,16 @@ r4ss::run(dir = here('models', new_name),
 # Fits to comps are pretty poor. Explore ways to improve these
 
 ####------------------------------------------------#
-## 1_0_1_improveCompFits ----
+## 1_0_1_ccfrpSelexLogistic ----
 ####------------------------------------------------#
 
 # Explore ways to improve comp fits
+# CCFRP is way off and not estimating well. Switch to logistic.
+# Mirroring rec is an option but the comps dont align very well
+# and there wouldn't be blocking structure, so not doing at this time. 
 
-new_name <- "1_0_1_improveCompFits"
-old_name <- "0_5_1_fixWarnings"
+new_name <- "1_0_1_ccfrpSelexLogistic"
+old_name <- "0_5_2_fixWarnings"
 
 
 ##
@@ -1616,7 +1617,9 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-
+# Fix parameter 4 to make selectivity logistic
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_CCFRP(4)", c("HI", "INIT", "PHASE")] <-
+  c(20, 15, -9)
 
 
 ##
@@ -1633,6 +1636,185 @@ r4ss::run(dir = here('models', new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+####------------------------------------------------#
+## 1_0_2_upweightCCFRP ----
+####------------------------------------------------#
+
+# Changing CCFRP to logistic did nothing. Try upweighting a LOT with var_adj
+
+new_name <- "1_0_2_upweightCCFRP"
+old_name <- "1_0_1_ccfrpSelexLogistic"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+# Upweight
+mod$ctl$Variance_adjustment_list[which(mod$ctl$Variance_adjustment_list$fleet == 4 &
+                                         mod$ctl$Variance_adjustment_list$fleet == 4), ] <-
+  c(4, 4, 10)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+
+####------------------------------------------------#
+## 1_0_3_upweightCCFRPlambda ----
+####------------------------------------------------#
+
+# Changing CCFRP to logistic did nothing. Try upweighting a LOT with lambda 
+
+new_name <- "1_0_3_upweightCCFRPlambda"
+old_name <- "1_0_1_ccfrpSelexLogistic"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+# Upweight
+mod$ctl$N_lambdas <- 1
+mod$ctl$lambdas <- data.frame("like_comp" = 4, 
+                             "fleet" = 4,
+                             "phase" = 1,
+                             "value" = 10,
+                             "sizefreq_method" = 1)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#Upweighting the lambda doesn't do as well as changing variance model run. 
+
+
+
+####------------------------------------------------#
+## 1_0_4_reweight ----
+####------------------------------------------------#
+
+# Try a single reweight to see if that gets the model in a reasonable place
+# My thought is that commercial and recreational comps are dominating the fits
+
+new_name <- "1_0_4_reweight"
+old_name <- "1_0_1_ccfrpSelexLogistic"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models',old_name),"Report.sso"),
+          to = file.path(here('models',new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+pp <- SS_output(here('models',new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 0, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+colnames(dw)[1] = "factor"
+new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
+                                by = dplyr::join_by(factor, fleet))
+mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+#Still really poor. Growth seems to be a contributing factor, but although
+#commercial and recreational look somewhat reasonable, selectivity for CCFRP
+#is still really poor. 
 
 
 ###
