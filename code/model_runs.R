@@ -1841,13 +1841,10 @@ mod <- SS_read(here('models', new_name))
 #Make Changes
 ##
 
-# Upweight
-mod$ctl$N_lambdas <- 1
-mod$ctl$lambdas <- data.frame("like_comp" = 4, 
-                              "fleet" = 4,
-                              "phase" = 1,
-                              "value" = 10,
-                              "sizefreq_method" = 1)
+# Estimate Q parameters
+mod$ctl$Q_parms[grep("CA_Rec|CA_CCFRP", rownames(mod$ctl$Q_parms)), "PHASE"] <- 2
+
+#Curious about whether there should be blocks around q for rec fleet
 
 
 ##
@@ -1867,7 +1864,8 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
-#Upweighting the lambda doesn't do as well as changing variance model run. 
+#Allowing the indices for both CCFRP and Rec to be fit better improves estimation
+#for CCFRP selectivity.
 
 
 
