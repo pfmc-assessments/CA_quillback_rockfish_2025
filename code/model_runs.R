@@ -1817,6 +1817,58 @@ SS_plots(pp, plot = c(1:26))
 #is still really poor. 
 
 
+####------------------------------------------------#
+## 1_0_4_unfixQ ----
+####------------------------------------------------#
+
+# Catchabilities are fixed at 1. Relax these are rerun. See if that improves
+
+new_name <- "1_0_4_unfixQ"
+old_name <- "1_0_1_ccfrpSelexLogistic"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+# Estimate Q parameters
+mod$ctl$Q_parms[grep("CA_Rec|CA_CCFRP", rownames(mod$ctl$Q_parms)), "PHASE"] <- 2
+
+#Curious about whether there should be blocks around q for rec fleet
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#Allowing the indices for both CCFRP and Rec to be fit better improves estimation
+#for CCFRP selectivity.
+
+
+
 ###
 #111
 ###
