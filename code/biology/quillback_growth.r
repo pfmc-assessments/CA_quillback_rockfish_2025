@@ -18,7 +18,7 @@ setwd(here())
 #read in the data
 #This is a data dump from Patrick McDonald (NWFSC CAP lab) of all the 
 #quillback his lab has aged
-qlbk <- read.csv(file.path(here(), "data-raw", "ages", "QLBK_Data_Dump_4_Monk.csv"))
+qlbk <- read.csv(file.path(here(), "data-raw", "ages","QLBK_Data_Dump_updated.csv"))
 
 #read in age 0 lengths
 dat <- read.csv(here("data-raw","Baetscher_juvenile_rockfish_NSF_dispersal_proj_genetic_ids.csv"))
@@ -140,7 +140,7 @@ ggplot(ca_1, aes(y = length_cm, x = age, color = project)) +
 #2021 estimate Linf = 43.04 k = .199 to = -0.067
 #2025 CA only est: 
 
-age_df <- ca
+age_df <- ca #%>% filter(age !=0)
 age_df$Age <- age_df$age
 age_df$Length_cm <- age_df$length_cm
 age_df <- age_df %>% 
@@ -151,7 +151,7 @@ vb_est_all<- est_vbgrowth(
   dat = age_df, 
   col_length = "length_cm",
   col_age = "age",
-  init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+  init_params = data.frame(K = 0.17, Linf = 55, L0 = 5, CV0 = 0.10, CV1 = 0.10))
 vb_est_all$all_growth
  #        K       Linf         L0        CV0        CV1
  #0.1782938 40.9971124  3.9225748  0.2262690  0.0649841

@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-03-24  10:30:48
+#C file write time: 2025-03-20  08:47:07
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -112,33 +112,19 @@
 #_initial_F_parms; count = 0
 #
 #_Q_setup for fleets with cpue or survey data
-#_fleet	link	link_info	extra_se	biasadj	float  #  fleetname
-    2	1	0	0	0	0	#_2_CA_Recreational
-    4	1	0	0	0	0	#_4_CA_CCFRP       
-    5	1	0	0	0	0	#_5_CA_ROV         
--9999	0	0	0	0	0	#_terminator       
+-9999 0 0 0 0 0 # terminator
 #_Q_parms(if_any);Qunits_are_ln(q)
-#_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
--25	25	0	0	1	0	-1	0	0	0	0	0	0	0	#_LnQ_base_2_CA_Recreational
--25	25	0	0	1	0	-1	0	0	0	0	0	0	0	#_LnQ_base_4_CA_CCFRP       
--25	25	0	0	1	0	-1	0	0	0	0	0	0	0	#_LnQ_base_5_CA_ROV         
 #_no timevary Q parameters
 #
 #_size_selex_patterns
 #_Pattern	Discard	Male	Special
 24	0	0	0	#_1 CA_Commercial  
 24	0	0	0	#_2 CA_Recreational
-24	0	0	0	#_3 CA_Growth      
-24	0	0	0	#_4 CA_CCFRP       
-24	0	0	0	#_5 CA_ROV         
 #
 #_age_selex_patterns
 #_Pattern	Discard	Male	Special
 10	0	0	0	#_1 CA_Commercial  
 10	0	0	0	#_2 CA_Recreational
-10	0	0	0	#_3 CA_Growth      
-10	0	0	0	#_4 CA_CCFRP       
-10	0	0	0	#_5 CA_ROV         
 #
 #_SizeSelex
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
@@ -154,24 +140,6 @@
 -10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Recreational(2)
 -20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
 -10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)
- 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_Growth(3)      
- -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Growth(3)      
--10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_Growth(3)      
--10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_Growth(3)      
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Growth(3)      
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Growth(3)      
- 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_CCFRP(4)       
- -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_CCFRP(4)       
--10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_CCFRP(4)       
--10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_CCFRP(4)       
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_CCFRP(4)       
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_CCFRP(4)       
- 15	50	   34.79	   38	5	0	 2	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_ROV(5)         
- -7	 7	 -0.3636	 -1.5	2	0	-2	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_ROV(5)         
--10	10	  4.1429	5.075	5	0	 3	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_ROV(5)         
--10	10	  -0.207	 4.56	2	0	-4	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_ROV(5)         
--20	30	     -20	  -20	5	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_ROV(5)         
--10	10	      10	   10	5	0	-3	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_ROV(5)         
 #_AgeSelex
 #_No age_selex_parm
 #_no timevary selex parameters
