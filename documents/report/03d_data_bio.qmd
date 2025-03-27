@@ -4,15 +4,36 @@
 ### Natural Mortality
 
 
+Natural mortality was not directly measured, so life-history based empirical relationships were used. The @hamel_development_2022 method for developing a prior on natural mortality for West Coast groundfish stock assessments combines meta-analytic approaches relating the $M$ rate to other life-history parameters such as longevity, size, growth rate, and reproductive effort to provide a prior for $M$. The @hamel_development_2022 method re-evaluated the data used by Then et al. [-@then_evaluating_2015] by fitting the one-parameter $A_{\text{max}}$ model under a log-log transformation (such that the slope is forced to be -1 in the transformed space [@hamel_method_2015], the point estimate and median of the prior for $M$ is:
+
+\begin{centering}
+
+$M=\frac{5.4}{A_{\text{max}}}$
+
+\end{centering}
+
+\vspace{0.5cm}
+
+where $A_{\text{max}}$ is the maximum age. The prior is defined as a log-normal distribution with parameters $\mu = ln(5.4/A_{\text{max}})$ and $\sigma = 0.438$. Using a maximum age of 95 years, the point estimate and median of the prior for $M$ is `r model$parameters["NatM_p_1_Fem_GP_1","Value"]` per year.
+
+The maximum age assumed for calculating natural mortality in the base model was 80 years. FROG
+
+
 ### Weight-at-length
 
 
 ### Maturity
 
+Maturity-at-length was based on maturity reads conducted by Melissa Head at the NWFSC examining a total of XX samples collected across California by the SWFSC Santa Cruz lab. The maturity-at-length curve is based on an estimate of functional maturity rather than biological maturity. Biological maturity can include multiple behaviors that functional maturity will exclude (e.g., abortive maturation and skip spawning). Biological maturity indicates that some energy reserves were used to create vitellogenin, but it does not mean that eggs will continue to develop and successfully spawn. This includes juvenile abortive maturation. Female rockfish commonly go through the first stages of spawning the year before they reach actual spawning capability. This is most likely a factor related to their complicated reproductive process of releasing live young. A subset of oocytes will develop early yolk, and then get aborted during the spawning season. Biological maturity also does not account for the proportion of oocytes in atresia (cellular breakdown and reabsorption), which means that fish that were skipping spawning for the season could be listed as biologically mature and functionally immature (Melissa Head, personal communication, NWFSC, NOAA). 
+
+
 
 ### Fecundity
 
+The fecundity-at-length was based on ovary samples collected by the SWFSC Santa Cruz lab in 2023 and 2024. The fecundity relationship for `r spp` was estimated to be equal to `r format(model$MGparmAdj$Eggs_scalar_Fem[1], scientific = TRUE)`$L$^`r round(model$MGparmAdj$Eggs_exp_len_Fem[1],2)`^ in millions of eggs where $L$ is fork length in cm. Fecundity-at-length is shown in Figure \ref{fig:fecundity}.
+
 ### Growth (Length-at-Age)
+
 
 
 ## Environmental and ecosystem data

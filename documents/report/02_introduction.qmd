@@ -17,7 +17,7 @@ The diets of `r spp` consist primarily of benthic and pelagic crustaceans and fi
 
 Limited studies have evaluated genetic variation in `r spp` across the U.S. West Coast. Genetic work has revealed significant differences between Puget Sound and coastal stocks of `r spp` [@seeb_gene_1998; @Stoutetal_DPS_2001], however Seeb [-@seeb_gene_1998] did not find significant differentiation in populations of `r spp` between coastal Washington and Alaska. 
 
-`r Spp` are a long-lived rockfish with the oldest aged specimen at 95 years from British Columbia [@loveetal_2002; @YamanakaandLacko_rockfish_2001]. FROG additiona max aged fish `r Spp` was determined to have a vulnerability (V = 2.22) of major concern in a productivity susceptibility analysis [@cope_approach_2011]. This analysis calculated species specific vulnerability scores based on two dimensions: productivity characterized by the life history, and susceptibility characterized by how the stock is likely affected by the fishery in question.
+`r Spp` are a long-lived rockfish with the oldest aged specimen at 95 years from British Columbia [@loveetal_2002; @YamanakaandLacko_rockfish_2001]. FROG  `r Spp` was determined to have a vulnerability (V = 2.22) of major concern in a productivity susceptibility analysis [@cope_approach_2011]. This analysis calculated species specific vulnerability scores based on two dimensions: productivity characterized by the life history, and susceptibility characterized by how the stock is likely affected by the fishery in question. 
 
 
 ## Ecosystem considerations
@@ -31,12 +31,12 @@ copied from the 2021 assessment and will continue editing week of 3/24 (mhm)
 `r Spp` off the coast of `r state` is caught in both the recreational and commercial fisheries.
 ### Commercial
 
- Recreational removals are the largest source of fishing mortality and represent approximately 70 percent of the total removals of `r spp` across all years (Table \ref{tab:allcatches} and Figure \ref{fig:catch}). The majority of the commercial landings for `r spp` occurred between 1990 and 2008, and apart from 1945-1946, in 1984, and in the last four years, commercial landings for `r spp` have been less than 2 mt per year. 
+ Recreational removals are the largest source of fishing mortality and represent approximately 70 percent of the total removals of `r spp` across all years (Table \ref{tab:allcatches} and Figure \ref{fig:catch}). The majority of the commercial landings for `r spp` occurred between 1990 and 2008, with a small increase from 2016 to 2022 prior to the stock being declared overfished. 
  [@Milleretal_2014]
 
 Prior to the development of the live-fish market in the 1980s, commercial catches of `r spp` were relatively low, and `r spp` were often landed dead for a relatively low ex-vessel price per pound. Most fish were caught using hook and line gear, though some were caught using traps, gill nets, and in some instances, trawl gear. Trawling within three miles of shore, where most of their habitat is found, has been prohibited since 1953, and gill nets were banned within three miles of shore in 1994. Whether from directed effort in the nearshore or as incidental catch while targeting other more valuable stocks such as lingcod, catches were below 0.5 mt from 1916 to 1980, with the exception of four of five years from 1944-1948.
 
-With the development and expansion of the nearshore live-fish fishery during the late 1980s and early 1990s, new entrants in this open access fishery were drawn by premium ex-vessel prices for live fish, resulting in over-capitalization of the fishery. Since 2002, the California Department of Fish and Wildlife (CDFW) has managed 19 nearshore species in accordance with Nearshore Fisheries Management Plan [@Wilson-Vandenbergetal_2014]. In 2003, the CDFW implemented a Nearshore Restricted Access Permit system, including a requirement of a Deeper Nearshore Fishery Species Permit to retain `r spp`, with the overall goal of reducing the number of participants to a more sustainable level, and with permit issuance based on historical landings history by a retrospective qualifying date. The result was a reduction in permits issued, from 1,127 in 1999 to 505 in 2003, greatly reducing catch levels. In addition, reduced trip limits, seasonal closures in March and April and depth restrictions were implemented to address bycatch of overfished species and associated constraints from these species low ACLs.
+With the development and expansion of the nearshore live-fish fishery during the late 1980s and early 1990s, new entrants in this open access fishery were drawn by premium ex-vessel prices for live fish. Since 2002, the California Department of Fish and Wildlife (CDFW) has managed 19 nearshore species in accordance with Nearshore Fisheries Management Plan [@Wilson-Vandenbergetal_2014]. In 2003, the CDFW implemented a Nearshore Restricted Access Permit system, including a requirement of a Deeper Nearshore Fishery Species Permit to retain `r spp`, with the overall goal of reducing the number of participants to a more sustainable level, and with permit issuance based on historical landings history by a retrospective qualifying date. The result was a reduction in permits issued, from 1,127 in 1999 to 505 in 2003, greatly reducing catch levels. In addition, reduced trip limits, seasonal closures in March and April and depth restrictions were implemented to address bycatch of overfished species and associated constraints from these species low ACLs.
  
 As overfished shelf rockfish have rebuilt, resumed access to deeper depths has been allowed for Nearshore Permit holders as well as open access fisheries. While depth restrictions for waters deeper than 75 fm were implemented in 2019 south of Point Conception where yelloweye rockfish are uncommon, access in constrained north of Point Conception where, since 2003, depth restrictions at a range of depths starting between 20 and 40 fm, depending on the management area, have prohibited fishing in deeper waters (see separately provided Regulation History addendum). 
 
@@ -51,11 +51,16 @@ As the yelloweye rockfish stock continues to rebuild, depth restrictions are exp
 
 ## Management History
 
+Reference the available recreational and commercial management history documents and highlight changes.
+
+
 <!---
 Summary of management history (e.g., changes in mesh sizes, trip limits, or other management actions that may have significantly altered selection, catch rates, or discards). 
 --->
 
 ## Management performance
+
+
 
 <!-- Management performance, including a table or tables comparing Overfishing Limit (OFL), Acceptable Biological Catch (ABC), Annual Catch Limit (ACL), landings, and catch (i.e., landings plus discard) for each area and year. Groundfish assessments that estimate dead discarded catch must include a disclaimer noting that total mortality estimates from the WCGOP and from the stock assessment may differ due to the use of different methods. Investigation into how these methods differ is beyond the scope of a benchmark assessment. The rationale for modeling discard mortality can also be provided. This should be included in all update assessments.  -->
 
