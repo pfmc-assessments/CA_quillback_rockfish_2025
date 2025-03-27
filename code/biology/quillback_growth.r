@@ -18,11 +18,18 @@ setwd(here())
 #read in the data
 #This is a data dump from Patrick McDonald (NWFSC CAP lab) of all the 
 #quillback his lab has aged
+qlbk <- read.csv(file.path(here(), "data-raw", "ages", "QLBK_Data_Dump_4_Monk.csv"))
 
-qlbk <- read.csv(file.path(here(), "data-raw", "QLBK_Data_Dump_4_Monk.csv"))
+#read in age 0 lengths
+dat <- read.csv(here("data-raw","Baetscher_juvenile_rockfish_NSF_dispersal_proj_genetic_ids.csv"))
+str(dat)
+mal <- dat %>%
+filter(GENETIC_ID == "Smaliger",
+       !is.na(LENGTH))
+
 
 #get the wcgbts locations to filter out OR/WA
-load(file.path(here(),"data-raw", "bio_quillback rockfish_NWFSC.Combo_2024-09-04.rdata"))
+load(file.path(here(),"data-raw", "trawl_surveys","bio_quillback rockfish_NWFSC.Combo_2024-09-04.rdata"))
 
 ca_bottomtrawl <- x %>%
 filter(Latitude_dd <42, !is.na(Otosag_id))
@@ -65,13 +72,22 @@ ca %>%
     group_by(Sex) %>%
     tally() 
 
+#combine the age 0 fish  to the ca dataframe
+ca <- ca %>% dplyr::select(specimen_id, age, length_cm, Sex, project)
+mal <- mal %>% 
+mutate(project = "SMURF", age = 0, length_cm = LENGTH/10, Sex = "U") %>%
+rename(specimen_id = NMFS_DNA_ID) %>%
+dplyr::select(specimen_id, age, length_cm, Sex, project)
+
+ca <- rbind(ca, mal)
+
 ######Data plots
 #plot by faceted project
 ggplot(ca, aes(y = length_cm, x = age, color = Sex)) +
 	geom_point(alpha = 0.1) + 
   theme_bw() + 
   geom_jitter() + 
-  xlim(1, 60) + ylim(1, 60) +
+  xlim(0, 60) + ylim(0, 60) +
   theme(panel.grid.major = element_blank(), 
         axis.text = element_text(size = 12),
         axis.title = element_text(size = 12),
@@ -88,7 +104,7 @@ ggplot(ca, aes(y = length_cm, x = age, color = project)) +
 	geom_point(alpha = 0.1) + 
   theme_bw() + 
   geom_jitter() + 
-  xlim(1, 60) + ylim(1, 60) +
+  xlim(0, 60) + ylim(0, 60) +
   theme(panel.grid.major = element_blank(), 
         axis.text = element_text(size = 16),
         axis.title = element_text(size = 16),
@@ -139,6 +155,11 @@ vb_est_all<- est_vbgrowth(
 vb_est_all$all_growth
  #        K       Linf         L0        CV0        CV1
  #0.1782938 40.9971124  3.9225748  0.2262690  0.0649841
+#adding in Diana's age 0 fish
+#          K        Linf          L0         CV0         CV1
+# 0.17630364 41.13319155  3.98363810  0.20734564  0.06333945
+
+
 #write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
 
 #males only
