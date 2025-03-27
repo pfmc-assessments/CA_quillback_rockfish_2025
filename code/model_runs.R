@@ -1558,6 +1558,9 @@ mod <- SS_read(here('models', new_name))
 # Change ROV units from biomass to numbers
 mod$dat$CPUEinfo["CA_ROV", "units"] <- 0
 
+# Allow growth to be estimated in the model.
+# Currently not estimating CV parameters
+mod$ctl$MG_parms[grep("L_at|VonBert", rownames(mod$ctl$MG_parms)), "PHASE"] <- 3
 
 
 
