@@ -18,6 +18,7 @@ setwd(here())
 #read in the data
 #This is a data dump from Patrick McDonald (NWFSC CAP lab) of all the 
 #quillback his lab has aged
+#UPdated csv file 3/27
 qlbk <- read.csv(file.path(here(), "data-raw", "ages","QLBK_Data_Dump_updated.csv"))
 
 #read in age 0 lengths
@@ -162,40 +163,40 @@ vb_est_all$all_growth
 
 #write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
 
-#males only
-length_age_males <- est_vbgrowth(
- dir = file.path(here(),"data-raw"),
-  dat = subset(age_df, Sex == 1), 
-  col_length = "length_cm",
-  col_age = "age",
-   init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-length_age_males$all_growth
-#males
-#           K         Linf           L0          CV0          CV1
-# 0.131052985 41.724881311 13.105886995  0.192873891  0.006705831
+# #males only
+# length_age_males <- est_vbgrowth(
+#  dir = file.path(here(),"data-raw"),
+#   dat = subset(age_df, Sex == 1), 
+#   col_length = "length_cm",
+#   col_age = "age",
+#    init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+# length_age_males$all_growth
+# #males
+# #           K         Linf           L0          CV0          CV1
+# # 0.131052985 41.724881311 13.105886995  0.192873891  0.006705831
 
-#females only
-length_age_females <- est_vbgrowth(
- dir = file.path(here(),"data-raw"),
-  dat = subset(age_df, Sex == 2), 
-  col_length = "length_cm",
-  col_age = "age",
-   init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-length_age_females$all_growth
-#females
-#           K         Linf           L0          CV0          CV1
-# 0.093386826 44.362969045 16.842822351  0.168755023  0.001117803
+# #females only
+# length_age_females <- est_vbgrowth(
+#  dir = file.path(here(),"data-raw"),
+#   dat = subset(age_df, Sex == 2), 
+#   col_length = "length_cm",
+#   col_age = "age",
+#    init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+# length_age_females$all_growth
+# #females
+# #           K         Linf           L0          CV0          CV1
+# # 0.093386826 44.362969045 16.842822351  0.168755023  0.001117803
 
-#unsexed only
-length_age_unsexed <- est_vbgrowth(
-  dir = file.path(here(),"data-raw"),
-  dat = subset(age_df, Sex == 3), 
-  col_length = "length_cm",
-  col_age = "age",
-  init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-length_age_unsexed$all_growth
-#unsexed
-#        K         Linf           L0          CV0          CV1
+# #unsexed only
+# length_age_unsexed <- est_vbgrowth(
+#   dir = file.path(here(),"data-raw"),
+#   dat = subset(age_df, Sex == 3), 
+#   col_length = "length_cm",
+#   col_age = "age",
+#   init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+# length_age_unsexed$all_growth
+# #unsexed
+# #        K         Linf           L0          CV0          CV1
 # 0.14501755 41.62102296 12.58916457  0.11829281  0.07596045
 
 ##################################################
@@ -277,3 +278,31 @@ ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_len
        width = 6, height = 8)
 
 
+
+###############################################################################
+###############################################################################
+#Vonbert Models estimated with a different package
+###############################################################################
+Startval = vbStarts(Length~Age, data=Alldat)
+Startval=list(Linf=49,K=.2,t0=-1)
+####fit model to all data 
+vbTypical <- Length~Linf*(1-exp(-K*(Age-t0)))
+fitTyp = nls(vbTypical, data=Alldat, start=Startval)
+
+#make changes to the dataframe to match
+Alldat <- ca %>% filter(age!=0) #add or remove the age 0 fish and it matters
+Alldat$Age = Alldat$age
+Alldat$Length = Alldat$length_cm
+
+fitGen <- nls(vbTypical, data = Alldat, start = Startval)
+fitGen
+
+#Schnute parameterization
+SchStarts = FSA::vbStarts(Length~Age, data=Alldat,type='Schnute')
+SchStarts
+
+vb3 <- FSA::vbFuns("Schnute",simple=FALSE)
+
+fit <- nls(Length~vb3(Age,L1, L3,K, t1=0,t3=40),
+                   data = Alldat,start=SchStarts)
+fit
