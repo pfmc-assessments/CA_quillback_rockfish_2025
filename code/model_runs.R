@@ -1844,7 +1844,10 @@ mod <- SS_read(here('models', new_name))
 # Estimate Q parameters
 mod$ctl$Q_parms[grep("CA_Rec|CA_CCFRP", rownames(mod$ctl$Q_parms)), "PHASE"] <- 2
 
-#Curious about whether there should be blocks around q for rec fleet
+#Curious about whether there should be blocks around q for rec fleet.
+#I dont think so because blocks in selectivity with account for changes in 
+#size structure. Block the index means there is something that changed beyond
+#what happended in selectivity changes. 
 
 
 ##
@@ -1864,8 +1867,106 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
-#Allowing the indices for both CCFRP and Rec to be fit better improves estimation
-#for CCFRP selectivity.
+#Allowing the indices for both CCFRP and Rec to be fit better and greatly improves 
+#estimation for selectivity of all fleets.
+
+
+####------------------------------------------------#
+## 1_0_6_unfixQ_float ----
+####------------------------------------------------#
+
+# Catchabilities are fixed at 1. Relax these are rerun. See if that improves
+
+new_name <- "1_0_6_unfixQ_float"
+old_name <- "1_0_5_unfixQ"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+# Float q for previously estimated Q parameters
+mod$ctl$Q_options[mod$ctl$Q_options$fleet %in% c(2, 4), "float"] <- 1
+
+# Fix previously estimated Q parameters
+mod$ctl$Q_parms[grep("CA_Rec|CA_CCFRP", rownames(mod$ctl$Q_parms)), "PHASE"] <- -2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#Likelihood is exactly the same when float Q vs fixing it. I like have an active
+#parameter so suggest we do the estimate Q option
+
+
+####------------------------------------------------#
+## 1_0_7_estQ_ROV ----
+####------------------------------------------------#
+
+# Catchabilities are fixed at 1 for ROV. Estimate using active parameter
+
+new_name <- "1_0_7_estQ_ROV"
+old_name <- "1_0_5_unfixQ"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+# Turn on estimation for ROV
+mod$ctl$Q_parms[grep("ROV", rownames(mod$ctl$Q_parms)), "PHASE"] <- 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
 
 
 
