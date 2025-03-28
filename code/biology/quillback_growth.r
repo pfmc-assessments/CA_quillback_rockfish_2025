@@ -22,15 +22,16 @@ setwd(here())
 qlbk <- read.csv(file.path(here(), "data-raw", "ages","QLBK_Data_Dump_updated.csv"))
 
 #read in age 0 lengths
-dat <- read.csv(here("data-raw","Baetscher_juvenile_rockfish_NSF_dispersal_proj_genetic_ids.csv"))
+dat <- read.csv(here("data-raw", "trawl_surveys","Baetscher_juvenile_rockfish_NSF_dispersal_proj_genetic_ids.csv"))
 str(dat)
+dat$year <- sub(".*(\\d+{4}).*$", "\\1", dat$COLLECTION_DATE) #get last 4 digits
 mal <- dat %>%
 filter(GENETIC_ID == "Smaliger",
        !is.na(LENGTH))
 
 
 #get the wcgbts locations to filter out OR/WA
-load(file.path(here(),"data-raw", "trawl_surveys","bio_quillback rockfish_NWFSC.Combo_2024-09-04.rdata"))
+load(file.path(here(),"data-raw", "bio_quillback rockfish_NWFSC.Combo_2025-03-14.rdata"))
 
 ca_bottomtrawl <- x %>%
 filter(Latitude_dd <42, !is.na(Otosag_id))
@@ -74,11 +75,11 @@ ca %>%
     tally() 
 
 #combine the age 0 fish  to the ca dataframe
-ca <- ca %>% dplyr::select(specimen_id, age, length_cm, Sex, project)
+ca <- ca %>% dplyr::select(year, specimen_id, age, length_cm, Sex, project)
 mal <- mal %>% 
 mutate(project = "SMURF", age = 0, length_cm = LENGTH/10, Sex = "U") %>%
 rename(specimen_id = NMFS_DNA_ID) %>%
-dplyr::select(specimen_id, age, length_cm, Sex, project)
+dplyr::select(year, specimen_id, age, length_cm, Sex, project)
 
 ca <- rbind(ca, mal)
 
@@ -152,13 +153,13 @@ vb_est_all<- est_vbgrowth(
   dat = age_df, 
   col_length = "length_cm",
   col_age = "age",
-  init_params = data.frame(K = 0.17, Linf = 55, L0 = 5, CV0 = 0.10, CV1 = 0.10))
+  init_params = data.frame(K = 0.17, Linf = 45, L0 = 5, CV0 = 0.10, CV1 = 0.10))
 vb_est_all$all_growth
- #        K       Linf         L0        CV0        CV1
- #0.1782938 40.9971124  3.9225748  0.2262690  0.0649841
+  # K        Linf          L0         CV0         CV1 
+  # 0.11584283 42.67082542 14.99321735  0.17985775  0.00262825
 #adding in Diana's age 0 fish
-#          K        Linf          L0         CV0         CV1
-# 0.17630364 41.13319155  3.98363810  0.20734564  0.06333945
+#         K        Linf          L0         CV0         CV1 
+# 0.17857625 41.16096213  3.98588220  0.20648865  0.06223067
 
 
 #write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
