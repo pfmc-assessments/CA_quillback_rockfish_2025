@@ -2076,6 +2076,53 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+####------------------------------------------------#
+## 1_0_10_growthSelex ----
+####------------------------------------------------#
+
+# Set growth fleet selectivity for ages to be type 0 (age 0 selex = 1)
+
+new_name <- "1_0_10_growthSelex"
+old_name <- "1_0_7_estQ_ROV"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+mod$ctl$age_selex_types["CA_Growth", "Pattern"] <- 0
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
 
 ####------------------------------------------------#
 ## 1_1_1_fixGrowthROVlogistic ----
