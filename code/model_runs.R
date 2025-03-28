@@ -2072,6 +2072,280 @@ SS_plots(pp, plot = c(1:26))
 
 
 
-###
-#111
-###
+####------------------------------------------------#
+## 1_1_1_fixGrowthROVlogistic ----
+####------------------------------------------------#
+
+#fix growth, now using Diana's age 0 lengths    
+# starting model 108 since Melissa forgot to commit older code
+
+ new_name <- "1_1_1_fixGrowthROVlogistic"  
+ old_name <- "1_0_8_ROVselexLogistic"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+mod$ctl$MG_parms$INIT[2] <-  3.986
+mod$ctl$MG_parms$INIT[3] <- 41.152
+mod$ctl$MG_parms$INIT[4] <-  0.178
+mod$ctl$MG_parms$INIT[5] <-  0.207
+mod$ctl$MG_parms$INIT[6] <-  0.063
+mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
+#negative phase 
+mod$ctl$MG_parms$PHASE[2:6] <- -9
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+#Fits look better.  Growth looks reasonable
+#Length fits still off
+
+
+####------------------------------------------------#
+## 1_1_2_estL2estK ----
+####------------------------------------------------#
+
+#starting model 108 since Melissa forgot to commit older code
+
+ new_name <- "1_1_2_estL2estK"  
+ old_name <- "1_1_1_fixGrowthROVlogistic"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+#phase 2 for L2 and K 
+mod$ctl$MG_parms$PHASE[3:4] <- 2
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#L2 now at 44.2 and k estimated at .12
+
+####------------------------------------------------#
+## 1_1_3_estL2estKCVs ----
+####------------------------------------------------#
+ 
+#starting model 108 since Melissa forgot to commit older code
+
+ new_name <- "1_1_3_estL2estKCVs"  
+ old_name <- "1_1_2_estL2estK"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+#phase 2 for L2 and K 
+mod$ctl$MG_parms$PHASE[3:6] <- 2
+#$triple check changes
+aa <- mod$ctl$MG_parms
+View(aa)
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#L2 now at 44.2 and k estimated at .12
+#CVs for L1 and L2 look ok
+
+####------------------------------------------------#
+## 1_1_4_estAll Growth ----
+####------------------------------------------------#
+
+ new_name <- "1_1_4_estAllGrowth"  
+ old_name <- "1_1_3_estL2estKCVs"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+#phase 2 for L2 and K 
+mod$ctl$MG_parms$PHASE[2:6] <- 2
+#triple check changes
+aa <- mod$ctl$MG_parms
+View(aa)
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#looks ok, ROV selex off
+
+####------------------------------------------------#
+## 1_1_5_fixL0someCAAL ----
+####------------------------------------------------#
+
+ new_name <- "1_1_5_fixL0someCAAL"  
+ old_name <- "1_1_4_estAllGrowth"
+
+#Copy inputs
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+#Make Changes
+# phase -9 for L0
+mod$ctl$MG_parms$PHASE[2] <- -2
+#$triple check changes
+aa <- mod$ctl$MG_parms
+View(aa)
+
+#Look at CAAL sample sizes
+caal <- mod$dat$agecomp
+View(caal)
+
+#get the year and fleet combos where there are fewer than 30 total ages
+caal_sum <- caal %>%
+group_by(year, fleet) %>%
+summarise(sum_ages = sum(Nsamp)) %>%
+filter(sum_ages <30)
+
+# set rows to zero where year and fleet are in the caal_sum table
+mod$dat$agecomp <-  mod$dat$agecomp %>%
+mutate(year = case_when( 
+        year %in% c(2007,2011,2012,2023,2024) & fleet == 1 ~ -year,
+        year %in% c(1985,2004,2006,2007,2014,2019,2020) & fleet == 3 ~ -year,
+        T ~ year))
+
+#Output files and run
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#removing the caal with small samples sizes helps
+
+####------------------------------------------------#
+## 1_1_6_L0to4 ----
+####------------------------------------------------#
+
+ new_name <- "1_1_6_L0to4"
+ old_name <- "1_1_5_fixL0someCAAL"  
+
+#Copy inputs
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+#Change params L0 to 4
+mod$ctl$MG_parms$INIT[2] <- 4
+
+
+#Output files and run
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
