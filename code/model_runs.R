@@ -2136,7 +2136,6 @@ SS_plots(pp, plot = c(1:26))
 ## 1_1_2_estL2estK ----
 ####------------------------------------------------#
 
-#starting model 108 since Melissa forgot to commit older code
 
  new_name <- "1_1_2_estL2estK"  
  old_name <- "1_1_1_fixGrowthROVlogistic"
@@ -2351,6 +2350,79 @@ r4ss::run(dir = here('models', new_name),
           skipfinished = FALSE)
 
 pp <- SS_output(here('models', new_name))
-SS_plots(pp, plot = c(1:26))
 
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 #Effectively does nothing, just removes the warning about the lower length bin
+
+####------------------------------------------------#
+## 1_1_7_FirstMatureAge ----
+####------------------------------------------------#
+
+ new_name <- "1_1_7_FirstMatureAge"
+ old_name <- "1_1_6_L0to4" 
+
+#Copy inputs
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+#Change first mature age to 2
+mod$ctl$First_Mature_Age <- 2
+
+
+#Output files and run
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+#Does nothing
+
+
+####------------------------------------------------#
+## 1_1_8_1cmPopBins ----
+####------------------------------------------------#
+
+ new_name <- "1_1_8_1cmPopBins"
+ old_name <- "1_1_6_L0to4" 
+
+#Copy inputs
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+#Change population size bins to 1cm
+mod$dat$binwidth <- 1
+
+
+
+#Output files and run
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+#Does nothing
