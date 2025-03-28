@@ -1818,12 +1818,12 @@ SS_plots(pp, plot = c(1:26))
 
 
 ####------------------------------------------------#
-## 1_0_4_unfixQ ----
+## 1_0_5_unfixQ ----
 ####------------------------------------------------#
 
 # Catchabilities are fixed at 1. Relax these are rerun. See if that improves
 
-new_name <- "1_0_4_unfixQ"
+new_name <- "1_0_5_unfixQ"
 old_name <- "1_0_1_ccfrpSelexLogistic"
 
 
