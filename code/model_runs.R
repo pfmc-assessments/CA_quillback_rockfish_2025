@@ -15,6 +15,7 @@ library(here)
 library(dplyr)
 library(tictoc)
 
+source(here('code/selexComp.R'))
 
 ##########################################################################################-
 #                                 ---- TEMPLATE ---- 
@@ -65,6 +66,8 @@ r4ss::run(dir = here('models', new_name),
 
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
+
+#plot_sel_all(pp) #uncomment if what to plot selectivities of each fleet
 
 
 ##
@@ -2069,6 +2072,8 @@ r4ss::run(dir = here('models', new_name),
 
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
 
 
 
