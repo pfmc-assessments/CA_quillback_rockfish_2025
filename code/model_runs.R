@@ -2353,4 +2353,4 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
-
+#Effectively does nothing, just removes the warning about the lower length bin
