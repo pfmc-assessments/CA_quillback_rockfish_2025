@@ -231,7 +231,8 @@ ggsave(file = file.path(fig.dir, "newstereolength_by_location_year_coredepths_by
 rov_bio <- read.csv(file.path(dir,"QuillbackRFStereoSize-11-26-2024.csv"))
 
 #Pull in final transect dataset so can use lengths of only kept transects in index
-transect <- read.csv(here("data-raw", "2025TransectROVData.csv"))
+#transect <- read.csv(here("data-raw", "2025TransectROVData.csv"))
+transect <- read.csv(here("data-raw", "2025ROVDataAllVariables_2025-03-26.csv"))
 
 #Weight is not measured so dont use. John uses a relationship to determine weight
 plot(rov_bio$StereoSize, rov_bio$Weight)
@@ -244,7 +245,7 @@ rov_bio$area <- dplyr::case_when(rov_bio$Implementation_Region == "North" ~ "Nor
 
 #Filter out lengths from transects not in the final dataset (transect)
 rov_bio_used <- rov_bio %>%
-  dplyr::filter(Transect_ID %in% c(transect$transect_id)) %>%
+  dplyr::filter(Transect_ID %in% c(transect$Transect_ID)) %>%
   mutate("Year" = Super.Year,
          "Actual_Year" = Survey_Year,
          "length_cm" = StereoSize,
