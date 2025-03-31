@@ -2269,6 +2269,7 @@ SS_plots(pp, plot = c(1:26))
 #L2 now at 44.2 and k estimated at .12
 #CVs for L1 and L2 look ok
 
+
 ####------------------------------------------------#
 ## 1_1_4_estAll Growth ----
 ####------------------------------------------------#
@@ -2312,6 +2313,7 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
 #looks ok, ROV selex off
+
 
 ####------------------------------------------------#
 ## 1_1_5_fixL0someCAAL ----
@@ -2367,6 +2369,7 @@ SS_plots(pp, plot = c(1:26))
 
 #removing the caal with small samples sizes helps
 
+
 ####------------------------------------------------#
 ## 1_1_6_L0to4 ----
 ####------------------------------------------------#
@@ -2381,6 +2384,7 @@ copy_SS_inputs(dir.old = here('models', old_name),
 
 mod <- SS_read(here('models', new_name))
 
+#Make Changes
 #Change params L0 to 4
 mod$ctl$MG_parms$INIT[2] <- 4
 
@@ -2401,6 +2405,7 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 #Effectively does nothing, just removes the warning about the lower length bin
+
 
 ####------------------------------------------------#
 ## 1_1_7_FirstMatureAge ----
@@ -2496,6 +2501,52 @@ mod$dat$CPUE$month <- 1
 
 
 #Output files and run
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 1_1_10_exponentialDecay0.2 ----
+####------------------------------------------------#
+
+#Set exponential decay from 0.01 to 0.2
+
+new_name <- "1_1_10_exponentialDecay0.2"
+old_name <- "1_1_6_L0to4" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+mod$ctl$Exp_Decay <- 0.2
+
+
+##
+#Output files and run
+##
+
 SS_write(mod,
          dir = here('models', new_name),
          overwrite = TRUE)
