@@ -159,6 +159,11 @@ gemm <- gemm_sector %>%
   dplyr::mutate(., "dis_mort_prop" = round(Dead_Discard/Tot_Dead,3)) %>% 
   data.frame() 
 
+#Add 2024 estimates as provided by the observer program
+gemm2024 <- read_excel(here("data-raw", "LangsethReq_ DRAFT_2024_qbdisest.xlsx"), sheet = "DRAFT_2024_qbdisest") %>%
+  dplyr::select(area_strat, qbdismort_mt_expanded) %>%
+  dplyr::summarise(sum2024 = sum(qbdismort_mt_expanded))
+
 
 #---------------------------------------------------------------------------------------------------------------#
 
@@ -245,14 +250,13 @@ ca_catch_faa[!ca_catch_faa$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "
   ca_catch_faa[!ca_catch_faa$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), c("com_dis_North", "com_dis_South")] +
   ca_catch_faa[!ca_catch_faa$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), c("com_lan_North", "com_lan_South")]
 
-#Now add assumed dead discards to 2024. 
-#Assume the same amount as was in 2023. Also, keep assumption of zero landing 
-#for 2024 as for non-FAA setup
+#Now add assumed dead discards to 2024.
+#Keep assumption of zero landing for 2024 as for non-FAA setup
+#Assume all are in north. Consistent with 2024 ratio, as well as other recent years
 ca_catch_faa[ca_catch_faa$Year == 2024, "com_lan_North"] <- 0
 ca_catch_faa[ca_catch_faa$Year == 2024, c("com_tot_North", "com_dis_North", 
                                           "com_tot_South", "com_dis_South")] <- 
-  ca_catch_faa[ca_catch_faa$Year == 2023, c("com_dis_North", "com_dis_North",
-                                            "com_dis_South", "com_dis_South")]
+  c(gemm2024, gemm2024, 0, 0)
 
 
 

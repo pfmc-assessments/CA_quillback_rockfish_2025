@@ -223,6 +223,12 @@ plot(ca_rec_recfin[ca_rec_recfin$RECFIN_YEAR >= 2002 & ca_rec_recfin$RECFIN_YEAR
        gemm[gemm$grouped_sector == "ca_rec", "Dead_Discard"])
 
 
+#Add 2024 estimates as provided by the observer program 
+gemm2024 <- read_excel(here("data-raw", "LangsethReq_ DRAFT_2024_qbdisest.xlsx"), sheet = "DRAFT_2024_qbdisest") %>%
+  dplyr::select(qbdismort_mt_expanded) %>%
+  dplyr::summarise(sum2024 = sum(qbdismort_mt_expanded))
+
+
 #---------------------------------------------------------------------------------------------------------------#
 
 # Combine data into single overall catch data frame and output ----
@@ -296,9 +302,9 @@ ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 
   ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_dis"] +
   ca_catch[!ca_catch$Year %in% c(gemm[gemm$grouped_sector == "ca_comm",  "year"], 2024), "com_lan"]
 
-#Now add assumed dead discards to 2024. Assume the same amount as was in 2023
+#Now add estiamted dead discards from observer program for 2024.
 
-ca_catch[ca_catch$Year == 2024, c("com_tot", "com_dis")] <- ca_catch[ca_catch$Year == 2023, "com_dis"]
+ca_catch[ca_catch$Year == 2024, c("com_tot", "com_dis")] <- gemm2024
 ca_catch[ca_catch$Year == 2024, "com_lan"] <- 0
 
 
