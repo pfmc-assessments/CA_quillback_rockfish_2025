@@ -2608,3 +2608,86 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+
+####------------------------------------------------#
+## 2_0_1_updateData ----
+####------------------------------------------------#
+
+#Updated data from the ROV and added updated 2024 commercial discard estimates
+
+new_name <- "2_0_1_updateData"
+old_name <- "1_1_6_L0to4" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+#Update 2024 catches with newest estimates from observer program
+
+catches <- read.csv(here("data", "CAquillback_total_removals.csv"))
+
+mod$dat$catch[mod$dat$catch == 2024 & mod$dat$catch$fleet == 
+                fleet.converter[fleet.converter$fleet == "com", "fleet_num"], "catch"] <- 
+  catches[catches$Year == 2024, "com_tot"]
+
+
+#Update ROV indices and length data with newest data
+
+#index
+rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+mod$dat$CPUE[which(mod$dat$CPUE$index %in% 
+                     fleet.converter[fleet.converter$fleet == "rov", "fleet_num"]),] <- 
+  rov_index
+
+#lengths
+rov_lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(rov.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp[which(mod$dat$lencomp$fleet %in% 
+                     fleet.converter[fleet.converter$fleet == "rov", "fleet_num"]),] <- 
+  rov_lengths
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
