@@ -4,6 +4,7 @@
 #
 #Author: Melissa Monk SWFSC
 #      1/17/2025
+#updated 4/1/25 with a single file for lengths
 ###############################################################
 rm(list = ls(all = TRUE))
 graphics.off()
@@ -17,85 +18,29 @@ library(FSA)
 setwd(here())
 #fig.dir <- file.path(here(),"data_explore_figs")
 #read in the data
-#This is a data dump from Patrick McDonald (NWFSC CAP lab) of all the
-#quillback his lab has aged
-#UPdated csv file 3/27
-qlbk <- read.csv(file.path(here(), "data-raw", "ages","QLBK_Data_Dump_updated.csv"))
+qlbk <- read.csv(file.path(here(), "data-raw", "ages","QLBK_faa_age_length.csv"))
 
-#read in age 0 lengths
-dat <- read.csv(here("data-raw","Baetscher_juvenile_rockfish_NSF_dispersal_proj_genetic_ids.csv"))
-str(dat)
-dat$year <- sub(".*(\\d+{4}).*$", "\\1", dat$COLLECTION_DATE) #get last 4 digits
-mal <- dat %>%
-filter(GENETIC_ID == "Smaliger",
-       !is.na(LENGTH))
+#model_fleet
+qlbk <- qlbk %>%
+mutate(fleet = case_when(source == "pacfin" ~ "Commercial", 
+                         TRUE ~ "Growth")) %>% mutate(project = source)
+summary(as.factor(qlbk$source))
+summary(as.factor(qlbk$fleet))
+summary(as.factor(qlbk$faa_area))
+#north south 
+#  729   532 
+qlbk %>% filter(age !=0) %>% group_by(faa_area) %>% tally()
+#without age 0 fish
+# north      729
+# south      340
 
-
-#get the wcgbts locations to filter out OR/WA
-load(file.path(here(),"data-raw", "trawl_surveys","bio_quillback rockfish_NWFSC.Combo_2025-03-14.rdata"))
-
-ca_bottomtrawl <- x %>%
-filter(Latitude_dd <42, !is.na(Otosag_id))
-
-#remove Oregon and northern data from the survey
-ca <- qlbk %>%
-filter(case_when (source == "OR" ~ F,
-       (source == "NWFSC" & specimen_id %in% ca_bottomtrawl$Otosag_id) ~ T,
-       source == "CA" ~ T,
-       T ~ F))
-
-#Remove two duplicated survey samples from patricks data dump (same specimen id in 2014 and 2017)
-#Have different "date_sent" so remove that column to remove duplicates
-ca[ca$year %in% c(2014, 2017) & ca$source == "NWFSC",]
-ca <- ca[!duplicated(ca %>% dplyr::select(-date_sent)),]
-
-
-#Recategorize CCFRP to all the same
-ca <- ca %>%
-filter(!is.na(length_cm)) %>%
-mutate(project = sample_type) 
-ca$project[grepl("CCFRP", ca$project)] <- "CCFRP"
-ca$project[grepl("Recreational", ca$project)] <- "CDFW"
-ca$project[grepl("Rec.", ca$project)] <- "CDFW"
-ca$project[grepl("Research", ca$project) & ca$year %in% c(2010,2011)] <- "Abrams"
-ca$project[grepl("Research", ca$project)] <- "CDFW" #remaining research go to CDFW
-ca$project[grepl("Unknown", ca$project) & ca$year == 2007] <- "SWFSC boxed"
-ca$project[grepl("Unknown", ca$project) & ca$year < 2007] <- "CDFW"
-
-
-#rename columns
-ca <- ca %>%
-rename(age = age_best,
-       Sex = sex)
-ca$Sex <- as.factor(ca$Sex)
-#tally by sample type - renamed project to group
-#using this to check things
-ca %>%
- #filter(project == "Combined Survey") %>%
-    group_by(project) %>%
-    tally() 
- 
-#how many by sex
-#Sex = 1 is male, Sex = 2 is female, Sex = 3 is unsexed
-ca %>%
-    group_by(Sex) %>%
-    tally() 
-
-#combine the age 0 fish  to the ca dataframe
-ca <- ca %>% dplyr::select(year, specimen_id, age, length_cm, Sex, project)
-mal <- mal %>% 
-mutate(project = "SMURF", age = 0, length_cm = LENGTH/10, Sex = "U") %>%
-rename(specimen_id = NMFS_DNA_ID) %>%
-dplyr::select(year, specimen_id, age, length_cm, Sex, project)
-
-ca <- rbind(ca, mal)
-
+#make a copy to keep the code the same
+ca <- qlbk
 ######Data plots
 #plot by faceted project
-ggplot(ca, aes(y = length_cm, x = age, color = Sex)) +
-	geom_point(alpha = 0.1) + 
+ggplot(ca, aes(y = length_cm, x = age, color = sex)) +
+	geom_point(alpha = 0.5) + 
   theme_bw() + 
-  geom_jitter() + 
   xlim(0, 60) + ylim(0, 60) +
   theme(panel.grid.major = element_blank(), 
         axis.text = element_text(size = 12),
@@ -107,6 +52,7 @@ ggplot(ca, aes(y = length_cm, x = age, color = Sex)) +
   scale_color_viridis_d()
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_by_project.png"),
        width = 10, height = 8)
+
 
 #plot by faceted sex
 ggplot(ca, aes(y = length_cm, x = age, color = project)) +
@@ -120,30 +66,79 @@ ggplot(ca, aes(y = length_cm, x = age, color = project)) +
         strip.text.y = element_text(size = 16),
          legend.text = element_text(size = 20),
         panel.grid.minor = element_blank()) + 
-	facet_grid(rows = vars(Sex)) + 
+	facet_grid(rows = vars(sex)) + 
 	xlab("Age") + ylab("Length (cm)") +
   scale_color_viridis_d()
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex.png"),
        width = 10, height = 8)
 
-
-#Plot just carcass and ccfrp sampling
-ca_1 <- ca %>% filter(project %in% c("Carcass Sampling", "CCFRP"))
-ggplot(ca_1, aes(y = length_cm, x = age, color = project)) +
-	geom_point(alpha = 0.1) + 
-  theme_bw() + 
-  geom_jitter() + 
-  xlim(1, 60) + ylim(1, 60) +
+#plot by area and project
+ggplot(ca, aes(y = length_cm, x = age, color = project)) +
+	geom_point(alpha = 0.3, size = 4) + 
+  theme_bw() +  
+  xlim(0, 60) + ylim(0, 60) +
   theme(panel.grid.major = element_blank(), 
-        axis.text = element_text(size = 12),
-        axis.title = element_text(size = 12),
-        strip.text.y = element_text(size = 14),
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 16),
+        strip.text.y = element_text(size = 16),
+         legend.text = element_text(size = 20),
+        panel.grid.minor = element_blank()) + 
+       facet_grid(rows = vars(faa_area)) +
+	xlab("Age") + ylab("Length (cm)") #+
+  #scale_color_viridis_d()#begin = .05, end = .8)
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length.png"),
+       width = 10, height = 8)
+
+
+#plot by faceted area
+ggplot(ca, aes(y = length_cm, x = age, colour = fleet)) +
+	geom_point(alpha = 0.3, size = 4) + 
+  theme_bw() +  
+  xlim(0, 60) + ylim(0, 60) +
+  theme(panel.grid.major = element_blank(), 
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 16),
+        strip.text.y = element_text(size = 16),
+         legend.text = element_text(size = 20),
         panel.grid.minor = element_blank()) + 
 	xlab("Age") + ylab("Length (cm)") +
-  scale_color_viridis_d()
-#ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_by_project.png"),
-#       width = 10, height = 8)
+  scale_color_viridis_d()#begin = .05, end = .8)
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length.png"),
+       width = 10, height = 8)
 
+
+####################################################################################
+# Additional data summaries
+
+faa_laa_summary <- ca %>%
+filter(age !=0) %>% 
+mutate(floor_len = floor(length_cm)) %>%
+group_by(faa_area, floor_len) %>%
+summarise(mean_age = round(mean(age),0)) %>% # %>%min_age = min(age), max_age = max(age), 
+tidyr::pivot_wider(names_from = faa_area, values_from = mean_age)
+View(faa_laa_summary)
+
+faa_laa_summary1 <- ca %>%
+filter(age !=0) %>% 
+mutate(floor_len = floor(length_cm)) %>%
+group_by(faa_area, floor_len) %>%
+summarise(median_age = round(median(age),0)) %>% # %>%min_age = min(age), max_age = max(age), 
+tidyr::pivot_wider(names_from = faa_area, values_from = median_age)
+View(faa_laa_summary1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########################################################################################################
 #############################################
 #estimate growth
 #2021 estimate Linf = 43.04 k = .199 to = -0.067
@@ -152,62 +147,20 @@ ggplot(ca_1, aes(y = length_cm, x = age, color = project)) +
 age_df <- ca #%>% filter(age !=0)
 age_df$Age <- age_df$age
 age_df$Length_cm <- age_df$length_cm
-age_df <- age_df %>% 
-filter(project != "Carcass Sampling") %>%
-filter(specimen_id != 'CA11-R016-QLBK-43')
+age_df <- age_df
 
 vb_est_all<- est_vbgrowth(
   dir = NULL, 
-  dat = age_df %>% filter(age!=0), 
+  dat = age_df,
   col_length = "length_cm",
   col_age = "age",
   init_params = data.frame(K = 0.17, Linf = 45, L0 = 5, CV0 = 0.10, CV1 = 0.10))
 vb_est_all$all_growth
- #         K        Linf          L0         CV0         CV1
-# 0.11689009 42.64238320 14.95089547  0.17051908  0.01113818
-#write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
-#adding in Diana's age 0 fish
+
 #         K        Linf          L0         CV0         CV1 
 #0.17780433 41.18165223  3.99243506  0.19936688  0.06328719
-
-
 #write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_withAge0.csv"))
 
-# #males only
-# length_age_males <- est_vbgrowth(
-#  dir = file.path(here(),"data-raw"),
-#   dat = subset(age_df, Sex == 1), 
-#   col_length = "length_cm",
-#   col_age = "age",
-#    init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-# length_age_males$all_growth
-# #males
-# #           K         Linf           L0          CV0          CV1
-# # 0.131052985 41.724881311 13.105886995  0.192873891  0.006705831
-
-# #females only
-# length_age_females <- est_vbgrowth(
-#  dir = file.path(here(),"data-raw"),
-#   dat = subset(age_df, Sex == 2), 
-#   col_length = "length_cm",
-#   col_age = "age",
-#    init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-# length_age_females$all_growth
-# #females
-# #           K         Linf           L0          CV0          CV1
-# # 0.093386826 44.362969045 16.842822351  0.168755023  0.001117803
-
-# #unsexed only
-# length_age_unsexed <- est_vbgrowth(
-#   dir = file.path(here(),"data-raw"),
-#   dat = subset(age_df, Sex == 3), 
-#   col_length = "length_cm",
-#   col_age = "age",
-#   init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
-# length_age_unsexed$all_growth
-# #unsexed
-# #        K         Linf           L0          CV0          CV1
-# 0.14501755 41.62102296 12.58916457  0.11829281  0.07596045
 
 ##################################################
 #Get the predictions
@@ -228,8 +181,9 @@ preds1 <- data.frame(ages,
 preds2 <- data.frame(ages,
                  fit = vb_fn2(ages,  Linf = 43.02, t0 = -0.067, k = 0.199))
 
+#from below
 preds3 <- data.frame(ages,
-                 fit = vb_fn2(ages,  Linf = 41.146, t0 = -0.6190 k = 0.1772))
+                     fit = vb_fn2(ages,  Linf = 41.1604, t0 = -0.6202, k = 0.1766))
 
 
 #Plot data with fit 
@@ -252,73 +206,33 @@ ggplot() +
 # ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex.png"),
 #       width = 10, height = 8)
 
-
-#Plot data with fits by sex
-ggplot(ca, aes(y = length_cm, x = age, col = Sex)) +
-  geom_point(alpha = 0.1) + 
-  theme_bw() + 
-  xlim(1, 60) + ylim(1, 60) +
-  theme(panel.grid.major = element_blank(), 
-        axis.text = element_text(size = 16),
-        axis.title = element_text(size = 16),
-        strip.text.y = element_text(size = 16),
-        legend.text = element_text(size = 20),
-        panel.grid.minor = element_blank()) + 
-  facet_grid(rows = vars(Sex)) +
-  geom_function(data = data.frame(age = 0, length_cm = 0, Sex = "1"),
-                fun = vb_fn,
-                args = list(Linf = length_age_males$all_growth["Linf"], 
-                            L0 = length_age_males$all_growth["L0"],
-                            k = length_age_males$all_growth["K"])) +
-  # geom_text(data = data.frame(age = 40, length_cm = 20, Sex = "1"), 
-  #           label = paste0("Linf = ", length_age_males$all_growth["Linf"])) +
-  geom_function(data = data.frame(age = 0, length_cm = 0, Sex = "2"),
-                fun = vb_fn,
-                args = list(Linf = length_age_females$all_growth["Linf"], 
-                            L0 = length_age_females$all_growth["L0"],
-                            k = length_age_females$all_growth["K"])) +
-  geom_function(data = data.frame(age = 0, length_cm = 0, Sex = "3"),
-                fun = vb_fn,
-                args = list(Linf = length_age_unsexed$all_growth["Linf"], 
-                            L0 = length_age_unsexed$all_growth["L0"],
-                            k = length_age_unsexed$all_growth["K"])) +
-  geom_function(data = data.frame(age = 0, length_cm = 0), aes(col = "All"),
-                fun = vb_fn,
-                args = list(Linf = vb_est_all$all_growth["Linf"], 
-                            L0 = vb_est_all$all_growth["L0"],
-                            k = vb_est_all$all_growth["K"])) +
-  xlab("Age") + ylab("Length (cm)")
-ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex_withFits.png"),
-       width = 6, height = 8)
-
-
-
 ###############################################################################
 ###############################################################################
-#Vonbert Models estimated with a different package
+#Vonbert Models estimated with a different package - to see if its still
+#sensitive to start values - the answer is yes
 ###############################################################################
-Startval = vbStarts(Length~Age, data=Alldat)
+Startval = vbStarts(Length~Age, data=age_df)
 Startval=list(Linf=49,K=.2,t0=-1)
 ####fit model to all data 
 vbTypical <- Length~Linf*(1-exp(-K*(Age-t0)))
-fitTyp = nls(vbTypical, data=Alldat, start=Startval)
+fitTyp = nls(vbTypical, data=age_df , start=Startval)
 
 #make changes to the dataframe to match
-Alldat <- age_df# %>% filter(age!=0) #add or remove the age 0 fish and it matters
-Alldat$Age = Alldat$age
-Alldat$Length = Alldat$length_cm
+age_df <- age_df# %>% filter(age!=0) #add or remove the age 0 fish and it matters
+age_df$Age = age_df$age
+age_df$Length = age_df$length_cm
 
-fitGen <- nls(vbTypical, data = Alldat, start = Startval)
+fitGen <- nls(vbTypical, data = age_df, start = Startval)
 fitGen
 
 #Schnute parameterization
-SchStarts = FSA::vbStarts(Length~Age, data=Alldat,type='Schnute')
+SchStarts = FSA::vbStarts(Length~Age, data=age_df,type='Schnute')
 SchStarts
 
 vb3 <- FSA::vbFuns("Schnute",simple=FALSE)
 
 fit <- nls(Length~vb3(Age,L1, L3,K, t1=0,t3=40),
-                   data = Alldat,start=SchStarts)
+                   data = age_df,start=SchStarts)
 fit
 
 
@@ -333,3 +247,84 @@ fit
 
 #Age 0 here is estimated as 3.9, but that's really a July 1 length
 # Look at using between 6 and 8 as a January 1 length at L1
+
+
+
+###########################################################################
+# Data biased and not collected randomly to look at sex
+
+# #males only
+# length_age_males <- est_vbgrowth(
+#  dir = file.path(here(),"data-raw"),
+#   dat = subset(age_df, sex == 1), 
+#   col_length = "length_cm",
+#   col_age = "age",
+#    init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+# length_age_males$all_growth
+# #males
+# #           K         Linf           L0          CV0          CV1
+# # 0.131052985 41.724881311 13.105886995  0.192873891  0.006705831
+
+# #females only
+# length_age_females <- est_vbgrowth(
+#  dir = file.path(here(),"data-raw"),
+#   dat = subset(age_df, sex == 2), 
+#   col_length = "length_cm",
+#   col_age = "age",
+#    init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+# length_age_females$all_growth
+# #females
+# #           K         Linf           L0          CV0          CV1
+# # 0.093386826 44.362969045 16.842822351  0.168755023  0.001117803
+
+# #unsexed only
+# length_age_unsexed <- est_vbgrowth(
+#   dir = file.path(here(),"data-raw"),
+#   dat = subset(age_df, sex == 3), 
+#   col_length = "length_cm",
+#   col_age = "age",
+#   init_params = data.frame(K = 0.12, Linf = 55, L0 = 15, CV0 = 0.10, CV1 = 0.10))
+# length_age_unsexed$all_growth
+# #unsexed
+# #        K         Linf           L0          CV0          CV1
+# 0.14501755 41.62102296 12.58916457  0.11829281  0.07596045
+
+
+#Data were not sampled in a manner that sex is unbiased 
+# #Plot data with fits by sex
+# ggplot(ca, aes(y = length_cm, x = age, col = sex)) +
+#   geom_point(alpha = 0.1) + 
+#   theme_bw() + 
+#   xlim(1, 60) + ylim(1, 60) +
+#   theme(panel.grid.major = element_blank(), 
+#         axis.text = element_text(size = 16),
+#         axis.title = element_text(size = 16),
+#         strip.text.y = element_text(size = 16),
+#         legend.text = element_text(size = 20),
+#         panel.grid.minor = element_blank()) + 
+#   facet_grid(rows = vars(sex)) +
+#   geom_function(data = data.frame(age = 0, length_cm = 0, sex = "1"),
+#                 fun = vb_fn,
+#                 args = list(Linf = length_age_males$all_growth["Linf"], 
+#                             L0 = length_age_males$all_growth["L0"],
+#                             k = length_age_males$all_growth["K"])) +
+#   # geom_text(data = data.frame(age = 40, length_cm = 20, sex = "1"), 
+#   #           label = paste0("Linf = ", length_age_males$all_growth["Linf"])) +
+#   geom_function(data = data.frame(age = 0, length_cm = 0, sex = "2"),
+#                 fun = vb_fn,
+#                 args = list(Linf = length_age_females$all_growth["Linf"], 
+#                             L0 = length_age_females$all_growth["L0"],
+#                             k = length_age_females$all_growth["K"])) +
+#   geom_function(data = data.frame(age = 0, length_cm = 0, sex = "3"),
+#                 fun = vb_fn,
+#                 args = list(Linf = length_age_unsexed$all_growth["Linf"], 
+#                             L0 = length_age_unsexed$all_growth["L0"],
+#                             k = length_age_unsexed$all_growth["K"])) +
+#   geom_function(data = data.frame(age = 0, length_cm = 0), aes(col = "All"),
+#                 fun = vb_fn,
+#                 args = list(Linf = vb_est_all$all_growth["Linf"], 
+#                             L0 = vb_est_all$all_growth["L0"],
+#                             k = vb_est_all$all_growth["K"])) +
+#   xlab("Age") + ylab("Length (cm)")
+# ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex_withFits.png"),
+#        width = 6, height = 8)

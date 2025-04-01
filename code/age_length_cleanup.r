@@ -21,7 +21,7 @@ setwd(here())
 #This is a data dump from Patrick McDonald (NWFSC CAP lab) of all the 
 #quillback his lab has aged
 
-qlbk <- read.csv(file.path(here(), "data-raw", "QLBK_Data_Dump_updated.csv"))
+qlbk <- read.csv(file.path(here(), "data-raw", "ages", "QLBK_Data_Dump_updated.csv"))
 qlbk <- qlbk %>% dplyr::select(-c(date_aged, date_sent)) %>% unique()#drops duplicates
 str(qlbk)
 dim(qlbk)
@@ -96,6 +96,12 @@ ca %>%
     group_by(Sex) %>%
     tally() 
 
+
+#some additional tallies
+ca %>% filter(project=="Commercial") %>% group_by(year) %>% tally()
+bb <- ca %>% filter(project=="Commercial", year==2019)
+View(bb)
+write.csv(bb, here("data-raw", "ages","2019fish.csv"), row.names = F)
 
 save(ca, file =  here("data-raw","all_ages_labeled.RData"))
 
