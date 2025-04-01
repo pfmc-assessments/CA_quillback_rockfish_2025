@@ -44,6 +44,11 @@ filter(case_when (source == "OR" ~ F,
        source == "CA" ~ T,
        T ~ F))
 
+#Remove two duplicated survey samples from patricks data dump (same specimen id in 2014 and 2017)
+#Have different "date_sent" so remove that column to remove duplicates
+ca[ca$year %in% c(2014, 2017) & ca$source == "NWFSC",]
+ca <- ca[!duplicated(ca %>% dplyr::select(-date_sent)),]
+
 #Recategorize CCFRP to all the same
 ca <- ca %>%
 filter(!is.na(length_cm)) %>%
@@ -158,13 +163,14 @@ vb_est_all<- est_vbgrowth(
   init_params = data.frame(K = 0.17, Linf = 45, L0 = 5, CV0 = 0.10, CV1 = 0.10))
 vb_est_all$all_growth
  #         K        Linf          L0         CV0         CV1
-#  0.12643203 42.15426023 13.97494714  0.16228049  0.02861817
+# 0.11689009 42.64238320 14.95089547  0.17051908  0.01113818
+#write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
 #adding in Diana's age 0 fish
 #         K        Linf          L0         CV0         CV1 
-# 0.17783557 41.17941670  3.99328653  0.19903124  0.06335928
+#0.17780433 41.18165223  3.99243506  0.19936688  0.06328719
 
 
-#write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
+#write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_withAge0.csv"))
 
 # #males only
 # length_age_males <- est_vbgrowth(
