@@ -53,7 +53,7 @@ data-raw/
 length_processed_noShare/
 confidential_noShare/
 literature/
-confidential_FAA_runs_noShare/
+_confidential_FAA_runs_noShare/
 
 # ignore R project
 *.RProj
