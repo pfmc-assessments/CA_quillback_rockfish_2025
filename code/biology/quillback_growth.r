@@ -12,7 +12,7 @@ library(ggplot2)
 library(dplyr)
 library(here)
 library(nwfscSurvey)
-library
+library(FSA)
 
 setwd(here())
 #fig.dir <- file.path(here(),"data_explore_figs")
@@ -48,6 +48,7 @@ filter(case_when (source == "OR" ~ F,
 #Have different "date_sent" so remove that column to remove duplicates
 ca[ca$year %in% c(2014, 2017) & ca$source == "NWFSC",]
 ca <- ca[!duplicated(ca %>% dplyr::select(-date_sent)),]
+
 
 #Recategorize CCFRP to all the same
 ca <- ca %>%
