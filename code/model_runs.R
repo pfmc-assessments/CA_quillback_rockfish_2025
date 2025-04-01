@@ -2608,6 +2608,7 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+
 ####------------------------------------------------#
 ## 1_1_12_L1age1fixedto8 ----
 ####------------------------------------------------#
@@ -2655,6 +2656,7 @@ plot_sel_all(pp)
 #Doesn't look like anything changes - strange....tried cranking length at age 1 to 16 a
 #and that's where you see a change
 
+
 ####------------------------------------------------#
 ## 1_1_13_L1age1EstAllGrowth ----
 ####------------------------------------------------#
@@ -2700,6 +2702,7 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
+
 
 ####------------------------------------------------#
 ## 2_0_1_updateData ----
@@ -2832,6 +2835,59 @@ colnames(dw)[1] = "factor"
 new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
                                 by = dplyr::join_by(factor, fleet))
 mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 2_1_2_ROVselexFix1 ----
+####------------------------------------------------#
+
+#Updated data from the ROV and added updated 2024 commercial discard estimates
+
+new_name <- "2_1_2_ROVselexFix1"
+old_name <- "2_1_1_reweight" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+# Set selectivity of ROV fleet to 1 for all lengths (type = 0) and 1 for ages > 0 (type = 10)
+mod$ctl$size_selex_types[grep("CA_ROV", rownames(mod$ctl$size_selex_types)),] <-
+  c(0, 0, 0, 0)
+
+# Selectivity type 0 does not require selectivity parameters so remove
+mod$ctl$size_selex_parms <- mod$ctl$size_selex_parms[
+  -grep("CA_ROV", rownames(mod$ctl$size_selex_parms)),]
 
 
 ##
