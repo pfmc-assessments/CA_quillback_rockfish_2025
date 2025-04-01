@@ -2608,6 +2608,98 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+####------------------------------------------------#
+## 1_1_12_L1age1fixedto8 ----
+####------------------------------------------------#
+
+#To see if more fixed catch (decreasing catch se) changes results
+
+new_name <- "1_1_12_L1age1fixedto8"
+old_name <- "1_1_6_L0to4" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+mod$ctl$MG_parms$INIT[2] <- 8
+mod$ctl$Growth_Age_for_L1 <- 1
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+#Doesn't look like anything changes - strange....tried cranking length at age 1 to 16 a
+#and that's where you see a change
+
+####------------------------------------------------#
+## 1_1_13_L1age1EstAllGrowth ----
+####------------------------------------------------#
+
+#To see if more fixed catch (decreasing catch se) changes results
+
+new_name <- "1_1_13_L1age1EstAllGrowth"
+old_name <- "1_1_6_L0to4" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+##
+#Make Changes
+##
+
+mod$ctl$MG_parms$INIT[2] <- 8
+mod$ctl$MG_parms$PHASE[2] <- 2
+mod$ctl$Growth_Age_for_L1 <- 1
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
 
 ####------------------------------------------------#
 ## 2_0_1_updateData ----

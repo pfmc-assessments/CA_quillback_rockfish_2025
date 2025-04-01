@@ -12,17 +12,18 @@ library(ggplot2)
 library(dplyr)
 library(here)
 library(nwfscSurvey)
+library
 
 setwd(here())
 #fig.dir <- file.path(here(),"data_explore_figs")
 #read in the data
-#This is a data dump from Patrick McDonald (NWFSC CAP lab) of all the 
+#This is a data dump from Patrick McDonald (NWFSC CAP lab) of all the
 #quillback his lab has aged
 #UPdated csv file 3/27
 qlbk <- read.csv(file.path(here(), "data-raw", "ages","QLBK_Data_Dump_updated.csv"))
 
 #read in age 0 lengths
-dat <- read.csv(here("data-raw", "trawl_surveys","Baetscher_juvenile_rockfish_NSF_dispersal_proj_genetic_ids.csv"))
+dat <- read.csv(here("data-raw","Baetscher_juvenile_rockfish_NSF_dispersal_proj_genetic_ids.csv"))
 str(dat)
 dat$year <- sub(".*(\\d+{4}).*$", "\\1", dat$COLLECTION_DATE) #get last 4 digits
 mal <- dat %>%
@@ -31,7 +32,7 @@ filter(GENETIC_ID == "Smaliger",
 
 
 #get the wcgbts locations to filter out OR/WA
-load(file.path(here(),"data-raw", "bio_quillback rockfish_NWFSC.Combo_2025-03-14.rdata"))
+load(file.path(here(),"data-raw", "trawl_surveys","bio_quillback rockfish_NWFSC.Combo_2025-03-14.rdata"))
 
 ca_bottomtrawl <- x %>%
 filter(Latitude_dd <42, !is.na(Otosag_id))
@@ -58,7 +59,7 @@ ca$project[grepl("Unknown", ca$project) & ca$year < 2007] <- "CDFW"
 
 #rename columns
 ca <- ca %>%
-rename(age = age_best, 
+rename(age = age_best,
        Sex = sex)
 ca$Sex <- as.factor(ca$Sex)
 #tally by sample type - renamed project to group
@@ -146,20 +147,21 @@ age_df <- ca #%>% filter(age !=0)
 age_df$Age <- age_df$age
 age_df$Length_cm <- age_df$length_cm
 age_df <- age_df %>% 
-filter(project != "Carcass Sampling")
+filter(project != "Carcass Sampling") %>%
+filter(specimen_id != 'CA11-R016-QLBK-43')
 
 vb_est_all<- est_vbgrowth(
   dir = NULL, 
-  dat = age_df, 
+  dat = age_df %>% filter(age!=0), 
   col_length = "length_cm",
   col_age = "age",
   init_params = data.frame(K = 0.17, Linf = 45, L0 = 5, CV0 = 0.10, CV1 = 0.10))
 vb_est_all$all_growth
-  # K        Linf          L0         CV0         CV1 
-  # 0.11584283 42.67082542 14.99321735  0.17985775  0.00262825
+ #         K        Linf          L0         CV0         CV1
+#  0.12643203 42.15426023 13.97494714  0.16228049  0.02861817
 #adding in Diana's age 0 fish
 #         K        Linf          L0         CV0         CV1 
-# 0.17857625 41.16096213  3.98588220  0.20648865  0.06223067
+# 0.17783557 41.17941670  3.99328653  0.19903124  0.06335928
 
 
 #write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
@@ -219,12 +221,16 @@ preds1 <- data.frame(ages,
 preds2 <- data.frame(ages,
                  fit = vb_fn2(ages,  Linf = 43.02, t0 = -0.067, k = 0.199))
 
+preds3 <- data.frame(ages,
+                 fit = vb_fn2(ages,  Linf = 41.146, t0 = -0.6190 k = 0.1772))
+
 
 #Plot data with fit 
 ggplot() +
 	geom_jitter(data = age_df, aes(y = length_cm, x = age), alpha = .8) + 
-  geom_line(data = preds1, aes(y = fit, x = ages, colour = "CA data"), linewidth = 2) +
+  geom_line(data = preds1, aes(y = fit, x = ages, colour = "CA data schnute"), linewidth = 2) +
   geom_line(data = preds2, aes(y = fit, x = ages, colour = "2021 est"), linewidth = 2) +
+   geom_line(data = preds3, aes(y = fit, x = ages, colour = "CA data vonB"), linewidth = 2) +
   theme_bw() + 
   xlim(0, 60) + ylim(0, 50) +
   theme(panel.grid.major = element_blank(), 
@@ -291,7 +297,7 @@ vbTypical <- Length~Linf*(1-exp(-K*(Age-t0)))
 fitTyp = nls(vbTypical, data=Alldat, start=Startval)
 
 #make changes to the dataframe to match
-Alldat <- ca %>% filter(age!=0) #add or remove the age 0 fish and it matters
+Alldat <- age_df# %>% filter(age!=0) #add or remove the age 0 fish and it matters
 Alldat$Age = Alldat$age
 Alldat$Length = Alldat$length_cm
 
@@ -307,3 +313,16 @@ vb3 <- FSA::vbFuns("Schnute",simple=FALSE)
 fit <- nls(Length~vb3(Age,L1, L3,K, t1=0,t3=40),
                    data = Alldat,start=SchStarts)
 fit
+
+
+#3/31/25
+#     ages       fit
+#   0.0  3.985882
+#    0.2  5.290169
+#    0.4  6.548696
+#    0.6  7.763066
+#    0.8  8.934831
+#    1.0 10.065485
+
+#Age 0 here is estimated as 3.9, but that's really a July 1 length
+# Look at using between 6 and 8 as a January 1 length at L1
