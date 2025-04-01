@@ -2909,3 +2909,277 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+
+####------------------------------------------------#
+## 2_2_1_FAA_confidential ----
+####------------------------------------------------#
+
+#These data are confidential. Putting in a separate folder and updating gitignore
+#to ensure not pushed. 
+
+#Try fleets as areas set up to see if improve fits to data.
+#Start from unweighted version given these changes would really change 211 weights
+
+new_name <- "2_2_1_FAA_confidential"
+old_name <- "2_0_1_updateData" 
+
+##
+#Copy inputs
+##
+
+dir.create(here("models", "_confidential_FAA_runs_noShare"))
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', "_confidential_FAA_runs_noShare", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_confidential_FAA_runs_noShare", new_name))
+
+
+##
+#Make Changes
+##
+
+##
+#Make Changes
+##
+
+#Update fleet information for model, lengths, ages, and indices
+mod$dat$Nfleets <- 7
+mod$dat$fleetinfo <- rbind(c("type" = 1, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Commercial_North"),
+                           mod$dat$fleetinfo[1,],
+                           c("type" = 1, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Recreational_North"),
+                           mod$dat$fleetinfo[-1,])
+mod$dat$fleetinfo$fleetname[c(2,4)] <- paste0(mod$dat$fleetinfo$fleetname[c(2,4)], "_South")
+
+mod$dat$len_info <- rbind("CA_Commercial_North" = mod$dat$len_info[1,],
+                          mod$dat$len_info[1,],
+                          "CA_Recreational_North" = mod$dat$len_info[2,],
+                          mod$dat$len_info[-1,])
+rownames(mod$dat$len_info)[c(2,4)] <- paste0(rownames(mod$dat$len_info)[c(2,4)], "_South")
+
+mod$dat$age_info <- rbind("CA_Commercial_North" = mod$dat$age_info[1,],
+                          mod$dat$age_info[1,],
+                          "CA_Recreational_North" = mod$dat$age_info[2,],
+                          mod$dat$age_info[-1,])
+rownames(mod$dat$age_info)[c(2,4)] <- paste0(rownames(mod$dat$age_info)[c(2,4)], "_South")
+
+
+mod$dat$CPUEinfo <- rbind("CA_Commercial_North" = mod$dat$CPUEinfo[1,],
+                          mod$dat$CPUEinfo[1,],
+                          "CA_Recreational_North" =  mod$dat$CPUEinfo[2,],
+                          mod$dat$CPUEinfo[-1,])
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "com", "rec", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(area = c("North", "South", "North", "South", "All", "All", "All")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5, 6, 7)) %>%
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::select(fleetname, fleet, area, joint, fleet_num)
+
+
+
+### Update catch time series --------------------------------
+
+catches <- read.csv(here("data", "confidential_noShare", "CAquillback_total_removals_faa.csv"))
+catches[is.na(catches)] <- 0
+
+updated.catch.df <- catches %>%
+  dplyr::select(c(Year, names(catches[grep("tot", names(catches))]))) %>%
+  tidyr::pivot_longer(cols = -Year, names_to = c('fleet', 'type', 'area'), values_to = 'catch', 
+                      names_sep = '_') %>% #ideally I want to separate by second hyphen but this is a workaround
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::left_join(fleet.converter %>% dplyr::select(joint, fleet_num), by = c("joint" = "joint")) %>%
+  dplyr::mutate(seas = 1, 
+                catch_se = 0.05) %>%
+  dplyr::select(year = Year, seas, fleet = fleet_num, catch, catch_se) %>%
+  dplyr::arrange(fleet, year) %>%
+  as.data.frame()
+
+mod$dat$catch <- updated.catch.df
+
+
+
+### Update comps --------------------------------
+
+# Length comps
+
+com.lengths <- read.csv(here("data", "forSS3", "Lcomps_PacFIN_FAA_unsexed_expanded_10_50.csv")) %>%
+  dplyr::mutate(fleet = paste0("com", fleet)) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  as.data.frame()
+
+rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_FAA_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = gsub('_', "", fleet)) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., 
+       dplyr::select(fleet.converter %>% dplyr::mutate(joint = tolower(joint)), -fleet), 
+       by = c("fleet" = "joint"))$fleet_num) %>%
+  as.data.frame()
+
+#Update previous fleet number for unupdated fleets, and then add new FAA fleets
+noFAA.lengths <- mod$dat$lencomp[-which(mod$dat$lencomp$fleet %in% c(1, 2)), ]
+noFAA.lengths$fleet <- noFAA.lengths$fleet + 2
+names(noFAA.lengths) <- names(com.lengths)
+
+mod$dat$lencomp <- dplyr::bind_rows(com.lengths, rec.lengths, noFAA.lengths)
+
+
+# Age comps
+
+mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
+#Requires length bins to be set to the length bin index, so need to change CAAL
+#to reflect bin index. Could set this to 3 and keep length bins as is (i.e. as lengths)
+
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_FAA_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = paste0("com", fleet)) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  as.data.frame()
+
+noFAA.caal <- mod$dat$agecomp[-which(mod$dat$agecomp$fleet %in% c(1, 2)), ]
+noFAA.caal$fleet <- noFAA.caal$fleet + 2
+
+
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, noFAA.caal)
+
+
+# Now change the selectivity tables....
+
+mod$ctl$size_selex_types <- rbind("CA_Commercial_North" = mod$ctl$size_selex_types[1,],
+                                  mod$ctl$size_selex_types[1,],
+                                  "CA_Recreational_North" = mod$ctl$size_selex_types[2,],
+                                  mod$ctl$size_selex_types[-1,])
+rownames(mod$ctl$size_selex_types)[c(2,4)] <- paste0(rownames(mod$ctl$size_selex_types)[c(2,4)], "_South")
+
+
+mod$ctl$age_selex_types <- rbind("CA_Commercial_North" = mod$ctl$age_selex_types[1,],
+                                 mod$ctl$age_selex_types[1,],
+                                 "CA_Recreational_North" = mod$ctl$age_selex_types[2,],
+                                 mod$ctl$age_selex_types[-1,])
+rownames(mod$ctl$age_selex_types)[c(2,4)] <- paste0(rownames(mod$ctl$age_selex_types)[c(2,4)], "_South")
+
+
+#...and length selectivity parameterization....
+#Set the new fleets selectivity to be the same as the rec fleet for now
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms[1:6,], #com north
+                                  mod$ctl$size_selex_parms[1:6,], #com south
+                                  mod$ctl$size_selex_parms[7:12,], #rec north
+                                  mod$ctl$size_selex_parms[7:12,], #rec south
+                                  mod$ctl$size_selex_parms[-c(1:12),])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |> 
+  as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
+  unlist()
+
+rownames(mod$ctl$size_selex_parms) <- selex_names
+
+
+#...and time varying selectivity
+
+selex_new <- mod$ctl$size_selex_parms
+
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+
+
+### Update indices --------------------------------
+
+May need a separate PR index to do this
+
+If so then will have to think about what the different values of Q mean
+
+# ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+#   dplyr::mutate(fleet = "ccfrp") %>%
+#   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+#   dplyr::rename("seas" = month, 
+#                 "se_log" = logse,
+#                 "index" = fleet) %>%
+#   as.data.frame()
+# 
+# pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
+#   dplyr::mutate(fleet = "rec") %>%
+#   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+#   dplyr::rename("seas" = month, 
+#                 "se_log" = logse,
+#                 "index" = fleet) %>%
+#   as.data.frame()
+# 
+# rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
+#   dplyr::rename("seas" = month, 
+#                 "se_log" = logse,
+#                 "index" = fleet) %>%
+#   as.data.frame()
+# 
+# mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index, rov_index)
+# 
+# 
+# # Add q setup for surveys with index data
+# 
+# #Base the number on fleetinfo and any fishery fleets with CPUE data
+# cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+# mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+#                                 "link" = 1,
+#                                 "link_info" = 0,
+#                                 "extra_se" = 0,
+#                                 "biasadj" = 0,
+#                                 "float" = 0,
+#                                 row.names = paste(cpuefleets, 
+#                                                   fleet.converter[cpuefleets, "fleetname"], 
+#                                                   sep = "_"))
+# 
+# mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+#                               "HI" = 25,
+#                               "INIT" = 0,
+#                               "PRIOR" = 0,
+#                               "PR_SD" = 1,
+#                               "PR_type" = 0,
+#                               "PHASE" = -1,
+#                               "env_var&link" = 0,
+#                               "dev_link" = 0,
+#                               "dev_minyr" = 0,
+#                               "dev_maxyr" = 0,
+#                               "dev_PH" = 0,
+#                               "Block" = 0,
+#                               "Block_Fxn" = 0,
+#                               row.names = paste("LnQ", "base", cpuefleets, 
+#                                                 fleet.converter[cpuefleets, "fleetname"], 
+#                                                 sep = "_"))
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
