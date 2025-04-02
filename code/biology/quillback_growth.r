@@ -23,21 +23,25 @@ qlbk <- read.csv(file.path(here(), "data-raw", "ages","QLBK_faa_age_length.csv")
 #model_fleet
 qlbk <- qlbk %>%
 mutate(fleet = case_when(source == "pacfin" ~ "Commercial", 
+                         source == "CCFRPNotFarallons" ~ "CCFRP",
                          TRUE ~ "Growth")) %>% mutate(project = source)
 summary(as.factor(qlbk$source))
 summary(as.factor(qlbk$fleet))
+#  CCFRP Commercial     Growth
+#  103        302        865
 summary(as.factor(qlbk$faa_area))
 #north south 
-#  729   532 
+#  738   532 
 qlbk %>% filter(age !=0) %>% group_by(faa_area) %>% tally()
 #without age 0 fish
-# north      729
+# north      738
 # south      340
 
+##############################################################################################################
 #make a copy to keep the code the same
 ca <- qlbk
 ######Data plots
-#plot by faceted project
+#age length by sex and project
 ggplot(ca, aes(y = length_cm, x = age, color = sex)) +
 	geom_point(alpha = 0.5) + 
   theme_bw() + 
@@ -50,7 +54,7 @@ ggplot(ca, aes(y = length_cm, x = age, color = sex)) +
 	facet_grid(project~.) + 
 	xlab("Age") + ylab("Length (cm)") +
   scale_color_viridis_d()
-ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_by_project.png"),
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_sex_project.png"),
        width = 10, height = 8)
 
 
@@ -66,10 +70,10 @@ ggplot(ca, aes(y = length_cm, x = age, color = project)) +
         strip.text.y = element_text(size = 16),
          legend.text = element_text(size = 20),
         panel.grid.minor = element_blank()) + 
-	facet_grid(rows = vars(sex)) + 
+	#facet_grid(rows = vars(sex)) + 
 	xlab("Age") + ylab("Length (cm)") +
   scale_color_viridis_d()
-ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex.png"),
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_byproject.png"),
        width = 10, height = 8)
 
 #plot by area and project
@@ -86,12 +90,12 @@ ggplot(ca, aes(y = length_cm, x = age, color = project)) +
        facet_grid(rows = vars(faa_area)) +
 	xlab("Age") + ylab("Length (cm)") #+
   #scale_color_viridis_d()#begin = .05, end = .8)
-ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length.png"),
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length_and_project.png"),
        width = 10, height = 8)
 
 
 #plot by faceted area
-ggplot(ca, aes(y = length_cm, x = age, colour = fleet)) +
+ggplot(ca, aes(y = length_cm, x = age, colour = fleet, shape = faa_area)) +
 	geom_point(alpha = 0.3, size = 4) + 
   theme_bw() +  
   xlim(0, 60) + ylim(0, 60) +
@@ -102,14 +106,30 @@ ggplot(ca, aes(y = length_cm, x = age, colour = fleet)) +
          legend.text = element_text(size = 20),
         panel.grid.minor = element_blank()) + 
 	xlab("Age") + ylab("Length (cm)") +
-  scale_color_viridis_d()#begin = .05, end = .8)
-ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length.png"),
+  scale_color_viridis_d(begin = .05, end = .8)
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length_byfleet.png"),
        width = 10, height = 8)
 
 
 ####################################################################################
+# Data summary tables
+ ca %>% group_by(faa_area) %>% summarise(max = max(length_cm))
+
+
+with(ca, table(project, faa_area))
+####################################################################################
 # Additional data summaries
 
+#look at the sample sizes for a given age for north and south
+faa_laa_summary0 <- ca %>%
+filter(age !=0) %>% 
+mutate(floor_len = floor(length_cm)) %>%
+group_by(age) %>%
+tally()
+View(faa_laa_summary0)
+
+
+#look at the mean and median age at a given length for north and south
 faa_laa_summary <- ca %>%
 filter(age !=0) %>% 
 mutate(floor_len = floor(length_cm)) %>%
@@ -127,10 +147,38 @@ tidyr::pivot_wider(names_from = faa_area, values_from = median_age)
 View(faa_laa_summary1)
 
 
+#box plots of the ages at length
+#look at the mean age at a given length for north and south
+ca %>%
+mutate(floor_len = floor(length_cm)) %>%
+#group_by(faa_area) %>%
+ggplot(aes(x = factor(age), y = length_cm, fill = faa_area)) +
+geom_boxplot()
+
+#box plots of the ages at length no commercial 
+#look at the ages at a given length for north and south
+ca %>% filter(project != "pacfin") %>%
+mutate(floor_len = floor(length_cm)) %>%
+#group_by(faa_area) %>%
+ggplot(aes(x = factor(age), y = length_cm, fill = faa_area)) +
+geom_boxplot()
+
+#box plots of the ages at length flipped 
+#look at the ages at a given length for north and south
+ca %>% 
+mutate(floor_len = floor(length_cm)) %>%
+#group_by(faa_area) %>%
+ggplot(aes(y = age, x = factor(floor_len), fill = faa_area)) +
+geom_boxplot()
 
 
-
-
+#box plots of the ages at length no commercial 
+#look at the ages at a given length for north and south
+ca %>% filter(project != "pacfin") %>%
+mutate(floor_len = floor(length_cm)) %>%
+#group_by(faa_area) %>%
+ggplot(aes(x = factor(age), y = length_cm, fill = faa_area)) +
+geom_boxplot()
 
 
 
@@ -157,9 +205,14 @@ vb_est_all<- est_vbgrowth(
   init_params = data.frame(K = 0.17, Linf = 45, L0 = 5, CV0 = 0.10, CV1 = 0.10))
 vb_est_all$all_growth
 
+#keep for reading into model runs files
 #         K        Linf          L0         CV0         CV1 
-#0.17780433 41.18165223  3.99243506  0.19936688  0.06328719
-#write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_withAge0.csv"))
+# 0.109943348 42.890509548 16.414008963  0.162235382  0.009453519
+write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
+
+#         K        Linf          L0         CV0         CV1 #
+# 0.17820030 41.18119888  3.98945906  0.20322534  0.06373563
+write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_withAge0.csv"))
 
 
 ##################################################
@@ -238,7 +291,7 @@ fit
 
 #3/31/25
 #     ages       fit
-#   0.0  3.985882
+#    0.0  3.985882
 #    0.2  5.290169
 #    0.4  6.548696
 #    0.6  7.763066
