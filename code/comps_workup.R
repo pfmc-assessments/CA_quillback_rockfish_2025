@@ -458,7 +458,7 @@ afs_nsamp_ccfrp <-  nwfscSurvey::get_raw_comps(
   two_sex_comps = FALSE,
   input_n_method = c("total_samples"),
   month = 7,
-  fleet = "growth ccfrp",
+  fleet = "ccfrp",
   dir = NULL)
 
 write.csv(afs_nsamp_ccfrp$unsexed, here("data", "forSS3", paste0("Acomps_noncommercial_ccfrp_unsexed_raw_", 
@@ -489,7 +489,7 @@ write.csv(afs_nsamp_nonccfrp$unsexed,
 #######-
 
 #Since the model is one sex, set to U before doing CAAL
-age_ca$Sex <- "U"
+age_ca$sex <- "U"
 
 
 #For all non-commercial
@@ -520,7 +520,7 @@ caal_ccfrp <-  nwfscSurvey::get_raw_caal(
   length_column_name = "length_cm",
   age_column_name = "age",
   month = 7,
-  fleet = "growthCAAL_ccfrp",
+  fleet = "ccfrp_CAAL",
   dir = NULL)
 
 write.csv(caal_ccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_ccfrp_unsexed_",
@@ -536,7 +536,7 @@ caal_nonccfrp <-  nwfscSurvey::get_raw_caal(
   length_column_name = "length_cm",
   age_column_name = "age",
   month = 7,
-  fleet = "growthCAAL_ccfrp",
+  fleet = "growthCAAL_noccfrp",
   dir = NULL)
 
 write.csv(caal_nonccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_nonccfrp_unsexed_",
