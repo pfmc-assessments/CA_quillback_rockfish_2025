@@ -12,7 +12,7 @@
 #     catches.R
 #
 #   For age comps, non-commercial data were accessed from 
-#     age_length_cleanup.R
+#     age_length_cleanup_by_area.R
 #
 ##############################################################################################################
 
@@ -406,22 +406,23 @@ write.csv(dplyr::bind_rows(rec_comps),
 ## Recreational (Growth fleet) Age comps ----
 ###########################-
 
-#Pull "ca" from age_length_cleanup.R
+#Pull "ca" from age_length_cleanup_by_area.R
 
-load(here("data-raw","all_ages_labeled.RData"))
+ca <- read.csv(here("data-raw", "QLBK_faa_age_length.csv"))
 age_ca <- ca %>% dplyr::filter(year < 2025) #remove the 2025 samples
 
 age_bins <- seq(1,60,1)
 
 #These are a mix of various rec projects and commercial and survey. For these entries
 #pull all non-commercial non-expanded comps for use as a "growth" fleet.
-#Note that what is labelled here as SWFSC boxed is actually commercial samples (all 2007)
+#For CCFRP, separate out Farallon fish which were from trips not included
+#in the CCFRP index, and thus should not be included in the CCFRP comps.
 #Do as marginals and CAAL, and do for CCFRP fleet separate, and included
 
-age_ca$fleet1 <- dplyr::case_when(age_ca$sample_type %in% c("Commercial", "Unknown") ~ "Com",
+age_ca$fleet1 <- dplyr::case_when(age_ca$source %in% c("pacfin") ~ "Com",
                                   TRUE ~ "Growth")
-age_ca$fleet2 <- dplyr::case_when(grepl("CCFRP", age_ca$sample_type) ~ "CCFRP",
-                                  age_ca$sample_type %in% c("Commercial", "Unknown") ~ "Com",
+age_ca$fleet2 <- dplyr::case_when(age_ca$source %in% c("CCFRPNotFarallons") ~ "CCFRP",
+                                  age_ca$source %in% c("pacfin") ~ "Com",
                                   TRUE ~ "other")
 
 
@@ -446,7 +447,7 @@ write.csv(afs_nsamp$unsexed, here("data", "forSS3", paste0("Acomps_noncommercial
                                                    ".csv")), row.names = FALSE)
 
 
-#For non-commercial split by CCFRP and non-CCFRP. 
+#For non-commercial split by CCFRP non-farallons and non-CCFRP. 
 #Only use number of fish
 
 ##First for CCFRP
@@ -464,7 +465,7 @@ write.csv(afs_nsamp_ccfrp$unsexed, here("data", "forSS3", paste0("Acomps_noncomm
                                                    age_bins[1], "_", tail(age_bins,1), 
                                                    ".csv")), row.names = FALSE)
 
-##Now for non-CCFRP
+##Now for non-CCFRP (which includes Farallon CCFRP fish)
 afs_nsamp_nonccfrp <-  nwfscSurvey::get_raw_comps(
   data = age_ca %>% dplyr::filter(fleet2 == "other"), 
   comp_bins = age_bins,
@@ -509,7 +510,7 @@ write.csv(caal, here("data", "forSS3", paste0("CAAL_noncommercial_all_unsexed_",
                                               ".csv")), row.names = FALSE)
 
 
-#For non-commercial split by CCFRP and non-CCFRP 
+#For non-commercial split by CCFRP non-farallons and non-CCFRP 
 
 ##First for CCFRP
 caal_ccfrp <-  nwfscSurvey::get_raw_caal(
@@ -527,7 +528,7 @@ write.csv(caal_ccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_ccfrp_un
                                               "_", age_bins[1], "_", tail(age_bins,1),
                                               ".csv")), row.names = FALSE)
 
-##Now for non-CCFRP
+##Now for non-CCFRP (which includes Farallon CCFRP fish)
 caal_nonccfrp <-  nwfscSurvey::get_raw_caal(
   data = age_ca %>% dplyr::filter(fleet2 == "other"), 
   len_bins = length_bins,
@@ -590,9 +591,9 @@ fa <- ma <- ua
 ub = lwests[lwests$sex == "all", "B"]
 fb <- mb <- ub
 
-#Read in the catch file to base expansion on. 
+#Read in the catch file to base expansion on 
 #Because have lengths in years where pacfin catch does not exist, 
-#use full commercial catch time seires 
+#use full commercial catch time series 
 catch.file <- read.csv(here("data", "CAquillback_total_removals.csv")) %>%
   dplyr::select(c("Year", "com_lan"))
 
@@ -603,8 +604,7 @@ catch.file <- read.csv(here("data", "CAquillback_total_removals.csv")) %>%
 bio_clean$faa <- dplyr::case_when(bio_clean$PACFIN_GROUP_PORT_CODE %in% c("CCA", "ERA", "BGA") ~ "North", 
                                   bio_clean$PACFIN_GROUP_PORT_CODE %in% c("BDA", "SFA", "MNA", "MRA") ~ "South")
 
-#Note that this only covers years in pacfin catch file. 
-#Right now I resolve this by only expanding lengths over this time period 
+#Read in the catch file to base expansion on
 catch.file.faa <- read.csv(here("data", "confidential_noShare", "CAquillback_total_removals_faa.csv")) %>%
   dplyr::select(c("Year", "com_lan_North", "com_lan_South")) %>%
   dplyr::rename("LANDING_YEAR" = Year,
