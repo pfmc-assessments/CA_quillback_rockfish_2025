@@ -24,8 +24,10 @@ setwd(here())
  # project            n
 # Abrams              116 #matches
 # Combined Survey      34 #matches
-# Commercial          281 #ok
-# SWFSC boxed          27 #These are actually commercial fish 27 + 281 = 302
+# Commercial          281 #ok however per issue #47 in our github repo, 6 of 
+#these fish (in 2019) were not part of the sampling design and instead purchased, 
+#so shouldn't be assigned for pacfin
+# SWFSC boxed          27 #These are actually commercial fish 27 + 281 - 6 = 302, 
 # total               458
 
 # NMFS-Cooperative   134 #matches
@@ -41,11 +43,14 @@ setwd(here())
 #Still need to find - there were aged for the 2021 assessment and trying to track down...
 #5 1985 fish don't show up in any of the new data - where did they come from? 
     #5 commercial fish that cannot be matched to any data, ages not documented anywhere
+    #These are assigned as miscellaneous fish in this script. 
 #5 2004 fish don't show up in the new data - where did they come from?
     #4 commercial fish unmatched to data, 1 research fish - ages not documented anywhere
+    #The 4 comm fish are assigned as miscellaneous fish in this script
+    #The other 1 fish is not included, as described in the miscellaneous section
 #2 2006 fish don't show up in the new data - where did they come from?
   #2 research fish from the juvenile rockfish cruise; ages not documented anywhere else
-
+  #These fish are not included, as described in the miscellaneous section
 
 #Pt Arena at 39 N
 #Age data sources
@@ -76,7 +81,8 @@ summary(as.factor(pacfin_trawl$source))
 pacfin_trawl %>% filter(source == "pacfin") %>% group_by(Year) %>% tally()
 #pacfin  trawl 
 #   302     34
-#same numbers as the prior data
+#same numbers as the prior data accounting for the 6 fish that appropriately now 
+#aren't in pacfin but rather labelled as CDFW (see CDFW section)
 
 names(pacfin_trawl)
 # [1] "Year"       "length_cm"  "weight_kg"  "age"        "sex"       
@@ -94,9 +100,9 @@ dplyr::select(year, length_cm, age, sex, source, faa_area)
 
 ##################################################################
 #2. Cooperative
-#3. CCFRP
 
 #assign projects to groups and then north and south
+#label farallon fish, so as to exclude from comps when the index doesn't include farallon trips
 swfsc <- read.csv(here("data-raw", "ages", "SWFSC-QLBK-Otolith-Inventory.csv"))
 swfsc <- swfsc %>% mutate(year = substr(Sample_ID, 1, 4)) %>% filter(!is.na(Forked_Length_mm)) %>%
 mutate(length_cm = Forked_Length_mm/10) %>%

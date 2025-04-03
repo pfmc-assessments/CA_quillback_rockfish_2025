@@ -1,11 +1,14 @@
 ###############################################################
 # Script clean up the available age at length data for quillback
 # rockfish for the 2025 California stock assessment
-# Also cleaned up and produces 2 files for ageing error
+# Also cleaned up doublereads and produces 2 files for ageing error
 # One that includes Oregon data and one that excludes OR double
 # reads
 #Author: Melissa Monk SWFSC
 #      2/28/2025
+#
+#As of April 2, the age_length_cleanup_by_area.R script replaces this
+#one for estimating growth and generating CCFRP and growth fleet comps.
 ###############################################################
 rm(list = ls(all = TRUE))
 graphics.off()

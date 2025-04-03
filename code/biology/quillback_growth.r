@@ -4,7 +4,8 @@
 #
 #Author: Melissa Monk SWFSC
 #      1/17/2025
-#updated 4/1/25 with a single file for lengths
+#updated 4/1/25 with a single file for lengths created by
+#age_length_cleanup_by_area.R
 ###############################################################
 rm(list = ls(all = TRUE))
 graphics.off()
@@ -208,7 +209,7 @@ vb_est_all$all_growth
 #keep for reading into model runs files
 #         K        Linf          L0         CV0         CV1 
 # 0.109943348 42.890509548 16.414008963  0.162235382  0.009453519
-write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
+#write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests.csv"))
 
 #         K        Linf          L0         CV0         CV1 #
 # 0.17820030 41.18119888  3.98945906  0.20322534  0.06373563
