@@ -2943,7 +2943,7 @@ fleet.converter <- mod$dat$fleetinfo %>%
 
 
 # Update growth inits
-vb_ests <- read.csv(here("data", "vonb_ests.csv"))
+vb_ests <- read.csv(here("data", "vonb_ests_withAge0.csv"))
 
 mod$ctl$MG_parms["L_at_Amax_Fem_GP_1", c("INIT", "PRIOR")] <- 
   vb_ests[vb_ests$X == "Linf", "ests"]
@@ -3070,7 +3070,7 @@ plot_sel_all(pp)
 ## 2_2_3_combineGrowth_CCFRP ----
 ####------------------------------------------------#
 
-#Recombine CAAL comps for CCFRP and the growth fleet
+#Recombine CAAL comps for CCFRP and the growth fleet and remove small samples
 
 new_name <- "2_2_3_combineGrowth_CCFRP"
 old_name <- "1_1_13_L1age1EstAllGrowth" 
