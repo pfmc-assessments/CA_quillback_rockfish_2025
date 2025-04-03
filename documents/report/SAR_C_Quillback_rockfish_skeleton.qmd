@@ -149,7 +149,8 @@ R0 <- output |>
 
 # Add our own calls
 spp <- "quillback rockfish"
-
+Spp <- "Quillback rockfish"
+state <- "California"
 ``` 
 
 {{< pagebreak >}} 
