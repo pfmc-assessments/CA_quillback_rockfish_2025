@@ -409,7 +409,7 @@ write.csv(dplyr::bind_rows(rec_comps),
 #Pull "ca" from age_length_cleanup_by_area.R
 
 ca <- read.csv(here("data-raw", "QLBK_faa_age_length.csv"))
-age_ca <- ca %>% dplyr::filter(year < 2025) #remove the 2025 samples
+age_ca <- ca %>% dplyr::filter(year < 2025, source != "SMURFS") #remove the 2025 samples and Diana's samples
 
 age_bins <- seq(1,60,1)
 
