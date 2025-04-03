@@ -3066,7 +3066,106 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+####------------------------------------------------#
+## 2_2_3_combineGrowth_CCFRP ----
+####------------------------------------------------#
 
+#Recombine CAAL comps for CCFRP and the growth fleet
+
+new_name <- "2_2_3_combineGrowth_CCFRP"
+old_name <- "1_1_13_L1age1EstAllGrowth" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+# Update growth inits
+vb_ests <- read.csv(here("data", "vonb_ests_withAge0.csv"))
+
+mod$ctl$MG_parms["L_at_Amax_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "Linf", "ests"]
+mod$ctl$MG_parms["VonBert_K_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "K", "ests"]
+mod$ctl$MG_parms["CV_young_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "CV0", "ests"]
+mod$ctl$MG_parms["CV_old_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "CV1", "ests"]
+
+
+# Update comps
+
+#Commercial comps haven't changed but repulling to keep in all data
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+#Use growth data that includes CCFRP
+growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = "growth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
+
+
+#Revisit choice in model 115 to negative year when fewer than 30 total ages
+new.caal <- mod$dat$agecomp
+
+small_N <- new.caal %>%
+  group_by(year, fleet) %>%
+  summarise(sum_ages = sum(input_n)) %>%
+  filter(sum_ages < 30) %>%
+  data.frame()
+
+for(i in unique(small_N$fleet)){
+  new.caal <- new.caal %>%
+    dplyr::mutate(year = case_when(
+      year %in% small_N[small_N$fleet == i, "year"] & fleet == i ~ -year,
+      T ~ year))
+}
+
+mod$dat$agecomp <- new.caal
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
 
 
 ####------------------------------------------------#
