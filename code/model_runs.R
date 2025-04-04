@@ -2613,7 +2613,7 @@ plot_sel_all(pp)
 ## 1_1_12_L1age1fixedto8 ----
 ####------------------------------------------------#
 
-#To see if more fixed catch (decreasing catch se) changes results
+#Change L1 to be length at age 1 (not 0) and set fixed parameter at 8cm
 
 new_name <- "1_1_12_L1age1fixedto8"
 old_name <- "1_1_6_L0to4" 
@@ -2661,7 +2661,7 @@ plot_sel_all(pp)
 ## 1_1_13_L1age1EstAllGrowth ----
 ####------------------------------------------------#
 
-#To see if more fixed catch (decreasing catch se) changes results
+#Change L1 to be length at age 1 (not 0) but estimate it with init set to 8
 
 new_name <- "1_1_13_L1age1EstAllGrowth"
 old_name <- "1_1_6_L0to4" 
@@ -3242,7 +3242,7 @@ plot_sel_all(pp)
 ## 2_3_2_recdevOption2----
 ####------------------------------------------------#
 
-#Reweight the model with updated age data
+#Set recdev option not to sum to 0 (set to 2)
 
 new_name <- "2_3_2_recdevOption2"
 old_name <- "2_3_1_reweight223" 
