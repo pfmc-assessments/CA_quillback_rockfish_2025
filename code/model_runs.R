@@ -2613,7 +2613,7 @@ plot_sel_all(pp)
 ## 1_1_12_L1age1fixedto8 ----
 ####------------------------------------------------#
 
-#To see if more fixed catch (decreasing catch se) changes results
+#Change L1 to be length at age 1 (not 0) and set fixed parameter at 8cm
 
 new_name <- "1_1_12_L1age1fixedto8"
 old_name <- "1_1_6_L0to4" 
@@ -2661,7 +2661,7 @@ plot_sel_all(pp)
 ## 1_1_13_L1age1EstAllGrowth ----
 ####------------------------------------------------#
 
-#To see if more fixed catch (decreasing catch se) changes results
+#Change L1 to be length at age 1 (not 0) but estimate it with init set to 8
 
 new_name <- "1_1_13_L1age1EstAllGrowth"
 old_name <- "1_1_6_L0to4" 
@@ -2943,7 +2943,7 @@ fleet.converter <- mod$dat$fleetinfo %>%
 
 
 # Update growth inits
-vb_ests <- read.csv(here("data", "vonb_ests.csv"))
+vb_ests <- read.csv(here("data", "vonb_ests_withAge0.csv"))
 
 mod$ctl$MG_parms["L_at_Amax_Fem_GP_1", c("INIT", "PRIOR")] <- 
   vb_ests[vb_ests$X == "Linf", "ests"]
@@ -3066,11 +3066,483 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+####------------------------------------------------#
+## 2_2_3_combineGrowth_CCFRP ----
+####------------------------------------------------#
+
+#Recombine CAAL comps for CCFRP and the growth fleet and remove small samples
+
+new_name <- "2_2_3_combineGrowth_CCFRP"
+old_name <- "1_1_13_L1age1EstAllGrowth" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+# Update growth inits
+vb_ests <- read.csv(here("data", "vonb_ests_withAge0.csv"))
+
+mod$ctl$MG_parms["L_at_Amax_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "Linf", "ests"]
+mod$ctl$MG_parms["VonBert_K_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "K", "ests"]
+mod$ctl$MG_parms["CV_young_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "CV0", "ests"]
+mod$ctl$MG_parms["CV_old_Fem_GP_1", c("INIT", "PRIOR")] <- 
+  vb_ests[vb_ests$X == "CV1", "ests"]
+
+
+# Update comps
+
+#Commercial comps haven't changed but repulling to keep in all data
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+#Use growth data that includes CCFRP
+growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = "growth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
+
+
+#Revisit choice in model 115 to negative year when fewer than 30 total ages
+new.caal <- mod$dat$agecomp
+
+small_N <- new.caal %>%
+  group_by(year, fleet) %>%
+  summarise(sum_ages = sum(input_n)) %>%
+  filter(sum_ages < 30) %>%
+  data.frame()
+
+for(i in unique(small_N$fleet)){
+  new.caal <- new.caal %>%
+    dplyr::mutate(year = case_when(
+      year %in% small_N[small_N$fleet == i, "year"] & fleet == i ~ -year,
+      T ~ year))
+}
+
+mod$dat$agecomp <- new.caal
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 2_3_1_reweight223 ----
+####------------------------------------------------#
+
+#Reweight the model with updated age data
+
+new_name <- "2_3_1_reweight223"
+old_name <- "2_2_3_combineGrowth_CCFRP" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models',old_name),"Report.sso"),
+          to = file.path(here('models',new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+pp <- SS_output(here('models',new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 0, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+colnames(dw)[1] = "factor"
+new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
+                                by = dplyr::join_by(factor, fleet))
+mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
 
 
 
 ####------------------------------------------------#
-## 2_3_1_FAA_confidential ----
+## 2_3_2_recdevOption2----
+####------------------------------------------------#
+
+#Set recdev option not to sum to 0 (set to 2)
+
+new_name <- "2_3_2_recdevOption2"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$do_recdev <- 2
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#There are not major changes having the recdevs set to option 2, no sum to zero constraint
+
+
+####------------------------------------------------#
+## 2_3_3_Nages70----
+####------------------------------------------------#
+
+#Change the accumulator age to 70
+#keeps recdevs at option 2
+
+new_name <- "2_3_3_Nages70"
+old_name <- "2_3_2_recdevOption2" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$dat$Nages <- 70 # to correspond with maximum age
+
+mod$dat$ageerror <- mod$dat$ageerror[,1:71]
+#ageing error matrix
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#Could probably go lower for the accumultator age, but leave here for now
+
+
+####------------------------------------------------#
+## 2_3_4_rmTimeBlocks----
+####------------------------------------------------#
+
+#Remove all selectivity time blocks
+
+new_name <- "2_3_4_rmTimeBlocks"
+old_name <- "2_3_3_Nages70" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$N_Block_Designs <- 0
+#mod$ctl$N_Block_Designs <- paste0("#",mod$ctl$blocks_per_pattern)
+mod$ctl$size_selex_parms$Block  = 0
+mod$ctl$size_selex_parms$Block_Fxn  = 0
+mod$ctl$size_selex_parms_tv <- 0
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#Time block doesn't seem to have an effect; as Brian already knows from 2021
+
+
+####------------------------------------------------#
+## 2_3_5_growthParm3----
+####------------------------------------------------#
+
+#Set growth parameters to phase 3, as no parameter currently has that phase
+
+new_name <- "2_3_5_growthParm3"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$MG_parms[mod$ctl$MG_parms$PHASE == 2, "PHASE"] <- 3
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#Not difference in results but does improve convergence. We should do this. 
+
+
+####------------------------------------------------#
+## 2_3_6_noRecDevs----
+####------------------------------------------------#
+
+#Turn off recdevs to see the effect
+
+new_name <- "2_3_6_noRecDevs"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$do_recdev <- 0
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 2_3_7_useSteepness----
+####------------------------------------------------#
+
+#Use steepness in equilibrium calculations
+
+new_name <- "2_3_7_useSteepness"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Use_steep_init_equi <- 1
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####------------------------------------------------#
+## 2_4_1_FAA_confidential ----
 ####------------------------------------------------#
 
 #These data are confidential. Putting in a separate folder and updating gitignore
