@@ -5,9 +5,9 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-ost/ss3-source-code
 
-StartTime: Thu Apr  3 13:09:24 2025
-EndTime: Thu Apr  3 13:10:04 2025
-This run took: 0 hours, 0 minutes, 40 seconds.
+StartTime: Thu Apr  3 15:18:13 2025
+EndTime: Thu Apr  3 15:18:52 2025
+This run took: 0 hours, 0 minutes, 39 seconds.
 Data_File: 2025_ca_quillback.dat
 Control_File: 2025_ca_quillback.ctl
 
@@ -19,20 +19,20 @@ total_LogL: 742.217
 
 Starter_Comments
 #C file created using an r4ss function
-#C file write time: 2025-04-03  13:09:23
+#C file write time: 2025-04-03  15:18:12
 
 Data_Comments
 #California Quillback Rockfish 2025 assessment Brian Langseth, Melissa Monk, Julia Coates
 #C file created using an r4ss function
-#C file write time: 2025-04-03  13:09:23
+#C file write time: 2025-04-03  15:18:12
 
 Control_Comments
 #C file created using an r4ss function
-#C file write time: 2025-04-03  13:09:23
+#C file write time: 2025-04-03  15:18:12
 
 Forecast_Comments
 #C file created using an r4ss function
-#C file write time: 2025-04-03  13:09:23
+#C file write time: 2025-04-03  15:18:12
 
 #_KeyWords_of_tables_available_in_report_sso
 #_NOTE: table_number_is_order_in_which_tables_are_output

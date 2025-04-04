@@ -3239,6 +3239,176 @@ plot_sel_all(pp)
 
 
 ####------------------------------------------------#
+## 2_3_2_recdevOption2----
+####------------------------------------------------#
+
+#Reweight the model with updated age data
+
+new_name <- "2_3_2_recdevOption2"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$do_recdev <- 2
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#There are not major changes having the recdevs set to option 2, no sum to zero constraint
+
+
+####------------------------------------------------#
+## 2_3_3_Nages70----
+####------------------------------------------------#
+
+#Change the accumulator age to 70
+#keeps recdevs at option 2
+
+new_name <- "2_3_3_Nages70"
+old_name <- "2_3_2_recdevOption2" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$dat$Nages <- 70 # to correspond with maximum age
+
+mod$dat$ageerror <- mod$dat$ageerror[,1:71]
+#ageing error matrix
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#Could probably go lower for the accumultator age, but leave here for now
+
+####------------------------------------------------#
+## 2_3_4_rmTimeBlocks----
+####------------------------------------------------#
+
+#Change the accumulator age to 70
+#keeps recdevs at option 2
+
+new_name <- "2_3_4_rmTimeBlocks"
+old_name <- "2_3_3_Nages70" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$N_Block_Designs <- 0
+#mod$ctl$N_Block_Designs <- paste0("#",mod$ctl$blocks_per_pattern)
+mod$ctl$size_selex_parms$Block  = 0
+mod$ctl$size_selex_parms$Block_Fxn  = 0
+mod$ctl$size_selex_parms_tv <- 0
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#Time block doesn't seem to have an effect; as Brian already knows from 2021
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####------------------------------------------------#
 ## 2_4_1_FAA_confidential ----
 ####------------------------------------------------#
 
