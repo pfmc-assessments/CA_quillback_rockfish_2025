@@ -1,9 +1,5 @@
 #C file created using an r4ss function
-<<<<<<< Updated upstream
-#C file write time: 2025-04-03  13:03:51
-=======
-#C file write time: 2025-04-03  12:00:56
->>>>>>> Stashed changes
+#C file write time: 2025-04-04  08:43:43
 #
 1 #_benchmarks
 2 #_MSY

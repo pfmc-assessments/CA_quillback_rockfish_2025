@@ -1,13 +1,8 @@
 #V3.30.23.1;_safe;_compile_date:_Dec  5 2024;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_13.2
 2025_ca_quillback.dat #_DataFile 
 2025_ca_quillback.ctl #_Control 
-<<<<<<< Updated upstream
-Run_Date: Thu Apr  3 13:03:51 2025
+Run_Date: Fri Apr  4 08:43:43 2025
 Final_phase: 6  N_iterations: 662
-=======
-Run_Date: Thu Apr  3 12:00:57 2025
-Final_phase: 6  N_iterations: 671
->>>>>>> Stashed changes
 #_LIKELIHOOD 
 Label logL*Lambda
 TOTAL_LogL 1558.97
