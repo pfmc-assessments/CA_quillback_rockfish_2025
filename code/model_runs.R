@@ -3334,12 +3334,12 @@ plot_sel_all(pp)
 
 #Could probably go lower for the accumultator age, but leave here for now
 
+
 ####------------------------------------------------#
 ## 2_3_4_rmTimeBlocks----
 ####------------------------------------------------#
 
-#Change the accumulator age to 70
-#keeps recdevs at option 2
+#Remove all selectivity time blocks
 
 new_name <- "2_3_4_rmTimeBlocks"
 old_name <- "2_3_3_Nages70" 
@@ -3384,11 +3384,144 @@ plot_sel_all(pp)
 #Time block doesn't seem to have an effect; as Brian already knows from 2021
 
 
+####------------------------------------------------#
+## 2_3_5_growthParm3----
+####------------------------------------------------#
+
+#Set growth parameters to phase 3, as no parameter currently has that phase
+
+new_name <- "2_3_5_growthParm3"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
 
 
+##
+#Make Changes
+##
+
+mod$ctl$MG_parms[mod$ctl$MG_parms$PHASE == 2, "PHASE"] <- 3
 
 
+##
+#Output files and run
+##
 
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+#Not difference in results but does improve convergence. We should do this. 
+
+
+####------------------------------------------------#
+## 2_3_6_noRecDevs----
+####------------------------------------------------#
+
+#Turn off recdevs to see the effect
+
+new_name <- "2_3_6_noRecDevs"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$do_recdev <- 0
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 2_3_7_useSteepness----
+####------------------------------------------------#
+
+#Use steepness in equilibrium calculations
+
+new_name <- "2_3_7_useSteepness"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Use_steep_init_equi <- 1
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
 
 
 
