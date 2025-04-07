@@ -7,7 +7,6 @@ rm(list = ls(all = TRUE))
 graphics.off()
 
 library(sdmTMB)
-library(tmbstan)
 library(ggeffects)
 library(MuMIn)
 library(here)
@@ -24,6 +23,7 @@ library(ggeffects)
 #library(tidybayes)
 library(gridExtra)
 #library(fitdistrplus)
+library(mgcv)
 
 
 #species and area identifiers - eventually put in function
@@ -59,18 +59,24 @@ grid_zeroes <- dat %>%
  summarise(avg_lat = mean(startLat),
 avg_long = mean(startLong))
 
-#
-
+#summary of depths for positive quillback
+pos <- dat %>% filter(cpue>0)
+summary(pos$depth)
+ggplot(pos, aes(depth, cpue)) +geom_point()
+#bin depth
+dat <- dat %>%
+ mutate(depth_bin = cut(depth, breaks = c(0, 40, 80, 120, 160, 200)))
 
 #-------------------------------------------------------------------------------
 #Ensure columns named appropriately and covariates are factors
-covars <- c("year", "month", "siteName", "MPAorREF", "gridCellID")
+covars <- c("year", "month", "siteName", "MPAorREF", "gridCellID", "depth_bin")
+
 
 
 dat <- dat %>%
   dplyr::select(year, month, name, site, effort, gridCellID, Full.Name, 
                 Nearest.Port, monitoringGroup,
-                anglers, driftTime, Target) %>%
+                anglers, driftTime, Target, depth_bin, depth) %>%
   mutate(Effort = anglers * (driftTime * 60)) %>% #need cpue > 1 to take log
   rename(siteName = name,
          MPAorREF = site,
@@ -79,11 +85,6 @@ dat <- dat %>%
   mutate(logEffort = log(Effort),
          cpue = Target/Effort) %>%
   mutate_at(covars, as.factor) # %>% # make sure covariates are factors
- ## mutate(depth = depth/6,
-  #       depth_2 = depth^2)
-
-
-
 
 #-------------------------------------------------------------------------------
 
@@ -111,10 +112,10 @@ year_site_mpa <- dat %>%
 
 #cpue by mpa and site
 ggplot(year_site_mpa, aes(x = year, y = avg_cpue, colour = MPAorREF, group = MPAorREF)) +
-  geom_point() +
+  geom_point(size = 2) +
   geom_path() +
   facet_wrap(~siteName) +
-  scale_color_viridis_d()
+  scale_color_viridis_d(begin = .2, end = .5)
 ggsave(file = file.path(dir, "mpa_site_cpue.png"), width = 7, height = 7)
 
 
@@ -131,118 +132,134 @@ ggplot(year_site_mpa, aes(x = year, y = avg_cpue, colour = MPAorREF,
                           linetype = year_site_mpa$siteName,
                           group = interaction(siteName:MPAorREF))) +
   geom_line(linewidth = 1.5) +
-  scale_color_viridis_d(begin = .1, end = .5)
+  scale_color_viridis_d(begin = .2, end = .5)
 ggsave(file = file.path(dir, "mpa_site_3way_cpue.png"), width = 7, height = 7)
 
 #percent pos and county by gridcell
-dat.nofn <- dat %>% filter(!grepl("FN", gridCellID))
+#use this to create a dataset without the farallons to explore
+#dat.nofn <- dat %>% filter(!grepl("FN", gridCellID))
 
 #-------------------------------------------------------------------------------
-#Models EXCLUDING the Farallon Islands
+#Models INCLUDING the Farallon Islands ---- adding the Farallons back in 4/7/25
+#Fallons only sampled in 2017, 2018 and 2024 so it's the year/area weighting
+#won't work unless we're creative, or use a 3 year index.
+#The final index without the Farallons is fairly flat
+
+area_summary <- dat %>% filter(MPAorREF=="MPA") %>% group_by(siteName) %>% 
+summarise(ngrids = n_distinct(gridCellID))
+area_summary
+#How many hectares within each MPA does CCFRP sample
+#Bodega 325
+#Farallons 300
+#Cape Mendo 400
+#Stewarts 225
+#Ten Mile 200
+
 #full model with main effect
-model.full <- MASS::glm.nb(
-  Target ~  year + siteName + MPAorREF + offset(logEffort),
-  data = dat.nofn,
-  na.action = "na.fail")
+model.full <- gam(
+  Target ~  year + siteName + MPAorREF + depth +s(depth),
+  offset = log(dat$Effort),
+  family = nb(),
+  data = dat)
 summary(model.full)
 anova(model.full)
 main_effects <- ggpredict(model.full, terms = "year")
 
 
 #see if the year:region interaction is significant
-#not significant in the south
-model.full <- MASS::glm.nb(
-  Target ~  year*siteName + MPAorREF +  offset(logEffort),
-  data = dat.nofn,
-  na.action = "na.fail")
+model.full <- gam(
+  Target ~  year*MPAorREF + siteName + s(depth) ,
+  offset = log(dat$Effort),
+  family = nb(),
+  data = dat)
 summary(model.full)
 anova(model.full)
-year_region_interxn <- ggpredict(model.full, terms = "year")
 
-#see if the year:MPAorREF
-model.full <- MASS::glm.nb(
-  Target ~  siteName +  year*MPAorREF + offset(logEffort),
-  data = dat.nofn,
-  na.action = "na.fail")
-summary(model.full)
-anova(model.full)
-year_mpa_interxn <- ggpredict(model.full, terms = "year")
-#MPAorREF:year is NOT significant 
-#same trends in each
 
 #see if we can add the gridCellID as a random effect - removing the interaction first
 #DOES NOT CONVERGE
-#  model.full <- lme4::glmer.nb(
-#    Target ~  year + MPAorREF + siteName + (1|gridCellID) + offset(logEffort),
-#    data = dat.nofn,
-#    na.action = "na.fail")
+  model.full <- gam( Target ~  year + MPAorREF + siteName + year*MPAorREF + s(depth) + offset(logEffort),
+          #      offset = log(dat$Effort),
+                family = nb(),
+                data = dat)
 #  summary(model.full)
 #  anova(model.full)
 
-
-model.full <- MASS::glm.nb(Target ~  year + siteName + MPAorREF + year*siteName + offset(logEffort),
-  data = dat.nofn,
-  na.action = "na.fail")
+model2 <- gam( Target ~  year + MPAorREF + siteName + year*MPAorREF + s(depth, by = siteName),
+                offset = log(dat$Effort),
+                family = nb(),
+                data = dat)
 #MuMIn will fit all models and then rank them by AICc
+options(na.action=na.fail)
 model.suite <- MuMIn::dredge(model.full,
                              rank = "AICc", 
-                             fixed= c("offset(logEffort)", "year"))
+                             fixed= c("year", "offset(logEffort)"))
 
 #Create model selection dataframe for the document
 Model_selection <- as.data.frame(model.suite) %>%
   dplyr::select(-weight)
-Model_selection
+View(Model_selection)
+
+
+
 
 #----------------------------------------------------------------------------------
 #Set up the grid for sdmTMB 
-#No MPA/REF interaction with year so need to weight it by the area of habitaet
+#Weight by inside/outside 20/80
 #MPA and year interaction
 
 grid <- expand.grid(
-  year = unique(dat.nofn$year),
-  MPAorREF = levels(dat.nofn$MPAorREF)[1],
-  siteName = levels(dat.nofn$siteName)[1])
+  year = unique(dat$year),
+  MPAorREF = levels(dat$MPAorREF)[1],
+  siteName = levels(dat$siteName)[1],
+  depth = mean(dat$depth))
 
-# grid2 <- NULL
-# for (a in 1:25){
-#   grid2 <- rbind(grid2, grid[grid$siteName == "Bodega Head", ])
-# }
-# for (a in 1:25){
-#   grid2 <- rbind(grid2, grid[grid$siteName == "South Cape Mendocino", ])
-# }
-# for (a in 1:25){
-#   grid2 <- rbind(grid2, grid[grid$siteName == "Sewarts Point", ])
-# }
-# for (a in 1:25){
-#   grid2 <- rbind(grid2, grid[grid$siteName == "Ten Mile", ])
-# }
+grid2 <- NULL
+for (a in 1:20){
+  grid2 <- rbind(grid2, grid[grid$MPAorREF == "MPA", ])
+}
+for (a in 1:80){
+  grid2 <- rbind(grid2, grid[grid$MPAorREF == "REF", ])
+}
 
 
-fit.deltalogn <- sdmTMB(
-  Target ~  year + siteName + MPAorREF,
-  data = dat.nofn,
-  offset = dat.nofn$logEffort,
+
+fit.mod <- sdmTMB(
+  Target ~  year + MPAorREF + siteName + year*MPAorREF + s(depth),
+  data = dat,
+  offset = dat$logEffort,
   time = "year",
   spatial="off",
   spatiotemporal = "off",
-  family = delta_lognormal(),
+  family = nbinom2(),
   control = sdmTMBcontrol(newton_loops = 1))
 
+#diagnostics
+diag.fit.mod <- simulate(fit.mod, nsim = 500, type = 'mle-mvn') 
+#check number of zeros
+sum(dat$Target == 0) / length(dat$Target)
+sum(diag.fit.mod == 0)/length(diag.fit.mod)
+#check residuals
+dharma_residuals(diag.fit.mod, fit.mod)
+
+
+#sanity check
 do_diagnostics(
   dir = file.path(dir), 
-  fit = fit.deltalogn,
+  fit = fit.mod,
   plot_resid = FALSE)
 
+#calculate the index
 index <- calc_index(
   dir = file.path(dir), 
-  fit = fit.deltalogn,
+  fit = fit.mod,
   grid = grid)
 
-
+#format the index
   format_index(index = index,
     dir = file.path(dir),
     month = 7,
-    fleet = NA
+    fleet = 4
   )
 
 
@@ -258,24 +275,16 @@ write.csv(dataFilters,
 #format table for the document
 out <- Model_selection %>%
   dplyr::select(-`(Intercept)`) %>%
-  mutate_at(vars("region",  "MPAorREF" ,"year","offset(logEffort)"), as.character) %>%
+  mutate_at(vars("siteName",  "MPAorREF" ,"year","offset(logEffort)"), as.character) %>%
   mutate(across(c("logLik","AICc","delta"), round, 1)) %>%
-#  replace_na(list(region = "Excluded", 
-        #          MPAorREF:year = "Excluded",
-#                  MPAorREF = "Excluded", 
-            #      depth_2 = "Excluded", 
- #                 depth = "Excluded")) %>%
-  mutate_at(c("region",  "MPAorREF" ,"year", "offset(logEffort)"), 
+  mutate_at(c("siteName",  "MPAorREF" ,"year", "offset(logEffort)"), 
             funs(stringr::str_replace(.,"\\+","Included"))) %>%
   rename(`Effort offset` = `offset(logEffort)`, 
          `log-likelihood` = logLik,
-         `Depth squared` = depth_2,
-         `Interaction` = `MPAorREF:year`) %>%
-  rename_with(stringr::str_to_title,-AICc)
+         `Region` = siteName,
+         `Depth` = `s(depth)`,
+         `Interaction` = `MPAorREF:year`)# %>%
+ # rename_with(stringr::str_to_title,-AICc)
 #View(out)
 write.csv(out, file = file.path(dir, "model_selection.csv"), 
           row.names = FALSE)
-
-
-
-

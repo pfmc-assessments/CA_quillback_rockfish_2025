@@ -34,6 +34,16 @@ data_filters <- data.frame(matrix(vector(), 10, 4,
     "Positive_Samples"))), stringsAsFactors = F)
 #-------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------
+# Add to filter dataframe
+data_filters$Filter[filter.num] <- c("None")
+data_filters$Description[filter.num] <- c("All data")
+data_filters$Samples[filter.num] <- dim(dat)[1]
+data_filters$Positive_Samples[filter.num] <- dim(subset(dat, Target > 0))[1]
+filter.num <- filter.num + 1
+
+#-------------------------------------------------------------------------------
+
 ####data for Arc maps
 grid_cells <- dat %>%
   group_by(gridCellID) %>%
@@ -92,86 +102,84 @@ target_by_area <- dat %>%
 #---------------------------------------------------------------------------------
 
 #remove cells that sampled only 1 year except the Farallons
-cell_years_remove <- dat %>%
-filter(!grepl("FN", gridCellID)) %>%
-   group_by(gridCellID) %>%
-    summarise(n = n_distinct(year)) %>%
-    filter(n==1)
+# cell_years_remove <- dat %>%
+# filter(!grepl("FN", gridCellID)) %>%
+#    group_by(gridCellID) %>%
+#     summarise(n = n_distinct(year)) %>%
+#     filter(n==1)
 
 
-dat <- dat %>%
-filter(!gridCellID %in% cell_years_remove$gridCellID)
+# dat <- dat %>%
+# filter(!gridCellID %in% cell_years_remove$gridCellID)
 
+# # #-------------------------------------------------------------------------------
+# # # Add to filter dataframe
+#  data_filters$Filter[filter.num] <- c("Location")
+#  data_filters$Description[filter.num] <- c("Remove exploratory grid cells")
+#  data_filters$Samples[filter.num] <- dim(dat)[1]
+#  data_filters$Positive_Samples[filter.num] <- dim(subset(dat, Target > 0))[1]
+#  filter.num <- filter.num + 1
 # #-------------------------------------------------------------------------------
-# # Add to filter dataframe
- data_filters$Filter[filter.num] <- c("Location")
- data_filters$Description[filter.num] <- c("Remove grid cells sampled in only one year, excep the Farallons")
- data_filters$Samples[filter.num] <- dim(dat)[1]
- data_filters$Positive_Samples[filter.num] <- dim(subset(dat, Target > 0))[1]
- filter.num <- filter.num + 1
-#-------------------------------------------------------------------------------
 
-#grid cells where the target was never observed
-#see how many
-target_by_gridcell <- dat %>%
-   group_by(gridCellID,name) %>%
-   summarise(target = sum(Target),
-   count = n())
+# #grid cells where the target was never observed
+# #see how many
+# target_by_gridcell <- dat %>%
+#    group_by(gridCellID,name) %>%
+#    summarise(target = sum(Target),
+#    count = n())
 
-gridcell.to.keep <- target_by_gridcell %>%
-filter(target>0)
-length(unique(target_by_gridcell$gridCellID))
-length(unique(gridcell.to.keep$gridCellID))
+# gridcell.to.keep <- target_by_gridcell %>%
+# filter(target>0)
+# length(unique(target_by_gridcell$gridCellID))
+# length(unique(gridcell.to.keep$gridCellID))
 
 
-#lose 20 grid cells
- dat <- dat %>%
- filter(gridCellID %in% gridcell.to.keep$gridCellID)
+# #lose 20 grid cells
+#  dat <- dat %>%
+#  filter(gridCellID %in% gridcell.to.keep$gridCellID)
 
+# # #-------------------------------------------------------------------------------
+# # # Add to filter dataframe
+#  data_filters$Filter[filter.num] <- c("Location")
+#  data_filters$Description[filter.num] <- c("Keep grid cells saw at least one quillback")
+#  data_filters$Samples[filter.num] <- dim(dat)[1]
+#  data_filters$Positive_Samples[filter.num] <- dim(subset(dat, Target > 0))[1]
+#  filter.num <- filter.num + 1
 # #-------------------------------------------------------------------------------
-# # Add to filter dataframe
- data_filters$Filter[filter.num] <- c("Location")
- data_filters$Description[filter.num] <- c("Keep grid cells saw at least one quillback")
- data_filters$Samples[filter.num] <- dim(dat)[1]
- data_filters$Positive_Samples[filter.num] <- dim(subset(dat, Target > 0))[1]
- filter.num <- filter.num + 1
-#-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 # Fished time filter
 #Remove drifts fished less than two minutes
-dat <- dat %>%
-  filter(driftTime > (2/60))
+ dat <- dat %>%
+   filter(driftTime > (2/60))
 
-# Give drifts within a cell on the same day a drift number
-# See how many drifts and total fished time
-Num_drifts_fished <- dat %>%
-  group_by(tripCellID) %>%
-  summarise(
-    num.drifts = n(),
-    tot_time = sum(driftTime)) %>%
-  filter(tot_time >= .25)
+# # Give drifts within a cell on the same day a drift number
+# # See how many drifts and total fished time
+# Num_drifts_fished <- dat %>%
+#   group_by(tripCellID) %>%
+#   summarise(
+#     num.drifts = n(),
+#     tot_time = sum(driftTime)) %>%
+#   filter(tot_time >= .25)
 
 
-ggplot(Num_drifts_fished, aes(x = tot_time, colour = "#E69F00", fill = "#E69F00")) +
-  geom_histogram(show.legend = FALSE) +
-     xlab("Hours fished") + ylab("Count") +
-       scale_color_viridis_d()
-ggsave(file = file.path(plot.dir, "ccfrp_time_fished.png"), width = 7, height = 7)
+# ggplot(Num_drifts_fished, aes(x = tot_time, colour = "#E69F00", fill = "#E69F00")) +
+#   geom_histogram(show.legend = FALSE) +
+#      xlab("Hours fished") + ylab("Count") +
+#        scale_color_viridis_d()
+# ggsave(file = file.path(plot.dir, "ccfrp_time_fished.png"), width = 7, height = 7)
 
-# Remove cells fished less than a total of 15 minutes on a day
-dat <- dat %>%
-  filter(tripCellID %in% Num_drifts_fished$tripCellID)
-#-------------------------------------------------------------------------------
-# Add to filter dataframe
-data_filters$Filter[filter.num] <- c("Time fished")
-data_filters$Description[filter.num] <- c("Remove drifts less than two minutes 
-                                          and cells fished less than 15 minutes
-                                          during a sampling event")
-data_filters$Samples[filter.num] <- dim(dat)[1]
-data_filters$Positive_Samples[filter.num] <- dim(subset(dat, Target > 0))[1]
-filter.num <- filter.num + 1
-#-------------------------------------------------------------------------------
+# # Remove cells fished less than a total of 15 minutes on a day
+# dat <- dat %>%
+#   filter(tripCellID %in% Num_drifts_fished$tripCellID)
+# #-------------------------------------------------------------------------------
+# # Add to filter dataframe
+ data_filters$Filter[filter.num] <- c("Time fished")
+ data_filters$Description[filter.num] <- c("Remove drifts less than two minutes")
+ data_filters$Samples[filter.num] <- dim(dat)[1]
+ data_filters$Positive_Samples[filter.num] <- dim(subset(dat, Target > 0))[1]
+ filter.num <- filter.num + 1
+# #-------------------------------------------------------------------------------
 
 
 
@@ -202,31 +210,31 @@ with(dat %>% filter(cpue >0), table(year, area))
 
 #-------------------------------------------------------------------------------
 #get the average depth per cell
-length(unique(dat$gridCellID)) #83 cells retained
-summary(lengths$Depth.Released..ft.)
-cell_dat <- dat %>% 
-group_by(gridCellID) %>%
-summarise(mean_start_depth_ft = mean(startDepthft, na.rm=T), 
-         median_end_depth_ft = mean(endDepthft, na.rm = T))
+target_lengths <- lengths
 
-
-#write out length data
-target_lengths <- lengths %>%
-dplyr::select(fishID, driftID, gridCellID, sex, speciesCode, monitoringGroup, name, length_cm, Depth.Released..ft.,
-              site.x, tripID, year, name) %>%
-rename(site = site.x, 
-       release_depth = Depth.Released..ft.) %>%
+#keep only lengths in the index
+lengths <- lengths %>%
 filter(driftID %in% dat$driftID)
 
-target_lengths <- inner_join(target_lengths, cell_dat)
+lengths <- left_join(lengths, dat %>% dplyr::select(driftID,depth))
 
-with(target_lengths, table(year, site))
-with(lengths, table(year, site.x))
+#write out length data
+lengths <- lengths %>%
+dplyr::select(fishID, driftID, gridCellID, sex, speciesCode, monitoringGroup, name, length_cm, depth,
+              site.x, tripID, year, name) %>%
+rename(site = site.x) %>%
+filter(driftID %in% dat$driftID)
+
+with(lengths, table(year, site))
 
 
-save(target_lengths, file = file.path(dir,"CCFRP_lengths.RData"))
-write.csv(target_lengths,  
-file = file.path(dir,"CCFRP_lengths.csv"), row.names = FALSE)
+
+save(lengths, file = file.path(dir,"CCFRP_lengths.RData"))
+write.csv(lengths, file = file.path(dir,"CCFRP_lengths.csv"), row.names = FALSE)
+
+
+
+
 
 
 

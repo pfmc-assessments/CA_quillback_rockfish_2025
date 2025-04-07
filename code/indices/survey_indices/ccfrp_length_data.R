@@ -17,49 +17,48 @@ library(nwfscSurvey)
 library(ggplot2)
 
 dir <- file.path(here(), "data-raw", "ccfrp")
-
+plot.dir <- file.path(here(), "data_explore_figs", "survey_figs")
 # Load in data from various sources
 # CRFS 2017-2024 - all areas
 len <- read.csv(file.path(dir,  "CCFRP_lengths.csv"))
 # The lengths have already been filtered based on the retained records 
-len$depth_m <- len$mean_start_depth_ft/3.281
-len <- len %>% mutate(depth_bin_m = cut(depth_m, breaks = c(17,30,40,50)))
-len$depth_bin_m <- as.factor(len$depth_bin_m)
-summary(as.factor(len$depth_bin_m))
+len <- len %>% mutate(depth_bin = cut(depth, breaks = c(0, 40,80,120,160,200)))
+len$depth_bin <- as.factor(len$depth_bin)
+summary(as.factor(len$depth_bin))
 #look at depth
-#10m bins
-summary(len$mean_start_depth_ft)
+
 
 
 ggplot(len) +
   geom_boxplot(aes(y = length_cm, colour = as.factor(year))) +
   facet_wrap('name')
+ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_year_area.png"), width = 7, height = 7)
 
 ggplot(len) +
-  geom_boxplot(aes(y = length_cm, colour = as.factor(depth_bin_m))) 
-
-ggplot(len) +
-  geom_boxplot(aes(y = length_cm, colour = depth_bin_m)) +
+  geom_boxplot(aes(y = length_cm, colour = as.factor(site))) +
   facet_wrap('name')
+ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_site_area.png"), width = 7, height = 7)
 
-with(len, table(year, name))
 
-ggplot(len, aes(x = mean_start_depth_ft, y = length_cm)) +
-geom_point()
 
-ggplot(len, aes(x = release_depth, y = length_cm)) +
-geom_jitter(alpha = 0.5)
+ggplot(len) +
+  geom_boxplot(aes(y = length_cm, colour = depth_bin)) +
+  facet_wrap('name')
+ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_depth_area.png"), width = 7, height = 7)
+
+
+
 
 #remove the Farallons from initial length comps
-len.nofn <- len %>%
-filter(!grepl("FN", gridCellID))
+#len.nofn <- len %>%
+#filter(!grepl("FN", gridCellID))
 
 
 #===============================================================================
 # Sample size calculation and input N
 #===============================================================================
 
-sample_by_group <- len.nofn %>%
+sample_by_group <- len %>%
   dplyr::group_by(year, name, site) %>%
   dplyr::summarise(
     drifts = length(unique(driftID)),
@@ -77,12 +76,12 @@ length_bins <- seq(10, 50, by = 2)
 
 #len <- len %>% mutate(len_bins = cut(length_cm, breaks = seq(9,51, by = 2)))
 #Assign all to have unknown sex since we are not using a sex specific model
-len.nofn$Sex <- "U"
+len$Sex <- "U"
 
 #len.nofn <- len.nofn %>% rename(Length_cm = length_cm, Year = year)
-len_final <- len.nofn %>%
+len_final <- len %>%
    dplyr::rename(Length_cm = length_cm, Year = year) %>%
-dplyr::select(fishID, driftID, gridCellID, Length_cm, Sex, Year)
+dplyr::select(fishID, driftID, gridCellID, Length_cm, Sex, Year, site, name)
 len_final$Sex <- as.factor(len_final$Sex)
 
  n <- len_final %>%
@@ -90,7 +89,7 @@ len_final$Sex <- as.factor(len_final$Sex)
    dplyr::summarise(
      drifts = length(unique(driftID)))
 
-#This is missin one of the lengths and can't figure out why- it's in 2022 in the 38-39 bin
+#This is missin one of the lengths and can't figure out why- it's in 2022 in the 38-3 bin9
  lfs <- UnexpandedLFs.fn(
         dir = file.path(dir),
         sex = 0,    #Sex has to be set to 0 if you have all unsexed fish
@@ -99,7 +98,52 @@ len_final$Sex <- as.factor(len_final$Sex)
         partition = 0,
         fleet = "ccfrp",
         month = 7)
+lfs <- as.data.frame(lfs)
 
 lfs$comps[, "Nsamp"] <- n$drifts
 
-write.csv(lfs$comps, file = file.path(dir, "ccfrp_noFN_length_comps_unsexed.csv"), row.names = FALSE)
+
+#Now process and weight the lengths
+n <- len_final %>%
+  dplyr::group_by(Year, site) %>%
+  dplyr::summarise(
+    drifts = length(unique(driftID)))
+
+lfs_mpa <-  UnexpandedLFs.fn(
+  dir = file.path(dir),
+  sex = 0,
+  datL = len_final[len_final$site == "MPA", ], 
+  lgthBins = length_bins,
+  partition = 0, 
+  fleet = "ccfrp", 
+  month = 7)
+  lfs_mpa <- as.data.frame(lfs_mpa)
+lfs_mpa[,"InputN"] <- n[n$site == "MPA", 'drifts']
+
+lfs_ref <-  UnexpandedLFs.fn(
+  dir = file.path(dir),
+  sex = 0,
+  datL = len_final[len_final$site == "REF", ], 
+  lgthBins = length_bins,
+  partition = 0, 
+  fleet = 4, 
+  month = 7)
+  lfs_ref <- as.data.frame(lfs_ref)
+lfs_ref[,"InputN"] <- n[n$site == "REF", 'drifts']
+
+protect <- 0.2; open <- 1 - protect
+ind <- 7:ncol(lfs_mpa)
+tmp <- lfs_mpa[, ind] * protect + lfs_ref[, ind] * open
+
+first <- 1:(length(length_bins))
+#second <- (length(length_bins) + 2):ncol(tmp)
+# This is for unsexed composition data only 
+lfs <- round(tmp[, first] /  apply(tmp[, first], 1, sum), 4)
+      #      round(100 * tmp[, second] / apply(tmp[, second], 1, sum), 4))
+out <- cbind(lfs_ref[,1:5], "InputN" = tmp[,"InputN"] , lfs)
+
+
+
+
+
+write.csv(lfs$comps, file = file.path(dir, "ccfrp_withFN_weighted_length_comps_unsexed.csv"), row.names = FALSE)

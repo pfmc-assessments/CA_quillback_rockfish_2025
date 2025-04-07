@@ -178,21 +178,8 @@ lengths <- lengths %>%
 
 summary(lengths$Fork.Length..mm.)
 summary(lengths$Total.Length..mm.)
+
 #-------------------------------------------------------------------------------
-#look at depth data
-summary(dat$startDepthft)
-#NAs for 823 sites
-summary(dat$endDepthft)
-#NAs for 1995 sites
-
-#where are the depth NA's
-aa <- subset(dat, is.na(startDepthft))
-summary(as.factor(aa$monitoringGroup))
-#mostly humboldt that doesn't have depth
-#cell could be included and accounts for depth likely
-
-
-
 #how many drifts with target species by MPA
 total_effort <- dat %>% group_by(name) %>%
   summarise(total_effort = sum(effort, na.rm=TRUE))
@@ -217,12 +204,7 @@ ggplot(dat %>% filter(cpue>0, cpue <20), aes(cpue, fill = name)) +
     scale_color_viridis_d()
 ggsave(file = file.path(plot.dir, "ccfrp_cpue_name.png"), width = 7, height = 7)
 
-#see how much depth changes within a drift when available
-ggplot(dat, aes(x = startDepthft , y = endDepthft, color = name)) +
-  geom_point(alpha = .5) +
-   xlab("Start depth (ft)") + ylab(" End depth (ft)") +
-    scale_color_viridis_d()
-ggsave(file = file.path(plot.dir, "ccfrp_start_end_depth.png"), width = 7, height = 7)
+
 
 
 
@@ -263,16 +245,86 @@ ggplot(lengths %>% filter(!name %in% name.remove), aes(lengthcm, fill = site.x))
 ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_mpa.png"), width = 7, height = 7)
 
 
-avg_start_depth <- dat %>%
-filter(cpue > 0) %>%
-group_by(gridCellID, name) %>%
-summarise(meansdepth = mean(startDepthft, na.rm = T))
+#-------------------------------------------------------------------------------
+#look at depth data
+summary(dat$startDepthft)
+#NAs for 646
+summary(dat$endDepthft)
+#NAs for 842 sites
 
-avg_end_depth <- dat %>%
-group_by(gridCellID, name) %>%
-summarise(meansdepth = mean(startDepthft, na.rm = T))
+#see how much depth changes within a drift when available
+ggplot(dat, aes(x = startDepthft , y = endDepthft, color = name)) +
+  geom_point(alpha = .5) +
+   xlab("Start depth (ft)") + ylab(" End depth (ft)") +
+    scale_color_viridis_d()
+ggsave(file = file.path(plot.dir, "ccfrp_start_end_depth.png"), width = 7, height = 7)
+
+#where are the depth NA's
+aa <- subset(dat, is.na(startDepthft))
+summary(as.factor(aa$monitoringGroup))
+bb <- subset(dat, is.na(endDepthft))
+summary(as.factor(bb$monitoringGroup))
+#mostly humboldt that doesn't have depth
+#which cells missing any depth info
+cc <- dat %>% 
+      group_by(gridCellID) %>%
+       summarise(SdepthMean = mean(, na.rm = T))
+View(cc)
+#read in the GIS interpreted depths
+#Rebecca Miller took all of the recorded start and end lat/long inforamtion from
+# each drift and used the 2m resolution bathymetry layer and the 90m  resolution 
+#bathymetry layer to interpret depths
+gis.start.depth1 <- readxl::read_excel(here("data-raw", "ccfrp","ccfrp_for_arc_Start_copy.xlsx"))
+gis.end.depth1 <- readxl::read_excel(here("data-raw", "ccfrp","ccfrp_for_arc_End_copy.xlsx")) 
+
+#convert the negative depth in meters to positive values in feet
+gis.start.depth <- gis.start.depth1 %>%
+  dplyr::select(Drift_ID, Depth_2m, Depth90m, Grid_Cell_ID) %>%
+  mutate_at(vars(Depth_2m), as.numeric) %>%
+  mutate(Depth_2mft = -Depth_2m * 3.281,
+         Depth90mft = -Depth90m * 3.281) %>%
+  rename(gis.start.2mtoft = Depth_2mft,
+         gis.start.90mtoft = Depth90mft) 
+
+#do the same for the end locations
+gis.end.depth <- gis.end.depth1 %>%
+  dplyr::select(Drift_ID, Depth2m, Depth90m, Grid_Cell_ID) %>%
+  mutate(Depth2mft = -Depth2m * 3.281,
+         Depth90mft = -Depth90m * 3.281) %>%
+  rename(gis.end.2mtoft = Depth2mft,
+         gis.end.90mtoft = Depth90mft)  
+
+#join the data to get an idea of what we have to gis depths
+gis.depth <- left_join(gis.start.depth, gis.end.depth) %>%
+  rename(driftID = Drift_ID) %>%
+  filter(Grid_Cell_ID %in% dat$gridCellID)
+#how different are the 2m and 90 depths
+ggplot(gis.depth, aes(gis.start.2mtoft,gis.start.90mtoft)) + geom_point()
+#look at 2m vs 90m - these both lok reasonable and won't change the binning we do for depth
+gis.depth.cell <- gis.depth %>%
+group_by(Grid_Cell_ID) %>%
+summarise(meanSGisDepth = mean(gis.start.2mtoft, na.rm = T), 
+          meanEGisDepth = mean(gis.end.2mtoft, na.rm = T))
+View(gis.depth.cell)
+
+#merge the mean SGisDepth to the main data
+StartGisDepth <- gis.depth.cell %>%
+                dplyr::select(Grid_Cell_ID, meanSGisDepth) %>%
+                rename(gridCellID = Grid_Cell_ID)
+
+#merge the new depths in
+dat <- left_join(dat, StartGisDepth)
+
+#assign depths
+#rules - take recorded depth when possible, if not take the average start depth for the cell
+dat <- dat %>%
+  mutate(depth = ifelse(is.na(startDepthft) & meanSGisDepth> 0, meanSGisDepth, startDepthft))# %>%
+  #filter(!is.na(depth))
 
 
+ggplot(dat, aes(x = depth, y = cpue)) + geom_point()
+
+#-----------------------------------------------------------                        -------------------
 #save the data or save it and just open the process_ccfrp R script
 save(dat, areas, catches, lengths, cellLocation, drifts, specieslu,
      tagReturns, dat, file = file.path(dir,"ccfrp.RData"))
