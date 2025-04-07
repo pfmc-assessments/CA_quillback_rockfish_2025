@@ -3589,6 +3589,8 @@ mod$dat$CPUEinfo <- rbind("CA_Commercial_North" = mod$dat$CPUEinfo[1,],
                           mod$dat$CPUEinfo[1,],
                           "CA_Recreational_North" =  mod$dat$CPUEinfo[2,],
                           mod$dat$CPUEinfo[-1,])
+rownames(mod$dat$CPUEinfo)[c(2,4)] <- paste0(rownames(mod$dat$CPUEinfo)[c(2,4)], "_South")
+mod$dat$CPUEinfo$fleet <- c(1:7)
 
 fleet.converter <- mod$dat$fleetinfo %>%
   dplyr::mutate(fleet = c("com", "com", "rec", "rec", "growth", "ccfrp", "rov")) %>%
@@ -3871,6 +3873,127 @@ colnames(dw)[1] = "factor"
 new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
                                 by = dplyr::join_by(factor, fleet))
 mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_confidential_FAA_runs_noShare", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_confidential_FAA_runs_noShare", new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_confidential_FAA_runs_noShare", new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all_faa(pp)
+
+
+####------------------------------------------------#
+## 2_4_3_FAA_confidential_fixComSouthSelex ----
+####------------------------------------------------#
+
+#Reweight model 242
+
+new_name <- "2_4_3_FAA_confidential_fixComSouthSelex"
+old_name <- "2_4_2_FAA_confidential_reweight" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_confidential_FAA_runs_noShare", old_name), 
+               dir.new = here('models', "_confidential_FAA_runs_noShare", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_confidential_FAA_runs_noShare", new_name))
+
+
+##
+#Make Changes
+##
+
+#To mirror blocks from a fleet, have to split the fleet again.
+#Thus, split the commercial south fleet into two. Have fleet 2 be the recent 
+#years, and add another fleet (fleet 8) to represent the early block. 
+
+#Other options are 1) to mirror the South to the North (so data in south along with
+#north used to estimate first block, only north in next two), or 2) to have only one
+#block for the south (which for selex would reflect data < 2003)
+
+
+## Set up fleet structure
+
+mod$dat$Nfleets <- 8
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo, mod$dat$fleetinfo[2,])
+mod$dat$fleetinfo$fleetname[8] <- c(paste0(mod$dat$fleetinfo$fleetname[2], "_early"))
+
+mod$dat$len_info <- rbind(mod$dat$len_info, 
+                          "CA_Commercial_South_early" = mod$dat$len_info[2,])
+
+mod$dat$age_info <- rbind(mod$dat$age_info,
+                          "CA_Commercial_South_early" = mod$dat$age_info[2,])
+
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
+                          "CA_Commercial_South_early" = mod$dat$CPUEinfo[2,])
+mod$dat$CPUEinfo$fleet[8] <- 8
+
+
+## Set up the data
+
+#Change the catch time series
+mod$dat$catch[which(mod$dat$catch$fleet == 2 & mod$dat$catch$year < 2003), "fleet"] <- 8
+
+#Change the length data - there is such small sample size after 2003 so omit that point
+mod$dat$lencomp[which(mod$dat$lencomp$fleet == 2 & mod$dat$lencomp$year < 2003), "fleet"] <- 8
+mod$dat$lencomp[which(mod$dat$lencomp$fleet == 2 & mod$dat$lencomp$year >= 2003), "year"] <-
+  -mod$dat$lencomp[which(mod$dat$lencomp$fleet == 2 & mod$dat$lencomp$year >= 2003), "year"]
+
+#There is no commercial south age data nor is there as commercial index prior to 2003
+
+
+## Update variance adjustment factors. 
+
+#Give south early (fleet 8) the same weight as original (fleet 2) because more or less same data
+mod$ctl$Variance_adjustment_list <- rbind(mod$ctl$Variance_adjustment_list[c(1,3,4,5,6),],
+                                          "Commercial_South_early" = mod$ctl$Variance_adjustment_list[2,],
+                                          mod$ctl$Variance_adjustment_list[c(7,8),])
+mod$ctl$Variance_adjustment_list[
+  grep("Commercial_South_early", rownames(mod$ctl$Variance_adjustment_list)), 
+       "fleet"] <- 8
+
+
+## Set up the blocking and mirroring
+#Mirror the recent commercial south to commercial north (first block < 2003 wont have influence)
+#Set up a single block for commercial south early (only < 2003 will matter)
+
+#Type
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, 
+                                  "CA_Commercial_South_early" = mod$ctl$size_selex_types[2,])
+mod$ctl$size_selex_types[2, c("Pattern", "Special")] <- c(15, 1)
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, 
+                                 "CA_Commercial_South_early" = mod$ctl$age_selex_types[2,])
+
+#Regular parameters (remove previous commercial south and add new commercial south early)
+parm_loc <- grep("Commercial_South", rownames(mod$ctl$size_selex_parms))
+new_parm <- mod$ctl$size_selex_parms[parm_loc,] %>%
+  dplyr::mutate(Block = 0, Block_Fxn = 0)
+rownames(new_parm) <- paste0(gsub('.{3}$', '', rownames(new_parm)), "_early(8)")
+
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms[-parm_loc,], new_parm)
+  
+#Time varying parameters (remove previous commercial south)
+tv_parm_loc <- grep("Commercial_South", rownames(mod$ctl$size_selex_parms_tv))
+
+mod$ctl$size_selex_parms_tv <- mod$ctl$size_selex_parms_tv[-tv_parm_loc,]
+
 
 
 ##

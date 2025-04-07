@@ -155,6 +155,11 @@ plot_sel_all_faa <- function(mod, sex = 1, fleetnames = "default") {
   plot_sel_ret(mod, Factor = "Lsel", fleet = 7, sex = sex, fleetnames = fleetnames)
   mtext("Length (cm)", side = 1, line = 2.5)
   
+  if(length(mod$fleet_ID == 8)) {
+    plot_sel_ret(mod, Factor = "Lsel", fleet = 8, sex = sex, fleetnames = fleetnames)
+    mtext("Length (cm)", side = 1, line = 2.5)
+  }
+  
   dev.off()
   
   print(paste0("Plot in ", filepath))
