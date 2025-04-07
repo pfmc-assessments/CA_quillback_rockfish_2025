@@ -3524,6 +3524,53 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+####------------------------------------------------#
+## 2_3_8_removeSparseData_5 ----
+####------------------------------------------------#
+
+#Remove sparse age and length comps (input sample size < 5)
+
+new_name <- "2_3_8_removeSparseData_5"
+old_name <- "2_3_1_reweight223" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$dat$lencomp[which(mod$dat$lencomp$Nsamp <= 5), "year"] <-
+  -mod$dat$lencomp[which(mod$dat$lencomp$Nsamp <= 5), "year"]
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
 
 
 
