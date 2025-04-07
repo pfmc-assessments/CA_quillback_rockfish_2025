@@ -3527,20 +3527,6 @@ plot_sel_all(pp)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ####------------------------------------------------#
 ## 2_4_1_FAA_confidential ----
 ####------------------------------------------------#
@@ -3549,10 +3535,11 @@ plot_sel_all(pp)
 #to ensure not pushed. 
 
 #Try fleets as areas set up to see if improve fits to data.
-#Start from unweighted version given these changes would really change 211 weights
+#Start from unweighted version given these changes would really change 231 weights
+#but then reweight
 
-new_name <- "2_3_1_FAA_confidential"
-old_name <- "2_0_1_updateData" 
+new_name <- "2_4_1_FAA_confidential"
+old_name <- "2_2_3_combineGrowth_CCFRP" 
 
 ##
 #Copy inputs
@@ -3570,6 +3557,10 @@ mod <- SS_read(here('models', "_confidential_FAA_runs_noShare", new_name))
 ##
 #Make Changes
 ##
+
+#Set growth parameter to three based on model 235
+mod$ctl$MG_parms[mod$ctl$MG_parms$PHASE == 2, "PHASE"] <- 3
+
 
 #Update fleet information for model, lengths, ages, and indices
 mod$dat$Nfleets <- 7
@@ -3669,7 +3660,7 @@ com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_FAA_unsexed_10_50_1_60.
 
 noFAA.caal <- mod$dat$agecomp[-which(mod$dat$agecomp$fleet %in% c(1, 2)), ]
 noFAA.caal$fleet <- noFAA.caal$fleet + 2
-
+names(noFAA.caal) <- names(com.CAAL)
 
 mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, noFAA.caal)
 
@@ -3726,69 +3717,89 @@ mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
   dplyr::select(-Block, -id)
 
 
+#Update variance adjustment factors but keep at 1 for now
+
+varadj_len <- data.frame("factor" = 4, 
+                         fleet = unique(mod$dat$lencomp$fleet), 
+                         value = 1,
+                         row.names = paste0("Len_", fleet.converter[unique(mod$dat$lencomp$fleet), "fleetname"]))
+varadj_age <- data.frame("factor" = 5,
+                         fleet = unique(mod$dat$agecomp$fleet), 
+                         value = 1,
+                         row.names = paste0("Age_", fleet.converter[unique(mod$dat$agecomp$fleet), "fleetname"]))
+mod$ctl$Variance_adjustment_list <- dplyr::bind_rows(varadj_len, varadj_age)
+
+
+
 
 ### Update indices --------------------------------
 
-May need a separate PR index to do this
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "ccfrp") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month,
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
 
-If so then will have to think about what the different values of Q mean
+pr_index_n <- read.csv(here("data", "forSS3", "PR_index_forSS_FAS_N.csv")) %>%
+  dplyr::mutate(fleet = "recNorth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  dplyr::rename("seas" = month,
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
 
-# ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
-#   dplyr::mutate(fleet = "ccfrp") %>%
-#   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
-#   dplyr::rename("seas" = month, 
-#                 "se_log" = logse,
-#                 "index" = fleet) %>%
-#   as.data.frame()
-# 
-# pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
-#   dplyr::mutate(fleet = "rec") %>%
-#   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
-#   dplyr::rename("seas" = month, 
-#                 "se_log" = logse,
-#                 "index" = fleet) %>%
-#   as.data.frame()
-# 
-# rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
-#   dplyr::rename("seas" = month, 
-#                 "se_log" = logse,
-#                 "index" = fleet) %>%
-#   as.data.frame()
-# 
-# mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index, rov_index)
-# 
-# 
-# # Add q setup for surveys with index data
-# 
-# #Base the number on fleetinfo and any fishery fleets with CPUE data
-# cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
-# mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
-#                                 "link" = 1,
-#                                 "link_info" = 0,
-#                                 "extra_se" = 0,
-#                                 "biasadj" = 0,
-#                                 "float" = 0,
-#                                 row.names = paste(cpuefleets, 
-#                                                   fleet.converter[cpuefleets, "fleetname"], 
-#                                                   sep = "_"))
-# 
-# mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
-#                               "HI" = 25,
-#                               "INIT" = 0,
-#                               "PRIOR" = 0,
-#                               "PR_SD" = 1,
-#                               "PR_type" = 0,
-#                               "PHASE" = -1,
-#                               "env_var&link" = 0,
-#                               "dev_link" = 0,
-#                               "dev_minyr" = 0,
-#                               "dev_maxyr" = 0,
-#                               "dev_PH" = 0,
-#                               "Block" = 0,
-#                               "Block_Fxn" = 0,
-#                               row.names = paste("LnQ", "base", cpuefleets, 
-#                                                 fleet.converter[cpuefleets, "fleetname"], 
-#                                                 sep = "_"))
+pr_index_s <- read.csv(here("data", "forSS3", "PR_index_forSS_FAS_S.csv")) %>%
+  dplyr::mutate(fleet = "recSouth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  dplyr::rename("seas" = month,
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "rovAll") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  dplyr::rename("seas" = month,
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index_n, pr_index_s, ccfrp_index, rov_index)
+
+
+# Add q setup for surveys with index data
+
+#Base the number on fleetinfo and any fishery fleets with CPUE data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets,
+                                                  fleet.converter[cpuefleets, "fleetname"],
+                                                  sep = "_"))
+
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = 2,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets,
+                                                fleet.converter[cpuefleets, "fleetname"],
+                                                sep = "_"))
 
 
 ##
@@ -3796,17 +3807,88 @@ If so then will have to think about what the different values of Q mean
 ##
 
 SS_write(mod,
-         dir = here('models', new_name),
+         dir = here('models', "_confidential_FAA_runs_noShare", new_name),
          overwrite = TRUE)
 
-r4ss::run(dir = here('models', new_name), 
+r4ss::run(dir = here('models', "_confidential_FAA_runs_noShare", new_name), 
           exe = here('models/ss3_win.exe'), 
           extras = '-nohess',
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-pp <- SS_output(here('models', new_name))
+pp <- SS_output(here('models', "_confidential_FAA_runs_noShare", new_name))
 SS_plots(pp, plot = c(1:26))
 
-plot_sel_all(pp)
+plot_sel_all_faa(pp)
+
+
+
+####------------------------------------------------#
+## 2_4_2_FAA_confidential_reweight ----
+####------------------------------------------------#
+
+#Reweight model 242
+
+new_name <- "2_4_2_FAA_confidential_reweight"
+old_name <- "2_4_1_FAA_confidential" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_confidential_FAA_runs_noShare", old_name), 
+               dir.new = here('models', "_confidential_FAA_runs_noShare", new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models', "_confidential_FAA_runs_noShare", old_name),"Report.sso"),
+          to = file.path(here('models', "_confidential_FAA_runs_noShare", new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',"_confidential_FAA_runs_noShare", old_name),"CompReport.sso"),
+          to = file.path(here('models',"_confidential_FAA_runs_noShare", new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', "_confidential_FAA_runs_noShare", old_name),"warning.sso"),
+          to = file.path(here('models', "_confidential_FAA_runs_noShare", new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', "_confidential_FAA_runs_noShare", old_name),"covar.sso"),
+          to = file.path(here('models', "_confidential_FAA_runs_noShare", new_name),"covar.sso"), overwrite = TRUE)
+
+
+mod <- SS_read(here('models', "_confidential_FAA_runs_noShare", new_name))
+
+
+##
+#Make Changes
+##
+
+pp <- SS_output(here('models', "_confidential_FAA_runs_noShare", new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', "_confidential_FAA_runs_noShare", new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 0, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+colnames(dw)[1] = "factor"
+new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
+                                by = dplyr::join_by(factor, fleet))
+mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_confidential_FAA_runs_noShare", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_confidential_FAA_runs_noShare", new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_confidential_FAA_runs_noShare", new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all_faa(pp)
 

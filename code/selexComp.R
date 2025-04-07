@@ -129,3 +129,33 @@ plot_sel_all <- function(mod, sex = 1, fleetnames = "default") {
   print(paste0("Plot in ", filepath))
 }
 
+
+plot_sel_all_faa <- function(mod, sex = 1, fleetnames = "default") {
+  
+  graphics.off()
+  
+  filename <- "_selectivityPlot_FAA.png"
+  if (sex == 2) {
+    filename <- gsub(".png", "_males.png", filename)
+  }
+  filepath <- file.path(mod$inputs$dir, filename)
+  png(filepath, width = 6.5, height = 6.5, units = "in", res = 300, pointsize = 10)
+  par(mfrow = c(4,2), oma = c(2,2,0,0), las = 1)
+  
+  #For each fleet
+  plot_sel_ret(mod, Factor = "Lsel", fleet = 1, sex = sex, fleetnames = fleetnames)
+  mtext("Selectivity", side = 2, line = 3, las = 0)
+  plot_sel_ret(mod, Factor = "Lsel", fleet = 2, sex = sex, fleetnames = fleetnames)
+  plot_sel_ret(mod, Factor = "Lsel", fleet = 3, sex = sex, fleetnames = fleetnames)
+  mtext("Selectivity", side = 2, line = 3, las = 0)
+  plot_sel_ret(mod, Factor = "Lsel", fleet = 4, sex = sex, fleetnames = fleetnames)
+  plot_sel_ret(mod, Factor = "Lsel", fleet = 5, sex = sex, fleetnames = fleetnames)
+  plot_sel_ret(mod, Factor = "Lsel", fleet = 6, sex = sex, fleetnames = fleetnames)
+  mtext("Length (cm)", side = 1, line = 2.5)
+  plot_sel_ret(mod, Factor = "Lsel", fleet = 7, sex = sex, fleetnames = fleetnames)
+  mtext("Length (cm)", side = 1, line = 2.5)
+  
+  dev.off()
+  
+  print(paste0("Plot in ", filepath))
+}
