@@ -14,7 +14,7 @@ library(PEPtools)
 library(here)
 library(dplyr)
 library(tictoc)
-
+library(nwfscSurvey)
 source(here('code/selexComp.R'))
 
 ##########################################################################################-
@@ -4119,4 +4119,74 @@ pp <- SS_output(here('models', "_confidential_FAA_runs_noShare", new_name))
 SS_plots(pp, plot = c(1:26))
 
 plot_sel_all_faa(pp)
+
+
+####------------------------------------------------#
+## 2_5_1_NewCCFRPIndexLengths ----
+####------------------------------------------------#
+
+#This model uses ROV length selectivity 11
+
+new_name <- "2_5_1_NewCCFRPIndexLengths"
+old_name <- "2_3_9_ROVFixSelex1L8"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+#CCFRP
+#these use number of drifts as sample sizes
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_withFN_weighted_length_comps_unsexed.csv")) %>%
+  as.data.frame()
+  ccfrp.lengths$fleet <- 4
+names(ccfrp.lengths) <- names(mod$dat$lencomp)
+
+
+#replace the lengths
+mod$dat$lencomp[mod$dat$lencomp$fleet == 4, ] <- ccfrp.lengths
+
+
+#aa <- mod$dat$lencomp
+#View(aa)
+### Update index --------------------------------
+### This includes 
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_withFN_weighted_index_forSS.csv")) #%>%
+ # dplyr::mutate(fleet = 4) %>%
+  dplyr::rename(
+                index = obs,
+                fleet ) %>%
+  as.data.frame()
+
+mod$dat$CPUE[mod$dat$CPUE == 4, ] <- ccfrp_index
+#mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index, rov_index)
+
+
+##
+#Output files and run
+##
+
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
 
