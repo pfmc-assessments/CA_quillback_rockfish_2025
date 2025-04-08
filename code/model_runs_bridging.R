@@ -528,7 +528,7 @@ dev.off()
 
 
 ##-------------------------------------------------------------------##
-#------------------Add Data Up to 2020-------------------------------
+#--------------------------Add Data----------------------------------
 ##-------------------------------------------------------------------##
 
 
@@ -599,6 +599,9 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+#Plot just the data figure (output as "data.png")
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SSplotData(pp, print = TRUE, subplots = 1) 
 
 
 ####------------------------------------------------#
@@ -675,12 +678,17 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+#Plot just the data figure (output as "data.png")
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SSplotData(pp, print = TRUE, subplots = 1) 
+
 
 ####------------------------------------------------#
 ## 0_2_3_update_Comps_oldFleets ----
 ####------------------------------------------------#
 
-# Include age comps now for old fleets alongwith length comps
+# Include age comps now for old fleets alongwith length comps. Also include
+# ageing error
 
 new_name <- "0_2_3_update_Comps_oldFleets"
 old_name <- "0_2_2_update_Lcomps_oldFleets"
@@ -732,6 +740,12 @@ com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv"
 
 mod$dat$agecomp <- com.CAAL
 
+# Add ageing error matrix
+ageerr <- read.csv(here("data", "forSS3", "Ageing_error_B01S11_forSS.csv"))
+
+age_ind <- grep(mod$dat$Nages, colnames(ageerr))
+mod$dat$ageerror <- ageerr[,1:age_ind]
+
 
 ##
 #Output files and run
@@ -747,18 +761,19 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+#Plot just the data figure (output as "data.png")
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SSplotData(pp, print = TRUE, subplots = 1)
 
 
 ####------------------------------------------------#
-## 0_2_4_updateComps_newFleets ----
+## 0_2_4_update_Comps_addGrowth ----
 ####------------------------------------------------#
 
-# Update model data for catch and comp data (does not include comps for indices) and
-# include comp data for new fleet (growth fleet). 
-# Adds length AND age comps because the new fleet structure requires it (silly
-# to break it apart into length and then length and age)
+# Adds the growth fleet to the old fleet structure and the old fleets have
+# all data updated (length and age comps). Also includes ageing error and estimates growth.
 
-new_name <- "0_2_4_updateComps_newFleets"
+new_name <- "0_2_4_update_Comps_addGrowth"
 old_name <- "0_2_1_updateCatch"
 
 
@@ -822,7 +837,6 @@ lcomps.df <- dplyr::bind_rows(com.lengths, rec.lengths)
 
 mod$dat$lencomp <- lcomps.df
 
-
 # Age comps
 
 mod$dat$agebin_vector <- seq(1, 60, by = 1)
@@ -850,29 +864,30 @@ growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_1
 mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
 
 
-# Now change the selectivity tables....
+## Add ageing error matrix
+
+ageerr <- read.csv(here("data", "forSS3", "Ageing_error_B01S11_forSS.csv"))
+
+age_ind <- grep(mod$dat$Nages, colnames(ageerr))
+mod$dat$ageerror <- ageerr[,1:age_ind]
+
+
+## Now change the selectivity tables....
 
 mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, #set to match that of the other fleets
                                   "CA_Growth" = mod$ctl$size_selex_types[1,])
+mod$ctl$size_selex_types["CA_Growth", "Pattern"] <- 0
 
 mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of the other fleets
                                  "CA_Growth" = mod$ctl$age_selex_types[1,])
 
-#...and length selectivity parameterization 
-#Set the new fleets selectivity to be the same as the rec fleet for now
-mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms,
-                                  mod$ctl$size_selex_parms[7:12,])
+#But because the growth fleet as selectivity type = 0, no need to update parameterization
 
-selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |> 
-  as.list()
-selex_names <- purrr::map(selex_fleets,
-                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
-                                       par = 1:6,
-                                       fleet_name = .x,
-                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
-  unlist()
 
-rownames(mod$ctl$size_selex_parms) <- selex_names
+## Estimate growth
+
+#Phase 2 for L1, L2 and K as well as CVs 
+mod$ctl$MG_parms$PHASE[2:6] <- 2
 
 
 ##
@@ -889,16 +904,21 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SSplotData(pp, print = TRUE, subplots = 1)
+SS_plots(pp, plot = c(1:26))
 
 
 ####------------------------------------------------#
-## 0_2_5_update_Indices ----
+## 0_2_5_update_Indices_noGrowth ----
 ####------------------------------------------------#
 
-# Update model data for indices (also includes comps for indices)
+# Update model data for indices and comps for index fleets
+# Right now exclude updating comps for non-index fleets which means growth fleet
+# data is not included
 
-new_name <- "0_2_4_updateIndices"
-old_name <- "0_1_0_updateAllBio"
+new_name <- "0_2_5_update_Indices_noGrowth"
+old_name <- "0_2_1_updateCatch"
 
 
 ##
@@ -916,7 +936,8 @@ mod <- SS_read(here('models', "_bridging_runs", new_name))
 #Make Changes
 ##
 
-## Add fleets for indices. Keep fleet structure from 0_2_2_updateComps
+## Add fleets for indices. Keep fleet structure from 0_2_4_updateComps_newFleets
+# which has the growth fleet
 
 mod$dat$Nfleets <- 5
 mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
@@ -938,7 +959,7 @@ mod$dat$age_info$combine_M_F <- 0
 mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
                           "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
                           "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
-                          "CA_ROV" = c("fleet" = 5, "units" = 1, "errtype" = 0, "SD_report" = 0))
+                          "CA_ROV" = c("fleet" = 5, "units" = 0, "errtype" = 0, "SD_report" = 0))
 
 fleet.converter <- mod$dat$fleetinfo %>%
   dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
@@ -997,7 +1018,7 @@ mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
                               "PRIOR" = 0,
                               "PR_SD" = 1,
                               "PR_type" = 0,
-                              "PHASE" = -1,
+                              "PHASE" = 2,
                               "env_var&link" = 0,
                               "dev_link" = 0,
                               "dev_minyr" = 0,
@@ -1026,13 +1047,14 @@ rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_raw_10_50.csv
   as.data.frame()
 names(rov.lengths) <- names(mod$dat$lencomp)
 
-mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths)
+mod$dat$lencomp <- dplyr::bind_rows(mod$dat$lencomp, ccfrp.lengths, rov.lengths)
 
 #Now change the selectivity tables....
 mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, #set to match that of the other fleets
-                                 "CA_Growth" = mod$ctl$size_selex_types[1,],
-                                 "CA_CCFRP" = mod$ctl$size_selex_types[1,],
-                                 "CA_ROV" = mod$ctl$size_selex_types[1,])
+                                  "CA_Growth" = mod$ctl$size_selex_types[1,],
+                                  "CA_CCFRP" = mod$ctl$size_selex_types[1,],
+                                  "CA_ROV" = mod$ctl$size_selex_types[1,])
+mod$ctl$size_selex_types["CA_Growth", "Pattern"] <- 0
 
 mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of the other fleets
                                  "CA_Growth" = mod$ctl$age_selex_types[1,],
@@ -1040,9 +1062,9 @@ mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of 
                                  "CA_ROV" = mod$ctl$age_selex_types[1,])
 
 #...and length selectivity parameterization 
-#Set the new fleets selectivity to be the same as the rec fleet for now
+#Set the new fleets selectivity to be the same as the rec fleet for now. 
+#Because the growth fleet selectivity type = 0, no need to have selectivity for that
 mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms,
-                                  mod$ctl$size_selex_parms[7:12,],
                                   mod$ctl$size_selex_parms[7:12,],
                                   mod$ctl$size_selex_parms[7:12,])
 
@@ -1073,10 +1095,342 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+#Plot just the data figure (output as "data.png")
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SSplotData(pp, print = TRUE, subplots = 1)
+
+
+####------------------------------------------------#
+## 0_2_6_updateAllData_nogrowth ----
+####------------------------------------------------#
+
+# Update all data, including catches and comps for existing fleets, new comps 
+# and indices for index fleets, and new data for the growth fleet.
+# Although growth fleet is included, do not estimate growth. 
+
+new_name <- "0_2_6_updateAllData_nogrowth"
+old_name <- "0_1_0_updateAllBio"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+mod$dat$endyr <- 2024
+
+## Add fleets for indices. Keep fleet structure from 0_2_4_updateComps_newFleets
+# which has the growth fleet
+
+mod$dat$Nfleets <- 5
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo,
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Growth"),
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_CCFRP"),
+                           c("type" = 3, "surveytiming" = 1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_ROV"))
+mod$dat$len_info <- rbind(mod$dat$len_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$len_info[1,],
+                          "CA_CCFRP" = mod$dat$len_info[1,],
+                          "CA_ROV" = mod$dat$len_info[1,])
+mod$dat$age_info <- rbind(mod$dat$age_info, #set to match that of the other fleets
+                          "CA_Growth" = mod$dat$age_info[1,],
+                          "CA_CCFRP" = mod$dat$age_info[1,],
+                          "CA_ROV" = mod$dat$age_info[1,])
+mod$dat$age_info$combine_M_F <- 0
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo,
+                          "CA_Growth" = c("fleet" = 3, "units" = 1, "errtype" = 0, "SD_report" = 0),
+                          "CA_CCFRP" = c("fleet" = 4, "units" = 0, "errtype" = 0, "SD_report" = 0),
+                          "CA_ROV" = c("fleet" = 5, "units" = 0, "errtype" = 0, "SD_report" = 0))
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+## Add catch data
+
+catches <- read.csv(here("data", "CAquillback_total_removals.csv"))
+catches[is.na(catches)] <- 0
+
+updated.catch.df <- catches %>%
+  dplyr::select(c(Year, com_tot, rec_tot)) %>%
+  tidyr::pivot_longer(cols = -Year, names_to = 'fleet', values_to = 'catch', 
+                      names_pattern = '(.*)_') %>% #keep everything before _
+  dplyr::left_join(fleet.converter) %>%
+  dplyr::mutate(seas = 1, 
+                catch_se = 0.05) %>%
+  dplyr::select(year = Year, seas, fleet = fleet_num, catch, catch_se) %>%
+  dplyr::arrange(fleet, year) %>%
+  as.data.frame()
+
+mod$dat$catch <- updated.catch.df
+
+
+## Add index data
+
+#CCFRP
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "ccfrp") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+#PR dockside
+pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "rec") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+#ROV
+rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index, rov_index)
+
+
+## Add q setup for surveys with index data
+
+#Base the number on fleetinfo and any fishery fleets with CPUE data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets, 
+                                                  fleet.converter[cpuefleets, "fleetname"], 
+                                                  sep = "_"))
+
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = 2,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets, 
+                                                fleet.converter[cpuefleets, "fleetname"], 
+                                                sep = "_"))
+
+
+## Add or update comps
+
+# Length comps
+
+mod$dat$use_lencomp <- 1 #already 1 but useful to set
+mod$dat$lbin_vector <- seq(10, 50, by = 2)
+mod$dat$N_lbins <- length(mod$dat$lbin_vector)
+
+com.lengths <- read.csv(here("data", "forSS3", "Lcomps_PacFIN_unsexed_expanded_10_50.csv")) %>%
+  dplyr::mutate(fleet = "com") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(com.lengths) <- names(mod$dat$lencomp)
+
+rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(rec.lengths) <- names(mod$dat$lencomp)
+
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(ccfrp.lengths) <- names(mod$dat$lencomp)
+
+rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(rov.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp <- dplyr::bind_rows(com.lengths, rec.lengths, ccfrp.lengths, rov.lengths) 
+
+# Age comps
+
+mod$dat$agebin_vector <- seq(1, 60, by = 1)
+mod$dat$N_agebins <- length(mod$dat$agebin_vector)
+
+mod$dat$lbin_method <- 2 #this is the current value, but useful to set.
+#Requires length bins to be set to the length bin index, so need to change CAAL
+#to reflect bin index. Could set this to 3 and keep length bins as is (i.e. as lengths)
+
+com.CAAL <- read.csv(here("data", "forSS3", "CAAL_PacFIN_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+growth.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = "growth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+
+mod$dat$agecomp <- dplyr::bind_rows(com.CAAL, growth.CAAL)
+
+#Add ageing error matrix
+ageerr <- read.csv(here("data", "forSS3", "Ageing_error_B01S11_forSS.csv"))
+age_ind <- grep(mod$dat$Nages, colnames(ageerr))
+mod$dat$ageerror <- ageerr[,1:age_ind]
+
+
+## Now change the selectivity tables....
+
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types, #set to match that of the other fleets
+                                  "CA_Growth" = mod$ctl$size_selex_types[1,],
+                                  "CA_CCFRP" = mod$ctl$size_selex_types[1,],
+                                  "CA_ROV" = mod$ctl$size_selex_types[1,])
+mod$ctl$size_selex_types["CA_Growth", "Pattern"] <- 0
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types, #set to match that of the other fleets
+                                 "CA_Growth" = mod$ctl$age_selex_types[1,],
+                                 "CA_CCFRP" = mod$ctl$age_selex_types[1,],
+                                 "CA_ROV" = mod$ctl$age_selex_types[1,])
+
+#...and length selectivity parameterization 
+#Set the new fleets selectivity to be the same as the rec fleet for now. 
+#Because the growth fleet selectivity type = 0, no need to have selectivity for that
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms,
+                                  mod$ctl$size_selex_parms[7:12,],
+                                  mod$ctl$size_selex_parms[7:12,])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |>
+  as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
+  unlist()
+
+rownames(mod$ctl$size_selex_parms) <- selex_names
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+#Plot just the data figure (output as "data.png")
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SSplotData(pp, print = TRUE, subplots = 1)
+
+
+####------------------------------------------------#
+## 0_2_0_updateAllData ----
+####------------------------------------------------#
+
+# Now estimate growth based on the new data
+
+new_name <- "0_2_0_updateAllData"
+old_name <- "0_2_6_updateAllData_nogrowth"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+#Phase 2 for L1, L2 and K as well as CVs 
+mod$ctl$MG_parms$PHASE[2:6] <- 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_1_0_updateAllBio",
+                                                 "0_2_1_updateCatch",
+                                                 "0_2_2_update_Lcomps_oldFleets",
+                                                 "0_2_3_update_Comps_oldFleets",
+                                                 "0_2_4_update_Comps_addGrowth",
+                                                 "0_2_5_update_Indices_noGrowth",
+                                                 "0_2_6_updateAllData_nogrowth",
+                                                 "0_2_0_updateAllData")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('All bio relationships',
+                                     'Update catch',
+                                     'Update length comps of existing fleets',
+                                     'Update length/age comps of existing fleets',
+                                     '+ add growth fleet and estimate growth',
+                                     'Add new index fleets (new indices and comps)',
+                                     'All data but do not estimate growth',
+                                     'All data and estimate growth'),
+                    subplots = c(1,3), print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
 
 
 ##-------------------------------------------------------------------##
-#------------------Add Data Up to 2025-------------------------------
+#--------------------------Add Data----------------------------------
 ##-------------------------------------------------------------------##
-
-
