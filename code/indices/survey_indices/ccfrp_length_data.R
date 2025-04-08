@@ -146,4 +146,4 @@ out <- cbind(lfs_ref[,1:5], "InputN" = tmp[,"InputN"] , lfs)
 
 
 
-write.csv(lfs$comps, file = file.path(dir, "ccfrp_withFN_weighted_length_comps_unsexed.csv"), row.names = FALSE)
+write.csv(out, file = file.path(dir, "ccfrp_withFN_weighted_length_comps_unsexed.csv"), row.names = FALSE)

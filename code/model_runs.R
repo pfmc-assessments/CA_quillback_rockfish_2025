@@ -69,7 +69,6 @@ SS_plots(pp, plot = c(1:26))
 
 #plot_sel_all(pp) #uncomment if what to plot selectivities of each fleet
 
-
 ##
 #Comparison plots
 ##
@@ -3570,6 +3569,65 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+
+####------------------------------------------------#
+## 2_3_9_ROVFixSelex1L8 ----
+####------------------------------------------------#
+
+#This model uses ROV length selectivity 11
+
+new_name <- "2_3_9_ROVFixSelex1L8"
+old_name <- "2_3_8_removeSparseData_5"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Change population size bins to 1cm
+mod$dat$binwidth <- 1
+
+# Set selectivity of ROV fleet to 1 for all lengths >= 8
+mod$ctl$size_selex_types[grep("CA_ROV", rownames(mod$ctl$size_selex_types)),] <- c(11, 0, 0, 0)
+
+
+# Need two parameters - remove the last 4
+mod$ctl$size_selex_parms <- mod$ctl$size_selex_parms[-grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[3:6],]
+
+#change values for first two
+mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[1],c("LO", "HI", "INIT", "PHASE")] <- c(1, 6, 5, -9)
+mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[2],c("LO", "HI", "INIT", "PHASE")] <- c(60, 60, 60, -9)
+
+
+aa <- mod$ctl$size_selex_parms
+View(aa)
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
 
 
 

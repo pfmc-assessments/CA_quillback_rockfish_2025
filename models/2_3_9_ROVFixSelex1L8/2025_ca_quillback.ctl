@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-04-08  07:59:21
+#C file write time: 2025-04-08  12:48:35
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -132,7 +132,7 @@
 24	0	0	0	#_2 CA_Recreational
  0	0	0	0	#_3 CA_Growth      
 24	0	0	0	#_4 CA_CCFRP       
-24	0	0	0	#_5 CA_ROV         
+11	0	0	0	#_5 CA_ROV         
 #
 #_age_selex_patterns
 #_Pattern	Discard	Male	Special
@@ -162,12 +162,8 @@
   0	20	     15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_CCFRP(4)       
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_CCFRP(4)       
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_CCFRP(4)       
- 11	51	     32	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_ROV(5)         
--20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_ROV(5)         
-  0	 9	5.07517	0	0	0	 5	0	0	0	0	0	0	0	#_SizeSel_P_3_CA_ROV(5)         
-  0	20	     15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_4_CA_ROV(5)         
--20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_ROV(5)         
--10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_ROV(5)         
+  1	 6	      5	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_ROV(5)         
+ 60	60	     60	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_ROV(5)         
 #_AgeSelex
 #_No age_selex_parm
 # timevary selex parameters 
