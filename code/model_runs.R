@@ -4125,7 +4125,10 @@ plot_sel_all_faa(pp)
 ## 2_5_1_NewCCFRPIndexLengths ----
 ####------------------------------------------------#
 
-#This model uses ROV length selectivity 11
+#This model uses ROV length selectivity of 1 for L8-60
+#Population size bins of 1
+#Changes the CCFRP index for Farallons and the length comps
+#Ages stay in the growth fleet
 
 new_name <- "2_5_1_NewCCFRPIndexLengths"
 old_name <- "2_3_9_ROVFixSelex1L8"
@@ -4160,14 +4163,11 @@ mod$dat$lencomp[mod$dat$lencomp$fleet == 4, ] <- ccfrp.lengths
 ### Update index --------------------------------
 ### This includes 
 ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_withFN_weighted_index_forSS.csv")) #%>%
- # dplyr::mutate(fleet = 4) %>%
-  dplyr::rename(
-                index = obs,
-                fleet ) %>%
-  as.data.frame()
+names(ccfrp_index) <- names(mod$dat$CPUE)
 
-mod$dat$CPUE[mod$dat$CPUE == 4, ] <- ccfrp_index
-#mod$dat$CPUE <- dplyr::bind_rows(pr_index, ccfrp_index, rov_index)
+#replace the index
+mod$dat$CPUE[mod$dat$CPUE$index == 4, ] <- ccfrp_index
+#View(mod$dat$CPUE)
 
 
 ##
@@ -4190,3 +4190,68 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+####------------------------------------------------#
+## 2_5_2_Reweight251 ----
+####------------------------------------------------#
+
+new_name <- "2_5_2_reweight251"
+old_name <- "2_5_1_NewCCFRPIndexLengths"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models',old_name),"Report.sso"),
+          to = file.path(here('models',new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+pp <- SS_output(here('models',new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 0, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+colnames(dw)[1] = "factor"
+new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
+                                by = dplyr::join_by(factor, fleet))
+mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
