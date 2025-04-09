@@ -415,13 +415,13 @@ age_bins <- seq(1,60,1)
 
 #These are a mix of various rec projects and commercial and survey. For these entries
 #pull all non-commercial non-expanded comps for use as a "growth" fleet.
-#For CCFRP, separate out Farallon fish which were from trips not included
-#in the CCFRP index, and thus should not be included in the CCFRP comps.
+#For CCFRP, keep Farallon fish in with nonFarallon fish which as of April 9 are
+#now in the CCFRP index, and thus should be included in the CCFRP comps.
 #Do as marginals and CAAL, and do for CCFRP fleet separate, and included
 
 age_ca$fleet1 <- dplyr::case_when(age_ca$source %in% c("pacfin") ~ "Com",
                                   TRUE ~ "Growth")
-age_ca$fleet2 <- dplyr::case_when(age_ca$source %in% c("CCFRPNotFarallons") ~ "CCFRP",
+age_ca$fleet2 <- dplyr::case_when(age_ca$source %in% c("CCFRPNotFarallons", "CCFRPFarallons") ~ "CCFRP",
                                   age_ca$source %in% c("pacfin") ~ "Com",
                                   TRUE ~ "other")
 
@@ -447,7 +447,7 @@ write.csv(afs_nsamp$unsexed, here("data", "forSS3", paste0("Acomps_noncommercial
                                                    ".csv")), row.names = FALSE)
 
 
-#For non-commercial split by CCFRP non-farallons and non-CCFRP. 
+#For non-commercial split by CCFRP (non-farallons and farallons) and non-CCFRP. 
 #Only use number of fish
 
 ##First for CCFRP
@@ -465,7 +465,7 @@ write.csv(afs_nsamp_ccfrp$unsexed, here("data", "forSS3", paste0("Acomps_noncomm
                                                    age_bins[1], "_", tail(age_bins,1), 
                                                    ".csv")), row.names = FALSE)
 
-##Now for non-CCFRP (which includes Farallon CCFRP fish)
+##Now for non-CCFRP (which no longer includes Farallon CCFRP fish)
 afs_nsamp_nonccfrp <-  nwfscSurvey::get_raw_comps(
   data = age_ca %>% dplyr::filter(fleet2 == "other"), 
   comp_bins = age_bins,
@@ -510,7 +510,7 @@ write.csv(caal, here("data", "forSS3", paste0("CAAL_noncommercial_all_unsexed_",
                                               ".csv")), row.names = FALSE)
 
 
-#For non-commercial split by CCFRP non-farallons and non-CCFRP 
+#For non-commercial split by CCFRP (non-farallons and farallons) and non-CCFRP 
 
 ##First for CCFRP
 caal_ccfrp <-  nwfscSurvey::get_raw_caal(
@@ -528,7 +528,7 @@ write.csv(caal_ccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_ccfrp_un
                                               "_", age_bins[1], "_", tail(age_bins,1),
                                               ".csv")), row.names = FALSE)
 
-##Now for non-CCFRP (which includes Farallon CCFRP fish)
+##Now for non-CCFRP (which no longer includes Farallon CCFRP fish)
 caal_nonccfrp <-  nwfscSurvey::get_raw_caal(
   data = age_ca %>% dplyr::filter(fleet2 == "other"), 
   len_bins = length_bins,
