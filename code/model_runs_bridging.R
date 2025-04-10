@@ -776,7 +776,8 @@ SSplotData(pp, print = TRUE, subplots = 1)
 ## 0_2_3b_noAgeErr ----
 ####------------------------------------------------#
 
-# Remove ageing error to see how that affects things
+# Remove ageing error to see how that affects things compared to 
+# model with updating length and age comps of old fleets
 
 new_name <- "0_2_3b_noAgeErr"
 old_name <- "0_2_3_update_Comps_oldFleets"
@@ -978,7 +979,7 @@ SS_plots(pp, plot = c(1:26))
 ## 0_2_5_update_Indices_noGrowth ----
 ####------------------------------------------------#
 
-# Update model data for indices and comps for index fleets
+# Update model data for indices and comps for new index fleets
 # Right now exclude updating comps for non-index fleets which means growth fleet
 # data is not included
 
@@ -1163,6 +1164,118 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
 pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1)
 SS_plots(pp, plot = c(1:26))
+
+
+####------------------------------------------------#
+## 0_2_5b_PRindexOnly ----
+####------------------------------------------------#
+
+# Only update PR index to see effect compared to index model
+
+new_name <- "0_2_5b_PRindexOnly"
+old_name <- "0_2_1_updateCatch"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec")) %>%
+  dplyr::mutate(fleet_num = c(1, 2)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+
+## Add index data
+
+pr_index <- read.csv(here("data", "forSS3", "PR_dockside_index_forSS.csv")) %>%
+  dplyr::mutate(fleet = "rec") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+mod$dat$CPUE <- pr_index
+
+
+## Add q setup for surveys with index data
+
+#Base the number on fleetinfo and any fishery fleets with CPUE data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets, 
+                                                  fleet.converter[cpuefleets, "fleetname"], 
+                                                  sep = "_"))
+
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = 2,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets, 
+                                                fleet.converter[cpuefleets, "fleetname"], 
+                                                sep = "_"))
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SSplotData(pp, print = TRUE, subplots = 1)
+SS_plots(pp, plot = c(1:26))
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_2_1_updateCatch",
+                                                 "0_2_5_update_Indices_noGrowth",
+                                                 "0_2_5b_PRindexOnly")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Update catch',
+                                     'Update indices',
+                                     'Update only PR index'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', "_bridging_runs", new_name))
 
 
 ####------------------------------------------------#
