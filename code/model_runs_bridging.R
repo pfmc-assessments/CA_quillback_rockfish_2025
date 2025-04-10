@@ -13,7 +13,7 @@ library(PEPtools)
 library(here)
 library(dplyr)
 library(tictoc)
-
+library(nwfscSurvey)
 source(here('code/selexComp.R'))
 
 
@@ -1165,7 +1165,8 @@ pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1)
 SS_plots(pp, plot = c(1:26))
 
-
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
 ####------------------------------------------------#
 ## 0_2_5b_PRindexOnly ----
 ####------------------------------------------------#
@@ -1535,6 +1536,7 @@ pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1)
 
 
+SS_plots(pp, plot = c(1:26)) #Melissa added to see all plot for visual comparison
 ####------------------------------------------------#
 ## 0_2_0_updateAllData ----
 ####------------------------------------------------#

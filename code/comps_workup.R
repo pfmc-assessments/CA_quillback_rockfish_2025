@@ -24,6 +24,7 @@ library(ggplot2)
 #devtools::install_github("pfmc-assessments/nwfscSurvey")
 library(nwfscSurvey)
 #devtools::install_github("pfmc-assessments/pacfintools")
+#pak::pkg_install("pfmc-assessments/pacfintools")
 devtools::load_all("U:/Stock assessments/PacFIN.Utilities")
 #library(pacfintools)
 
@@ -796,6 +797,7 @@ out <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.cs
 rov_out <- out %>% dplyr::filter(source %in% c("ROV"))
 
 
+
 ##
 #Basic. Output with both number of samples and number of transects
 ##
@@ -832,6 +834,58 @@ rov_comps <- tibble::add_column(lfs$unsexed, "Nsamp" = lfs_nsamp$unsexed$input_n
 write.csv(rov_comps, here("data", "forSS3", paste0("Lcomps_rov_unsexed_raw_", 
                                                    length_bins[1], "_", tail(length_bins,1), 
                                                    ".csv")), row.names = FALSE)
+#--------------------------------------------------------------
+#Weight the ROV comps; 20% inside MPAs and 80% outside MPAs
+#melissa
+length_bins <- seq(10, 50, by = 2)
+len_final <- read.csv(here("data", "length_processed_noShare", "CAquillback_rov_bio2.csv")) 
+len_final <- len_final %>% mutate(site = case_when(Designation == "MPA" ~ "MPA", 
+                                        .default = "REF"))
 
+#CODE from CCFRP length comps = not modified yet
+n <- len_final %>%
+  dplyr::group_by(Year, site) %>%
+  dplyr::summarise(
+    drifts = length(unique(tripID)))
+
+lfs_mpa <- nwfscSurvey::get_raw_comps(
+  data = len_final[len_final$site == "MPA", ], 
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("tows"),
+  month = 7,
+  fleet = "rov")
+  lfs_mpa <- as.data.frame(lfs_mpa)
+lfs_mpa[,"InputN"] <- n[n$site == "MPA", 'drifts']
+
+
+
+lfs_ref <- nwfscSurvey::get_raw_comps(
+  data = len_final[len_final$site == "REF", ], 
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("tows"),
+  month = 7,
+  fleet = "rov")
+
+lfs_ref <- as.data.frame(lfs_ref)
+lfs_ref[,"InputN"] <- n[n$site == "REF", 'drifts']
+
+#now weight the comps
+protect <- 0.2; open <- 1 - protect
+ind <- 7:ncol(lfs_mpa)
+tmp <- lfs_mpa[, ind] * protect + lfs_ref[, ind] * open
+
+first <- 1:(length(length_bins))
+
+# This is for unsexed composition data only 
+lfs <- round(tmp[, first] /  apply(tmp[, first], 1, sum), 4)
+out <- cbind(lfs_ref[,1:5], "InputN" = tmp[,"InputN"] , lfs)
+#Output final weighted comps in forSS3 folder
+write.csv(rov_comps, here("data", "forSS3", paste0("Lcomps_rov_unsexed_weighted_", 
+                                                   length_bins[1], "_", tail(length_bins,1), 
+                                                   ".csv")), row.names = FALSE)
 #Dont need FAA for ROV fleet so no faa length comps
 

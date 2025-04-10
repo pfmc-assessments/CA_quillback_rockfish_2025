@@ -26,7 +26,7 @@ fig.dir <- file.path(here(),"data_explore_figs", "survey_figs", "rov")
 
 ###########################################################################################################
 # This section is just the newest stereo size length file from CDFW ----
-lengthsNewStereo <- read.csv(file.path(dir,"QuillbackRFStereoSize-11-26-2024.csv"))
+lengthsNewStereo <- read.csv(file.path(dir,"rov","QuillbackRFStereoSize-11-26-2024.csv"))
 
 dim(lengthsNewStereo)
 #683 lengths
@@ -228,7 +228,7 @@ ggsave(file = file.path(fig.dir, "newstereolength_by_location_year_coredepths_by
 #############--------------------------------------------#
 
 #Pull final length data. This is the same as lengthsNewStereo above
-rov_bio <- read.csv(file.path(dir,"QuillbackRFStereoSize-11-26-2024.csv"))
+rov_bio <- read.csv(file.path(dir,"rov","QuillbackRFStereoSize-11-26-2024.csv"))
 
 #Pull in final transect dataset so can use lengths of only kept transects in index
 #transect <- read.csv(here("data-raw", "2025TransectROVData.csv"))
@@ -256,9 +256,9 @@ rov_bio_used <- rov_bio %>%
          "disp" = NA,
          "source" = "ROV",
          "tripID" = as.numeric(factor(Transect_ID))) %>%
-  dplyr::select(c(Year, Actual_Year, length_cm, weight_kg, sex, mode, area, disp, source, tripID))
+  dplyr::select(c(Year, Actual_Year, length_cm, weight_kg, sex, mode, area, disp, source, tripID, Designation))
 
-#write.csv(rov_bio_used, here("data", "length_processed_noShare", "CAquillback_rov_bio.csv"), row.names = FALSE)
+write.csv(rov_bio_used, here("data", "length_processed_noShare", "CAquillback_rov_bio2.csv"), row.names = FALSE)
 
 
 
