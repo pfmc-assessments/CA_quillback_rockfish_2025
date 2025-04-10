@@ -4122,6 +4122,263 @@ plot_sel_all_faa(pp)
 
 
 ####------------------------------------------------#
+## 2_4_4_FAA_confidential_resetCom ----
+####------------------------------------------------#
+
+# Remove the commercial split (only do rec as faa)
+
+new_name <- "2_4_4_FAA_confidential_resetCom"
+old_name <- "2_4_2_FAA_confidential_reweight" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_confidential_FAA_runs_noShare", old_name), 
+               dir.new = here('models', "_confidential_FAA_runs_noShare", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_confidential_FAA_runs_noShare", new_name))
+
+
+##
+#Make Changes
+##
+
+#Given that commercial has some disparate data streams, keep as one fleet. Only
+#split recreational. Thus reduce number of fleets from previous model
+
+mod$dat$Nfleets <- 6
+mod$dat$fleetinfo <- mod$dat$fleetinfo[-2,]
+mod$dat$fleetinfo$fleetname[1] <- "CA_Commercial"
+
+mod$dat$len_info <- mod$dat$len_info[-2,]
+rownames(mod$dat$len_info)[1] <- "CA_Commercial"
+
+mod$dat$age_info <- mod$dat$age_info[-2,]
+rownames(mod$dat$age_info)[1] <- "CA_Commercial"
+
+mod$dat$CPUEinfo <- mod$dat$CPUEinfo[-2,]
+mod$dat$CPUEinfo$fleet <- seq(1:mod$dat$Nfleets)
+rownames(mod$dat$CPUEinfo)[1] <- "CA_Commercial"
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(area = c("All", "North", "South", "All", "All", "All")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5, 6)) %>%
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::select(fleetname, fleet, area, joint, fleet_num)
+
+
+## Set up the data
+
+# Catches - combine commercial N/S catches for fleets 1 and 2, and renumber other fleets
+mod$dat$catch[which(mod$dat$catch$fleet == 2), "fleet"] <- 1
+
+aggregated.catch.df <- mod$dat$catch %>%
+  dplyr::group_by(year, seas, fleet) %>%
+  dplyr::summarize(catch = sum(catch)) %>%
+  dplyr::arrange(fleet, year) %>%
+  dplyr::mutate("catch_se" = 0.05) %>%
+  data.frame()
+
+aggregated.catch.df[which(aggregated.catch.df$fleet > 2), "fleet"] <-
+  aggregated.catch.df[which(aggregated.catch.df$fleet > 2), "fleet"] - 1
+
+mod$dat$catch <- aggregated.catch.df
+
+# Length comps - redo length comps for the commercial fleet, renumber other fleets.
+com.lengths <- read.csv(here("data", "forSS3", "Lcomps_PacFIN_unsexed_expanded_10_50.csv")) %>%
+  dplyr::mutate(fleet = "com") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(com.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp <- dplyr::bind_rows(com.lengths, mod$dat$lencomp[which(mod$dat$lencomp$fleet > 2),])
+
+mod$dat$lencomp[which(mod$dat$lencomp$fleet > 2), "fleet"] <- 
+  mod$dat$lencomp[which(mod$dat$lencomp$fleet > 2), "fleet"] - 1
+
+# Age comps - renumber because all commercial ages are in north
+mod$dat$agecomp[which(mod$dat$agecomp$fleet > 2), "fleet"] <- 
+  mod$dat$agecomp[which(mod$dat$agecomp$fleet > 2), "fleet"] - 1
+
+# CPUE data - redo numbering on CPUE data and q options
+mod$dat$CPUE$index <- mod$dat$CPUE$index - 1
+
+mod$ctl$Q_options$fleet <- mod$ctl$Q_options$fleet - 1
+
+# Remove variance adjustment factor for fleet 2 and renumber other fleets
+mod$ctl$Variance_adjustment_list <- mod$ctl$Variance_adjustment_list[-2,] 
+mod$ctl$Variance_adjustment_list[which(mod$ctl$Variance_adjustment_list$fleet > 2), "fleet"] <-
+  mod$ctl$Variance_adjustment_list[which(mod$ctl$Variance_adjustment_list$fleet > 2), "fleet"] - 1
+
+
+## Set up selectivity
+
+#Regular selectivity parameters...
+mod$ctl$size_selex_types <- mod$ctl$size_selex_types[-2,]
+rownames(mod$ctl$size_selex_types)[1] <- "CA_Commercial"
+
+mod$ctl$age_selex_types <- mod$ctl$age_selex_types[-2,]
+rownames(mod$ctl$age_selex_types)[1] <- "CA_Commercial"
+
+mod$ctl$size_selex_parms <- mod$ctl$size_selex_parms[-c(7:12),]
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |> 
+  as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |>
+  unlist()
+rownames(mod$ctl$size_selex_parms) <- selex_names
+
+#...and time varying selectivity
+selex_new <- mod$ctl$size_selex_parms
+
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_confidential_FAA_runs_noShare", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_confidential_FAA_runs_noShare", new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_confidential_FAA_runs_noShare", new_name))
+SS_plots(pp, plot = c(1:26))
+
+#plot_sel_all_faa(pp) #need to fix with new selectivity structure
+
+
+####------------------------------------------------#
+## 2_4_5_FAA_confidential_resetBlocks ----
+####------------------------------------------------#
+
+# Reset recreational blocks
+
+new_name <- "2_4_5_FAA_confidential_resetBlocks"
+old_name <- "2_4_4_FAA_confidential_resetCom" 
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_confidential_FAA_runs_noShare", old_name), 
+               dir.new = here('models', "_confidential_FAA_runs_noShare", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_confidential_FAA_runs_noShare", new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(area = c("All", "North", "South", "All", "All", "All")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5, 6)) %>%
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::select(fleetname, fleet, area, joint, fleet_num)
+
+
+#Redo recreational blocks
+
+mod$ctl$N_Block_Designs <- 3
+mod$ctl$blocks_per_pattern <- c(3, 4, 3)
+mod$ctl$Block_Design <- list(c(2003, 2013, 2014, 2021, 2022, 2024), #commercial fleet
+                             c(2001, 2007, 2008, 2022, 2023, 2023, 2024, 2024), #recreational north fleet
+                             c(2001, 2016, 2017, 2022, 2023, 2024)) #recreational south fleet
+
+
+## Set up the data
+
+## Set up selectivity
+
+#Set recreational south block to new block
+mod$ctl$size_selex_parms[intersect(grep("Recreational_South", rownames(mod$ctl$size_selex_parms)),
+                                   which(mod$ctl$size_selex_parms$PHASE > 0)), "Block"] <- 3
+
+#...and time varying selectivity
+selex_new <- mod$ctl$size_selex_parms
+
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_confidential_FAA_runs_noShare", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_confidential_FAA_runs_noShare", new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_confidential_FAA_runs_noShare", new_name))
+SS_plots(pp, plot = c(1:26))
+
+#plot_sel_all_faa(pp) #need to fix with new selectivity structure
+
+
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = c(here("models", "2_2_3_combineGrowth_CCFRP"),
+                             glue::glue("{models}/{subdir}", models = here('models', "_confidential_FAA_runs_noShare"),
+                                      subdir = c("2_4_2_FAA_confidential_reweight",
+                                                 "2_4_3_FAA_confidential_fixComSouthSelex",
+                                                 "2_4_4_FAA_confidential_resetCom",
+                                                 "2_4_5_FAA_confidential_resetBlocks"))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Non FAA model',
+                                     'FAA setup for rec and comm funky',
+                                     'FAA setup for rec and comm with comm south mirror',
+                                     'FAA setup for rec only',
+                                     'FAA setup for rec only and new blocks'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', "_confidential_FAA_runs_noShare", new_name))
+
+
+####------------------------------------------------#
 ## 2_5_1_NewCCFRPIndexLengths ----
 ####------------------------------------------------#
 
