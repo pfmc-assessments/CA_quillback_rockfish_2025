@@ -22,7 +22,7 @@ source(here('code/selexComp.R'))
 ##-------------------------------------------------------------------##
 
 ####------------------------------------------------#
-## 0_0_1_2025setup  ----
+## 0_0_1_2025rename  ----
 ####------------------------------------------------#
 
 # Change file names and comments to reflect a 2025 model
@@ -99,6 +99,9 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           extras = '-nohess',
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
 
 
 ##
@@ -500,6 +503,9 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+
 
 ##
 #Comparison plots
@@ -599,9 +605,9 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-#Plot just the data figure (output as "data.png")
 pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1) 
+SS_plots(pp, plot = c(1:26))
 
 
 ####------------------------------------------------#
@@ -764,6 +770,65 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
 #Plot just the data figure (output as "data.png")
 pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1)
+
+
+####------------------------------------------------#
+## 0_2_3b_noAgeErr ----
+####------------------------------------------------#
+
+# Remove ageing error to see how that affects things
+
+new_name <- "0_2_3b_noAgeErr"
+old_name <- "0_2_3_update_Comps_oldFleets"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+# Remove ageing error matrix
+mod$dat$ageerror[1,] <- -1
+mod$dat$ageerror[2,] <- 0.01
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_2_3_update_Comps_oldFleets",
+                                                 "0_2_3b_noAgeErr")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Update length/age comps of existing fleets',
+                                     'Reset to old age err'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
 
 
 ####------------------------------------------------#
@@ -1095,9 +1160,9 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-#Plot just the data figure (output as "data.png")
 pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1)
+SS_plots(pp, plot = c(1:26))
 
 
 ####------------------------------------------------#
@@ -1409,7 +1474,8 @@ SS_plots(pp, plot = c(1:26))
 ##
 
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
-                                      subdir = c("0_1_0_updateAllBio",
+                                      subdir = c("0_0_1_2025rename",
+                                                 "0_1_0_updateAllBio",
                                                  "0_2_1_updateCatch",
                                                  "0_2_2_update_Lcomps_oldFleets",
                                                  "0_2_3_update_Comps_oldFleets",
@@ -1418,7 +1484,8 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "0_2_6_updateAllData_nogrowth",
                                                  "0_2_0_updateAllData")))
 SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('All bio relationships',
+  SSplotComparisons(legendlabels = c('2021 base',
+                                     'All bio relationships',
                                      'Update catch',
                                      'Update length comps of existing fleets',
                                      'Update length/age comps of existing fleets',
@@ -1426,7 +1493,8 @@ SSsummarize(xx) |>
                                      'Add new index fleets (new indices and comps)',
                                      'All data but do not estimate growth',
                                      'All data and estimate growth'),
-                    subplots = c(1,3), print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
 
 dev.off()
 
