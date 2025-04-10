@@ -3630,6 +3630,22 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_3_1_reweight223",
+                                                 "2_3_8_removeSparseData_5",
+                                                 "2_3_9_ROVFixSelex1L8")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2_3_1_reweight223',
+                                     '2_3_8: Remove sparse data',
+                                     '2_3_9: Rov selex to 11, and pop bins at 1'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+
+
 
 
 ####------------------------------------------------#
@@ -4417,7 +4433,8 @@ mod$dat$lencomp[mod$dat$lencomp$fleet == 4, ] <- ccfrp.lengths
 
 #aa <- mod$dat$lencomp
 #View(aa)
-### Update index --------------------------------
+
+### Update index --------------------------------#
 ### This includes 
 ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_withFN_weighted_index_forSS.csv")) #%>%
 names(ccfrp_index) <- names(mod$dat$CPUE)
@@ -4446,6 +4463,7 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
+
 
 ####------------------------------------------------#
 ## 2_5_2_Reweight251 ----
@@ -4512,3 +4530,19 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_3_9_ROVFixSelex1L8",
+                                                 "2_5_1_NewCCFRPIndexLengths",
+                                                 "2_5_2_reweight251")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2_3_9_ROVFixSelex1L8',
+                                     '2_5_1: Update CCFRP',
+                                     '2_5_2: reweight 251'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
