@@ -4794,6 +4794,20 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_5_2_reweight251",
+                                                 "2_5_3_weightedROVcomps")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 252',
+                                     'use weighted ROV comps'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+
+
 ####------------------------------------------------#
 ## 2_5_4_inputFixes ----
 ####------------------------------------------------#
@@ -4803,7 +4817,7 @@ plot_sel_all(pp)
 #Also rest ROV selex to be double normal
 
 new_name <- "2_5_4_inputFixes"
-old_name <- "2_5_2_reweight251"
+old_name <- "2_5_3_weightedROVcomps"
 
 
 ##
@@ -4856,6 +4870,7 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
 
 
 ####------------------------------------------------#
