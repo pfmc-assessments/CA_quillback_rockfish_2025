@@ -4737,13 +4737,62 @@ SSsummarize(xx) |>
 
 
 ####------------------------------------------------#
-## 2_5_3_inputFixes ----
+## 2_5_3_weightedCCFRPcomps ----
+####------------------------------------------------#
+
+#Use weighted CCFRP comps, where weighting is based on 80/20 split
+
+new_name <- "2_5_3_weightedCCFRPcomps"
+old_name <- "2_5_2_reweight251"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+yet to do
+
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 2_5_4_inputFixes ----
 ####------------------------------------------------#
 
 #Update model inputs for recdev years, growth params phase to 3, 
-#PR index units to numbers, and warning fixes
+#PR index units to numbers, and warning fixes.
+#Also rest ROV selex to be double normal
 
-new_name <- "2_5_3_inputFixes"
+new_name <- "2_5_4_inputFixes"
 old_name <- "2_5_2_reweight251"
 
 
@@ -4774,8 +4823,10 @@ mod$dat$binwidth <- 2
 
 mod$dat$maximum_size <- 60 - mod$dat$binwidth #(with 1 cm bins need to change this)
 
-mod$ctl$size_selex_parms["SizeSel_P_2_CA_ROV", c("LO", "HI")] <- c(1,60)
-
+#Reset ROV selectivity to double normal and reuse previous models' values
+mod$ctl$size_selex_types["CA_ROV", "Pattern"] <- 24
+prev_mod <- SS_read(here('models', '2_3_8_removeSparseData_5'))
+mod$ctl$size_selex_parms <- prev_mod$ctl$size_selex_parms
 
 
 ##
