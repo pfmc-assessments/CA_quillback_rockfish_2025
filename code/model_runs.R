@@ -14,7 +14,7 @@ library(PEPtools)
 library(here)
 library(dplyr)
 library(tictoc)
-library(nwfscSurvey)
+
 source(here('code/selexComp.R'))
 
 ##########################################################################################-
@@ -2908,6 +2908,19 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_1_1_reweight" ,
+                                                 "2_1_2_ROVselexFix1")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2_1_1_reweight201',
+                                     '2_1_2: Selex 1 at all lengths'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+
 
 ####------------------------------------------------#
 ## 2_2_1_updateData_ages ----
@@ -3574,7 +3587,7 @@ plot_sel_all(pp)
 ## 2_3_9_ROVFixSelex1L8 ----
 ####------------------------------------------------#
 
-#This model uses ROV length selectivity 11
+#This model uses ROV length selectivity 11 and sets population bins to 1cm
 
 new_name <- "2_3_9_ROVFixSelex1L8"
 old_name <- "2_3_8_removeSparseData_5"
@@ -3596,7 +3609,7 @@ mod <- SS_read(here('models',new_name))
 #Change population size bins to 1cm
 mod$dat$binwidth <- 1
 
-# Set selectivity of ROV fleet to 1 for all lengths >= 8
+# Set selectivity of ROV fleet to 1 for all lengths >= 8 (5th bin)
 mod$ctl$size_selex_types[grep("CA_ROV", rownames(mod$ctl$size_selex_types)),] <- c(11, 0, 0, 0)
 
 
@@ -3607,9 +3620,10 @@ mod$ctl$size_selex_parms <- mod$ctl$size_selex_parms[-grep("CA_ROV", rownames(mo
 mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[1],c("LO", "HI", "INIT", "PHASE")] <- c(1, 6, 5, -9)
 mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[2],c("LO", "HI", "INIT", "PHASE")] <- c(60, 60, 60, -9)
 
-
 aa <- mod$ctl$size_selex_parms
 View(aa)
+
+
 ##
 #Output files and run
 ##
@@ -3650,7 +3664,7 @@ SSsummarize(xx) |>
 ## 2_3_10_PopSizeBin1cm ----
 ####------------------------------------------------#
 
-
+#Try just setting pop bins size to 1 cm
 
 new_name <- "2_3_10_PopSizeBin1cm"
 old_name <- "2_3_8_removeSparseData_5"
@@ -3714,7 +3728,7 @@ mod <- SS_read(here('models',new_name))
 #Make Changes
 ##
 
-# Set selectivity of ROV fleet to 1 for all lengths >= 8
+# Set selectivity of ROV fleet to 1 for all lengths >= 13 (10th bin)
 mod$ctl$size_selex_types[grep("CA_ROV", rownames(mod$ctl$size_selex_types)),] <- c(11, 0, 0, 0)
 
 
@@ -3726,6 +3740,7 @@ mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[1],c
 mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[2],c("LO", "HI", "INIT", "PHASE")] <- c(60, 60, 60, -9)
 
 
+##
 #Output files and run
 ##
 
@@ -3744,6 +3759,81 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+
+####------------------------------------------------#
+## 2_3_12_ROVFixSelexL8 ----
+####------------------------------------------------#
+
+#Similar to model 239 but keep population bins at 2
+
+new_name <- "2_3_12_ROVFixSelexL8"
+old_name <- "2_3_8_removeSparseData_5"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+# Set selectivity of ROV fleet to 1 for all lengths >= 8 (3rd bin)
+mod$ctl$size_selex_types[grep("CA_ROV", rownames(mod$ctl$size_selex_types)),] <- c(11, 0, 0, 0)
+
+# Need two parameters - remove the last 4
+mod$ctl$size_selex_parms <- mod$ctl$size_selex_parms[-grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[3:6],]
+
+#change values for first two
+mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[1],c("LO", "HI", "INIT", "PHASE")] <- c(1, 6, 3, -9)
+mod$ctl$size_selex_parms[grep("CA_ROV", rownames(mod$ctl$size_selex_parms))[2],c("LO", "HI", "INIT", "PHASE")] <- c(1, 28, 28, -9)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_3_1_reweight223",
+                                                 "2_3_8_removeSparseData_5",
+                                                 "2_3_9_ROVFixSelex1L8",
+                                                 "2_3_10_PopSizeBin1cm",
+                                                 "2_3_11_PopSizeBin1cmPlusROVSelex",
+                                                 "2_3_12_ROVFixSelexL8")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2_3_1_reweight223',
+                                     '2_3_8: Remove sparse data',
+                                     '2_3_9: Rov selex to 11 (8cm), and pop bins at 1',
+                                     '2_3_10: Pop bins at 1',
+                                     '2_3_11: Rov selex to 11 (13cm), Pop bins at 1',
+                                     '2_3_12: Rov selex to 11 (8cm)'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
 
 
 ####------------------------------------------------#
@@ -4644,3 +4734,64 @@ SSsummarize(xx) |>
                                      '2_5_2: reweight 251'),
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
+
+
+####------------------------------------------------#
+## 2_5_3_inputFixes ----
+####------------------------------------------------#
+
+#Update model inputs for recdev years, growth params phase to 3, 
+#PR index units to numbers, and warning fixes
+
+new_name <- "2_5_3_inputFixes"
+old_name <- "2_5_2_reweight251"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$dat$CPUEinfo["CA_Recreational", "units"] <- 0
+
+mod$ctl$MG_parms[2:6, "PHASE"] <- 3
+
+mod$ctl$MainRdevYrLast <- 2021
+
+#For bias adj ramp need a hessian
+
+mod$dat$binwidth <- 2
+
+mod$dat$maximum_size <- 60 - mod$dat$binwidth #(with 1 cm bins need to change this)
+
+mod$ctl$size_selex_parms["SizeSel_P_2_CA_ROV", c("LO", "HI")] <- c(1,60)
+
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
