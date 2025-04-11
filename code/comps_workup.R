@@ -2,6 +2,8 @@
 #
 # 	Purpose: Compile length data and generate comps for use in stock synthesis
 #            Also useful as a single one stop shop for calculating length and age based biological relationships
+#            Do so for recreational, commercial, growth, and ROV fleets. 
+#            For CCFRP length comps see ccfrp_length_data.R
 #
 #   Created: Jauary 3, 2025
 #			  by Brian Langseth 
@@ -790,12 +792,13 @@ write.csv(com_comps_faa, here("data", "forSS3", paste0("CAAL_PacFIN_FAA_unsexed_
 ## ROV Length comps ----
 ###########################-
 
+length_bins <- seq(10, 50, by = 2)
+
 #Read in data so dont have to process script up to this point
 
 out <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.csv"))
 
 rov_out <- out %>% dplyr::filter(source %in% c("ROV"))
-
 
 
 ##
@@ -834,15 +837,18 @@ rov_comps <- tibble::add_column(lfs$unsexed, "Nsamp" = lfs_nsamp$unsexed$input_n
 write.csv(rov_comps, here("data", "forSS3", paste0("Lcomps_rov_unsexed_raw_", 
                                                    length_bins[1], "_", tail(length_bins,1), 
                                                    ".csv")), row.names = FALSE)
-#--------------------------------------------------------------
+
+##
+#Weighted - need designation so pull directly from the ROV length file. Do for number of trips only. 
+##
+
 #Weight the ROV comps; 20% inside MPAs and 80% outside MPAs
-#melissa
-length_bins <- seq(10, 50, by = 2)
-len_final <- read.csv(here("data", "length_processed_noShare", "CAquillback_rov_bio2.csv")) 
+len_final <- read.csv(here("data", "length_processed_noShare", "CAquillback_rov_bio.csv")) 
 len_final <- len_final %>% mutate(site = case_when(Designation == "MPA" ~ "MPA", 
                                         .default = "REF"))
+len_final$trawl_id <- len_final$tripID #trawl_id needed to calculate input_n for tows (trips) option.  
 
-#CODE from CCFRP length comps = not modified yet
+#Sample size check
 n <- len_final %>%
   dplyr::group_by(Year, site) %>%
   dplyr::summarise(
@@ -856,10 +862,6 @@ lfs_mpa <- nwfscSurvey::get_raw_comps(
   input_n_method = c("tows"),
   month = 7,
   fleet = "rov")
-  lfs_mpa <- as.data.frame(lfs_mpa)
-lfs_mpa[,"InputN"] <- n[n$site == "MPA", 'drifts']
-
-
 
 lfs_ref <- nwfscSurvey::get_raw_comps(
   data = len_final[len_final$site == "REF", ], 
@@ -870,22 +872,22 @@ lfs_ref <- nwfscSurvey::get_raw_comps(
   month = 7,
   fleet = "rov")
 
-lfs_ref <- as.data.frame(lfs_ref)
-lfs_ref[,"InputN"] <- n[n$site == "REF", 'drifts']
-
-#now weight the comps
+#Now apply the weighting
 protect <- 0.2; open <- 1 - protect
-ind <- 7:ncol(lfs_mpa)
-tmp <- lfs_mpa[, ind] * protect + lfs_ref[, ind] * open
+ind <- 7:ncol(lfs_mpa$unsexed)
+tmp <- lfs_mpa$unsexed[, ind] * protect + lfs_ref$unsexed[, ind] * open
 
 first <- 1:(length(length_bins))
 
 # This is for unsexed composition data only 
 lfs <- round(tmp[, first] /  apply(tmp[, first], 1, sum), 4)
-out <- cbind(lfs_ref[,1:5], "InputN" = tmp[,"InputN"] , lfs)
+samp <- data.frame("input_n" = lfs_ref$unsexed[,6] + lfs_mpa$unsexed[,"input_n"])
+out <- cbind(lfs_ref$unsexed[,1:5], samp, lfs)
+
 #Output final weighted comps in forSS3 folder
-write.csv(rov_comps, here("data", "forSS3", paste0("Lcomps_rov_unsexed_weighted_", 
+write.csv(out, here("data", "forSS3", paste0("Lcomps_rov_unsexed_weighted_", 
                                                    length_bins[1], "_", tail(length_bins,1), 
                                                    ".csv")), row.names = FALSE)
+
 #Dont need FAA for ROV fleet so no faa length comps
 
