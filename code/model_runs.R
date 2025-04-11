@@ -4623,7 +4623,7 @@ mod$dat$lencomp[mod$dat$lencomp$fleet == 4, ] <- ccfrp.lengths
 #View(aa)
 
 ### Update index --------------------------------#
-### This includes 
+### This includes the farallons and is weigthed
 ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_withFN_weighted_index_forSS.csv")) #%>%
 names(ccfrp_index) <- names(mod$dat$CPUE)
 
@@ -4737,12 +4737,12 @@ SSsummarize(xx) |>
 
 
 ####------------------------------------------------#
-## 2_5_3_weightedCCFRPcomps ----
+## 2_5_3_weightedROVcomps ----
 ####------------------------------------------------#
 
-#Use weighted CCFRP comps, where weighting is based on 80/20 split
+#Use weighted ROV comps, where weighting is based on 80/20 split
 
-new_name <- "2_5_3_weightedCCFRPcomps"
+new_name <- "2_5_3_weightedROVcomps"
 old_name <- "2_5_2_reweight251"
 
 
@@ -4761,8 +4761,18 @@ mod <- SS_read(here('models',new_name))
 #Make Changes
 ##
 
-yet to do
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
 
+#Update ROV length comps with weighted version
+rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_weighted_10_50.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(rov.lengths) <- names(mod$dat$lencomp)
+
+mod$dat$lencomp[mod$dat$lencomp$fleet == fleet.converter[fleet.converter$fleet == "rov", "fleet_num"],] <- rov.lengths
 
 
 ##
@@ -4846,3 +4856,22 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 2_5_5_inputFixes ----
+####------------------------------------------------#
+
+#Update model inputs for recdev years, growth params phase to 3, 
+#PR index units to numbers, and warning fixes.
+#Also rest ROV selex to be double normal.
+#Base all on the newest data for ROV and CCFRP
+
+new_name <- "2_5_5_inputFixes"
+old_name <- "2_5_3_weightedROVcomps"
+
+
+##
+#Copy inputs
+##
+
