@@ -258,7 +258,7 @@ rov_bio_used <- rov_bio %>%
          "tripID" = as.numeric(factor(Transect_ID))) %>%
   dplyr::select(c(Year, Actual_Year, length_cm, weight_kg, sex, mode, area, disp, source, tripID, Designation))
 
-write.csv(rov_bio_used, here("data", "length_processed_noShare", "CAquillback_rov_bio2.csv"), row.names = FALSE)
+write.csv(rov_bio_used, here("data", "length_processed_noShare", "CAquillback_rov_bio.csv"), row.names = FALSE)
 
 
 
