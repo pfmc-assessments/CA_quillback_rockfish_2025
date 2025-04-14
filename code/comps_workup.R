@@ -889,5 +889,68 @@ write.csv(out, here("data", "forSS3", paste0("Lcomps_rov_unsexed_weighted_",
                                                    length_bins[1], "_", tail(length_bins,1), 
                                                    ".csv")), row.names = FALSE)
 
-#Dont need FAA for ROV fleet so no faa length comps
 
+##
+#Weighted and by ACTUAL year - need designation so pull directly from the ROV length file. Do for number of trips only. 
+##
+
+#Weight the ROV comps; 20% inside MPAs and 80% outside MPAs
+len_final <- read.csv(here("data", "length_processed_noShare", "CAquillback_rov_bio.csv")) 
+len_final <- len_final %>% 
+  mutate(site = case_when(Designation == "MPA" ~ "MPA", .default = "REF")) %>%
+  mutate(Year = Actual_Year) 
+len_final$trawl_id <- len_final$tripID #trawl_id needed to calculate input_n for tows (trips) option.  
+
+#Sample size check
+n <- len_final %>%
+  dplyr::group_by(Year, site) %>%
+  dplyr::summarise(
+    drifts = length(unique(tripID)))
+
+lfs_mpa <- nwfscSurvey::get_raw_comps(
+  data = len_final[len_final$site == "MPA", ],
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("tows"),
+  month = 7,
+  fleet = "rov")
+
+lfs_ref <- nwfscSurvey::get_raw_comps(
+  data = len_final[len_final$site == "REF", ], 
+  comp_bins = length_bins,
+  comp_column_name = "length_cm",
+  two_sex_comps = FALSE,
+  input_n_method = c("tows"),
+  month = 7,
+  fleet = "rov")
+
+#Now apply the weighting. For 2016, which only occurs in mpa samples, remove
+#when calculating the average but add back in after done
+protect <- 0.2; open <- 1 - protect
+ind <- 7:ncol(lfs_mpa$unsexed)
+tmp <- lfs_mpa$unsexed[lfs_mpa$unsexed$year != 2016, ind] * protect + lfs_ref$unsexed[, ind] * open
+#add back in 2016 data (which is only)
+tmp2016 <- lfs_mpa$unsexed[lfs_mpa$unsexed$year == 2016, ind]
+tmp <- dplyr::bind_rows(tmp[which(lfs_ref$unsexed$year < 2016),], 
+                        tmp2016, 
+                        tmp[which(lfs_ref$unsexed$year > 2016),])
+
+
+first <- 1:(length(length_bins))
+
+# This is for unsexed composition data only 
+lfs <- round(tmp[, first] /  apply(tmp[, first], 1, sum), 4)
+samp <- data.frame("input_n" = lfs_ref$unsexed[,6] + lfs_mpa$unsexed[lfs_mpa$unsexed$year != 2016, "input_n"])
+samp <- c(samp[1:2, ],
+          lfs_mpa$unsexed[lfs_mpa$unsexed$year == 2016, "input_n"], #2016 sample size
+          samp[3:5, ])
+                         
+out <- cbind(lfs_mpa$unsexed[,1:5], samp, lfs)
+
+#Output final weighted comps in forSS3 folder
+write.csv(out, here("data", "forSS3", paste0("Lcomps_rov_unsexed_weighted_ACTUAL_YEAR_", 
+                                             length_bins[1], "_", tail(length_bins,1), 
+                                             ".csv")), row.names = FALSE)
+
+#Dont need FAA for ROV fleet so no faa length comps

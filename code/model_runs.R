@@ -4809,12 +4809,87 @@ SSsummarize(xx) |>
 
 
 ####------------------------------------------------#
+## 2_5_4_ActualYear_ROVComps ----
+####------------------------------------------------#
+
+#Use actual year for ROV comps (omits 3 samples in 2016 over two trips)
+
+new_name <- "2_5_4_ActualYear_ROVComps"
+old_name <- "2_5_3_weightedROVcomps"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+#Update ROV length comps with weighted version for actual year (not super year)
+rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_weighted_ACTUAL_YEAR_10_50.csv")) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+  as.data.frame()
+names(rov.lengths) <- names(mod$dat$lencomp)
+rov.lengths[rov.lengths$year == 2016, "year"] <- -2016 #negative year due to small sample size
+
+other.lengths <- mod$dat$lencomp[!mod$dat$lencomp$fleet == fleet.converter[fleet.converter$fleet == "rov", "fleet_num"],]
+
+mod$dat$lencomp <- dplyr::bind_rows(other.lengths, rov.lengths)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_5_3_weightedROVcomps",
+                                                 "2_5_4_ActualYear_ROVComps")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 253',
+                                     'use actual year weighted ROV comps'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+
+
+####------------------------------------------------#
 ## 2_5_4_inputFixes ----
 ####------------------------------------------------#
 
 #Update model inputs for recdev years, growth params phase to 3, 
-#PR index units to numbers, and warning fixes.
-#Also rest ROV selex to be double normal
+#PR index units to numbers.
+#Also rest ROV selex to be double normal (which fixes warnings)
 
 new_name <- "2_5_4_inputFixes"
 old_name <- "2_5_3_weightedROVcomps"
@@ -4871,22 +4946,4 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-
-
-####------------------------------------------------#
-## 2_5_5_inputFixes ----
-####------------------------------------------------#
-
-#Update model inputs for recdev years, growth params phase to 3, 
-#PR index units to numbers, and warning fixes.
-#Also rest ROV selex to be double normal.
-#Base all on the newest data for ROV and CCFRP
-
-new_name <- "2_5_5_inputFixes"
-old_name <- "2_5_3_weightedROVcomps"
-
-
-##
-#Copy inputs
-##
 
