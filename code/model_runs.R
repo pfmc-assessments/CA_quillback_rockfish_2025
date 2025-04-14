@@ -5015,3 +5015,93 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
+
+####------------------------------------------------#
+## 2_5_7_reweight256 ----
+####------------------------------------------------#
+
+#Update the model weights
+
+new_name <- "2_5_7_reweight256"
+old_name <- "2_5_6_inputFixes"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models',old_name),"Report.sso"),
+          to = file.path(here('models',new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+pp <- SS_output(here('models',new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 0, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+colnames(dw)[1] = "factor"
+new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
+                                by = dplyr::join_by(factor, fleet))
+mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_5_2_reweight251",
+                                                 "2_5_3_weightedROVcomps",
+                                                 "2_5_4_ActualYear_ROVComps",
+                                                 "2_5_5_update_CCFRPSampleSize",
+                                                 "2_5_6_inputFixes",
+                                                 "2_5_7_reweight256")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 252',
+                                     '253: add weighted ROV comps',
+                                     '254: change ROV comps to actual years',
+                                     '255: change CCFRP comp sample sizes',
+                                     '256: revert ROV selex and other inputs',
+                                     '257: reweight 256'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
