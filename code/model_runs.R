@@ -4950,21 +4950,16 @@ SSsummarize(xx) |>
                     plotdir = here('models', new_name))
 
 
-
-
-
-
-
 ####------------------------------------------------#
-## 2_5_4_inputFixes ----
+## 2_5_6_inputFixes ----
 ####------------------------------------------------#
 
-#Update model inputs for recdev years, growth params phase to 3, 
-#PR index units to numbers.
-#Also rest ROV selex to be double normal (which fixes warnings)
+#Update model inputs for recdev years, growth params phase to 3, and
+#PR index units to numbers. Also rest ROV selex to be double normal 
+#(which fixes warnings). Keeping 1 cm pop bins though. 
 
-new_name <- "2_5_4_inputFixes"
-old_name <- "2_5_3_weightedROVcomps"
+new_name <- "2_5_6_inputFixes"
+old_name <- "2_5_5_update_CCFRPSampleSize"
 
 
 ##
@@ -4990,14 +4985,16 @@ mod$ctl$MainRdevYrLast <- 2021
 
 #For bias adj ramp need a hessian
 
-mod$dat$binwidth <- 2
-
 mod$dat$maximum_size <- 60 - mod$dat$binwidth #(with 1 cm bins need to change this)
 
 #Reset ROV selectivity to double normal and reuse previous models' values
 mod$ctl$size_selex_types["CA_ROV", "Pattern"] <- 24
 prev_mod <- SS_read(here('models', '2_3_8_removeSparseData_5'))
-mod$ctl$size_selex_parms <- prev_mod$ctl$size_selex_parms
+prev_selexROV <- prev_mod$ctl$size_selex_parms[grep("ROV", rownames(prev_mod$ctl$size_selex_parms)), ]
+
+mod$ctl$size_selex_parms <- dplyr::bind_rows(
+  mod$ctl$size_selex_parms[-grep("ROV", rownames(mod$ctl$size_selex_parms)), ],
+  prev_selexROV)
 
 
 ##
@@ -5017,5 +5014,4 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
-
 
