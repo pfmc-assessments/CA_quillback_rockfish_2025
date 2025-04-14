@@ -100,7 +100,7 @@ len_final$Sex <- as.factor(len_final$Sex)
         month = 7)
 lfs <- as.data.frame(lfs)
 
-lfs$comps[, "Nsamp"] <- n$drifts
+lfs[, "comps.Nsamp"] <- n$drifts
 
 
 #Now process and weight the lengths
@@ -118,7 +118,7 @@ lfs_mpa <-  UnexpandedLFs.fn(
   fleet = "ccfrp", 
   month = 7)
   lfs_mpa <- as.data.frame(lfs_mpa)
-lfs_mpa[,"InputN"] <- n[n$site == "MPA", 'drifts']
+lfs_mpa[,"InputN"] <- n$drifts
 
 lfs_ref <-  UnexpandedLFs.fn(
   dir = file.path(dir),
@@ -129,7 +129,7 @@ lfs_ref <-  UnexpandedLFs.fn(
   fleet = 4, 
   month = 7)
   lfs_ref <- as.data.frame(lfs_ref)
-lfs_ref[,"InputN"] <- n[n$site == "REF", 'drifts']
+lfs_ref[,"InputN"] <- n$drifts
 
 protect <- 0.2; open <- 1 - protect
 ind <- 7:ncol(lfs_mpa)
@@ -140,10 +140,12 @@ first <- 1:(length(length_bins))
 # This is for unsexed composition data only 
 lfs <- round(tmp[, first] /  apply(tmp[, first], 1, sum), 4)
       #      round(100 * tmp[, second] / apply(tmp[, second], 1, sum), 4))
-out <- cbind(lfs_ref[,1:5], "InputN" = tmp[,"InputN"] , lfs)
+out <- cbind(lfs_ref[,1:5], "InputN" = n, lfs)
 
 
 
 
 
-write.csv(out, file = file.path(dir, "ccfrp_withFN_weighted_length_comps_unsexed.csv"), row.names = FALSE)
+write.csv(out, file = file.path(here("data","forSS3", "Lcomps_ccfrp_withFN_weighted_length_comps_unsexed.csv")), row.names = FALSE)
+
+
