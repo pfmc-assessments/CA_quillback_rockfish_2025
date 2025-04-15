@@ -1036,7 +1036,7 @@ fleet.converter <- mod$dat$fleetinfo %>%
 ## Add index data
 
 #CCFRP
-ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_withFN_weighted_index_forSS.csv")) %>%
   dplyr::mutate(fleet = "ccfrp") %>%
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   dplyr::rename("seas" = month, 
@@ -1100,15 +1100,17 @@ mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
 ## Add composition data for indices
 
 #CCFRP
-#these use number of fish as sample sizes
-ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
-  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+#these use number of drifts as sample size. Fleet is hard coded so dont need
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_withFN_weighted_length_comps_unsexed.csv")) %>%
+  dplyr::select(-InputN.Year) %>%
+  #dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 names(ccfrp.lengths) <- names(mod$dat$lencomp)
 
 #ROV
-rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_raw_10_50.csv")) %>%
-  dplyr::select(-Nsamp) %>%
+#Use number of transects as sample size.
+rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_weighted_ACTUAL_YEAR_10_50.csv")) %>%
+  #dplyr::select(-Nsamp) %>%
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 names(rov.lengths) <- names(mod$dat$lencomp)
@@ -1165,8 +1167,7 @@ pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1)
 SS_plots(pp, plot = c(1:26))
 
-pp <- SS_output(here('models', "_bridging_runs", new_name))
-SS_plots(pp, plot = c(1:26))
+
 ####------------------------------------------------#
 ## 0_2_5b_PRindexOnly ----
 ####------------------------------------------------#
@@ -1361,7 +1362,7 @@ mod$dat$catch <- updated.catch.df
 ## Add index data
 
 #CCFRP
-ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_noFN_index_forSS.csv")) %>%
+ccfrp_index <- read.csv(here("data", "forSS3", "CCFRP_withFN_weighted_index_forSS.csv")) %>%
   dplyr::mutate(fleet = "ccfrp") %>%
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   dplyr::rename("seas" = month, 
@@ -1442,13 +1443,14 @@ rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_unsexed_raw_
   as.data.frame()
 names(rec.lengths) <- names(mod$dat$lencomp)
 
-ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_noFN_length_comps_unsexed.csv")) %>%
-  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
+ccfrp.lengths <- read.csv(here("data", "forSS3", "Lcomps_ccfrp_withFN_weighted_length_comps_unsexed.csv")) %>%
+  dplyr::select(-InputN.Year) %>%
+  #dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 names(ccfrp.lengths) <- names(mod$dat$lencomp)
 
-rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_raw_10_50.csv")) %>%
-  dplyr::select(-Nsamp) %>%
+rov.lengths <- read.csv(here("data", "forSS3", "Lcomps_rov_unsexed_weighted_ACTUAL_YEAR_10_50.csv")) %>%
+  #dplyr::select(-Nsamp) %>%
   dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_num) %>%
   as.data.frame()
 names(rov.lengths) <- names(mod$dat$lencomp)
@@ -1531,12 +1533,11 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-#Plot just the data figure (output as "data.png")
 pp <- SS_output(here('models', "_bridging_runs", new_name))
 SSplotData(pp, print = TRUE, subplots = 1)
+SS_plots(pp, plot = c(1:26))
 
 
-SS_plots(pp, plot = c(1:26)) #Melissa added to see all plot for visual comparison
 ####------------------------------------------------#
 ## 0_2_0_updateAllData ----
 ####------------------------------------------------#
