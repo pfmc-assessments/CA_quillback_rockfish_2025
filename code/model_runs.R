@@ -2790,7 +2790,7 @@ plot_sel_all(pp)
 ## 2_1_1_reweight ----
 ####------------------------------------------------#
 
-#Updated data from the ROV and added updated 2024 commercial discard estimates
+#Reweight model 201
 
 new_name <- "2_1_1_reweight"
 old_name <- "2_0_1_updateData" 
@@ -2860,7 +2860,7 @@ plot_sel_all(pp)
 ## 2_1_2_ROVselexFix1 ----
 ####------------------------------------------------#
 
-#Updated data from the ROV and added updated 2024 commercial discard estimates
+#Set ROV selectivity to 1
 
 new_name <- "2_1_2_ROVselexFix1"
 old_name <- "2_1_1_reweight" 
@@ -5121,4 +5121,78 @@ ageOnePlus_numbers %>% filter(Time == 2015.5)
 ageOnePlus_numbers %>% filter(Time == 2020.5)
 
 
+####------------------------------------------------#
+## 3_0_1_fix_rovIndex_2024discard ----
+####------------------------------------------------#
 
+#Update the model weights
+
+new_name <- "3_0_1_fix_rovIndex_2024discard"
+old_name <- "2_5_7_reweight256"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Fix the 2024 catch estimate for commercial to the new estimate. No other estimate differed
+catches <- read.csv(here("data", "CAquillback_total_removals.csv"))
+
+mod$dat$catch[mod$dat$catch$year == 2024 & mod$dat$catch$fleet == 1, "catch"] <- 
+  catches[catches$Year == 2024, "com_tot"]
+
+
+#Use the new ROV index values and se
+rov_index <- read.csv(here("data", "forSS3", "ROV_index_forSS.csv")) %>%
+  dplyr::rename("seas" = month, 
+                "se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+names(rov_index) <- names(mod$dat$CPUE)
+
+mod$dat$CPUE[mod$dat$CPUE$index == unique(rov_index$index),] <- rov_index 
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("2_5_7_reweight256",
+                                                 "3_0_1_fix_rovIndex_2024discard")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 257',
+                                     'correct ROV index values and 2024 comm catch'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
