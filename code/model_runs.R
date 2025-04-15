@@ -5109,10 +5109,9 @@ SSsummarize(xx) |>
 #Can move this elsewhere - looks at the number of age 1 fish to compare to Tanya's abs. MPA est.
 #Sum numbers at age
 numbers_at_age <- pp$natage
-
-ageOnePlus_numbers <- numbers_at_age %>%
+pp$natageOnePlus_numbers <- numbers_at_age %>%
   filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
-  mutate(numberOfFish = rowSums(across(c("1":"90")))) %>%  #could also look at ages 2+
+  mutate(numberOfFish = rowSums(across(c("3":"90")))) %>%  #could also look at ages 2+
   dplyr::select(c("Time", "numberOfFish"))
 
 #Tanya predicts 155,255 in 2015 and 298,559 in 2020

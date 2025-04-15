@@ -43,6 +43,8 @@ dat <- dat %>%
 
 #length weight relationship as a check
 ggplot(dat, aes(length_cm, OVERALL_TOTAL_WEIGHT_G)) + geom_point(size = 10)
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_length_weight_check.png"),
+       width = 10, height = 8)
 
 ggplot(dfo.dat, aes(length_cm, somatic_weight))  + geom_point(size = 10)
 
@@ -78,6 +80,8 @@ ca_est <- function(x) {alpha.ca.mod*x^beta.ca.mod}
 ggplot(dat, aes(x = length_cm, y = fec_mil, colour = PORT,  xmin = 0, xmax = 42)) + 
 geom_point(size = 5) + #geom_line(stat = 'function', fun = ej_Est, color = "blue") +
 geom_line(stat = 'function', fun = ca_est, color = "red")
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_data_fits.png"),
+       width = 10, height = 8)
 
 
 
@@ -103,7 +107,8 @@ dfo_est <- function(x) {alpha.dfo.mod * x^beta.dfo.mod}
 ggplot(dfo.dat, aes(x = length_cm, y = fec_mil)) + 
 geom_point() + geom_line(stat = 'function', fun = ej_Est, color = "blue") +
 geom_line(stat = 'function', fun = dfo_est, color = "purple")
-
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_dfo_ej_data.png"),
+       width = 10, height = 8)
 
 
 ####################################################################################################
@@ -147,6 +152,8 @@ geom_jitter(size = 6, alpha = .5)
 
 ggplot(dfo_ca, aes(length_cm, total_weight, colour = area))  + 
 geom_jitter(size = 6, alpha = .5)
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_length_weight_check.png"),
+       width = 10, height = 8)
 
 lw_ests <- nwfscSurvey::estimate_weight_length(data = ca %>% mutate(weight_kg = OVERALL_TOTAL_WEIGHT_G/1000))
 
@@ -156,7 +163,8 @@ geom_point(size = 3)  + scale_colour_viridis_d(begin = 0, end = .6) +
 geom_line(stat = 'function', fun = ej_Est, color = "blue") +
 geom_line(stat = 'function', fun = dfo_est1, color = "purple") +
 geom_line(stat = 'function', fun = ca_est, color = "red")
-
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_all_data_all_fitspng"),
+       width = 10, height = 8)
 
 3.93e-07*L^3.7
 alpha.ca.mod
