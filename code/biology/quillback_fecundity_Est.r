@@ -46,7 +46,6 @@ ggplot(dat, aes(length_cm, OVERALL_TOTAL_WEIGHT_G)) + geom_point(size = 10)
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_length_weight_check.png"),
        width = 10, height = 8)
 
-ggplot(dfo.dat, aes(length_cm, somatic_weight))  + geom_point(size = 10)
 
 add_curve <- function(plot, i){
         return(plot + stat_function(aes(x = 30:40), function(x) {3.93e-07*x^3.7 })) #
@@ -155,7 +154,7 @@ geom_jitter(size = 6, alpha = .5)
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_length_weight_check.png"),
        width = 10, height = 8)
 
-lw_ests <- nwfscSurvey::estimate_weight_length(data = ca %>% mutate(weight_kg = OVERALL_TOTAL_WEIGHT_G/1000))
+lw_ests <- nwfscSurvey::estimate_weight_length(data = ca %>% mutate(weight_kg = total_weight/1000))
 
 
 ggplot(dfo_ca, aes(x = length_cm, y = fec_mil, colour = area)) + 
@@ -163,7 +162,7 @@ geom_point(size = 3)  + scale_colour_viridis_d(begin = 0, end = .6) +
 geom_line(stat = 'function', fun = ej_Est, color = "blue") +
 geom_line(stat = 'function', fun = dfo_est1, color = "purple") +
 geom_line(stat = 'function', fun = ca_est, color = "red")
-ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_all_data_all_fitspng"),
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_all_data_all_fits.png"),
        width = 10, height = 8)
 
 3.93e-07*L^3.7
