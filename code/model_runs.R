@@ -5105,3 +5105,21 @@ SSsummarize(xx) |>
                                      '257: reweight 256'),
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
+
+#Can move this elsewhere - looks at the number of age 1 fish to compare to Tanya's abs. MPA est.
+#Sum numbers at age
+numbers_at_age <- pp$natage
+
+ageOnePlus_numbers <- numbers_at_age %>%
+  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
+  mutate(numberOfFish = rowSums(across(c("1":"90")))) %>%  #could also look at ages 2+
+  dplyr::select(c("Time", "numberOfFish"))
+
+#Tanya predicts 155,255 in 2015 and 298,559 in 2020
+#Model predicted 2015.5 - believe these are in 1,000s
+ageOnePlus_numbers %>% filter(Time == 2015.5)
+#Model predicted 2020.5
+ageOnePlus_numbers %>% filter(Time == 2020.5)
+
+
+
