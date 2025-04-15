@@ -5196,3 +5196,51 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
+
+
+####------------------------------------------------#
+## 3_0_2_plusGrowth999----
+####------------------------------------------------#
+
+#Update the model weights
+
+new_name <- "3_0_2_plusGrowth999"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Exp_Decay <- 999
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+#Does nothing - just a check
+#can remove model or change
