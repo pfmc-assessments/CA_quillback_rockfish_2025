@@ -5443,5 +5443,135 @@ SSsummarize(xx) |>
 dev.off()
 
 
+####------------------------------------------------#
+## 3_1_4_sigmaR ----
+####------------------------------------------------#
 
+#Explore sigmaR adjustments
+
+new_name <- "3_1_4_sigmaR"
+old_name <- "3_1_3_biasAdjRamp2"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models', old_name),"Report.sso"),
+          to = file.path(here('models', new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+pp <- SS_output(here('models',new_name), covar = TRUE)
+
+
+##
+#Make Changes
+##
+
+#Update sigmaR with tuned value? Suggests higher value
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main","alternative_sigma_R"]
+
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#Next round suggest even higher sigmaR. Seem likes its the common pattern that 
+#it wants to just keep increasing. Keeping at 0.6 seems reasonable.
+pp$sigma_R_info
+
+
+####------------------------------------------------#
+## 3_1_5_sigmaR0.4 ----
+####------------------------------------------------#
+
+#Explore sigmaR adjustments
+
+new_name <- "3_1_5_sigmaR0.4"
+old_name <- "3_1_4_sigmaR"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+
+##
+#Make Changes
+##
+
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- 0.4
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#Still wants it higher
+pp$sigma_R_info
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_1_3_biasAdjRamp2",
+                                                 "3_1_4_sigmaR",
+                                                 "3_1_5_sigmaR0.4")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 313 new bias adj ramp',
+                                     'increase sigmaR to formula',
+                                     'fix sigmaR to 0.4'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
 
