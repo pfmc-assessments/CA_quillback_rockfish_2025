@@ -5246,6 +5246,56 @@ plot_sel_all(pp)
 #can remove model or change
 
 
+
+####------------------------------------------------#
+## 3_0_3_Nages60----
+####------------------------------------------------#
+
+#Update the model weights
+
+new_name <- "3_0_3_Nages60"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$dat$Nages <- 60 # to correspond with maximum age
+
+mod$dat$ageerror <- mod$dat$ageerror[,1:61]
+#ageing error matrix
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
 ####------------------------------------------------#
 ## 3_1_1_hessian301 ----
 ####------------------------------------------------#
