@@ -5484,6 +5484,120 @@ dev.off()
 #No real effect. Personally I like the parameter
 
 
+####------------------------------------------------#
+## 3_0_7_felFbasis ----
+####------------------------------------------------#
+
+#relF basis is 0 in the forecast. This isn't in the manual. Set to 1, which
+#is year range of benchmark, which is entered as 2024
+
+new_name <- "3_0_7_felFbasis"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Adjust relative F basis
+mod$fore$Bmark_relF_Basis <- 1 #there isn't a 0 option in the manual
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_0_8_felFbasis2 ----
+####------------------------------------------------#
+
+#Set relF basis to 2 in the forecast, which matches the forecast and is 2021-2024
+
+new_name <- "3_0_8_felFbasis2"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Adjust relative F basis
+mod$fore$Bmark_relF_Basis <- 2 #there isn't a 0 option in the manual
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_7_felFbasis",
+                                                 "3_0_8_felFbasis2")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'relF_basis 2024',
+                                     'relF_basis 2021-2024'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+#No real effect on model trajectory. Should affect plots and references for forecasts
+
 
 ####------------------------------------------------#
 ## 3_1_1_hessian301 ----
@@ -5813,4 +5927,54 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
+
+
+####------------------------------------------------#
+## 3_2_1_sigmaR ----
+####------------------------------------------------#
+
+#Change some starter and forecast inputs. Set F benchmark base to 1
+#and set prior likelihood to only register M and h
+
+new_name <- "3_2_1_moreInputs"
+old_name <- "3_1_3_biasAdjRamp2"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Adjust relative F basis
+mod$fore$Bmark_relF_Basis <- 1 #there isn't a 0 option in the manual
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
 
