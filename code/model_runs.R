@@ -5202,7 +5202,7 @@ dev.off()
 ## 3_0_2_plusGrowth999----
 ####------------------------------------------------#
 
-#Update the model weights
+#Change the exponential decay function value for decay after plus group
 
 new_name <- "3_0_2_plusGrowth999"
 old_name <- "3_0_1_fix_rovIndex_2024discard"
@@ -5251,7 +5251,7 @@ plot_sel_all(pp)
 ## 3_0_3_Nages60----
 ####------------------------------------------------#
 
-#Update the model weights
+#Change Nages to 60 
 
 new_name <- "3_0_3_Nages60"
 old_name <- "3_0_1_fix_rovIndex_2024discard"
@@ -5294,6 +5294,128 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_0_4_recdev_phase ----
+####------------------------------------------------#
+
+#Change phase of recdevs from 2 to 4 and early devs from 5 to 2
+#to see if this affects things
+
+new_name <- "3_0_4_recdev_phase"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$recdev_phase <- 4
+mod$ctl$recdev_early_phase <- 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#It does not
+
+
+####------------------------------------------------#
+## 3_0_5_recdev_years ----
+####------------------------------------------------#
+
+#Change time period of early recdevs to be from first year and main recdevs
+#to go back through to what was the early recdevs
+
+new_name <- "3_0_5_recdev_years"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$recdev_early_start <- 1916 #set to first year of model
+mod$ctl$MainRdevYrFirst <- 1940 #set to what was early phase start
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+round(pp$likelihoods_used,2)
+round(SS_output(here('models', '3_0_1_fix_rovIndex_2024discard'))$likelihoods_used,2)
+#Setting these does reduce the likelihood but the total amount is less than 1 unit
+#and the number of parameters is significantly more. Pattern in recdev isn't greatly
+#change though trajector does differ a bit. Regardless, there is nothing missing
+#from what we had previously. Thus, keep what we had. 
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_4_recdev_phase",
+                                                 "3_0_5_recdev_years")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'change main recdev phase to 4, early to 2',
+                                     'change early recdev to styr, and main to 1940'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
 
 
 ####------------------------------------------------#
