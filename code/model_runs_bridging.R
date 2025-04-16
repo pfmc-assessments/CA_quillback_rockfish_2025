@@ -1617,7 +1617,7 @@ dev.off()
 
 
 ##-------------------------------------------------------------------##
-#--------------------Changes to model inputs-------------------------
+#--------------------Changes to selectivity-------------------------
 ##-------------------------------------------------------------------##
 
 
@@ -2240,6 +2240,9 @@ SSsummarize(xx) |>
 
 dev.off()
 
+#Main point is that previous selectivity setup produces similar results to ours
+#and that domed versus asymptotic isn't very impactful
+
 
 ####------------------------------------------------#
 ## 0_3_5_selexBlocks_fixWarnings ----
@@ -2328,4 +2331,163 @@ SSsummarize(xx) |>
 
 dev.off()
 
+
+##-------------------------------------------------------------------##
+#------------------------Reweight------------------------------------
+##-------------------------------------------------------------------##
+
+
+####------------------------------------------------#
+## 0_4_1_addVarAdj ----
+####------------------------------------------------#
+
+# Add variance adjust terms for all comps
+
+new_name <- "0_4_1_addVarAdj"
+old_name <- "0_3_5_selexBlocks_fixWarnings"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+# Add variance adjustment for each comp data set
+varadj_len <- data.frame("factor" = 4, 
+                         fleet = unique(mod$dat$lencomp$fleet), 
+                         value = 1,
+                         row.names = paste0("Len_", fleet.converter[unique(mod$dat$lencomp$fleet), "fleetname"]))
+varadj_age <- data.frame("factor" = 5,
+                         fleet = unique(mod$dat$agecomp$fleet), 
+                         value = 1,
+                         row.names = paste0("Age_", fleet.converter[unique(mod$dat$agecomp$fleet), "fleetname"]))
+mod$ctl$Variance_adjustment_list <- dplyr::bind_rows(varadj_len, varadj_age)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+####------------------------------------------------#
+## 0_4_2_reweight ----
+####------------------------------------------------#
+
+# Add variance adjust terms for all comps
+
+new_name <- "0_4_2_reweight"
+old_name <- "0_4_1_addVarAdj"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models', "_bridging_runs", old_name),"Report.sso"),
+          to = file.path(here('models', "_bridging_runs", new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', "_bridging_runs", old_name),"CompReport.sso"),
+          to = file.path(here('models', "_bridging_runs", new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', "_bridging_runs", old_name),"warning.sso"),
+          to = file.path(here('models', "_bridging_runs", new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', "_bridging_runs", old_name),"covar.sso"),
+          to = file.path(here('models', "_bridging_runs", new_name),"covar.sso"), overwrite = TRUE)
+
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', "_bridging_runs", new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 0, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+#If run twice get this. Isn't that much different so run just once for now
+# $weights[[2]]
+#   factor fleet    value
+# 1      4     1 0.406335
+# 2      4     2 0.199728
+# 3      4     4 0.242004
+# 4      4     5 0.216700
+# 5      5     1 0.255340
+# 6      5     3 0.816932
+
+colnames(dw)[1] = "factor"
+new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
+                                by = dplyr::join_by(factor, fleet))
+mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_3_5_selexBlocks_fixWarnings",
+                                                 "0_4_1_addVarAdj",
+                                                 "0_4_2_reweight")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Update selectivity params and add blocks',
+                                     'Add variance adjustment set to 1',
+                                     'Reweight'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
 
