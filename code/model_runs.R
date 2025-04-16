@@ -5603,7 +5603,7 @@ dev.off()
 ## 3_1_1_hessian301 ----
 ####------------------------------------------------#
 
-#Run hessian from model 301 to set up correct bias adj ramp
+#Run hessian from model 301 to set up correct bias adj ramp and check sigmaR.
 
 new_name <- "3_1_1_hessian301"
 old_name <- "3_0_1_fix_rovIndex_2024discard"
@@ -5928,53 +5928,5 @@ SSsummarize(xx) |>
                     plotdir = here('models', new_name))
 dev.off()
 
-
-####------------------------------------------------#
-## 3_2_1_sigmaR ----
-####------------------------------------------------#
-
-#Change some starter and forecast inputs. Set F benchmark base to 1
-#and set prior likelihood to only register M and h
-
-new_name <- "3_2_1_moreInputs"
-old_name <- "3_1_3_biasAdjRamp2"
-
-
-##
-#Copy inputs
-##
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               overwrite = TRUE)
-
-mod <- SS_read(here('models',new_name))
-
-
-##
-#Make Changes
-##
-
-#Adjust relative F basis
-mod$fore$Bmark_relF_Basis <- 1 #there isn't a 0 option in the manual
-
-
-##
-#Output files and run
-##
-
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
-
-pp <- SS_output(here('models', new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
 
 
