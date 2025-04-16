@@ -1615,6 +1615,717 @@ SSsummarize(xx) |>
 dev.off()
 
 
+
 ##-------------------------------------------------------------------##
-#--------------------------Add Data----------------------------------
+#--------------------Changes to model inputs-------------------------
 ##-------------------------------------------------------------------##
+
+
+####------------------------------------------------#
+## 0_3_1_selexInits_parms1234 ----
+####------------------------------------------------#
+
+# Update initial selectivity parameters based on new data. Update the initial 
+# parameters for parameters 1-4 but keep those for 5-6. Given previous inits 
+# for parameter 5 and 6 aren't -999 changing parameter 4 is unlikely to change 
+# model results
+
+new_name <- "0_3_1_selexInits_parms1234"
+old_name <- "0_2_0_updateAllData"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+selex_new <- mod$ctl$size_selex_parms
+
+#since all PR_types are zero these aren't used, just set to any number
+selex_new$PR_SD <- 0 
+selex_new$PRIOR <- 0
+
+# Fix three parameters of double normal
+# -999 for p5 and p6 means set control to p3 and p4
+selex_new$INIT[grep('P_2', rownames(selex_new))] <- -15
+#selex_new$INIT[grep('P_5', rownames(selex_new))] <- -999
+#selex_new$INIT[grep('P_6', rownames(selex_new))] <- -999
+selex_new$PHASE[grep('P_2', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_5', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_6', rownames(selex_new))] <- -9
+selex_new$LO[grep('P_2', rownames(selex_new))] <- -20
+selex_new$HI[grep('P_2', rownames(selex_new))] <- 20
+
+# calculate initial values for p1, p3, p4 for each fleet
+selex_modes <- mod$dat$lencomp |>
+  dplyr::arrange(fleet) |>
+  dplyr::group_by(fleet) |>
+  dplyr::summarise(dplyr::across(l10:l50, ~ sum(Nsamp*.x)/sum(Nsamp))) |> 
+  tidyr::pivot_longer(cols = -fleet, names_to = 'len_bin', values_to = 'dens') |>
+  tidyr::separate(col = len_bin, into = c('sex', 'length'), sep = 1) |> #with unsexed sex is just "l"
+  dplyr::group_by(fleet, sex) |> 
+  dplyr::summarise(mode = length[which.max(dens)]) |>
+  dplyr::summarise(mode = mean(as.numeric(mode))) |>
+  dplyr::mutate(asc.slope = log(8*(mode - 12)),
+                desc.slope = log(8*(66-mode)))
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |>
+  as.list()
+
+# Parameter 1
+p1.ind <- grep('P_1', rownames(selex_new))
+selex_new$LO[p1.ind] <- 11 #midpoint of first bin
+selex_new$HI[p1.ind] <- 51 #midpoint of last bin
+selex_new$PHASE[p1.ind] <- 4
+#Only update the mode for fleets we have length data for
+p1.ind.2 <- intersect(
+  grep('P_1', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p1.ind.2] <- purrr::map(selex_fleets, 
+                                       ~ selex_modes$mode[selex_modes$fleet == fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |> 
+  unlist()
+
+
+### P_3
+p3.ind <- grep('P_3', rownames(selex_new))
+selex_new$LO[p3.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
+selex_new$HI[p3.ind] <- 9
+selex_new$PHASE[p3.ind] <- 5
+#Only update the mode for fleets we have length data for
+p3.ind.2 <- intersect(
+  grep('P_3', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p3.ind.2] <- purrr::map(selex_fleets, 
+                                       ~ selex_modes$asc.slope[selex_modes$fleet == 
+                                                                 fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
+  unlist()
+
+## P_4
+p4.ind <- grep('P_4', rownames(selex_new))
+selex_new$LO[p4.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
+selex_new$HI[p4.ind] <- 9
+selex_new$PHASE[p4.ind] <- 5
+#Only update the mode for fleets we have length data for
+p4.ind.2 <- intersect(
+  grep('P_4', rownames(selex_new)),
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"),
+       rownames(selex_new)))
+selex_new$INIT[p4.ind.2] <- purrr::map(selex_fleets,
+                                       ~ selex_modes$desc.slope[selex_modes$fleet ==
+                                                                  fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
+  unlist()
+
+#Set new selectivity parameters
+mod$ctl$size_selex_parms <- selex_new
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_2_0_updateAllData",
+                                                 "0_3_1_selexInits_parms1234")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('All data and estimate growth',
+                                     'Update selex inits'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
+
+
+
+####------------------------------------------------#
+## 0_3_2_selexInits_parm12356 ----
+####------------------------------------------------#
+
+# Update initial selectivity parameters based on new data. Update the initial 
+# parameters for parameters 1-3, keeping parameter 4 at previous values and 
+# setting inits of parameter 5 and 6 to -999 so now parameter 4 controls domed-ness 
+
+new_name <- "0_3_2_selexInits_parms12356"
+old_name <- "0_2_0_updateAllData"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+selex_new <- mod$ctl$size_selex_parms
+
+#since all PR_types are zero these aren't used, just set to any number
+selex_new$PR_SD <- 0 
+selex_new$PRIOR <- 0
+
+# Fix three parameters of double normal
+# -999 for p5 and p6 means set control to p3 and p4
+selex_new$INIT[grep('P_2', rownames(selex_new))] <- -15
+selex_new$INIT[grep('P_5', rownames(selex_new))] <- -999
+selex_new$INIT[grep('P_6', rownames(selex_new))] <- -999
+selex_new$PHASE[grep('P_2', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_5', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_6', rownames(selex_new))] <- -9
+selex_new$LO[grep('P_2', rownames(selex_new))] <- -20
+selex_new$HI[grep('P_2', rownames(selex_new))] <- 20
+
+# calculate initial values for p1, p3, p4 for each fleet
+selex_modes <- mod$dat$lencomp |>
+  dplyr::arrange(fleet) |>
+  dplyr::group_by(fleet) |>
+  dplyr::summarise(dplyr::across(l10:l50, ~ sum(Nsamp*.x)/sum(Nsamp))) |> 
+  tidyr::pivot_longer(cols = -fleet, names_to = 'len_bin', values_to = 'dens') |>
+  tidyr::separate(col = len_bin, into = c('sex', 'length'), sep = 1) |> #with unsexed sex is just "l"
+  dplyr::group_by(fleet, sex) |> 
+  dplyr::summarise(mode = length[which.max(dens)]) |>
+  dplyr::summarise(mode = mean(as.numeric(mode))) |>
+  dplyr::mutate(asc.slope = log(8*(mode - 12)),
+                desc.slope = log(8*(66-mode)))
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |>
+  as.list()
+
+# Parameter 1
+p1.ind <- grep('P_1', rownames(selex_new))
+selex_new$LO[p1.ind] <- 11 #midpoint of first bin
+selex_new$HI[p1.ind] <- 51 #midpoint of last bin
+selex_new$PHASE[p1.ind] <- 4
+#Only update the mode for fleets we have length data for
+p1.ind.2 <- intersect(
+  grep('P_1', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p1.ind.2] <- purrr::map(selex_fleets, 
+                                       ~ selex_modes$mode[selex_modes$fleet == fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |> 
+  unlist()
+
+
+### P_3
+p3.ind <- grep('P_3', rownames(selex_new))
+selex_new$LO[p3.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
+selex_new$HI[p3.ind] <- 9
+selex_new$PHASE[p3.ind] <- 5
+#Only update the mode for fleets we have length data for
+p3.ind.2 <- intersect(
+  grep('P_3', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p3.ind.2] <- purrr::map(selex_fleets, 
+                                       ~ selex_modes$asc.slope[selex_modes$fleet == 
+                                                                 fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
+  unlist()
+
+## P_4
+# p4.ind <- grep('P_4', rownames(selex_new))
+# selex_new$LO[p4.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
+# selex_new$HI[p4.ind] <- 9
+# selex_new$PHASE[p4.ind] <- 5
+# #Only update the mode for fleets we have length data for
+# p4.ind.2 <- intersect(
+#   grep('P_4', rownames(selex_new)),
+#   grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"),
+#        rownames(selex_new)))
+# selex_new$INIT[p4.ind.2] <- purrr::map(selex_fleets,
+#                                        ~ selex_modes$desc.slope[selex_modes$fleet ==
+#                                                                   fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
+#   unlist()
+
+#Set new selectivity parameters
+mod$ctl$size_selex_parms <- selex_new
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_2_0_updateAllData",
+                                                 "0_3_2_selexInits_parms12356")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('All data and estimate growth',
+                                     'Update selex inits'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
+
+
+####------------------------------------------------#
+## 0_3_2b_estParm4 ----
+####------------------------------------------------#
+
+# Copy previous model but now allow parameter 4 to be estimated for non-survey
+# fleets (i.e. not CCFRP nor ROV)
+
+new_name <- "0_3_2b_estParm4"
+old_name <- "0_3_2_selexInits_parms12356"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+ind <- intersect(grep('P_4', rownames(mod$ctl$size_selex_parms)),
+                 grep('Comm|Rec', rownames(mod$ctl$size_selex_parms)))
+mod$ctl$size_selex_parms[ind, "PHASE"] <- 5
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_3_2_selexInits_parms12356",
+                                                 "0_3_2b_estParm4")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Update selex inits for 12356',
+                                     'Estimate parameter 4'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
+
+
+
+####------------------------------------------------#
+## 0_3_3_selexInits_All ----
+####------------------------------------------------#
+
+# Update initial selectivity parameters based on new data. Update the initial 
+# parameters for parameters 1-4, and setting inits of parameter 5 and 6 to 
+# -999 which gives parameter 4 control of domed-ness. Fix parameter 4 for 
+# non-survey fleets to a large positive number
+
+new_name <- "0_3_3_selexInits_All"
+old_name <- "0_2_0_updateAllData"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5)) %>%
+  dplyr::select(fleetname, fleet, fleet_num)
+
+selex_new <- mod$ctl$size_selex_parms
+
+#since all PR_types are zero these aren't used, just set to any number
+selex_new$PR_SD <- 0 
+selex_new$PRIOR <- 0
+
+# Fix three parameters of double normal
+# -999 for p5 and p6 means set control to p3 and p4
+selex_new$INIT[grep('P_2', rownames(selex_new))] <- -15
+selex_new$INIT[grep('P_5', rownames(selex_new))] <- -999
+selex_new$INIT[grep('P_6', rownames(selex_new))] <- -999
+selex_new$PHASE[grep('P_2', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_5', rownames(selex_new))] <- -9
+selex_new$PHASE[grep('P_6', rownames(selex_new))] <- -9
+selex_new$LO[grep('P_2', rownames(selex_new))] <- -20
+selex_new$HI[grep('P_2', rownames(selex_new))] <- 20
+
+# calculate initial values for p1, p3, p4 for each fleet
+selex_modes <- mod$dat$lencomp |>
+  dplyr::arrange(fleet) |>
+  dplyr::group_by(fleet) |>
+  dplyr::summarise(dplyr::across(l10:l50, ~ sum(Nsamp*.x)/sum(Nsamp))) |> 
+  tidyr::pivot_longer(cols = -fleet, names_to = 'len_bin', values_to = 'dens') |>
+  tidyr::separate(col = len_bin, into = c('sex', 'length'), sep = 1) |> #with unsexed sex is just "l"
+  dplyr::group_by(fleet, sex) |> 
+  dplyr::summarise(mode = length[which.max(dens)]) |>
+  dplyr::summarise(mode = mean(as.numeric(mode))) |>
+  dplyr::mutate(asc.slope = log(8*(mode - 12)),
+                desc.slope = log(8*(66-mode)))
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |>
+  as.list()
+
+# Parameter 1
+p1.ind <- grep('P_1', rownames(selex_new))
+selex_new$LO[p1.ind] <- 11 #midpoint of first bin
+selex_new$HI[p1.ind] <- 51 #midpoint of last bin
+selex_new$PHASE[p1.ind] <- 4
+#Only update the mode for fleets we have length data for
+p1.ind.2 <- intersect(
+  grep('P_1', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p1.ind.2] <- purrr::map(selex_fleets, 
+                                       ~ selex_modes$mode[selex_modes$fleet == fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |> 
+  unlist()
+
+
+### P_3
+p3.ind <- grep('P_3', rownames(selex_new))
+selex_new$LO[p3.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
+selex_new$HI[p3.ind] <- 9
+selex_new$PHASE[p3.ind] <- 5
+#Only update the mode for fleets we have length data for
+p3.ind.2 <- intersect(
+  grep('P_3', rownames(selex_new)),  
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"), 
+       rownames(selex_new)))
+selex_new$INIT[p3.ind.2] <- purrr::map(selex_fleets, 
+                                       ~ selex_modes$asc.slope[selex_modes$fleet == 
+                                                                 fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
+  unlist()
+
+# P_4
+p4.ind <- grep('P_4', rownames(selex_new))
+selex_new$LO[p4.ind] <- 0 #could go negative but slope is super steep. Good to have 0 as the bound
+selex_new$HI[p4.ind] <- 9
+selex_new$PHASE[p4.ind] <- 5
+#Only update the mode for fleets we have length data for
+p4.ind.2 <- intersect(
+  grep('P_4', rownames(selex_new)),
+  grep(paste0(fleet.converter[fleet.converter$fleet_num %in% unique(mod$dat$lencomp$fleet), "fleetname"], collapse = "|"),
+       rownames(selex_new)))
+selex_new$INIT[p4.ind.2] <- purrr::map(selex_fleets,
+                                       ~ selex_modes$desc.slope[selex_modes$fleet ==
+                                                                  fleet.converter$fleet_num[fleet.converter$fleetname == .x]]) |>
+  unlist()
+#now for survey fleets fix p_4 at large number
+p4.ind.surv <- intersect(p4.ind, grep('CCFRP|ROV', rownames(selex_new)))
+selex_new$INIT[p4.ind.surv] <- 15
+selex_new$HI[p4.ind.surv] <- 20
+selex_new$PHASE[p4.ind.surv] <- -9
+
+
+#Set new selectivity parameters
+mod$ctl$size_selex_parms <- selex_new
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_2_0_updateAllData",
+                                                 "0_3_3_selexInits_All")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('All data and estimate growth',
+                                     'Update all selex inits'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
+
+
+####------------------------------------------------#
+## 0_3_4_selexBlocks ----
+####------------------------------------------------#
+
+# Add full selectivity blocks
+
+new_name <- "0_3_4_selexBlocks"
+old_name <- "0_3_3_selexInits_All"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+# Add selectivity blocks, one each for recreational and commercial
+# Setting the end year to -2 sets the forecast selectivity to be the final year,
+# otherwise it would get reset to the base selectivity block
+mod$ctl$N_Block_Designs <- 2
+mod$ctl$blocks_per_pattern <- c(3, 3)
+mod$ctl$Block_Design <- list(c(2003, 2013, 2014, 2021, 2022, -2), #commercial fleet
+                             c(2001, 2016, 2017, 2022, 2023, -2)) #recreational fleet
+
+### Add block indicators into selectivity table
+# Block = number of block to use, Block_Fxn = 2 means replace parameters 
+selex_new <- mod$ctl$size_selex_parms
+
+selex_new[intersect(grep("Commercial", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block")] <- 1
+selex_new[intersect(grep("Commercial", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block_Fxn")] <- 2
+selex_new[intersect(grep("Recreational", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block")] <- 2
+selex_new[intersect(grep("Recreational", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block_Fxn")] <- 2
+
+mod$ctl$size_selex_parms <- selex_new
+
+
+### Time varying selectivity table
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_3_3_selexInits_All",
+                                                 "0_3_4_selexBlocks")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Update selex parameters',
+                                     'Add blocks'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
+
+
+####------------------------------------------------#
+## 0_3_5_selexBlocks_fixWarnings ----
+####------------------------------------------------#
+
+# Fix all the warnings which deal with forecast setup and entry of blocks
+# Also increase R0 init to avoid that warning
+
+new_name <- "0_3_5_selexBlocks_fixWarnings"
+old_name <- "0_3_4_selexBlocks"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+# Increase R0 initial to avoid 1st iteration warnings
+
+mod$ctl$SR_parms["SR_LN(R0)", c("INIT", "PRIOR")] <- 5
+
+
+# Use new forecast formatting to avoid warning
+
+# Type 10 is selectivity, currently set to equal the last year
+# Type 11 is relF, currently set to be the last three years
+# Type 12 is recruitment, currently set to be all years
+mod$fore$Fcast_selex <- -12345
+mod$fore$Fcast_years <- data.frame("MG_type" = c(10, 11, 12),
+                                   "method" = c(1, 1, 1),
+                                   "st_year" = c(0, -3, -999),
+                                   "end_year" = c(0, 0, 0),
+                                   row.names = c("#_Fcast_years1",
+                                                 "#_Fcast_years2",
+                                                 "#_Fcast_years3"))
+
+
+# Adjust selectivity block format to avoid warnings about endyr being past retroyr
+
+# The new forecast formating overrides the timevarying blocking so can reset time blocks
+mod$ctl$Block_Design <- list(c(2003, 2013, 2014, 2021, 2022, 2024), #commercial fleet
+                             c(2001, 2016, 2017, 2022, 2023, 2024)) #recreational fleet
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_3_4_selexBlocks",
+                                                 "0_3_5_selexBlocks_fixWarnings")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Add blocks',
+                                     'Fix warnings'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name))
+
+dev.off()
+
+
