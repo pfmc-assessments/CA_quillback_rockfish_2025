@@ -5738,6 +5738,139 @@ SSsummarize(xx) |>
 dev.off()
 
 
+####------------------------------------------------#
+## 3_0_11_matureAge2 ----
+####------------------------------------------------#
+
+#Set first mature age to 2. Maturity is around 0.001 at 16, which is around age 2
+
+new_name <- "3_0_11_matureAge2"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$First_Mature_Age <- 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_11_matureAge2")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'first mature age set to 2'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+####------------------------------------------------#
+## 3_0_12_Fiter7_Fballpark0.5 ----
+####------------------------------------------------#
+
+#See if the number of iterations affects the current F method (hybrid) and
+#whether the F ballpark value matters (it shouldn't because its fixed)
+
+new_name <- "3_0_12_Fiter7_Fballpark0.5"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$F_ballpark <- 0.5
+mod$ctl$F_iter <- 7
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+mod301 <- SS_output(here('models', '3_0_1_fix_rovIndex_2024discard'))$likelihoods_used
+newmod <- round(pp$likelihoods_used,2)
+round(cbind(mod301-newmod),3)
+
+#There is a very slight difference with F ballpark though our existing entry (0.04)
+#is not too far off from what is in report file for mod301 for 2001 (0.06)
+#F iterations changes are also not impactful. Could change F ballpark to 0.06
+
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_12_Fiter7_Fballpark0.5")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'increase F iterations and F ballpark'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
 
 ####------------------------------------------------#
 ## 3_1_1_hessian301 ----
