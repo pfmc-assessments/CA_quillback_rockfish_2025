@@ -5600,6 +5600,146 @@ dev.off()
 
 
 ####------------------------------------------------#
+## 3_0_9_priorLike0 ----
+####------------------------------------------------#
+
+#Prior likelihood is included in lieklihood within starter. Either shut off (this run)
+#or adjust parameters with prior types so only those we want (M and h) affect
+
+new_name <- "3_0_9_priorLike0"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Set prior type like to 0 - meaning only calculate priors for active parameters
+mod$start$prior_like <- 0
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#Greater difference than I was expecting
+round(SS_output(here('models', '3_0_1_fix_rovIndex_2024discard'))$likelihoods_used,2)
+round(pp$likelihoods_used,2)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_9_priorLike0")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'prior like only for active parameters'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+####------------------------------------------------#
+## 3_0_10_priorLike1 ----
+####------------------------------------------------#
+
+#Prior likelihood is included in lieklihood within starter. Either shut off
+#or adjust parameters with prior types (this run) so only those we want 
+#(M and h) affect
+
+new_name <- "3_0_10_priorLike1"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Keep prior type like at 1 - meaning calculate priors for any priors
+#but remove the prior types for all but M and h (meaning remove prior type for maturity)
+mod$ctl$MG_parms[c("Mat50%_Fem_GP_1", "Mat_slope_Fem_GP_1"), "PR_type"] <- 0
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#Greater difference than I was expecting
+round(SS_output(here('models', '3_0_1_fix_rovIndex_2024discard'))$likelihoods_used,2)
+round(pp$likelihoods_used,2)
+
+#Still, to keep profiles smooth, set prior like to 1 but remove prior type for
+#all but M and h parameters
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_10_priorLike1")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'prior like for M and h only'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+
+####------------------------------------------------#
 ## 3_1_1_hessian301 ----
 ####------------------------------------------------#
 
