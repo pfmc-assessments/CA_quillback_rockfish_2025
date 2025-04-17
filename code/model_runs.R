@@ -6202,4 +6202,89 @@ SSsummarize(xx) |>
 dev.off()
 
 
+####------------------------------------------------#
+## 3_2_1_issue63Changes ----
+####------------------------------------------------#
+
+#Make changes from discussion of issue #63
+
+new_name <- "3_2_1_issue63Changes"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#Pull bias adjustment values from model 313
+biasadj_mod <- SS_read(here('models', "3_1_3_biasAdjRamp2"))
+mod$ctl$last_early_yr_nobias_adj <- biasadj_mod$ctl$last_early_yr_nobias_adj
+mod$ctl$first_yr_fullbias_adj <- biasadj_mod$ctl$first_yr_fullbias_adj
+mod$ctl$last_yr_fullbias_adj <- biasadj_mod$ctl$last_yr_fullbias_adj 
+mod$ctl$first_recent_yr_nobias_adj <- biasadj_mod$ctl$first_recent_yr_nobias_adj 
+mod$ctl$max_bias_adj <- biasadj_mod$ctl$max_bias_adj
+
+#Keep prior type like at 1 but remove the prior types for all but M and h 
+#(meaning remove prior type for maturity)
+mod$ctl$MG_parms[c("Mat50%_Fem_GP_1", "Mat_slope_Fem_GP_1"), "PR_type"] <- 0
+
+#Adjust relative F basis
+mod$fore$Bmark_relF_Basis <- 2 #there isn't a 0 option in the manual
+
+#Set plus group to 80
+mod$dat$Nages <- 80
+mod$dat$ageerror <- mod$dat$ageerror[,1:(mod$dat$Nages + 1)]
+
+#Set steepness sd to two sig. digits
+mod$ctl$SR_parms["SR_BH_steep", "PR_SD"] = 0.16
+
+#Set exponential decay to 3.24 version
+mod$ctl$Exp_Decay <- -999
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_2_1_issue63Changes")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'input changes from github issue 63'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
 
