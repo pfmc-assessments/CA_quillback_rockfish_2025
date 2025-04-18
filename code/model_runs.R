@@ -6288,3 +6288,119 @@ dev.off()
 
 
 
+####------------------------------------------------#
+## 3_2_2_SetUpExtraSE ----
+####------------------------------------------------#
+
+#Make changes from discussion of issue #63
+#Set up extraSE for the indices but keep phase negative
+
+new_name <- "3_2_2_SetUpExtraSE"
+old_name <- "3_2_1_issue63Changes"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Q_parms
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO=0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = -2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .before=2)
+
+rownames(mod$ctl$Q_parms)
+rownames(mod$ctl$Q_parms) <- c("LnQ_base_CA_Recreational(2)", "ExtraSD_CA_Recreational(2)", "LnQ_base_CA_CCFRP(4)", "LnQ_base_CA_ROV(5)")
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO=0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = -2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .before=4)
+
+rownames(mod$ctl$Q_parms)
+rownames(mod$ctl$Q_parms) <- c("LnQ_base_CA_Recreational(2)", "ExtraSD_CA_Recreational(2)", "LnQ_base_CA_CCFRP(4)", "ExtraSD_CA_CCFRP(4)", "LnQ_base_CA_ROV(5)")
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO=0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = -2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .after=5)
+
+rownames(mod$ctl$Q_parms) <- c("LnQ_base_CA_Recreational(2)", "ExtraSD_CA_Recreational(2)", "LnQ_base_CA_CCFRP(4)", "ExtraSD_CA_CCFRP(4)", "LnQ_base_CA_ROV(5)", "ExtraSD_base_CA_ROV(5)")
+
+mod[["ctl"]][["Q_options"]][["extra_se"]] <- c(1,1,1)
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+
+
+
+
+
+
+
