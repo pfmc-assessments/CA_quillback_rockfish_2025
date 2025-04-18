@@ -5943,7 +5943,7 @@ dev.off()
 ## 3_0_14_recdevOption3----
 ####------------------------------------------------#
 
-#Set recdev option not to sum to 0 (set to 2)
+#Set recdev option to be a more complicated version (set to 3)
 
 new_name <- "3_0_14_recdevOption3"
 old_name <- "3_0_1_fix_rovIndex_2024discard"
@@ -5986,7 +5986,7 @@ plot_sel_all(pp)
 ## 3_0_15_recdevOption4----
 ####------------------------------------------------#
 
-#Set recdev option not to sum to 0 (set to 2)
+#Set recdev option to be similar to option 3 but now contains a penalty (set to 4)
 
 new_name <- "3_0_15_recdevOption4"
 old_name <- "3_0_1_fix_rovIndex_2024discard"
