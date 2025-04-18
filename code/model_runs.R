@@ -5871,6 +5871,80 @@ SSsummarize(xx) |>
 dev.off()
 
 
+####------------------------------------------------#
+## 3_0_16_Foption4 ----
+####------------------------------------------------#
+
+#Set up F option 4  to see how different results are and how well fit 
+#catch time series are. Option 4 is also the preferred option now (over 3)
+
+new_name <- "3_0_16_Foption4"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$F_Method <- 4
+mod$ctl$F_4_Fleet_Parms <- data.frame("fleet" = c(1,2),
+                                      "start_F" = 0.04,
+                                      "first_parm_phase" = 2)
+mod$ctl$F_iter <- 2 #Manual says 2 is sufficient, could keep at 4 to get what manual says is "near exactly"
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+#Catch fits are good
+ggplot(pp$catch) +
+  geom_line(aes(y = Obs, x = Yr, color = "Obs")) +
+  geom_line(aes(y = Exp, x = Yr, color = "Exp")) + 
+  facet_wrap(~ Fleet)
+
+#This results in the same output, and catch fits are just as good as with hybrid
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_14_Foption4")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'F method 4 with 4 iters'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
 
 ####------------------------------------------------#
 ## 3_1_1_hessian301 ----
