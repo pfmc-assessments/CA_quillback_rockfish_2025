@@ -5872,6 +5872,176 @@ dev.off()
 
 
 ####------------------------------------------------#
+## 3_0_13_recdevOption2----
+####------------------------------------------------#
+
+#Set recdev option not to sum to 0 (set to 2)
+
+new_name <- "3_0_13_recdevOption2"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$do_recdev <- 2
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_13_recdevOption2")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'recdev option2 - no sum to 0'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+
+SSsummarize(xx) |>
+ SSplotComparisons(legendlabels = c('model 301',
+                                     'recdev option2 - no sum to 0'),
+                    subplots = c(9:12), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+#Look at the recdevs
+
+
+
+####------------------------------------------------#
+## 3_0_14_recdevOption3----
+####------------------------------------------------#
+
+#Set recdev option not to sum to 0 (set to 2)
+
+new_name <- "3_0_14_recdevOption3"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$do_recdev <- 3
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+####------------------------------------------------#
+## 3_0_15_recdevOption4----
+####------------------------------------------------#
+
+#Set recdev option not to sum to 0 (set to 2)
+
+new_name <- "3_0_15_recdevOption4"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$do_recdev <- 4
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+
+plot_sel_all(pp)
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_13_recdevOption2",
+                                                 "3_0_14_recdevOption3",
+                                                 "3_0_15_recdevOption4")))
+SSsummarize(xx) |>
+ SSplotComparisons(legendlabels =  c('model 301',
+                                     'recdev option2','recdev option3', 'recdev option4'),
+                    subplots = c(1,3,9:12), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+####------------------------------------------------#
 ## 3_0_16_Foption4 ----
 ####------------------------------------------------#
 
