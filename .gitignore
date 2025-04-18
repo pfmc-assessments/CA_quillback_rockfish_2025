@@ -54,6 +54,10 @@ length_processed_noShare/
 confidential_noShare/
 literature/
 _confidential_FAA_runs_noShare/
+models/*jitter*/
+models/*profile*/
+models/*retro*/
+
 
 # ignore R project
 *.RProj
