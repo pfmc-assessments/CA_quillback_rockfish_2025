@@ -234,7 +234,9 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
-
+pp <- SS_output(here('models', '_bridging_runs', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 ####------------------------------------------------#
 ## 0_1_3_updateLW  ----
 ####------------------------------------------------#
@@ -530,6 +532,28 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
 
 dev.off()
+
+####Additional comparisons
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_0_1_2025rename",
+                                                 "0_1_1_updateM",
+                                                 "0_1_2_updateGrowth",
+                                                 "0_1_3_updateLW",
+                                                 "0_1_4_updateMaturity",
+                                                 "0_1_5_updateFecundity")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021 model',
+                                     'Update Natural Mortality',
+                                     'Update Growth',
+                                     'Update Length weight',
+                                     'Update Maturity',
+                                     'Update Fecundity'),
+                    , print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
+
+
+
+
 
 
 
