@@ -74,6 +74,19 @@ ggplot(
   scale_fill_viridis_d()
 ggsave(file = file.path(fig.dir, "newstereolength_by_latitude_ggridges.png"), width = 7, height = 7)
 
+
+#Look at the lengths by depth boxplot
+ggplot(
+  lenNewStereo %>% filter(!is.na(Depth)), aes(y = StereoSize, x = dbin, fill = dbin)) +
+  geom_boxplot() +
+  xlab("Depth bin") +
+  ylab("Length") +
+  scale_fill_viridis_d()
+#ggsave(file = file.path(fig.dir, "newstereolength_by_latitude_ggridges.png"), width = 7, height = 7)
+
+
+
+
 #Look at the data with ggridges using the binned lat and depth
 ggplot(
   lenNewStereo, aes(x = StereoSize, y = dbin, fill = latbin)) +

@@ -6722,6 +6722,614 @@ plot_sel_all(pp)
 
 
 
+####------------------------------------------------#
+## 3_2_3_noTimeBlocks ----
+####------------------------------------------------#
+
+new_name <- "3_2_3_noTimeBlocks"
+old_name <- "3_2_1_issue63Changes"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+mod$ctl$N_Block_Designs <- 0
+#mod$ctl$N_Block_Designs <- paste0("#",mod$ctl$blocks_per_pattern)
+mod$ctl$size_selex_parms$Block  = 0
+mod$ctl$size_selex_parms$Block_Fxn  = 0
+mod$ctl$size_selex_parms_tv <- 0
+
+##
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_4_RecSelexAsymptotic----
+####------------------------------------------------#
+
+#force recreational to be asymptotic and leave time blocks off
+
+new_name <- "3_2_4_RecSelexAsymptotic"
+old_name <- "3_2_3_noTimeBlocks"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+
+selex_new <- mod$ctl$size_selex_parms
+#rec size selectivity
+  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+                                     grep("4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 15, -4)
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_5_TimeBlocksRecAsmy----
+####------------------------------------------------#
+
+#Force rec selectivity to by asymptotic and turn the time blocks back on
+
+new_name <- "3_2_5_TimeBlocksRexAsym"
+old_name <- "3_2_1_issue63Changes"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+selex_new <- mod$ctl$size_selex_parms
+selex_new_tv <- mod$ctl$size_selex_parms_tv
+
+##
+#Make Changes
+##
+
+#rec size selectivity asymptotic in each time block
+mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+                                     grep("4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE", "Block", "Block_Fxn")] <- c(0, 20, 15, -4, 0, 0)
+
+mod$ctl$size_selex_parms_tv <- mod$ctl$size_selex_parms_tv[1:15,]
+
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_6_ROVDomed----
+####------------------------------------------------#
+
+#Rec selex is asymptotic
+#Time blocks on
+#ROV selex is domed
+
+new_name <- "3_2_6_ROVDomed"
+old_name <- "3_2_5_TimeBlocksRexAsym"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+  mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+####------------------------------------------------#
+## 3_2_7_CCFRPDomed----
+####------------------------------------------------#
+
+#Rec selex is asymptotic
+#Time blocks on
+#ROV selex is domed
+
+new_name <- "3_2_7_CCFRPDomed"
+old_name <- "3_2_5_TimeBlocksRexAsym"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+  mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+                        
+
+
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+####------------------------------------------------#
+## 3_2_8_ROVandCCFRPDomed----
+####------------------------------------------------#
+
+#Rec selex is asymptotic
+#Time blocks on
+#ROV selex is domed and CCFRP can be domed
+
+new_name <- "3_2_8_ROVandCCFRPDomed"
+old_name <- "3_2_5_TimeBlocksRexAsym"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+  mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+  mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_9_AllCanBeDomedNoTimeBlocks----
+####------------------------------------------------#
+
+new_name <- "3_2_9_AllCanBeDomedNoTimeBlocks"
+old_name <- "3_2_1_issue63Changes"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+mod$ctl$N_Block_Designs <- 0
+#mod$ctl$N_Block_Designs <- paste0("#",mod$ctl$blocks_per_pattern)
+mod$ctl$size_selex_parms$Block  = 0
+mod$ctl$size_selex_parms$Block_Fxn  = 0
+mod$ctl$size_selex_parms_tv <- 0
+
+  mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+  mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_10_AllCanBeDomed----
+####------------------------------------------------#
+
+new_name <- "3_2_10_AllCanBeDomed"
+old_name <- "3_2_1_issue63Changes"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+  mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+  mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_11_Reweight10---
+####------------------------------------------------#
+
+
+#Reweight model 201
+
+new_name <- "3_2_11_Reweight10"
+old_name <- "3_2_10_AllCanBeDomed"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models',old_name),"Report.sso"),
+          to = file.path(here('models',new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models',old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+pp <- SS_output(here('models',new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 0, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+colnames(dw)[1] = "factor"
+new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
+                                by = dplyr::join_by(factor, fleet))
+mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_12_EarlyRecAsymp----
+####------------------------------------------------#
+
+new_name <- "3_2_12_EarlyRecAsymp"
+old_name <- "3_2_1_issue63Changes"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+  mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+  mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
+
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+         # extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_13_AdjBlocks----
+####------------------------------------------------#
+
+new_name <- "3_2_13_AdjBlocks"
+old_name <- "3_2_12_EarlyRecAsymp"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes
+##
+
+mod$ctl$blocks_per_pattern <- c(3, 2)
+mod$ctl$Block_Design <- list(c(2003, 2013, 2014, 2022, 2023, 2024), #commercial fleet
+                             c(2001, 2022, 2023, 2024)) #recreational fleet
+
+
+
+### Add block indicators into selectivity table
+# Block = number of block to use, Block_Fxn = 2 means replace parameters 
+selex_new <- mod$ctl$size_selex_parms
+
+selex_new[intersect(grep("Commercial", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block")] <- 1
+selex_new[intersect(grep("Commercial", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block_Fxn")] <- 2
+selex_new[intersect(grep("Recreational", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block")] <- 2
+selex_new[intersect(grep("Recreational", rownames(selex_new)), which(selex_new$PHASE > 0)), 
+          c("Block_Fxn")] <- 2
+
+mod$ctl$size_selex_parms <- selex_new
+
+
+### Time varying selectivity table
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+#estimate param 4 in recreational time blocks
+
+  mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
+                                     grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
+                           c("PHASE")] <- c(4)
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+
 
 
 

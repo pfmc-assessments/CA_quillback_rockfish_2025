@@ -24,7 +24,7 @@ library(ggplot2)
 # 
 # Quill.mat<-read.csv("Quillbackmaturity.csv")
 
-Quill.mat <- read.csv(here("data-raw", "Quillbackmaturity_update02282025.csv"))
+Quill.mat <- read.csv(here("data-raw", "maturity","Quillbackmaturity_update02282025.csv"))
 data <- Quill.mat
 View(data)
 summary(as.factor(data$Certainty))
@@ -62,7 +62,7 @@ data.glm <- glm(Functional_maturity ~ Length_cm, data=data_cert,
 summary(data.glm)
 
 ##see if area is significant - yes, but low sample sizes in the north
-data.glm1 <- glm(Functional_maturity ~ Length_cm + area, data=data_cert, 
+data.glm1 <- glm(Functional_maturity ~ Length_cm, data=data_cert, 
                 family = binomial(link ="logit"))
 summary(data.glm1)
 
