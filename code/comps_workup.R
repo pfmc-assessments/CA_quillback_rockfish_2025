@@ -317,7 +317,7 @@ length_bins <- seq(10, 50, 2)
 
 out <- read.csv(here("data", "length_processed_noShare", "CAquillback_ALL_bio.csv"))
 
-rec_out <- out %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial"))
+rec_out <- out %>% dplyr::filter(!source %in% c("pacfin", "trawl", "triennial", "ROV"))
 
 
 ##
