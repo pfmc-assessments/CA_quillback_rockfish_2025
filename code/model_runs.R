@@ -5419,6 +5419,71 @@ dev.off()
 
 
 ####------------------------------------------------#
+## 3_0_5b_recdev_years_1990 ----
+####------------------------------------------------#
+
+#Start recdevs in 1990 which is when recdev var (model 311) come back to sigmaR
+
+new_name <- "3_0_5b_recdev_years_1990"
+old_name <- "3_0_1_fix_rovIndex_2024discard"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+mod$ctl$MainRdevYrFirst <- 1990
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_5_recdev_years",
+                                                 "3_0_5b_recdev_years_1990")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'change early recdev to styr, and main to 1940',
+                                     'remove early recdev, set main to 1990'),
+                    print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+####------------------------------------------------#
 ## 3_0_6_floatQ ----
 ####------------------------------------------------#
 
