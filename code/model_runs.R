@@ -6922,9 +6922,9 @@ plot_sel_all(pp)
 ## 3_2_7_CCFRPDomed----
 ####------------------------------------------------#
 
-#Rec selex is asymptotic
+#Rec and ROV selex is asymptotic
 #Time blocks on
-#ROV selex is domed
+#CCFRP selex is domed
 
 new_name <- "3_2_7_CCFRPDomed"
 old_name <- "3_2_5_TimeBlocksRexAsym"
@@ -7124,11 +7124,11 @@ plot_sel_all(pp)
 
 
 ####------------------------------------------------#
-## 3_2_11_Reweight10---
+## 3_2_11_Reweight10----
 ####------------------------------------------------#
 
 
-#Reweight model 201
+#Reweight model 3210
 
 new_name <- "3_2_11_Reweight10"
 old_name <- "3_2_10_AllCanBeDomed"
@@ -7248,6 +7248,51 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+##
+#Comparisons
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_2_1_issue63Changes",
+                                                 "3_2_3_noTimeBlocks",
+                                                 "3_2_4_RecSelexAsymptotic",
+                                                 "3_2_5_TimeBlocksRexAsym",
+                                                 "3_2_6_ROVDomed",
+                                                 "3_2_7_CCFRPDomed",
+                                                 "3_2_8_ROVandCCFRPDomed",
+                                                 "3_2_9_AllCanBeDomedNoTimeBlocks",
+                                                 "3_2_10_AllCanBeDomed",
+                                                 "3_2_11_Reweight10",
+                                                 "3_2_12_EarlyRecAsymp")))
+
+#Compare likelihoods
+xx.sum <- SSsummarize(xx)
+xx.tab <- SStableComparisons(xx.sum, 
+                             modelnames = c('Model 321',
+                                            '323: No time blocks',
+                                            '324: No time blocks and rec asymptotic',
+                                            '325: Rec asymptotic',
+                                            '326: Rec asymptotic with rov domed',
+                                            '327: Rec asymptotic with ccfrp domed',
+                                            '328: Rec asymptotic with rov and ccfrp domed',
+                                            '329: No time blocks and domed',
+                                            '3210: Domed',
+                                            '3211: Reweighted 3210',
+                                            '3212: Rec asymptotic for first block')) |>
+  dplyr::mutate(across(-Label, ~ round(., 2))) |>
+  dplyr::rename(' ' = Label)
+xx.val <- rbind(xx.sum$npars, xx.tab[,-1]) #add number of parameters
+rownames(xx.val) <- c("Npars", xx.tab[,1]) #add rownames so dataframe stays numerical
+write.csv(t(xx.val[1:5,]), here('models', new_name, 'like_comp.csv'), row.names = TRUE)
+
+#Make relative. 
+#Take values and subtract those from model 321 (negative means fewer than model 321
+#and positive means larger)
+xx.rel <- t(xx.val[1:5,] - xx.val[1:5, "Model 321"]) 
+write.csv(xx.rel, here('models', new_name, 'like_comp_relative.csv'), row.names = TRUE)
+
+
+
 ####------------------------------------------------#
 ## 3_2_13_AdjBlocks----
 ####------------------------------------------------#
@@ -7326,11 +7371,6 @@ r4ss::run(dir = here('models', new_name),
 pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
-
-
-
-
-
 
 
 
