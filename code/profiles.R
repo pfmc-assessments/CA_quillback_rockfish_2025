@@ -55,10 +55,10 @@ settings <- nwfscDiag::get_settings(
     globalpar = FALSE,
     usepar = FALSE,
     init_values_src = 0,
-    Njitter = 5, 
-    jitter_fraction = 0.1, #default is 0.05
+    Njitter = 100, 
+    jitter_fraction = 0.5, #default is 0.05
     show_in_console = FALSE,
-    retro_yrs = -1:-5))
+    retro_yrs = -1:-15))
 
 # set up parallel stuff - runs about 4x faster
 future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
@@ -219,7 +219,7 @@ settings <- nwfscDiag::get_settings(
     base_name = base_model,
     run = 'jitter',
     Njitter = 100,
-    jitter_fraction = 0.1, #default is 0.05
+    jitter_fraction = 0.5, #default is 0.05
     exe = exe_loc,
     extras = '-nohess'))
 
