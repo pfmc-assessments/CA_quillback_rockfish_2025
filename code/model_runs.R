@@ -5979,7 +5979,7 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
-sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 5.374593
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 5.374593
 
 
 ##
@@ -6049,7 +6049,7 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
-sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 5.335102
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 5.335102
 
 ####------------------------------------------------#
 ## 3_0_15_recdevOption4----
@@ -6094,7 +6094,7 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
-sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 4.983856
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 4.983856
 
 ##
 #Comparison plots
@@ -6198,6 +6198,76 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('model 301',
                                      'F method 4 with 4 iters'),
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+####------------------------------------------------#
+## 3_0_17_recdev_years_1990Option2 ----
+####------------------------------------------------#
+
+#Start recdevs in 1990 which is when recdev var (model 311) come back to sigmaR
+#and set recdev option to 2. To see if option 2 changes results from model 305b
+#and whether sum of devs is closer to 1 than for models 3013-3015
+
+new_name <- "3_0_17_recdev_years_1990Option2"
+old_name <- "3_0_5b_recdev_years_1990"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$do_recdev <- 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 0.3204329
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_13_recdevOption2",
+                                                 "3_0_5b_recdev_years_1990",
+                                                 "3_0_17_recdev_years_1990Option2")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'redev opt 2',
+                                     'remove early recdev, set main to 1990',
+                                     'remove early recdev, set main to 1990 but recdev opt 2'),
+                    print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
 
