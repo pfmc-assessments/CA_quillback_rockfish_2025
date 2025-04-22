@@ -7265,6 +7265,24 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "3_2_11_Reweight10",
                                                  "3_2_12_EarlyRecAsymp")))
 
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Model 321',
+                                     '323: No time blocks',
+                                     '324: No time blocks and rec asymptotic',
+                                     '325: Rec asymptotic',
+                                     '326: Rec asymptotic with rov domed',
+                                     '327: Rec asymptotic with ccfrp domed',
+                                     '328: Rec asymptotic with rov and ccfrp domed',
+                                     '329: No time blocks and domed',
+                                     '3210: Domed',
+                                     '3211: Reweighted 3210',
+                                     '3212: Domed but rec asymptotic for first block'),
+                    print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
 #Compare likelihoods
 xx.sum <- SSsummarize(xx)
 xx.tab <- SStableComparisons(xx.sum, 
@@ -7278,16 +7296,14 @@ xx.tab <- SStableComparisons(xx.sum,
                                             '329: No time blocks and domed',
                                             '3210: Domed',
                                             '3211: Reweighted 3210',
-                                            '3212: Rec asymptotic for first block')) |>
+                                            '3212: Domed but rec asymptotic for first block')) |>
   dplyr::mutate(across(-Label, ~ round(., 2))) |>
   dplyr::rename(' ' = Label)
 xx.val <- rbind(xx.sum$npars, xx.tab[,-1]) #add number of parameters
 rownames(xx.val) <- c("Npars", xx.tab[,1]) #add rownames so dataframe stays numerical
 write.csv(t(xx.val[1:5,]), here('models', new_name, 'like_comp.csv'), row.names = TRUE)
-
-#Make relative. 
-#Take values and subtract those from model 321 (negative means fewer than model 321
-#and positive means larger)
+#Make relative. Take values and subtract those from model 321 (negative means 
+#fewer than model 321 and positive means larger)
 xx.rel <- t(xx.val[1:5,] - xx.val[1:5, "Model 321"]) 
 write.csv(xx.rel, here('models', new_name, 'like_comp_relative.csv'), row.names = TRUE)
 
