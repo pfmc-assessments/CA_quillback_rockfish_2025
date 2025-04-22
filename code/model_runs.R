@@ -5979,6 +5979,8 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 5.374593
+
 
 ##
 #Comparison plots
@@ -6047,6 +6049,8 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
+sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 5.335102
+
 ####------------------------------------------------#
 ## 3_0_15_recdevOption4----
 ####------------------------------------------------#
@@ -6089,6 +6093,8 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
+
+sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 4.983856
 
 ##
 #Comparison plots
