@@ -237,6 +237,8 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
 pp <- SS_output(here('models', '_bridging_runs', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
+
 ####------------------------------------------------#
 ## 0_1_3_updateLW  ----
 ####------------------------------------------------#
@@ -550,10 +552,6 @@ SSsummarize(xx) |>
                                      'Update Maturity',
                                      'Update Fecundity'),
                     , print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
-
-
-
-
 
 
 
