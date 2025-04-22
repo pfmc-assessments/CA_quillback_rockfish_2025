@@ -46,6 +46,9 @@ ggplot(len) +
   facet_wrap('name')
 ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_depth_area.png"), width = 7, height = 7)
 
+ggplot(len) +
+  geom_boxplot(aes(y = length_cm, colour = depth_bin))
+ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_depth.png"), width = 7, height = 7)
 
 
 
