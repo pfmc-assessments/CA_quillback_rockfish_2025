@@ -26,8 +26,11 @@ len <- len %>% mutate(depth_bin = cut(depth, breaks = c(0, 40,80,120,160,200)))
 len$depth_bin <- as.factor(len$depth_bin)
 summary(as.factor(len$depth_bin))
 #look at depth
-
-
+#convert depth to meters to compare with 
+len <- len %>% mutate(depth_meters = depth/3.281) %>%
+        mutate(depth_bin_meters = cut(depth_meters, breaks = c(0,20,30,40,50,60,70,80,90,100)))
+len$depth_bin_meters <- as.factor(len$depth_bin_meters)
+summary(as.factor(len$depth_bin_meters))
 
 ggplot(len) +
   geom_boxplot(aes(y = length_cm, colour = as.factor(year))) +
@@ -39,6 +42,15 @@ ggplot(len) +
   facet_wrap('name')
 ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_site_area.png"), width = 7, height = 7)
 
+
+ggplot(
+  len, aes(y = length_cm, x = depth_bin_meters, fill = depth_bin_meters)) +
+  geom_boxplot() +
+  ylim(0,60) +
+  xlab("Depth bin meters") +
+  ylab("Length cm") +
+  scale_fill_viridis_d(begin = 0, end = .8)
+ggsave(file = file.path(plot.dir, "ccfrp_lengths_by_depth_meters.png"), width = 7, height = 7)
 
 
 ggplot(len) +
