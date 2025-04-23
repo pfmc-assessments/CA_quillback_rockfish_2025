@@ -1,0 +1,18 @@
+"","Npars","TOTAL_like","Survey_like","Length_comp_like","Age_comp_like"
+"Model 321",134,751.08,-25.92,171.44,583.5
+"323: No time blocks",116,779.62,-19.74,193.31,581.42
+"324: No time blocks and rec asymptotic",115,779.56,-19.71,193.21,581.43
+"325: Rec asymptotic",130,751.35,-25.83,171.72,583.47
+"326: Rec asymptotic with rov domed",131,751.25,-25.8,171.6,583.4
+"327: Rec asymptotic with ccfrp domed",131,750.7,-25.88,171.48,583.1
+"328: Rec asymptotic with rov and ccfrp domed",132,750.49,-25.83,171.28,582.97
+"329: No time blocks and domed",118,775.41,-20.98,190.5,580.8
+"3210: Domed",136,749.18,-25.88,169.67,583.02
+"3211: Reweighted 3210",136,756.99,-25.86,172.58,587.62
+"3212: Domed but rec asymptotic for first block",135,749.2,-25.84,169.73,582.82
+"3214: ROV and Rec can be domed",135,750.87,-25.88,171.16,583.43
+"3215: CCFRP and Rec can be domed",135,749.9,-26,170.62,583.08
+"3216: Rec domed except for first block",133,751.02,-25.9,171.38,583.45
+"3217: Simplify rec blocks",130,751.08,-25.84,171.49,583.27
+"3218: Simplify comm blocks",130,754.34,-25.8,174.85,583.06
+"3219: Simplify all blocks",127,754.38,-25.75,174.9,582.94
