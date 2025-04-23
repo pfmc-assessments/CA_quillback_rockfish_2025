@@ -7576,7 +7576,6 @@ plot_sel_all(pp)
 ####------------------------------------------------#
 
 #rec 1916-2000 asymptotic
-#asymptotic last block
 
 
 new_name <- "3_2_16_RecEarlyAsymtotic"
@@ -7599,7 +7598,7 @@ mod <- SS_read(here('models',new_name))
 #Make Changes
 ##
 
-#rec size selectivity asymptotic in each time block
+#rec size selectivity asymptotic in first block
 mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
                                      grep("4", rownames(mod$ctl$size_selex_parms))), 
                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
@@ -7658,8 +7657,9 @@ mod$ctl$Block_Design <- list(c(2003, 2013, 2014 ,2021 ,2022 ,2024), #commercial 
                              c(2017, 2022, 2023, 2024)) #recreational fleet
 
 
- 
 ### Time varying selectivity table
+selex_new <- mod$ctl$size_selex_parms
+
 selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
   dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
   tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
@@ -7671,14 +7671,10 @@ rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
 mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
   dplyr::select(-Block, -id)
 
-#rec size selectivity asymptotic in first and last time blocks
+#rec size selectivity asymptotic in first time block
 mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
                                      grep("4", rownames(mod$ctl$size_selex_parms))), 
                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
-
-mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
-                                     grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
-                           c("PHASE")] <- c(4)
 
 
 
@@ -7733,6 +7729,8 @@ mod$ctl$Block_Design <- list(c(2003, 2022, 2023, 2024), #commercial fleet
                              c(2001, 2016, 2017 ,2022, 2023 ,2024)) #recreational fleet
  
 ### Time varying selectivity table
+selex_new <- mod$ctl$size_selex_parms
+
 selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
   dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
   tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
@@ -7744,15 +7742,10 @@ rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
 mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
   dplyr::select(-Block, -id)
 
-#rec size selectivity asymptotic in first and last time blocks
+#rec size selectivity asymptotic in first time block
 mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
                                      grep("4", rownames(mod$ctl$size_selex_parms))), 
                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
-
-mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
-                                     grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
-                           c("PHASE")] <- c(4)
-
 
 
 #Output files and run
@@ -7806,6 +7799,8 @@ mod$ctl$Block_Design <- list(c(2003, 2022, 2023, 2024), #commercial fleet
                              c(2017, 2022, 2023, 2024)) #recreational fleett
  
 ### Time varying selectivity table
+selex_new <- mod$ctl$size_selex_parms
+
 selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
   dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
   tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
@@ -7817,15 +7812,10 @@ rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
 mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
   dplyr::select(-Block, -id)
 
-#rec size selectivity asymptotic in first and last time blocks
+#rec size selectivity asymptotic in first time block
 mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
                                      grep("4", rownames(mod$ctl$size_selex_parms))), 
                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
-
-mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
-                                     grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
-                           c("PHASE")] <- c(4)
-
 
 
 #Output files and run
@@ -7861,7 +7851,7 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "3_2_12_EarlyRecAsymp",
                                                  "3_2_14_ROVandRecDomed",
                                                  "3_2_15_CCFRPandRecDomed",
-                                              #  "3_2_16_RecEarlyAsymptotic",
+                                                 "3_2_16_RecEarlyAsymptotic",
                                                  "3_2_17_SimplifyRecBlocks",
                                                  "3_2_18_SimplifyComBlocks", 
                                                  "3_2_19_SimplifyAllBlocks")))
@@ -7879,12 +7869,12 @@ SSsummarize(xx) |>
                                      '3210: Domed',
                                      '3211: Reweighted 3210',
                                      '3212: Domed but rec asymptotic for first block',
-                                            '3214: ROV and Rec can be domed',
-                                            '3215: CCFRP and Rec can be domed',
-                                     #    '3216: Rec domed except for first block',
-                                            '3217: Simplify rec blocks',
-                                            '3218: Simplify comm blocks',
-                                            '3219: Simplify all blocks'),
+                                     '3214: ROV and Rec can be domed',
+                                     '3215: CCFRP and Rec can be domed',
+                                     '3216: Rec domed except for first block',
+                                     '3217: Simplify rec blocks',
+                                     '3218: Simplify comm blocks',
+                                     '3219: Simplify all blocks'),
                     print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
