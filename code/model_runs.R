@@ -7599,17 +7599,10 @@ mod <- SS_read(here('models',new_name))
 #Make Changes
 ##
 
-#rec selectivity asymptotic in first and last blocks
-
 #rec size selectivity asymptotic in each time block
 mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
                                      grep("4", rownames(mod$ctl$size_selex_parms))), 
-                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 15, -4)
-
-mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
-                                     grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
-                           c("PHASE")] <- c(4)
-
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
 
 
 #Output files and run
