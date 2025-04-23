@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-04-22  14:00:16
+#C file write time: 2025-04-23  13:07:24
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -182,8 +182,8 @@
 11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2023
  0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017
  0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2023
- 0	20	     15	0	0	0	4	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
- 0	20	     15	0	0	0	4	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2023
+ 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
+ 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2023
 # info on dev vectors created for selex parms are reported with other devs after tag parameter section
 #
 0 #  use 2D_AR1 selectivity(0/1):  experimental feature

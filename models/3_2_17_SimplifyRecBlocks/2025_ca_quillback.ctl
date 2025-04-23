@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-04-22  13:58:23
+#C file write time: 2025-04-17  16:33:15
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -17,10 +17,10 @@
 #_Cond 1 1 1 2 4 10 # example move definition for seas=1, morph=1, source=1 dest=2, age1=4, age2=10
 #
 2 #_Nblock_Patterns
-3 2 #_blocks_per_pattern
+3 3 #_blocks_per_pattern
 #_begin and end years of blocks
 2003 2013 2014 2021 2022 2024
-2017 2022 2023 2024
+2001 2016 2017 2022 2023 2024
 #
 # controls for all timevary parameters 
 1 #_env/block/dev_adjust_method for all time-vary parms (1=warn relative to base parm bounds; 3=no bound check)
@@ -153,7 +153,7 @@
  11	51	     34	0	0	0	 4	0	0	0	0	0	2	2	#_SizeSel_P_1_CA_Recreational(2)
 -20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Recreational(2)
   0	 9	5.17048	0	0	0	 5	0	0	0	0	0	2	2	#_SizeSel_P_3_CA_Recreational(2)
-  0	20	     15	0	0	0	-4	0	0	0	0	0	2	2	#_SizeSel_P_4_CA_Recreational(2)
+  0	 9	5.54518	0	0	0	 5	0	0	0	0	0	2	2	#_SizeSel_P_4_CA_Recreational(2)
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)
  11	51	     42	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_CCFRP(4)       
@@ -181,12 +181,15 @@
  0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2003  
  0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014  
  0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2022  
+11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2001
 11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017
 11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2023
+ 0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2001
  0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017
  0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2023
- 0	20	     15	0	0	0	4	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
- 0	20	     15	0	0	0	4	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2023
+ 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2001
+ 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
+ 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2023
 # info on dev vectors created for selex parms are reported with other devs after tag parameter section
 #
 0 #  use 2D_AR1 selectivity(0/1):  experimental feature
