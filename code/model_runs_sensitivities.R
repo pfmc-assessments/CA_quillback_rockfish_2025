@@ -13,7 +13,7 @@ library(ggplot2)
 source(here('code/selexComp.R'))
 
 #Enter in base model from which to base sensitivities
-base_mod_name <- '3_2_2_SetUpExtraSE' 
+base_mod_name <- '3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
 #Create the sensitivities directory
@@ -44,7 +44,7 @@ fleet.converter <- base_mod$dat$fleetinfo %>%
 
 new_name <- 'leaveOut_rec_lengths'
 
-mod <- base_mod
+mod <- base_mod #<------- This is a required line so as not to change the base model files
 
 #Set all rec lengths to negative year
 mod$dat$lencomp <- mod$dat$lencomp %>% 
