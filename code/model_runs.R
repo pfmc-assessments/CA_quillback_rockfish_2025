@@ -5979,7 +5979,7 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
-sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 5.374593
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 5.374593
 
 
 ##
@@ -6049,7 +6049,7 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
-sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 5.335102
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 5.335102
 
 ####------------------------------------------------#
 ## 3_0_15_recdevOption4----
@@ -6094,7 +6094,7 @@ SS_plots(pp, plot = c(1:26))
 
 plot_sel_all(pp)
 
-sum(pp$recruit[pp4$recruit$era == "Main", "dev"]) # sum of devs = 4.983856
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 4.983856
 
 ##
 #Comparison plots
@@ -6198,6 +6198,76 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('model 301',
                                      'F method 4 with 4 iters'),
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+####------------------------------------------------#
+## 3_0_17_recdev_years_1990Option2 ----
+####------------------------------------------------#
+
+#Start recdevs in 1990 which is when recdev var (model 311) come back to sigmaR
+#and set recdev option to 2. To see if option 2 changes results from model 305b
+#and whether sum of devs is closer to 1 than for models 3013-3015
+
+new_name <- "3_0_17_recdev_years_1990Option2"
+old_name <- "3_0_5b_recdev_years_1990"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$do_recdev <- 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 0.3204329
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_0_1_fix_rovIndex_2024discard",
+                                                 "3_0_13_recdevOption2",
+                                                 "3_0_5b_recdev_years_1990",
+                                                 "3_0_17_recdev_years_1990Option2")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('model 301',
+                                     'redev opt 2',
+                                     'remove early recdev, set main to 1990',
+                                     'remove early recdev, set main to 1990 but recdev opt 2'),
+                    print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
 
@@ -7933,13 +8003,13 @@ plot_sel_all(pp)
 
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
                                       subdir = c("3_2_1_issue63Changes",
-                                             #    "3_2_3_noTimeBlocks",
-                                             #    "3_2_4_RecSelexAsymptotic",
+                                                 "3_2_3_noTimeBlocks",
+                                                 "3_2_4_RecSelexAsymptotic",
                                                  "3_2_5_TimeBlocksRexAsym",
-                                              #   "3_2_6_ROVDomed",
-                                              #   "3_2_7_CCFRPDomed",
-                                              #   "3_2_8_ROVandCCFRPDomed",
-                                               #  "3_2_9_AllCanBeDomedNoTimeBlocks",
+                                                 "3_2_6_ROVDomed",
+                                                 "3_2_7_CCFRPDomed",
+                                                 "3_2_8_ROVandCCFRPDomed",
+                                                 "3_2_9_AllCanBeDomedNoTimeBlocks",
                                                  "3_2_10_AllCanBeDomed",
                                                  "3_2_11_Reweight10",
                                                  "3_2_12_EarlyRecAsymp",
@@ -7956,15 +8026,15 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
 #Compare outputs
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Model 321',
-                                  #   '323: No time blocks',
-                                  #   '324: No time blocks and rec asymptotic',
+                                     '323: No time blocks',
+                                     '324: No time blocks and rec asymptotic',
                                      '325: Rec asymptotic',
-                                  #   '326: Rec asymptotic with rov domed',
-                                  #   '327: Rec asymptotic with ccfrp domed',
-                                   #  '328: Rec asymptotic with rov and ccfrp domed',
-                                   #  '329: No time blocks and domed',
+                                     '326: Rec asymptotic with rov domed',
+                                     '327: Rec asymptotic with ccfrp domed',
+                                     '328: Rec asymptotic with rov and ccfrp domed',
+                                     '329: No time blocks and domed',
                                      '3210: Domed',
-                                   #  '3211: Reweighted 3210',
+                                     '3211: Reweighted 3210',
                                      '3212: Domed but rec asymptotic for first block',
                                      '3214: ROV and Rec can be domed',
                                      '3215: CCFRP and Rec can be domed',
@@ -7983,13 +8053,13 @@ dev.off()
 xx.sum <- SSsummarize(xx)
 xx.tab <- SStableComparisons(xx.sum, 
                              modelnames = c('Model 321',
-                                          #  '323: No time blocks',
-                                         #   '324: No time blocks and rec asymptotic',
+                                            '323: No time blocks',
+                                            '324: No time blocks and rec asymptotic',
                                             '325: Rec asymptotic',
-                                           # '326: Rec asymptotic with rov domed',
-                                           # '327: Rec asymptotic with ccfrp domed',
-                                           # '328: Rec asymptotic with rov and ccfrp domed',
-                                           # '329: No time blocks and domed',
+                                            '326: Rec asymptotic with rov domed',
+                                            '327: Rec asymptotic with ccfrp domed',
+                                            '328: Rec asymptotic with rov and ccfrp domed',
+                                            '329: No time blocks and domed',
                                             '3210: Domed',
                                             '3211: Reweighted 3210',
                                             '3212: Domed but rec asymptotic for first block',
@@ -8029,161 +8099,54 @@ SSsummarize(xx[c(1,4,6,13,18,19,20)]) |>
                     plotdir = here('models', new_name))
 dev.off()
 
-####------------------------------------------------#
-## 3_2_20_SimplifyRecBlocksRecDomed----
-####------------------------------------------------#
-
-new_name <- "3_2_20_SimplifyRecBlocksRecDomed"
-old_name <- "3_2_1_issue63Changes"
-
-
-##
-#Copy inputs
-##
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               overwrite = TRUE)
-
-mod <- SS_read(here('models',new_name))
-
-
-
-##
-#Make Changes
-##
-
-#rec selectivity asymptotic in first and last blocks
-mod$ctl$blocks_per_pattern <- c(3, 2)
-mod$ctl$Block_Design <- list(c(2003, 2013, 2014 ,2021 ,2022 ,2024), #commercial fleet
-                             c(2017, 2022, 2023, 2024)) #recreational fleet
-
-
- 
-### Time varying selectivity table
-selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
-  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
-  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
-
-rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
-  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
-  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
-
-mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
-  dplyr::select(-Block, -id)
-
-rec size selectivity asymptotic in first and last time blocks
-mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-                                     grep("4", rownames(mod$ctl$size_selex_parms))), 
-                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
-
-mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
-                                     grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
-                           c("PHASE")] <- c(4)
-
-
-
-#Output files and run
-##
-
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-           extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
-
-
-pp <- SS_output(here('models', new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
-
-
-
-
-
-####------------------------------------------------#
-## 3_2_21_SimplifyRecBlocksRecCCFRPDomed----
-####------------------------------------------------#
-
-new_name <- "3_2_21_SimplifyRecBlocksRecCCFRPDomed"
-old_name <- "3_2_1_issue63Changes"
-
-
-##
-#Copy inputs
-##
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               overwrite = TRUE)
-
-mod <- SS_read(here('models',new_name))
-
-
-
-##
-#Make Changes
-##
-
-#rec selectivity asymptotic in first and last blocks
-mod$ctl$blocks_per_pattern <- c(3, 2)
-mod$ctl$Block_Design <- list(c(2003, 2013, 2014 ,2021 ,2022 ,2024), #commercial fleet
-                             c(2017, 2022, 2023, 2024)) #recreational fleet
-
-
- 
-### Time varying selectivity table
-selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
-  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
-  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
-
-rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
-  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
-  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
-
-mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
-  dplyr::select(-Block, -id)
-
-#rec can be domed
-mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-                                     grep("4", rownames(mod$ctl$size_selex_parms))), 
-                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
-
-mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
-                                     grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
-                           c("PHASE")] <- c(4)
-
-#ccfrp can be domed
-mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
-                                     grep("P_4", rownames(mod$ctl$size_selex_parms))), 
-                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
-#Output files and run
-##
-
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-           extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
-
-
-pp <- SS_output(here('models', new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
 
 
 
 
 
 
+
+
+#rec size selectivity
+# mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+#                                    grep("1", rownames(mod$ctl$size_selex_parms))), 
+#                          c("LO", "HI", "INIT", "PHASE")] <- c(10, 50, 30, 4)
+
+#  #mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+#  #                                   grep("2", rownames(mod$ctl$size_selex_parms))), 
+#  #                         c("LO", "HI", "INIT", "PRIOR", "PR_SD", "PHASE")] <- c(-7, 7, -1, -0.5, 2, -4)
+
+#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+#                                     grep("3", rownames(mod$ctl$size_selex_parms))), 
+#                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
+
+#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+#                                     grep("4", rownames(mod$ctl$size_selex_parms))), 
+#                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
+
+#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+#                                     grep("5", rownames(mod$ctl$size_selex_parms))), 
+#                           c("LO", "HI", "INIT", "PHASE")] <- c(-20, 30, -20, 4)
+
+#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+#                                     grep("6", rownames(mod$ctl$size_selex_parms))), 
+#                           c("LO", "HI", "INIT", "PHASE")] <- c(-10, 10, 5, 4)
+
+#  mod$ctl$size_selex_parms[intersect(grep("Commercial", rownames(mod$ctl$size_selex_parms)),
+#                                     grep("6", rownames(mod$ctl$size_selex_parms))), 
+#                           c("LO", "HI", "INIT", "PHASE")] <- c(-10, 10, 5, 4)
+
+#  mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+#                                     grep("6", rownames(mod$ctl$size_selex_parms))), 
+#                           c("LO", "HI", "INIT", "PHASE")] <- c(-10, 10, 5, 4)
+
+ # mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+ #                                    grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+ #                          c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
+
+ # mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+ #                                    grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+ #                          c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
 
 
 

@@ -79,11 +79,10 @@ ggsave(file = file.path(fig.dir, "newstereolength_by_latitude_ggridges.png"), wi
 ggplot(
   lenNewStereo %>% filter(!is.na(Depth)), aes(y = StereoSize, x = dbin, fill = dbin)) +
   geom_boxplot() +
-  ylim(0,60) +
-  xlab("Depth bin meters") +
-  ylab("Length cm") +
+  xlab("Depth bin") +
+  ylab("Length") +
   scale_fill_viridis_d()
-ggsave(file = file.path(fig.dir, "newstereolength_by_depthbin_boxplot.png"), width = 7, height = 7)
+#ggsave(file = file.path(fig.dir, "newstereolength_by_latitude_ggridges.png"), width = 7, height = 7)
 
 
 
