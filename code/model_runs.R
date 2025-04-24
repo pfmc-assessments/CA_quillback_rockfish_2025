@@ -7837,6 +7837,169 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+####------------------------------------------------#
+## 3_2_20_SimplifyRecBlocks_LateRecAsymp----
+####------------------------------------------------#
+
+#Take model 3217 and set last block for rec to be asymptotic 
+
+new_name <- "3_2_20_SimplifyRecBlocks_LateRecAsymp"
+old_name <- "3_2_17_SimplifyRecBlocks"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+
+##
+#Make Changes
+##
+
+#and last block in the rec fleet to be asymptotic
+mod$ctl$size_selex_parms_tv[intersect(
+  intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
+            grep("P_4", rownames(mod$ctl$size_selex_parms_tv))),
+  grep("2023", rownames(mod$ctl$size_selex_parms_tv))), 
+  c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -5)
+
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+####------------------------------------------------#
+## 3_2_21_SimplifyRecBlocks_CCFRPdomed_LateRecAsymp----
+####------------------------------------------------#
+
+#Take model 3217 but allow CCFRP to be domed and set last block for rec to be asymptotic 
+
+new_name <- "3_2_21_SimplifyRecBlocks_CCFRPdomed_LateRecAsymp"
+old_name <- "3_2_17_SimplifyRecBlocks"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+
+##
+#Make Changes
+##
+
+#allow CCFRP to be domed
+mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+#and last block in the rec fleet to be asymptotic
+mod$ctl$size_selex_parms_tv[intersect(
+  intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
+            grep("P_4", rownames(mod$ctl$size_selex_parms_tv))),
+  grep("2023", rownames(mod$ctl$size_selex_parms_tv))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -5)
+
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_2_22_SimplifyRecBlocks_RecAsymp----
+####------------------------------------------------#
+
+#Take model 3220 but set all rec to be asymptotic 
+
+new_name <- "3_2_22_SimplifyRecBlocks_RecAsymp"
+old_name <- "3_2_20_SimplifyRecBlocks_LateRecAsymp"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+
+##
+#Make Changes
+##
+
+#and last block in the rec fleet to be asymptotic
+mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
+            grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
+  c("LO", "HI", "INIT", "PHASE")] <- rep(c(0, 20, 15, -5), each = 2)
+
+
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
 
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
                                       subdir = c("3_2_1_issue63Changes",
@@ -7855,7 +8018,10 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "3_2_16_RecEarlyAsymtotic",
                                                  "3_2_17_SimplifyRecBlocks",
                                                  "3_2_18_SimplifyComBlocks", 
-                                                 "3_2_19_SimplifyAllBlocks")))
+                                                 "3_2_19_SimplifyAllBlocks",
+                                                 "3_2_20_SimplifyRecBlocks_LateRecAsymp",
+                                                 "3_2_21_SimplifyRecBlocks_CCFRPdomed_LateRecAsymp",
+                                                 "3_2_22_SimplifyRecBlocks_RecAsymp")))
 
 #Compare outputs
 SSsummarize(xx) |>
@@ -7875,8 +8041,11 @@ SSsummarize(xx) |>
                                      '3216: Rec domed except for first block',
                                      '3217: Simplify rec blocks',
                                      '3218: Simplify comm blocks',
-                                     '3219: Simplify all blocks'),
-                    print = TRUE, legendloc = "topright",
+                                     '3219: Simplify all blocks',
+                                     '3220: Simplify rec block and rec asymp last block',
+                                     '3221: Simplify rec blocks and ccfrp domed, and rec asymp last block',
+                                     '3222: Simplify rec blocks and all rec asymp'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
 
@@ -7899,7 +8068,10 @@ xx.tab <- SStableComparisons(xx.sum,
                                             '3216: Rec domed except for first block',
                                             '3217: Simplify rec blocks',
                                             '3218: Simplify comm blocks',
-                                            '3219: Simplify all blocks')) |>
+                                            '3219: Simplify all blocks',
+                                            '3220: Simplify rec block and rec asymp last block',
+                                            '3221: Simplify rec blocks and ccfrp domed, and rec asymp last block',
+                                            '3222: Simplify rec blocks and all rec asymp')) |>
   dplyr::mutate(across(-Label, ~ round(., 2))) |>
   dplyr::rename(' ' = Label)
 xx.val <- rbind(xx.sum$npars, xx.tab[,-1]) #add number of parameters
@@ -7911,7 +8083,21 @@ xx.rel <- t(xx.val[1:5,] - xx.val[1:5, "Model 321"])
 write.csv(xx.rel, here('models', new_name, 'like_comp_relative.csv'), row.names = TRUE)
 
 
+#Output plots on jsut a subset. The full list is near unreadable. 
 
+#This can be used to answer "What to do with rec selex type and CCFRP?"
+#I am assuming ROV is asymptotic. Note: This will overwrite the full comparison plots
+SSsummarize(xx[c(1,4,6,13,18,19,20)]) |>
+  SSplotComparisons(legendlabels = c('321: Rec dome, rov and ccfrp asymptotic',
+                                     '325: Rec asymptotic',
+                                     '327: Rec asymptotic with ccfrp domed',
+                                     '3215: Rec and ccfrp can be domed',
+                                     '3220: Simplify rec blocks from 3215 and rec asymp last block',
+                                     '3221: Simplify rec blocks and ccfrp domed, and rec asymp last block',
+                                     '3222: Simplify rec blocks and all rec asymp'),
+                    subplots = c(1,3), print = TRUE, legendloc = "bottomleft",
+                    plotdir = here('models', new_name))
+dev.off()
 
 
 

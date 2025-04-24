@@ -16,3 +16,6 @@
 "3217: Simplify rec blocks",130,751.08,-25.84,171.49,583.27
 "3218: Simplify comm blocks",130,754.34,-25.8,174.85,583.06
 "3219: Simplify all blocks",127,754.38,-25.75,174.9,582.94
+"3220: Simplify rec block and rec asymp last block",129,751.08,-25.84,171.49,583.27
+"3221: Simplify rec blocks and ccfrp domed, and rec asymp last block",130,750.18,-25.94,171.09,582.87
+"3222: Simplify rec blocks and all rec asymp",128,751.37,-25.81,171.74,583.39
