@@ -8103,54 +8103,145 @@ dev.off()
 
 
 
+####------------------------------------------------#
+## 3_3_1_FinalRecComSelex----
+####------------------------------------------------#
+
+new_name <- "3_3_1_FinalRecComSelex"
+old_name <- "3_2_1_issue63Changes"
+
+
+#Rec selex 
+#Asymptotic rec blocks, two blocks (1915-2016, 2017-2024). 
+#Domed com blocks, three blocks (1916-2002, 2003-2013 and 2022-2024, 2014-2021). 
+#comm block 2014-2021 asymptotic
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#rec selectivity asymptotic in all blocks 
+mod$ctl$N_Block_Designs <- 2
+mod$ctl$blocks_per_pattern <- c(2, 1)
+mod$ctl$Block_Design <- list(c(1916, 2002, 2014, 2021),#commercial fleet; mirror 2022-2024 to 2014-2021 
+                             c(2017, 2024)) #recreational fleet
+#rec selectivity asymptotic in first and last blocks
+
+### Time varying selectivity table
+
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+#rec size selectivity asymptotic in first time block
+mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
+                                     grep("4", rownames(mod$ctl$size_selex_parms))), 
+                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
+
+
+#2014-2021 commercial block to be asymptotic
+mod$ctl$size_selex_parms_tv[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms_tv)),
+            grep("P_4", rownames(mod$ctl$size_selex_parms_tv))), 
+  c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -5)
 
 
 
+#View(mod$ctl$size_selex_parms)
+#View(mod$ctl$size_selex_parms_tv)
 
-#rec size selectivity
-# mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-#                                    grep("1", rownames(mod$ctl$size_selex_parms))), 
-#                          c("LO", "HI", "INIT", "PHASE")] <- c(10, 50, 30, 4)
+##
+#Output files and run
+##
 
-#  #mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-#  #                                   grep("2", rownames(mod$ctl$size_selex_parms))), 
-#  #                         c("LO", "HI", "INIT", "PRIOR", "PR_SD", "PHASE")] <- c(-7, 7, -1, -0.5, 2, -4)
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
 
-#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-#                                     grep("3", rownames(mod$ctl$size_selex_parms))), 
-#                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
-
-#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-#                                     grep("4", rownames(mod$ctl$size_selex_parms))), 
-#                           c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
-
-#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-#                                     grep("5", rownames(mod$ctl$size_selex_parms))), 
-#                           c("LO", "HI", "INIT", "PHASE")] <- c(-20, 30, -20, 4)
-
-#  mod$ctl$size_selex_parms[intersect(grep("Recreational", rownames(mod$ctl$size_selex_parms)),
-#                                     grep("6", rownames(mod$ctl$size_selex_parms))), 
-#                           c("LO", "HI", "INIT", "PHASE")] <- c(-10, 10, 5, 4)
-
-#  mod$ctl$size_selex_parms[intersect(grep("Commercial", rownames(mod$ctl$size_selex_parms)),
-#                                     grep("6", rownames(mod$ctl$size_selex_parms))), 
-#                           c("LO", "HI", "INIT", "PHASE")] <- c(-10, 10, 5, 4)
-
-#  mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
-#                                     grep("6", rownames(mod$ctl$size_selex_parms))), 
-#                           c("LO", "HI", "INIT", "PHASE")] <- c(-10, 10, 5, 4)
-
- # mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
- #                                    grep("P_4", rownames(mod$ctl$size_selex_parms))), 
- #                          c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
-
- # mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
- #                                    grep("P_4", rownames(mod$ctl$size_selex_parms))), 
- #                          c("LO", "HI", "INIT", "PHASE")] <- c(0, 10, 5, 4)
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
 
 
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 3_3_2_MirrorCCFRP----
+####------------------------------------------------#
+
+new_name <- "3_3_2_MirrorCCFRP"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+#Rec selex 
+#Asymptotic rec blocks, two blocks (1915-2016, 2017-2024). 
+#Domed com blocks, three blocks (1916-2002, 2003-2013 and 2022-2024, 2014-2021). 
+#comm block 2014-2021 asymptotic
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+mod$ctl$size_selex_types[grep('CCFRP', rownames(mod$ctl$size_selex_types)),c(1,4)] <- c(15,2) 
+
+mod$ctl$size_selex_parms  <- mod$ctl$size_selex_parms[-grep("CCFRP",rownames(mod$ctl$size_selex_parms)), ]
 
 
 
+#View(mod$ctl$size_selex_parms)
+#View(mod$ctl$size_selex_parms_tv)
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+           extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#this model mirrow the time block even though there isn't any data in the first time block.  Could spend more time figureing this out
 
 
