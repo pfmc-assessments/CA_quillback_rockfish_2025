@@ -13,7 +13,7 @@ library(ggplot2)
 source(here('code/selexComp.R'))
 
 #Enter in base model from which to base sensitivities
-base_mod_name <- '3_2_2_SetUpExtraSE' 
+base_mod_name <- '3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
 #Create the sensitivities directory
@@ -34,9 +34,240 @@ fleet.converter <- base_mod$dat$fleetinfo %>%
 
 ## Drop length data by fleet --------------------------------------------------------
 
+#Many options to do this
+# 1. downweight the comps (but selectivity could get squiggly)
+# 2. remove and then fix selectivity to something (i.e. maturity, another fleet)
+# 3. remove (but then the selectivity is mostly defined by the bounds and do we want this?)
+#Ultimately going with option 3 just to see. 
+
+# Rec lengths
+
+new_name <- 'leaveOut_rec_lengths'
+
+mod <- base_mod #<------- This is a required line so as not to change the base model files
+
+#Set all rec lengths to negative year
+mod$dat$lencomp <- mod$dat$lencomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("rec", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove rec lengths'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+# Commercial lengths
+
+new_name <- 'leaveOut_com_lengths'
+
+mod <- base_mod
+
+#Set all rec lengths to negative year
+mod$dat$lencomp <- mod$dat$lencomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("com", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove com lengths'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
 ## Drop age data by fleet --------------------------------------------------------
 
-## Drop indices (and index comps) by fleet --------------------------------------------------------
+# Commercial ages
+
+new_name <- 'leaveOut_com_ages'
+
+mod <- base_mod
+
+#Set all rec lengths to negative year
+mod$dat$agecomp <- mod$dat$agecomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("com", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove com ages'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+# Growth fleet ages
+
+new_name <- 'leaveOut_growth_ages'
+
+mod <- base_mod
+
+#Set all rec lengths to negative year
+mod$dat$agecomp <- mod$dat$agecomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("growth", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove growth ages'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+## Drop index fleets --------------------------------------------------------
+
+#Drop CCFRP
+
+new_name <- 'leaveOut_ccfrp'
+
+mod <- base_mod
+
+#Set all ccfrp lengths to negative year
+mod$dat$lencomp <- mod$dat$lencomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("ccfrp", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+#Set ccfrp index to negative year
+mod$dat$CPUE <- mod$dat$CPUE %>% 
+  dplyr::mutate(year = ifelse(index == fleet.converter$fleet_no_num[grep("ccfrp", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+#Remove CCFRP q
+mod$ctl$Q_options <- mod$ctl$Q_options %>%
+  dplyr::filter(fleet != fleet.converter$fleet_no_num[grep("ccfrp", fleet.converter$fleet)])
+mod$ctl$Q_parms <- mod$ctl$Q_parms[-grep("CCFRP", rownames(mod$ctl$Q_parms)),]
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove CCFRP fleet'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+#Drop ROV
+
+new_name <- 'leaveOut_rov'
+
+mod <- base_mod
+
+#Set all rov lengths to negative year
+mod$dat$lencomp <- mod$dat$lencomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("rov", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+#Set rov index to negative year
+mod$dat$CPUE <- mod$dat$CPUE %>% 
+  dplyr::mutate(year = ifelse(index == fleet.converter$fleet_no_num[grep("rov", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+#Remove rov q
+mod$ctl$Q_options <- mod$ctl$Q_options %>%
+  dplyr::filter(fleet != fleet.converter$fleet_no_num[grep("rov", fleet.converter$fleet)])
+mod$ctl$Q_parms <- mod$ctl$Q_parms[-grep("ROV", rownames(mod$ctl$Q_parms)),]
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove ROV fleet'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
 
