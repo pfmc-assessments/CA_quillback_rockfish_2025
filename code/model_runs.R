@@ -8625,3 +8625,139 @@ SSsummarize(xx) |>
 dev.off()
 
 #Slightly higher k and lower Linf, but overall little difference. Keep as is (estimated)
+
+
+####------------------------------------------------#
+## 4_0_1_reweight331_francis ----
+####------------------------------------------------#
+
+#Reweight model 3_3_1 (reweight three times starting at 1)
+
+new_name <- "4_0_1_reweight331_francis"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes and run models
+##
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+####------------------------------------------------#
+## 4_0_2_reweight331_MI ----
+####------------------------------------------------#
+
+#Reweight model 3_3_1 (reweight three times starting at 1)
+
+new_name <- "4_0_2_reweight331_MI"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes and run models
+##
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now reweight based on weight = 1 run and reassign weights
+#Only need to do once for MI
+pp <- SS_output(here('models', new_name))
+iter <- 1
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'MI', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#Less downweighting in general compared to Francis
+#Length comp fits a little better but in general Francis weighting is
+#often preferred
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_3_1_FinalRecComSelex",
+                                                 "4_0_1_reweight331_francis",
+                                                 "4_0_2_reweight331_MI")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('331: Simplify rec and com blocks',
+                                     '401: reweight francis',
+                                     '402: reweight MI'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
