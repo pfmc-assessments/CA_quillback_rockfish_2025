@@ -8504,3 +8504,124 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
+
+
+####------------------------------------------------#
+## 3_3_5_firstPopBin_2 ----
+####------------------------------------------------#
+
+#Set first pop bin at 2 to get size at 0.5 to be 4 according to Diana's data
+
+new_name <- "3_3_5_firstPopBin_2"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$dat$minimum_size <- 2
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#No effect. Estimate of L1 exactly the same
+
+
+####------------------------------------------------#
+## 3_3_6_setL1_8 ----
+####------------------------------------------------#
+
+#Revisit fixing L1 to 8 to approximate external growth estimate
+
+new_name <- "3_3_6_setL1_8"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$MG_parms["L_at_Amin_Fem_GP_1", "PHASE"] <- -3
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+old_mod <- SS_output(here('models', '3_3_1_FinalRecComSelex'))
+round(old_mod$likelihoods_used, 2)
+round(pp$likelihoods_used, 2)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_3_1_FinalRecComSelex",
+                                                 "3_3_6_setL1_8")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('331: Simplify rec and com blocks',
+                                     '336: Set L1 to 8'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+#Slightly higher k and lower Linf, but overall little difference. Keep as is (estimated)
