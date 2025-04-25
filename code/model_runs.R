@@ -8173,6 +8173,7 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+
 ####------------------------------------------------#
 ## 3_3_2_MirrorCCFRP----
 ####------------------------------------------------#
@@ -8230,4 +8231,276 @@ plot_sel_all(pp)
 
 #this model mirrow the time block even though there isn't any data in the first time block.  Could spend more time figureing this out
 
+##
+#Comparison plots
+##
 
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_2_1_issue63Changes",
+                                                 "3_2_22_SimplifyRecBlocks_RecAsymp",
+                                                 "3_3_1_FinalRecComSelex",
+                                                 "3_3_2_MirrorCCFRP")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Model 321',
+                                     '3222: Simplify rec blocks and all rec asymp',
+                                     '331: Simplify rec and com blocks',
+                                     '332: Same as 331 but mirror ccfrp'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+#Compare likelihoods
+xx.sum <- SSsummarize(xx)
+xx.tab <- SStableComparisons(xx.sum, 
+                             modelnames = c('Model 321',
+                                            '3222: Simplify rec blocks and all rec asymp',
+                                            '331: Simplify rec and com blocks',
+                                            '332: Same as 331 but mirror ccfrp')) |>
+  dplyr::mutate(across(-Label, ~ round(., 2))) |>
+  dplyr::rename(' ' = Label)
+xx.val <- rbind(xx.sum$npars, xx.tab[,-1]) #add number of parameters
+rownames(xx.val) <- c("Npars", xx.tab[,1]) #add rownames so dataframe stays numerical
+write.csv(t(xx.val[1:5,]), here('models', new_name, 'like_comp.csv'), row.names = TRUE)
+#Make relative. Take values and subtract those from model 321 (negative means 
+#fewer than model 321 and positive means larger)
+xx.rel <- t(xx.val[1:5,] - xx.val[1:5, "Model 321"]) 
+write.csv(xx.rel, here('models', new_name, 'like_comp_relative.csv'), row.names = TRUE)
+
+
+####------------------------------------------------#
+## 3_3_3_extraSE_CCFRP_rec ----
+####------------------------------------------------#
+
+#Add the extraSE options from 322
+#Early explorations suggest ROV extraSE doesnt add anything (its functionally 0)
+#so dont include
+
+new_name <- "3_3_3_extraSE_CCFRP_rec"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO = 0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = 2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .before = 2)
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO=0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = 2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .before = 4)
+
+# mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+#                                   LO=0,
+#                                   HI = 0.5,
+#                                   INIT = 0,
+#                                   PRIOR = 0,
+#                                   PR_SD = 1,
+#                                   PR_type = 0,
+#                                   PHASE = 2,
+#                                   `env_var&link` = 0,
+#                                   dev_link = 0,
+#                                   dev_minyr = 0,
+#                                   dev_maxyr = 0,
+#                                   dev_PH = 0,
+#                                   Block = 0,
+#                                   Block_Fxn = 0,
+#                                   .after=5)
+# 
+# rownames(mod$ctl$Q_parms)[c(2, 4, 6)] <- c("ExtraSD_CA_Recreational(2)", "ExtraSD_CA_CCFRP(4)", "ExtraSD_base_CA_ROV(5)")
+# 
+# mod$ctl$Q_options$extra_se <- c(1,1,1)
+
+rownames(mod$ctl$Q_parms)[c(2, 4)] <- c("ExtraSD_CA_Recreational(2)", "ExtraSD_CA_CCFRP(4)")
+
+mod$ctl$Q_options$extra_se[c(1,2)] <- c(1,1)
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+old_mod <- SS_output(here('models', '3_3_1_FinalRecComSelex'))
+cbind(pp$likelihoods_by_fleet[,1], round(old_mod$likelihoods_by_fleet[,-1] - pp$likelihoods_by_fleet[,-1], 2))
+
+
+
+####------------------------------------------------#
+## 3_3_4_extraSE_rec ----
+####------------------------------------------------#
+
+#Add the extraSE options from 322
+#Early explorations show likelihood benefit is nearly all for rec survey, 
+#so only add extraSE for rec
+
+new_name <- "3_3_4_extraSE_rec"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO = 0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = 2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .before = 2)
+
+# mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+#                                   LO=0,
+#                                   HI = 0.5,
+#                                   INIT = 0,
+#                                   PRIOR = 0,
+#                                   PR_SD = 1,
+#                                   PR_type = 0,
+#                                   PHASE = 2,
+#                                   `env_var&link` = 0,
+#                                   dev_link = 0,
+#                                   dev_minyr = 0,
+#                                   dev_maxyr = 0,
+#                                   dev_PH = 0,
+#                                   Block = 0,
+#                                   Block_Fxn = 0,
+#                                   .before = 4)
+#
+# mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+#                                   LO=0,
+#                                   HI = 0.5,
+#                                   INIT = 0,
+#                                   PRIOR = 0,
+#                                   PR_SD = 1,
+#                                   PR_type = 0,
+#                                   PHASE = 2,
+#                                   `env_var&link` = 0,
+#                                   dev_link = 0,
+#                                   dev_minyr = 0,
+#                                   dev_maxyr = 0,
+#                                   dev_PH = 0,
+#                                   Block = 0,
+#                                   Block_Fxn = 0,
+#                                   .after=5)
+# 
+# rownames(mod$ctl$Q_parms)[c(2, 4, 6)] <- c("ExtraSD_CA_Recreational(2)", "ExtraSD_CA_CCFRP(4)", "ExtraSD_base_CA_ROV(5)")
+# 
+# mod$ctl$Q_options$extra_se <- c(1,1,1)
+
+rownames(mod$ctl$Q_parms)[2] <- "ExtraSD_CA_Recreational(2)"
+
+mod$ctl$Q_options$extra_se[1] <- 1
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+old_mod <- SS_output(here('models', '3_3_1_FinalRecComSelex'))
+cbind(pp$likelihoods_by_fleet[,1], round(old_mod$likelihoods_by_fleet[,-1] - pp$likelihoods_by_fleet[,-1], 2))
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_3_1_FinalRecComSelex",
+                                                 "3_3_3_extraSE_CCFRP_rec",
+                                                 "3_3_4_extraSE_rec")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('331: Simplify rec and com blocks',
+                                     '333: Extra SE ccfrp and rec',
+                                     '334: Extra SE rec'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
