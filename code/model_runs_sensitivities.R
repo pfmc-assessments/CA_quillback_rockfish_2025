@@ -269,7 +269,47 @@ SSsummarize(xx) |>
                                      'Remove ROV fleet'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+## Drop data sets using lambdas --------------------------------------------------------
 
+#Example below for the PR index
+
+new_name <- 'leaveOut_pr'
+
+mod <- base_mod
+
+# Create a lambda section 
+lambdas <- matrix(NA, 1, 5)
+rownames(lambdas) <- "Surv_CA_Recreational_Phz2"
+colnames(lambdas) <- c("like_comp", "fleet", "phase", "value", "sizefreq_method")
+lambdas[1, ] <- c(1,2,1,0,1)
+# Made the matrix into the proper list format
+lambdas2 <- as.list(split(lambdas, col(lambdas)))
+names(lambdas2) <- colnames(lambdas)
+lambdas3 <- as.data.frame(lambdas2)
+mod[["ctl"]][["lambdas"]] <- lambdas3
+mod[["ctl"]][["N_lambdas"]] <- 1
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove PR Index'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 ####------------------------------------------------#
 # Other sensitivities ----
