@@ -7465,20 +7465,6 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
-#R script to temporary hold model runs before copying over to model_runs.R
-#Avoids merge conflicts
-
-#Load packages
-library(r4ss)
-library(PEPtools)
-library(here)
-library(dplyr)
-library(tictoc)
-library(nwfscSurvey)
-source(here('code/selexComp.R'))
-
-
-
 ####------------------------------------------------#
 ## 3_2_14_ROVandRecDomed----
 ####------------------------------------------------#
