@@ -8632,6 +8632,9 @@ dev.off()
 ####------------------------------------------------#
 
 #Set 2014-2021 commercial block to asymptotic
+#When doing this there is a warning for P_4_Commercial parameter being above
+#the upper limit, even when Ive set that years upper limit above the fixed init. 
+#Thus also need to set the upper bound for the primary block. 
 
 new_name <- "3_3_7_comBlockAsym"
 old_name <- "3_3_1_FinalRecComSelex"
@@ -8655,6 +8658,8 @@ mod <- SS_read(here('models',new_name))
 mod$ctl$size_selex_parms_tv[intersect(grep("P_4_CA_Comm", rownames(mod$ctl$size_selex_parms_tv)),
                                       grep("BLK1repl_2014", rownames(mod$ctl$size_selex_parms_tv))),
                             c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -5)
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", "HI"] <- 20
+
 
 
 ##
@@ -8830,4 +8835,403 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, legendloc = "topright",
                     plotdir = here('models', new_name))
 dev.off()
+
+
+####------------------------------------------------#
+## 4_1_1_reweight337_francis ----
+####------------------------------------------------#
+
+#Reweight model 3_3_7 (reweight three times starting at 1)
+#using francis weighting
+
+new_name <- "4_1_1_reweight337_francis"
+old_name <- "3_3_7_comBlockAsym"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes and run models
+##
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_3_1_FinalRecComSelex",
+                                                 "4_0_1_reweight331_francis",
+                                                 "3_3_7_comBlockAsym",
+                                                 "4_1_1_reweight337_francis")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('331: Simplify rec and com blocks',
+                                     '401: reweight francis',
+                                     '337: Set 2014 com block to asymptotic',
+                                     '411: reweight francis'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+####------------------------------------------------#
+## 4_1_2_hessian ----
+####------------------------------------------------#
+
+#Run model 411 with a hessian to see if need to change bias adj
+
+new_name <- "4_1_2_hessian"
+old_name <- "4_1_1_reweight337_francis"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#No changes, just run with hessian
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#Bias adjustment looks ok, but suggestions are different
+pp$breakpoints_for_bias_adjustment_ramp
+biasadj <- SS_fitbiasramp(pp, verbose = TRUE)
+
+
+
+####------------------------------------------------#
+## 4_1_3_biasAdjRamp ----
+####------------------------------------------------#
+
+#Test whether a change to bias adjsut ramp is really necessary. 
+#Switch to suggestion from hessian model
+
+new_name <- "4_1_3_biasAdjRamp"
+old_name <- "4_1_2_hessian"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models', old_name),"Report.sso"),
+          to = file.path(here('models', new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+pp <- SS_output(here('models',new_name), covar = TRUE)
+
+
+##
+#Make Changes
+##
+
+#Update bias adjust? Yes, all values
+pp$breakpoints_for_bias_adjustment_ramp
+
+biasadj <- SS_fitbiasramp(pp, verbose = TRUE)
+
+mod$ctl$last_early_yr_nobias_adj <- biasadj$df[1, "value"]
+mod$ctl$first_yr_fullbias_adj <- biasadj$df[2, "value"]
+mod$ctl$last_yr_fullbias_adj <- biasadj$df[3, "value"] 
+mod$ctl$first_recent_yr_nobias_adj <- biasadj$df[4, "value"] 
+mod$ctl$max_bias_adj <- biasadj$df[5, "value"]
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 4_1_4_biasAdjRamp2 ----
+####------------------------------------------------#
+
+#Repeat bias adjust ramp because previous model suggests a second
+#update is needed
+
+new_name <- "4_1_4_biasAdjRamp2"
+old_name <- "4_1_3_biasAdjRamp"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models', old_name),"Report.sso"),
+          to = file.path(here('models', new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+pp <- SS_output(here('models',new_name), covar = TRUE)
+
+
+##
+#Make Changes
+##
+
+#Update bias adjust again? Yes, all values
+pp$breakpoints_for_bias_adjustment_ramp
+
+biasadj <- SS_fitbiasramp(pp, verbose = TRUE)
+
+mod$ctl$last_early_yr_nobias_adj <- biasadj$df[1, "value"]
+mod$ctl$first_yr_fullbias_adj <- biasadj$df[2, "value"]
+mod$ctl$last_yr_fullbias_adj <- biasadj$df[3, "value"] 
+mod$ctl$first_recent_yr_nobias_adj <- biasadj$df[4, "value"] 
+mod$ctl$max_bias_adj <- biasadj$df[5, "value"]
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+#Now back to around what we had
+
+
+####------------------------------------------------#
+## 4_1_5_biasAdjRamp3 ----
+####------------------------------------------------#
+
+#Repeat bias adjust ramp because previous model suggests a third
+#update is needed, which more or less brings us back to what we had
+
+new_name <- "4_1_5_biasAdjRamp3"
+old_name <- "4_1_4_biasAdjRamp2"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here('models', old_name),"Report.sso"),
+          to = file.path(here('models', new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"CompReport.sso"),
+          to = file.path(here('models',new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"warning.sso"),
+          to = file.path(here('models',new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here('models', old_name),"covar.sso"),
+          to = file.path(here('models',new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+pp <- SS_output(here('models',new_name), covar = TRUE)
+
+
+##
+#Make Changes
+##
+
+#Update bias adjust again? Yes, all values
+pp$breakpoints_for_bias_adjustment_ramp
+
+biasadj <- SS_fitbiasramp(pp, verbose = TRUE)
+
+mod$ctl$last_early_yr_nobias_adj <- biasadj$df[1, "value"]
+mod$ctl$first_yr_fullbias_adj <- biasadj$df[2, "value"]
+mod$ctl$last_yr_fullbias_adj <- biasadj$df[3, "value"] 
+mod$ctl$first_recent_yr_nobias_adj <- biasadj$df[4, "value"] 
+mod$ctl$max_bias_adj <- biasadj$df[5, "value"]
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_3_7_comBlockAsym",
+                                                 "4_1_2_hessian",
+                                                 "4_1_3_biasAdjRamp",
+                                                 "4_1_4_biasAdjRamp2",
+                                                 "4_1_5_biasAdjRamp3")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('337: Set 2014 com block to asymptotic',
+                                     '412: hessian',
+                                     '413: bias adj 1',
+                                     '414: bias adj 2',
+                                     '415: bias adj 3'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+
+####------------------------------------------------#
+## 4_2_1_propBase ----
+####------------------------------------------------#
+
+#Proposed base
+
+new_name <- "4_2_1_propBase"
+old_name <- "4_1_5_biasAdjRamp3"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+#No changes, just run
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 
