@@ -1,0 +1,21 @@
+Note 1 Information: Max data length bin: 50  < max pop len bins: 59; so will accumulate larger pop len bins
+Warning 1 : At least one block pattern ends in endyr. Check the output parameter value time series to see if the values in forecast years are as intended.
+Warning 2 Adjustment: Adjusted selparm out of base parm bounds. Phase: 1; Inter: 1; fleet: 1; base_parm#: 4; y: 2014; min: 0; max: 9; base: 5.48064 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 3 : Final gradient: 0.000340796 is larger than final_conv: 1e-05
+Warning 4 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2014; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 5 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2015; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 6 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2016; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 7 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2017; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 8 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2018; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 9 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2019; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 10 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2020; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 11 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2021; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 12 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2014; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 13 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2015; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 14 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2016; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 15 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2017; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 16 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2018; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 17 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2019; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 18 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2020; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+Warning 19 Adjustment: Adjusted selparm out of base parm bounds. Phase: 6; Inter: 616; fleet: 1; base_parm#: 4; y: 2021; min: 0; max: 9; base: 4.0202 timevary_val: 15  Size_DblN_descend_se_CA_Commercial(1)
+ 19 warnings  and 1 note 

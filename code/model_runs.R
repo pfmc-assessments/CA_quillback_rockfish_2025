@@ -8628,6 +8628,76 @@ dev.off()
 
 
 ####------------------------------------------------#
+## 3_3_7_comBlockAsym ----
+####------------------------------------------------#
+
+#Set 2014-2021 commercial block to asymptotic
+
+new_name <- "3_3_7_comBlockAsym"
+old_name <- "3_3_1_FinalRecComSelex"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$size_selex_parms_tv[intersect(grep("P_4_CA_Comm", rownames(mod$ctl$size_selex_parms_tv)),
+                                      grep("BLK1repl_2014", rownames(mod$ctl$size_selex_parms_tv))),
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -5)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+old_mod <- SS_output(here('models', '3_3_1_FinalRecComSelex'))
+round(old_mod$likelihoods_used, 2)
+round(pp$likelihoods_used, 2)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("3_3_1_FinalRecComSelex",
+                                                 "3_3_7_comBlockAsym")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('331: Simplify rec and com blocks',
+                                     '337: Set 2014-2021 commercial block to asymptotic'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
+####------------------------------------------------#
 ## 4_0_1_reweight331_francis ----
 ####------------------------------------------------#
 
