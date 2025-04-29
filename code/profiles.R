@@ -12,12 +12,12 @@
 
 #pak::pkg_install("pfmc-assessments/nwfscDiag")
 devtools::load_all("U:/Other github repos/nwfscDiag")
-#library(nwfscDiag)
+library(nwfscDiag)
 library(r4ss)
 library(here)
 library(tictoc)
 
-base_model <- "3_2_2_SetUpExtraSE"
+base_model <- "4_2_1_propBase"
 
 directory <-  here::here("models")
 exe_loc <- here::here(directory, 'ss3_win.exe')
@@ -38,7 +38,6 @@ profile.settings <- nwfscDiag::get_settings_profile(
   low =  c(-0.02, 0.50, -0.5, 0.4),
   high = c(0.02, 0.95,  0.5, 1),
   step_size = c(0.005, 0.05, 0.1, 0.1),
-  use_prior_like = c(1, 1, 1, 1),
   param_space = c('relative', 'real', 'relative', 'real'))
 
 #FROM CANARY RUNS: "Should do usepar because stabilizes. Testing this showed instability with some runs when not using it
@@ -269,11 +268,16 @@ tictoc::toc()
 future::plan(future::sequential)
 
 # MCMC --------------------------------------------------------------------
-
-Need to do
-
-
+#need to change do_recdev to option 2 for use with MCMC
+base_model_recdev2 <- "4_2_1a_propBase"
 
 
-
-
+run_mcmc_diagnostics(
+    dir_wd = here('models',base_model_recdev2),
+    model = "ss3_win",
+    extension = ".exe",
+    iter = 200,
+    chains = 2,
+    interactive = FALSE,
+    verbose = FALSE
+  )
