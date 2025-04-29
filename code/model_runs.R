@@ -2329,7 +2329,7 @@ copy_SS_inputs(dir.old = here('models', old_name),
 mod <- SS_read(here('models', new_name))
 
 #Make Changes
-# phase -9 for L0
+#phase -9 for L0
 mod$ctl$MG_parms$PHASE[2] <- -2
 #$triple check changes
 aa <- mod$ctl$MG_parms
@@ -2345,7 +2345,7 @@ group_by(year, fleet) %>%
 summarise(sum_ages = sum(Nsamp)) %>%
 filter(sum_ages <30)
 
-# set rows to zero where year and fleet are in the caal_sum table
+#set rows to zero where year and fleet are in the caal_sum table
 mod$dat$agecomp <-  mod$dat$agecomp %>%
 mutate(year = case_when( 
         year %in% c(2007,2011,2012,2023,2024) & fleet == 1 ~ -year,
