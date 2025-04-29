@@ -125,6 +125,7 @@ _main.Rmd
 
 #but keep supporting files needed for report creation, mix of latex and png files
 !documents/report/support_files/*
+!documents/report/sa4ss_glossaries.tex
 
 # Windows files
 *Thumbs.db
