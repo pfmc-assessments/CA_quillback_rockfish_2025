@@ -13,7 +13,8 @@ library(ggplot2)
 source(here('code/selexComp.R'))
 
 #Enter in base model from which to base sensitivities
-base_mod_name <- '3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
+#base_mod_name <- '3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
+base_mod_name <- '4_2_1_propBase' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
 #Create the sensitivities directory
@@ -316,8 +317,210 @@ SSsummarize(xx) |>
 ####------------------------------------------------#
 
 
-## Reduce catches --------------------------------------------------------
+## Increase Catch SE --------------------------------------------------------
+
+new_name <- 'increaseCatchSE'
+
+mod <- base_mod
+
+mod[["dat"]][["catch"]][["catch_se"]] <- rep(0.1, 218)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Increase Catch SE'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+## Adjusting High Catch Outliers --------------------------------------------------------
+
+new_name <- 'CatchOutliers'
+
+mod <- base_mod
+
+catch <- mod[["dat"]][["catch"]]
+
+# Assign a commercial catch value in 1991 that is the average of the 3 years before and after
+catch$catch[catch$fleet==1 & catch$year==1991]
+years <- c(1988:1990, 1991:1994)
+catch$catch[catch$fleet==1 & catch$year==1991] <- mean(catch$catch[catch$fleet==1 & catch$year %in% years])
+
+# Replace the recreational value in 1983 with the average of the 3 years before and after
+# Replace the recreational value in 1993 with the average of the 3 years after
+# We can't calculate a 1993 value including the 3 years before because there was no sampling in 1990-1992
+# Use new values for these 1990-1992 blanks based on the new values for 1983 and 1993
+# These calculations are done in the catches_sensitivity.R script
+
+years <- c(1983, 1990, 1991, 1992, 1993)
+catch$catch[catch$fleet==2 & catch$year %in% years] <- c(10.053, 5.688, 5.843, 5.998, 6.003)
+
+mod[["dat"]][["catch"]] <- catch
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Reduce Catch Outliers'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+## Leave out 2024 recreational lengths --------------------------------------------------------
+
+new_name <- 'NoRecLen2024'
+
+mod <- base_mod
+
+lencomp <- mod[["dat"]][["lencomp"]]
+lencomp$year[lencomp$fleet==2 & lencomp$year==2024] <- -2024
+mod[["dat"]][["lencomp"]] <- lencomp
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'No Rec Length 2024'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+## Add extra SE to indices --------------------------------------------------------------------
 
-## Continue on here
+
+#Make changes from discussion of issue #63
+#Set up extraSE for the indices but keep phase negative
+
+new_name <- "IndexExtraSE"
+
+mod <- base_mod
+
+##
+#Make Changes
+##
+
+mod$ctl$Q_parms
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO=0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = 2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .before=2)
+
+rownames(mod$ctl$Q_parms)
+rownames(mod$ctl$Q_parms) <- c("LnQ_base_CA_Recreational(2)", "ExtraSD_CA_Recreational(2)", "LnQ_base_CA_CCFRP(4)", "LnQ_base_CA_ROV(5)")
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO=0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = 2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .before=4)
+
+rownames(mod$ctl$Q_parms)
+rownames(mod$ctl$Q_parms) <- c("LnQ_base_CA_Recreational(2)", "ExtraSD_CA_Recreational(2)", "LnQ_base_CA_CCFRP(4)", "ExtraSD_CA_CCFRP(4)", "LnQ_base_CA_ROV(5)")
+
+mod$ctl$Q_parms <- dplyr::add_row(mod$ctl$Q_parms,
+                                  LO=0,
+                                  HI = 0.5,
+                                  INIT = 0,
+                                  PRIOR = 0,
+                                  PR_SD = 1,
+                                  PR_type = 0,
+                                  PHASE = 2,
+                                  `env_var&link` = 0,
+                                  dev_link = 0,
+                                  dev_minyr = 0,
+                                  dev_maxyr = 0,
+                                  dev_PH = 0,
+                                  Block = 0,
+                                  Block_Fxn = 0,
+                                  .after=5)
+
+rownames(mod$ctl$Q_parms) <- c("LnQ_base_CA_Recreational(2)", "ExtraSD_CA_Recreational(2)", "LnQ_base_CA_CCFRP(4)", "ExtraSD_CA_CCFRP(4)", "LnQ_base_CA_ROV(5)", "ExtraSD_base_CA_ROV(5)")
+
+mod[["ctl"]][["Q_options"]][["extra_se"]] <- c(1,1,1)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Index Extra SE'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
