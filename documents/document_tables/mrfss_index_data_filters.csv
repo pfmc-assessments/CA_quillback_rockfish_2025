@@ -1,0 +1,9 @@
+Description,Samples,Proportion Positive
+"MRFSS PR, Observed Catch, Complete Interviews, Trips w/ Fishing Effort",33170,0.007
+Open Water Area,25938,0.009
+Exclude Inland Waters,25938,0.009
+Exclude SoCal Counties,15457,0.015
+Exclude Wave 1,14791,0.015
+Include only bottomfish & rockfish genus primary target species,4006,0.031
+Begin in 1993 when target species consistently used,3717,0.029
+Remove outlier trip catching 120 quillback,3716,0.029

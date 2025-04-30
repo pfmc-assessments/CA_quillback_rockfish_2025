@@ -1,0 +1,5 @@
+Description,Samples,Percent Positive
+California data north of Point Conception,457391,0.273
+Exclude Jan-Mar,415669,0.301
+Only include trips targeting rockfish,113555,0.297
+Only single day trips,92905,0.297
