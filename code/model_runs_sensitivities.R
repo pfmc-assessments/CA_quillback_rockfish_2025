@@ -41,8 +41,10 @@ fleet.converter <- base_mod$dat$fleetinfo %>%
 # 3. remove (but then the selectivity is mostly defined by the bounds and do we want this?)
 #Ultimately going with option 3 just to see. 
 
-# Rec lengths
+# ============================================================================ #
+# leaveOut_rec_lengths
 
+# Rec lengths
 new_name <- 'leaveOut_rec_lengths'
 
 mod <- base_mod #<------- This is a required line so as not to change the base model files
@@ -74,6 +76,8 @@ SSsummarize(xx) |>
                                      'Remove rec lengths'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+# ============================================================================ #
+# leaveOut_com_lengths
 
 # Commercial lengths
 
@@ -108,8 +112,13 @@ SSsummarize(xx) |>
                                      'Remove com lengths'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+# ============================================================================ #
+# Drop age data by fleet
+# ============================================================================ #
 
-## Drop age data by fleet --------------------------------------------------------
+
+# ============================================================================ #
+# leaveOut_com_ages
 
 # Commercial ages
 
@@ -144,6 +153,8 @@ SSsummarize(xx) |>
                                      'Remove com ages'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+# ============================================================================ #
+# leaveOut_growth_ages
 
 # Growth fleet ages
 
@@ -179,7 +190,14 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-## Drop index fleets --------------------------------------------------------
+
+# ============================================================================ #
+# Drop index fleets
+# ============================================================================ #
+
+
+# ============================================================================ #
+# leaveOut_ccfrp
 
 #Drop CCFRP
 
@@ -225,6 +243,8 @@ SSsummarize(xx) |>
                                      'Remove CCFRP fleet'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+# ============================================================================ #
+# leaveOut_rov
 
 #Drop ROV
 
@@ -271,6 +291,9 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+# ============================================================================ #
+# leaveOut_prIndex
+
 # Drop PR index (example for dropping by using lambda)
 
 new_name <- 'leaveOut_prIndex'
@@ -316,6 +339,8 @@ SSsummarize(xx) |>
 # Catch sensitivities ----
 ####------------------------------------------------#
 
+# ============================================================================ #
+# increaseCatchSE
 
 ## Increase Catch SE --------------------------------------------------------
 
@@ -347,6 +372,9 @@ SSsummarize(xx) |>
                                      'Increase Catch SE'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+
+# ============================================================================ #
+# CatchOutliers
 
 ## Adjusting High Catch Outliers --------------------------------------------------------
 
@@ -399,6 +427,8 @@ SSsummarize(xx) |>
 # Other sensitivities ----
 ####------------------------------------------------#
 
+# ============================================================================ #
+# NoRecLen2024
 
 ## Leave out 2024 recreational lengths --------------------------------------------------------
 
@@ -435,6 +465,8 @@ SSsummarize(xx) |>
 
 ## Add extra SE to indices --------------------------------------------------------------------
 
+# ============================================================================ #
+# IndexExtraSE
 
 #Make changes from discussion of issue #63
 #Set up extraSE for the indices but keep phase negative
@@ -533,12 +565,15 @@ SSsummarize(xx) |>
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-####------------------------------------------------#
-# Biology sensitivities ----
-####------------------------------------------------#
+
+# ============================================================================ #
+# Biology sensitivities
+# ============================================================================ #
+
+# ============================================================================ #
+# fecundity_EJest
 
 
-## Biological parameters to 2021 assessment values --------------------------------------------------------
 ### Fecundity to E.J.'s Pteropodus values'
 new_name <- 'fecundity_EJest'
 
@@ -575,6 +610,10 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Fecundity fixed EJ est.'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+# ============================================================================ #
+#  Maturity_2021est
 
 ### Maturity to 2021 estimates
 
@@ -618,7 +657,15 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-## Estimate M --------------------------------------------------------
+# ============================================================================ #
+# Natural mortality and steepness
+# ============================================================================ #
+
+
+# ============================================================================ #
+# Estimate_M
+
+## Estimate M 
 new_name <- 'Estimate_M'
 
 mod <- base_mod
@@ -649,7 +696,10 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-## Max Age 70 --------------------------------------------------------
+# ============================================================================ #
+# maxAge70
+
+## Max Age 70 
 new_name <- 'maxAge70'
 
 mod <- base_mod
@@ -685,6 +735,10 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Max age 70'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+# ============================================================================ #
+# maxAge75
 
 ## Max Age 75 --------------------------------------------------------
 new_name <- 'maxAge75'
@@ -723,7 +777,11 @@ SSsummarize(xx) |>
                                      'Max age 75'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-## Max Age 80 --------------------------------------------------------
+
+# ============================================================================ #
+# maxAge80
+
+## Max Age 80 
 new_name <- 'maxAge80'
 
 mod <- base_mod
@@ -761,8 +819,10 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+# ============================================================================ #
+# estimate_h
 
-## Estimate h --------------------------------------------------------
+## Estimate h 
 new_name <- 'estimate_h'
 
 mod <- base_mod
@@ -793,6 +853,8 @@ SSsummarize(xx) |>
                                      'Estimate h'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+# ============================================================================ #
+# estimate_M_and_h
 
 ## Estimate M and h --------------------------------------------------------
 new_name <- 'estimate_M_and_h'
