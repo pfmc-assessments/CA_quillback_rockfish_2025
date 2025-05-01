@@ -6,7 +6,7 @@
 #_Source_code_at:_https://github.com/nmfs-ost/ss3-source-code
 
 #C file created using an r4ss function
-#C file write time: 2025-04-24  14:17:49
+#C file write time: 2025-05-01  08:07:40
 #_data_and_control_files: 2025_ca_quillback.dat // 2025_ca_quillback.ctl
 0  # 0 means do not read wtatage.ss; 1 means read and use wtatage.ss and also read and use growth parameters
 1  #_N_Growth_Patterns (Growth Patterns, Morphs, Bio Patterns, GP are terms used interchangeably in SS3)
@@ -27,10 +27,10 @@
 #_Cond 1 1 1 2 4 10 # example move definition for seas=1, morph=1, source=1 dest=2, age1=4, age2=10
 #
 2 #_Nblock_Patterns
- 3 3 #_blocks_per_pattern 
+ 2 1 #_blocks_per_pattern 
 # begin and end years of blocks
- 2003 2013 2014 2021 2022 2024
- 2001 2016 2017 2022 2023 2024
+ 1916 2002 2014 2021
+ 2017 2024
 #
 # controls for all timevary parameters 
 1 #_time-vary parm bound check (1=warn relative to base parm bounds; 3=no bound check); Also see env (3) and dev (5) options to constrain with base bounds
@@ -74,11 +74,11 @@
 # Sex: 1  BioPattern: 1  NatMort
  0.01 0.15 0.0643 -2.74 0.31 3 -2 0 0 0 0 0 0 0 # NatM_uniform_Fem_GP_1
 # Sex: 1  BioPattern: 1  Growth
- 0 20 9.81772 3.986 0 0 3 0 0 0 0 0 0 0 # L_at_Amin_Fem_GP_1
- 35 50 42.9826 41.1812 0 0 3 0 0 0 0 0 0 0 # L_at_Amax_Fem_GP_1
- 0.03 0.3 0.124238 0.1782 0 0 3 0 0 0 0 0 0 0 # VonBert_K_Fem_GP_1
- 0.01 0.5 0.187164 0.203225 0 0 3 0 0 0 0 0 0 0 # CV_young_Fem_GP_1
- 0.001 0.5 0.0867328 0.0637356 0 0 3 0 0 0 0 0 0 0 # CV_old_Fem_GP_1
+ 0 20 9.81318 3.986 0 0 3 0 0 0 0 0 0 0 # L_at_Amin_Fem_GP_1
+ 35 50 42.7881 41.1812 0 0 3 0 0 0 0 0 0 0 # L_at_Amax_Fem_GP_1
+ 0.03 0.3 0.125511 0.1782 0 0 3 0 0 0 0 0 0 0 # VonBert_K_Fem_GP_1
+ 0.01 0.5 0.184848 0.203225 0 0 3 0 0 0 0 0 0 0 # CV_young_Fem_GP_1
+ 0.001 0.5 0.086476 0.0637356 0 0 3 0 0 0 0 0 0 0 # CV_old_Fem_GP_1
 # Sex: 1  BioPattern: 1  WtLen
  0 0.1 1.57769e-05 1.57769e-05 0 0 -9 0 0 0 0 0 0 0 # Wtlen_1_Fem_GP_1
  2 4 3.08018 3.08018 0 0 -9 0 0 0 0 0 0 0 # Wtlen_2_Fem_GP_1
@@ -110,7 +110,7 @@
 0  # 0/1 to use steepness in initial equ recruitment calculation
 0  #  future feature:  0/1 to make realized sigmaR a function of SR curvature
 #_          LO            HI          INIT         PRIOR         PR_SD       PR_type      PHASE    env-var    use_dev   dev_mnyr   dev_mxyr     dev_PH      Block    Blk_Fxn #  parm_name
-             1            20       3.73294             5             5             0          1          0          0          0          0          0          0          0 # SR_LN(R0)
+             1            20       3.71541             5             5             0          1          0          0          0          0          0          0          0 # SR_LN(R0)
            0.2             1          0.72          0.72          0.16             2         -7          0          0          0          0          0          0          0 # SR_BH_steep
           0.15           0.9           0.6           0.6           0.2             0        -99          0          0          0          0          0          0          0 # SR_sigmaR
             -2             2             0             0             2             0        -99          0          0          0          0          0          0          0 # SR_regime
@@ -126,10 +126,10 @@
  6 #_forecast_recruitment phase (incl. late recr) (0 value resets to maxphase+1)
  1 #_lambda for Fcast_recr_like occurring before endyr+1
  1993 #_last_yr_nobias_adj_in_MPD; begin of ramp
- 2002.73 #_first_yr_fullbias_adj_in_MPD; begin of plateau
- 2019.2 #_last_yr_fullbias_adj_in_MPD
- 2021.79 #_end_yr_for_ramp_in_MPD (can be in forecast to shape ramp, but SS3 sets bias_adj to 0.0 for fcast yrs)
- 0.6929 #_max_bias_adj_in_MPD (typical ~0.8; -3 sets all years to 0.0; -2 sets all non-forecast yrs w/ estimated recdevs to 1.0; -1 sets biasadj=1.0 for all yrs w/ recdevs)
+ 2002.87 #_first_yr_fullbias_adj_in_MPD; begin of plateau
+ 2019.08 #_last_yr_fullbias_adj_in_MPD
+ 2021.73 #_end_yr_for_ramp_in_MPD (can be in forecast to shape ramp, but SS3 sets bias_adj to 0.0 for fcast yrs)
+ 0.6816 #_max_bias_adj_in_MPD (typical ~0.8; -3 sets all years to 0.0; -2 sets all non-forecast yrs w/ estimated recdevs to 1.0; -1 sets biasadj=1.0 for all yrs w/ recdevs)
  0 #_period of cycles in recruitment (N parms read below)
  -5 #min rec_dev
  5 #max rec_dev
@@ -142,7 +142,7 @@
 #
 # all recruitment deviations
 #  1940E 1941E 1942E 1943E 1944E 1945E 1946E 1947E 1948E 1949E 1950E 1951E 1952E 1953E 1954E 1955E 1956E 1957E 1958E 1959E 1960E 1961E 1962E 1963E 1964E 1965E 1966E 1967E 1968E 1969E 1970E 1971E 1972E 1973E 1974E 1975E 1976E 1977E 1978R 1979R 1980R 1981R 1982R 1983R 1984R 1985R 1986R 1987R 1988R 1989R 1990R 1991R 1992R 1993R 1994R 1995R 1996R 1997R 1998R 1999R 2000R 2001R 2002R 2003R 2004R 2005R 2006R 2007R 2008R 2009R 2010R 2011R 2012R 2013R 2014R 2015R 2016R 2017R 2018R 2019R 2020R 2021R 2022F 2023F 2024F 2025F 2026F 2027F 2028F 2029F 2030F 2031F 2032F 2033F 2034F 2035F 2036F
-#  -0.0446035 -0.0483633 -0.0525677 -0.0572533 -0.0624449 -0.0681462 -0.0743272 -0.0809321 -0.0878522 -0.0947657 -0.101213 -0.106474 -0.109776 -0.11088 -0.110648 -0.110484 -0.111109 -0.113305 -0.116034 -0.118101 -0.120634 -0.124667 -0.131389 -0.141764 -0.156573 -0.176536 -0.201632 -0.230312 -0.259089 -0.283983 -0.302311 -0.313219 -0.317315 -0.315657 -0.310653 -0.302901 -0.284708 -0.238771 -0.29795 -0.182174 -0.0297138 0.153417 0.383684 0.63161 0.654174 0.512318 0.236858 -0.00291788 -0.0925494 -0.00116706 0.221732 0.336676 0.287961 0.445415 2.20408 -0.101698 -0.17664 -0.133491 -0.46396 -0.655358 -0.740726 -0.906705 -0.851016 0.308066 -0.397614 -0.692372 -0.911114 -0.891813 -0.891744 -0.759091 0.617839 0.421484 0.649301 -0.633901 -0.740143 -0.920196 1.28531 1.19257 0.428811 0.791289 0.126127 -0.414664 -0.0213396 0.014545 0 0 0 0 0 0 0 0 0 0 0 0 0
+#  -0.0376472 -0.0411611 -0.045114 -0.0495426 -0.0544662 -0.0598848 -0.065763 -0.0720369 -0.0785852 -0.0850749 -0.0910235 -0.0956877 -0.0982961 -0.0986843 -0.0978895 -0.0974417 -0.0979802 -0.100194 -0.102906 -0.105007 -0.107798 -0.11243 -0.120172 -0.131935 -0.148214 -0.169245 -0.194593 -0.222674 -0.250417 -0.27437 -0.292106 -0.302666 -0.306393 -0.304193 -0.298543 -0.290169 -0.271175 -0.223792 -0.270798 -0.153116 -0.00103207 0.17762 0.398943 0.616914 0.605296 0.473248 0.229722 0.0117891 -0.0661208 0.0286857 0.243116 0.332204 0.272585 0.399592 2.16345 -0.0442538 -0.134647 -0.151161 -0.460316 -0.643375 -0.730787 -0.88017 -0.819588 0.234414 -0.420085 -0.706611 -0.902258 -0.90113 -0.871136 -0.718314 0.580312 0.399128 0.59729 -0.636963 -0.752196 -0.885624 1.2542 1.18415 0.422579 0.773921 0.112509 -0.361985 -0.0133623 0.0145256 0 0 0 0 0 0 0 0 0 0 0 0 0
 #
 #Fishing Mortality info 
 0.04 # F ballpark value in units of annual_F
@@ -158,8 +158,8 @@
 # F rates by fleet x season
 #_year:  1916 1917 1918 1919 1920 1921 1922 1923 1924 1925 1926 1927 1928 1929 1930 1931 1932 1933 1934 1935 1936 1937 1938 1939 1940 1941 1942 1943 1944 1945 1946 1947 1948 1949 1950 1951 1952 1953 1954 1955 1956 1957 1958 1959 1960 1961 1962 1963 1964 1965 1966 1967 1968 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 2032 2033 2034 2035 2036
 # seas:  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-# CA_Commercial 4.19388e-05 8.66775e-05 0.000201336 4.47451e-05 6.15265e-05 9.50908e-05 6.9923e-05 2.23757e-05 6.1534e-05 0.000204196 0.000201424 0.000380536 0.000330263 0.000310783 0.000495812 0.000675534 0.00050211 0.000378944 0.000342688 0.000632533 0.000607829 0.000419703 0.0005752 0.000555983 0.000217505 0.00037886 0.00037061 0.000495279 0.0025302 0.00624296 0.00657035 0.00133114 0.00278537 0.000984973 0.000507385 0.000923242 0.000778513 0.000449808 0.00113445 4.7528e-05 0.000104565 0.000186359 0.000290787 0.000134389 5.84272e-05 5.56609e-05 5.594e-05 0.000193847 0.000100681 0.00030108 0.00011836 0.000248858 0.000222174 0 0 0 0 0 0 0 0 0 0.000473804 4.31459e-06 0 0 0 0 0.0165407 0 0.0004387 0.000815849 0.00154802 0.00967913 0.00663567 0.270332 0.0353637 0.0301296 0.132408 0.0660408 0.0825189 0.136734 0.0846424 0.0545621 0.0381383 0.0665958 0.023837 0.0119627 0.0105952 0.0251988 0.0209074 0.0328783 0.0318115 0.00625799 0.00444114 0.00478716 0.00833872 0.00356478 0.00328685 0.00808875 0.0077013 0.0201496 0.0217173 0.0406912 0.038754 0.0460156 0.0686904 0.0175308 0.0122433 0 0 0.0274954 0.0273452 0.0272246 0.027104 0.0269534 0.0268329 0.0267125 0.0265623 0.0264422 0.0263223
-# CA_Recreational 0 0 0 0 0 0 0 0 0 0 0 0 0.000121531 0.000241158 0.000277166 0.000371129 0.000463252 0.000555486 0.000649852 0.00074246 0.000837356 0.000992607 0.000977568 0.000855952 0.00123283 0.00114141 0.000606344 0.000580415 0.000476199 0.000637803 0.00110336 0.000876787 0.00175493 0.00228239 0.0027928 0.00341291 0.00298498 0.00255182 0.00318822 0.00382001 0.00428725 0.00428221 0.00751019 0.00567299 0.00476159 0.00346662 0.00394463 0.00590187 0.00487514 0.00834726 0.00959119 0.0108527 0.0112425 0.0127777 0.0176379 0.0159331 0.0232341 0.0257111 0.0291858 0.0299162 0.0351539 0.0384818 0.0384617 0.0428055 0.0480978 0.0160521 0.0167231 0.141785 0.039957 0.0485352 0.0533942 0.022334 0.00722051 0.0369372 0.0210336 0.0440603 0.072377 0.178346 0.0333021 0.0291362 0.0189495 0.0179957 0.0140322 0.0257131 0.0297234 0.0149506 0.00454233 0.0437948 0.0113952 0.0200791 0.0361938 0.0468919 0.0181031 0.0222673 0.0105146 0.0177632 0.0254325 0.011933 0.0106079 0.0315656 0.036728 0.0494261 0.0522667 0.0611752 0.0583655 0.0601388 0.0573875 0.0111044 0.00503132 0 0 0.0254389 0.0252997 0.0251881 0.0250765 0.0249373 0.024826 0.0247148 0.0245761 0.0244651 0.0243543
+# CA_Commercial 4.19408e-05 8.66818e-05 0.000201347 4.47476e-05 6.15298e-05 9.50961e-05 6.99269e-05 2.2377e-05 6.15375e-05 0.000204208 0.000201436 0.000380561 0.000330287 0.000310808 0.000495857 0.000675605 0.000502171 0.000378997 0.000342741 0.000632644 0.000607951 0.000419797 0.000575344 0.000556137 0.000217571 0.000378984 0.000370738 0.000495454 0.00253113 0.00624539 0.00657301 0.00133158 0.00278587 0.000984958 0.000507251 0.000922741 0.000777852 0.000449271 0.00113269 4.74374e-05 0.000104328 0.000185868 0.000289921 0.000133944 5.82116e-05 5.54329e-05 5.56876e-05 0.000192897 0.000100151 0.000299392 0.000117664 0.000247336 0.000220773 0 0 0 0 0 0 0 0 0 0.000471714 4.29742e-06 0 0 0 0 0.0165205 0 0.000438201 0.000814849 0.00154613 0.00967806 0.00664938 0.272266 0.0358422 0.0307189 0.135791 0.06792 0.0849747 0.141104 0.0876079 0.0566514 0.0397344 0.0696131 0.0249669 0.013248 0.0116971 0.0277107 0.0229265 0.0360057 0.0348101 0.00683898 0.0048463 0.00521784 0.00908625 0.003883 0.00370034 0.00909068 0.00864996 0.0226397 0.0244361 0.0459174 0.04391 0.0523791 0.0690609 0.0176063 0.0122501 0 0 0.0275074 0.027357 0.0272363 0.0271156 0.0269649 0.0268444 0.0267239 0.0265736 0.0264535 0.0263334
+# CA_Recreational 0 0 0 0 0 0 0 0 0 0 0 0 0.000123679 0.000245422 0.00028207 0.000377701 0.000471463 0.000565341 0.000661392 0.00075566 0.000852264 0.0010103 0.00099502 0.000871252 0.00125489 0.00116186 0.00061722 0.000590827 0.000484741 0.000649249 0.00112316 0.000892444 0.001786 0.0023224 0.00284118 0.00347128 0.00303533 0.00259417 0.00324024 0.00388125 0.00435473 0.00434832 0.00762405 0.0057574 0.00483089 0.00351582 0.00399912 0.00598131 0.00493907 0.00845409 0.00971144 0.0109863 0.0113788 0.0129308 0.0178483 0.0161232 0.023513 0.0260241 0.0295479 0.0302953 0.0356104 0.0389965 0.0389919 0.0434142 0.0488061 0.0162912 0.0169681 0.144005 0.0406316 0.0493565 0.0543009 0.0227147 0.00734514 0.037619 0.02146 0.0451464 0.0745359 0.184468 0.0346034 0.0303366 0.0197514 0.018814 0.0147433 0.0271326 0.0314401 0.0154052 0.00469526 0.0453666 0.0118187 0.0208283 0.0375592 0.0487103 0.0188203 0.0231457 0.0109219 0.018438 0.0263935 0.0123768 0.0109868 0.0326655 0.0380217 0.0490894 0.0520511 0.0611781 0.0586578 0.0607461 0.0583106 0.0123292 0.00556863 0 0 0.0249018 0.0247655 0.0246561 0.0245469 0.0244106 0.0243015 0.0241927 0.0240568 0.0239482 0.0238396
 #
 #_Q_setup for fleets with cpue or survey or deviation data
 #_1:  fleet number
@@ -171,19 +171,16 @@
 #_5:  0/1 for biasadj or not
 #_6:  0/1 to float
 #_   fleet      link link_info  extra_se   biasadj     float  #  fleetname
-         2         1         0         1         0         0  #  CA_Recreational
-         4         1         0         1         0         0  #  CA_CCFRP
-         5         1         0         1         0         0  #  CA_ROV
+         2         1         0         0         0         0  #  CA_Recreational
+         4         1         0         0         0         0  #  CA_CCFRP
+         5         1         0         0         0         0  #  CA_ROV
 -9999 0 0 0 0 0
 #
 #_Q_parameters
 #_          LO            HI          INIT         PRIOR         PR_SD       PR_type      PHASE    env-var    use_dev   dev_mnyr   dev_mxyr     dev_PH      Block    Blk_Fxn  #  parm_name
-           -25            25      -6.67439             0             1             0          2          0          0          0          0          0          0          0  #  LnQ_base_CA_Recreational(2)
-             0           0.5             0             0             1             0         -2          0          0          0          0          0          0          0  #  Q_extraSD_CA_Recreational(2)
-           -25            25      -11.8906             0             1             0          2          0          0          0          0          0          0          0  #  LnQ_base_CA_CCFRP(4)
-             0           0.5             0             0             1             0         -2          0          0          0          0          0          0          0  #  Q_extraSD_CA_CCFRP(4)
-           -25            25       -2.7919             0             1             0          2          0          0          0          0          0          0          0  #  LnQ_base_CA_ROV(5)
-             0           0.5             0             0             1             0         -2          0          0          0          0          0          0          0  #  Q_extraSD_CA_ROV(5)
+           -25            25      -6.64817             0             1             0          2          0          0          0          0          0          0          0  #  LnQ_base_CA_Recreational(2)
+           -25            25      -11.8259             0             1             0          2          0          0          0          0          0          0          0  #  LnQ_base_CA_CCFRP(4)
+           -25            25      -2.72251             0             1             0          2          0          0          0          0          0          0          0  #  LnQ_base_CA_ROV(5)
 #_no timevary Q parameters
 #
 #_size_selex_patterns
@@ -239,31 +236,31 @@
 #
 #_          LO            HI          INIT         PRIOR         PR_SD       PR_type      PHASE    env-var    use_dev   dev_mnyr   dev_mxyr     dev_PH      Block    Blk_Fxn  #  parm_name
 # 1   CA_Commercial LenSelex
-            11            51       37.0743             0             0             0          4          0          0          0          0          0          1          2  #  Size_DblN_peak_CA_Commercial(1)
+            11            51       40.2794             0             0             0          4          0          0          0          0          0          1          2  #  Size_DblN_peak_CA_Commercial(1)
            -20            20           -15             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_top_logit_CA_Commercial(1)
-             0             9        4.2858             0             0             0          5          0          0          0          0          0          1          2  #  Size_DblN_ascend_se_CA_Commercial(1)
-             0             9       4.11374             0             0             0          5          0          0          0          0          0          1          2  #  Size_DblN_descend_se_CA_Commercial(1)
+             0             9       3.77362             0             0             0          5          0          0          0          0          0          1          2  #  Size_DblN_ascend_se_CA_Commercial(1)
+             0            20       3.96581             0             0             0          5          0          0          0          0          0          1          2  #  Size_DblN_descend_se_CA_Commercial(1)
            -20            30          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_start_logit_CA_Commercial(1)
            -10            10          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_end_logit_CA_Commercial(1)
 # 2   CA_Recreational LenSelex
-            11            51       31.6949             0             0             0          4          0          0          0          0          0          2          2  #  Size_DblN_peak_CA_Recreational(2)
+            11            51       31.9243             0             0             0          4          0          0          0          0          0          2          2  #  Size_DblN_peak_CA_Recreational(2)
            -20            20           -15             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_top_logit_CA_Recreational(2)
-             0             9       3.60156             0             0             0          5          0          0          0          0          0          2          2  #  Size_DblN_ascend_se_CA_Recreational(2)
-             0             9       8.98069             0             0             0          5          0          0          0          0          0          2          2  #  Size_DblN_descend_se_CA_Recreational(2)
+             0             9       3.62325             0             0             0          5          0          0          0          0          0          2          2  #  Size_DblN_ascend_se_CA_Recreational(2)
+             0            20            15             0             0             0         -4          0          0          0          0          0          2          2  #  Size_DblN_descend_se_CA_Recreational(2)
            -20            30          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_start_logit_CA_Recreational(2)
            -10            10          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_end_logit_CA_Recreational(2)
 # 3   CA_Growth LenSelex
 # 4   CA_CCFRP LenSelex
-            11            51       32.2733             0             0             0          4          0          0          0          0          0          0          0  #  Size_DblN_peak_CA_CCFRP(4)
+            11            51        32.424             0             0             0          4          0          0          0          0          0          0          0  #  Size_DblN_peak_CA_CCFRP(4)
            -20            20           -15             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_top_logit_CA_CCFRP(4)
-             0             9       4.33302             0             0             0          5          0          0          0          0          0          0          0  #  Size_DblN_ascend_se_CA_CCFRP(4)
+             0             9       4.34433             0             0             0          5          0          0          0          0          0          0          0  #  Size_DblN_ascend_se_CA_CCFRP(4)
              0            20            15             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_descend_se_CA_CCFRP(4)
            -20            30          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_start_logit_CA_CCFRP(4)
            -10            10          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_end_logit_CA_CCFRP(4)
 # 5   CA_ROV LenSelex
-            11            51        38.707             0             0             0          4          0          0          0          0          0          0          0  #  Size_DblN_peak_CA_ROV(5)
+            11            51       39.0352             0             0             0          4          0          0          0          0          0          0          0  #  Size_DblN_peak_CA_ROV(5)
            -20            20           -15             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_top_logit_CA_ROV(5)
-             0             9       5.55196             0             0             0          5          0          0          0          0          0          0          0  #  Size_DblN_ascend_se_CA_ROV(5)
+             0             9       5.56495             0             0             0          5          0          0          0          0          0          0          0  #  Size_DblN_ascend_se_CA_ROV(5)
              0            20            15             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_descend_se_CA_ROV(5)
            -20            30          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_start_logit_CA_ROV(5)
            -10            10          -999             0             0             0         -9          0          0          0          0          0          0          0  #  Size_DblN_end_logit_CA_ROV(5)
@@ -275,24 +272,15 @@
 #_No_Dirichlet parameters
 # timevary selex parameters 
 #_          LO            HI          INIT         PRIOR         PR_SD       PR_type    PHASE  #  parm_name
-            11            51       40.2764             0             0             0      4  # Size_DblN_peak_CA_Commercial(1)_BLK1repl_2003
-            11            51       46.0205             0             0             0      4  # Size_DblN_peak_CA_Commercial(1)_BLK1repl_2014
-            11            51       40.1134             0             0             0      4  # Size_DblN_peak_CA_Commercial(1)_BLK1repl_2022
-             0             9       3.90296             0             0             0      5  # Size_DblN_ascend_se_CA_Commercial(1)_BLK1repl_2003
-             0             9       4.13016             0             0             0      5  # Size_DblN_ascend_se_CA_Commercial(1)_BLK1repl_2014
-             0             9        3.5285             0             0             0      5  # Size_DblN_ascend_se_CA_Commercial(1)_BLK1repl_2022
-             0             9       3.97097             0             0             0      5  # Size_DblN_descend_se_CA_Commercial(1)_BLK1repl_2003
-             0             9       2.87725             0             0             0      5  # Size_DblN_descend_se_CA_Commercial(1)_BLK1repl_2014
-             0             9       3.58879             0             0             0      5  # Size_DblN_descend_se_CA_Commercial(1)_BLK1repl_2022
-            11            51       32.0839             0             0             0      4  # Size_DblN_peak_CA_Recreational(2)_BLK2repl_2001
-            11            51       36.1023             0             0             0      4  # Size_DblN_peak_CA_Recreational(2)_BLK2repl_2017
-            11            51       36.2356             0             0             0      4  # Size_DblN_peak_CA_Recreational(2)_BLK2repl_2023
-             0             9       3.60847             0             0             0      5  # Size_DblN_ascend_se_CA_Recreational(2)_BLK2repl_2001
-             0             9       3.80818             0             0             0      5  # Size_DblN_ascend_se_CA_Recreational(2)_BLK2repl_2017
-             0             9       4.03837             0             0             0      5  # Size_DblN_ascend_se_CA_Recreational(2)_BLK2repl_2023
-             0             9       7.67384             0             0             0      5  # Size_DblN_descend_se_CA_Recreational(2)_BLK2repl_2001
-             0             9       5.84393             0             0             0      5  # Size_DblN_descend_se_CA_Recreational(2)_BLK2repl_2017
-             0             9        8.6056             0             0             0      5  # Size_DblN_descend_se_CA_Recreational(2)_BLK2repl_2023
+            11            51       37.1079             0             0             0      4  # Size_DblN_peak_CA_Commercial(1)_BLK1repl_1916
+            11            51       46.6761             0             0             0      4  # Size_DblN_peak_CA_Commercial(1)_BLK1repl_2014
+             0             9       4.29249             0             0             0      5  # Size_DblN_ascend_se_CA_Commercial(1)_BLK1repl_1916
+             0             9       4.20324             0             0             0      5  # Size_DblN_ascend_se_CA_Commercial(1)_BLK1repl_2014
+             0             9       4.17383             0             0             0      5  # Size_DblN_descend_se_CA_Commercial(1)_BLK1repl_1916
+             0            20            15             0             0             0      -5  # Size_DblN_descend_se_CA_Commercial(1)_BLK1repl_2014
+            11            51       36.1416             0             0             0      4  # Size_DblN_peak_CA_Recreational(2)_BLK2repl_2017
+             0             9        3.8335             0             0             0      5  # Size_DblN_ascend_se_CA_Recreational(2)_BLK2repl_2017
+             0            20            15             0             0             0      -5  # Size_DblN_descend_se_CA_Recreational(2)_BLK2repl_2017
 # info on dev vectors created for selex parms are reported with other devs after tag parameter section 
 #
 0   #  use 2D_AR1 selectivity? (0/1)
@@ -310,11 +298,11 @@
 #  base   base first block   block  env  env   dev   dev   dev   dev   dev
 #  type  index  parm trend pattern link  var  vectr link _mnyr  mxyr phase  dev_vector
 #      5     1     1     1     2     0     0     0     0     0     0     0
-#      5     3     4     1     2     0     0     0     0     0     0     0
-#      5     4     7     1     2     0     0     0     0     0     0     0
-#      5     7    10     2     2     0     0     0     0     0     0     0
-#      5     9    13     2     2     0     0     0     0     0     0     0
-#      5    10    16     2     2     0     0     0     0     0     0     0
+#      5     3     3     1     2     0     0     0     0     0     0     0
+#      5     4     5     1     2     0     0     0     0     0     0     0
+#      5     7     7     2     2     0     0     0     0     0     0     0
+#      5     9     8     2     2     0     0     0     0     0     0     0
+#      5    10     9     2     2     0     0     0     0     0     0     0
      #
 # Input variance adjustments factors: 
  #_1=add_to_survey_CV
@@ -325,12 +313,12 @@
  #_6=mult_by_size-at-age_N
  #_7=mult_by_generalized_sizecomp
 #_factor  fleet  value
-      4      1  0.360053
-      4      2  0.180941
-      4      4   0.23979
-      4      5  0.170899
-      5      1  0.082235
-      5      3   0.74652
+      4      1  0.350104
+      4      2  0.183025
+      4      4  0.237556
+      4      5  0.170138
+      5      1  0.084542
+      5      3    0.6286
  -9999   1    0  # terminator
 #
 1 #_maxlambdaphase

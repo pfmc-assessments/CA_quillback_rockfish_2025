@@ -270,11 +270,10 @@ SSsummarize(xx) |>
                                      'Remove ROV fleet'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-## Drop data sets using lambdas --------------------------------------------------------
 
-#Example below for the PR index
+# Drop PR index (example for dropping by using lambda)
 
-new_name <- 'leaveOut_pr'
+new_name <- 'leaveOut_prIndex'
 
 mod <- base_mod
 
@@ -288,7 +287,7 @@ lambdas2 <- as.list(split(lambdas, col(lambdas)))
 names(lambdas2) <- colnames(lambdas)
 lambdas3 <- as.data.frame(lambdas2)
 mod[["ctl"]][["lambdas"]] <- lambdas3
-mod[["ctl"]][["N_lambdas"]] <- 1
+mod[["ctl"]][["N_lambdas"]] <- nrow(lambdas3)
 
 # Write model and run
 SS_write(mod, here(sens_dir, new_name),
@@ -312,8 +311,9 @@ SSsummarize(xx) |>
                                      'Remove PR Index'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+
 ####------------------------------------------------#
-# Other sensitivities ----
+# Catch sensitivities ----
 ####------------------------------------------------#
 
 
@@ -346,6 +346,7 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Increase Catch SE'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
 
 ## Adjusting High Catch Outliers --------------------------------------------------------
 
@@ -392,6 +393,12 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Reduce Catch Outliers'),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+####------------------------------------------------#
+# Other sensitivities ----
+####------------------------------------------------#
+
 
 ## Leave out 2024 recreational lengths --------------------------------------------------------
 
@@ -648,7 +655,7 @@ new_name <- 'maxAge70'
 mod <- base_mod
 
 #change values
-maxAge <- 70 #this is the maximum age among BC entries in Claires dataset
+maxAge <- 70 
 m_init <- round(5.4/maxAge, 4)
 m_se <- 0.31
 m_prior <- 3 #log-normal
@@ -685,7 +692,7 @@ new_name <- 'maxAge75'
 mod <- base_mod
 
 #change values
-maxAge <- 75 #this is the maximum age among BC entries in Claires dataset
+maxAge <- 75 
 m_init <- round(5.4/maxAge, 4)
 m_se <- 0.31
 m_prior <- 3 #log-normal
@@ -722,7 +729,7 @@ new_name <- 'maxAge80'
 mod <- base_mod
 
 #change values
-maxAge <- 80 #this is the maximum age among BC entries in Claires dataset
+maxAge <- 80 
 m_init <- round(5.4/maxAge, 4)
 m_se <- 0.31
 m_prior <- 3 #log-normal

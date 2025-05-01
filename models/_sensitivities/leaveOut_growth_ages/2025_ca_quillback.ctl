@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-04-24  14:21:49
+#C file write time: 2025-05-01  08:08:29
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -17,10 +17,10 @@
 #_Cond 1 1 1 2 4 10 # example move definition for seas=1, morph=1, source=1 dest=2, age1=4, age2=10
 #
 2 #_Nblock_Patterns
-3 3 #_blocks_per_pattern
+2 1 #_blocks_per_pattern
 #_begin and end years of blocks
-2003 2013 2014 2021 2022 2024
-2001 2016 2017 2022 2023 2024
+1916 2002 2014 2021
+2017 2024
 #
 # controls for all timevary parameters 
 1 #_env/block/dev_adjust_method for all time-vary parms (1=warn relative to base parm bounds; 3=no bound check)
@@ -90,10 +90,10 @@
 6 #_forecast_recruitment phase (incl. late recr) (0 value resets to maxphase+1)
 1 #_lambda for Fcast_recr_like occurring before endyr+1
 1993 #_last_yr_nobias_adj_in_MPD; begin of ramp
-2002.7301 #_first_yr_fullbias_adj_in_MPD; begin of plateau
-2019.2005 #_last_yr_fullbias_adj_in_MPD
-2021.7918 #_end_yr_for_ramp_in_MPD (can be in forecast to shape ramp, but SS sets bias_adj to 0.0 for fcast yrs)
-0.6929 #_max_bias_adj_in_MPD (-1 to override ramp and set biasadj=1.0 for all estimated recdevs)
+2002.8662 #_first_yr_fullbias_adj_in_MPD; begin of plateau
+2019.079 #_last_yr_fullbias_adj_in_MPD
+2021.7277 #_end_yr_for_ramp_in_MPD (can be in forecast to shape ramp, but SS sets bias_adj to 0.0 for fcast yrs)
+0.6816 #_max_bias_adj_in_MPD (-1 to override ramp and set biasadj=1.0 for all estimated recdevs)
 0 #_period of cycles in recruitment (N parms read below)
 -5 #min rec_dev
 5 #max rec_dev
@@ -115,18 +115,15 @@
 #
 #_Q_setup for fleets with cpue or survey data
 #_fleet	link	link_info	extra_se	biasadj	float  #  fleetname
-    2	1	0	1	0	0	#_CA_Recreational
-    4	1	0	1	0	0	#_CA_CCFRP       
-    5	1	0	1	0	0	#_CA_ROV         
+    2	1	0	0	0	0	#_CA_Recreational
+    4	1	0	0	0	0	#_CA_CCFRP       
+    5	1	0	0	0	0	#_CA_ROV         
 -9999	0	0	0	0	0	#_terminator     
 #_Q_parms(if_any);Qunits_are_ln(q)
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
--25	 25	0	0	1	0	 2	0	0	0	0	0	0	0	#_LnQ_base_CA_Recreational(2) 
-  0	0.5	0	0	1	0	-2	0	0	0	0	0	0	0	#_Q_extraSD_CA_Recreational(2)
--25	 25	0	0	1	0	 2	0	0	0	0	0	0	0	#_LnQ_base_CA_CCFRP(4)        
-  0	0.5	0	0	1	0	-2	0	0	0	0	0	0	0	#_Q_extraSD_CA_CCFRP(4)       
--25	 25	0	0	1	0	 2	0	0	0	0	0	0	0	#_LnQ_base_CA_ROV(5)          
-  0	0.5	0	0	1	0	-2	0	0	0	0	0	0	0	#_Q_extraSD_CA_ROV(5)         
+-25	25	0	0	1	0	2	0	0	0	0	0	0	0	#_LnQ_base_CA_Recreational(2)
+-25	25	0	0	1	0	2	0	0	0	0	0	0	0	#_LnQ_base_CA_CCFRP(4)       
+-25	25	0	0	1	0	2	0	0	0	0	0	0	0	#_LnQ_base_CA_ROV(5)         
 #_no timevary Q parameters
 #
 #_size_selex_patterns
@@ -150,13 +147,13 @@
  11	51	     36	0	0	0	 4	0	0	0	0	0	1	2	#_SizeSel_P_1_CA_Commercial(1)  
 -20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Commercial(1)  
   0	 9	 5.2575	0	0	0	 5	0	0	0	0	0	1	2	#_SizeSel_P_3_CA_Commercial(1)  
-  0	 9	5.48064	0	0	0	 5	0	0	0	0	0	1	2	#_SizeSel_P_4_CA_Commercial(1)  
+  0	20	5.48064	0	0	0	 5	0	0	0	0	0	1	2	#_SizeSel_P_4_CA_Commercial(1)  
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Commercial(1)  
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Commercial(1)  
  11	51	     34	0	0	0	 4	0	0	0	0	0	2	2	#_SizeSel_P_1_CA_Recreational(2)
 -20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Recreational(2)
   0	 9	5.17048	0	0	0	 5	0	0	0	0	0	2	2	#_SizeSel_P_3_CA_Recreational(2)
-  0	 9	5.54518	0	0	0	 5	0	0	0	0	0	2	2	#_SizeSel_P_4_CA_Recreational(2)
+  0	20	     15	0	0	0	-4	0	0	0	0	0	2	2	#_SizeSel_P_4_CA_Recreational(2)
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)
  11	51	     42	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_CCFRP(4)       
@@ -175,24 +172,15 @@
 #_No age_selex_parm
 # timevary selex parameters 
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE
-11	51	     36	0	0	0	4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2003  
-11	51	     36	0	0	0	4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2014  
-11	51	     36	0	0	0	4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2022  
- 0	 9	 5.2575	0	0	0	5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2003  
- 0	 9	 5.2575	0	0	0	5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2014  
- 0	 9	 5.2575	0	0	0	5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2022  
- 0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2003  
- 0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014  
- 0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2022  
-11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2001
-11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017
-11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2023
- 0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2001
- 0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017
- 0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2023
- 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2001
- 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
- 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2023
+11	51	     36	0	0	0	 4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_1916  
+11	51	     36	0	0	0	 4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2014  
+ 0	 9	 5.2575	0	0	0	 5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_1916  
+ 0	 9	 5.2575	0	0	0	 5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2014  
+ 0	 9	5.48064	0	0	0	 5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_1916  
+ 0	20	     15	0	0	0	-5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014  
+11	51	     34	0	0	0	 4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017
+ 0	 9	5.17048	0	0	0	 5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017
+ 0	20	     15	0	0	0	-5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
 # info on dev vectors created for selex parms are reported with other devs after tag parameter section
 #
 0 #  use 2D_AR1 selectivity(0/1):  experimental feature
@@ -203,12 +191,12 @@
 #
 # Input variance adjustments factors: 
 #_factor	fleet	value
-    4	1	0.360053	#_Variance_adjustment_list1
-    4	2	0.180941	#_Variance_adjustment_list2
-    4	4	 0.23979	#_Variance_adjustment_list3
-    4	5	0.170899	#_Variance_adjustment_list4
-    5	1	0.082235	#_Variance_adjustment_list5
-    5	3	 0.74652	#_Variance_adjustment_list6
+    4	1	0.350104	#_Variance_adjustment_list1
+    4	2	0.183025	#_Variance_adjustment_list2
+    4	4	0.237556	#_Variance_adjustment_list3
+    4	5	0.170138	#_Variance_adjustment_list4
+    5	1	0.084542	#_Variance_adjustment_list5
+    5	3	  0.6286	#_Variance_adjustment_list6
 -9999	0	       0	#_terminator               
 #
 1 #_maxlambdaphase
