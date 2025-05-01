@@ -30,12 +30,12 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
     
 5.  Estimates of life history parameters were generated from various sources, and include:
 
-    a.  Updated maturity schedule from fish sampled across California by the \gls{gcdc} based on analysis assuming functional age-at-maturity, which accounts for abortive maturation, wherein young spawners may have yolk present but are not yet spawning capable, and skip spawning, wherein mature individuals do not spawn in every year. **FROG: This is holdover from canary. My memory is that maturity was based on functional age-at-maturity, and thus this still holds true, but I dont recall if it was the focus**
+    a.  Updated maturity schedule from fish sampled in California by the \gls{gcdc} based on analysis assuming functional age-at-maturity.
     b.  Updated fecundity relationship from fish sampled in California by the \gls{gcdc} assuming fecundity is a power function of length.
     c.  Updated prior for natural mortality based on an update value for maximum age.
     d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{recfin}, as well as from the \gls{s-wcgbt}.
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
-    f.  Age and length samples from the same fish were collection from various sources and included as a growth fleet in the model.  
+    f.  Age and length samples from the same fish were collected from various sources and included as a growth fleet in the model.  
 
 The timing of these data sources as used in the base model are illustrated in Figure \ref{fig:data-plot}.
 
