@@ -1121,6 +1121,125 @@ dev.off()
 
 
 # ============================================================================ #
+# marginalComAge
+
+## Replace commercial CAAL with marginal age comps --------------------------------------------------------
+
+new_name <- 'marginalComAge'
+
+mod <- base_mod
+
+com.marg <- read.csv(here("data", "forSS3", "Acomps_PacFIN_unsexed_expanded_1_60.csv")) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = "com") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_no_num) %>%
+  as.data.frame()
+names(com.marg) <- names(mod$dat$agecomp)
+#Negative year years with < 10 Nsamp
+com.marg[which(com.marg$Nsamp <= 10), "year"] <- -com.marg[which(com.marg$Nsamp <= 10), "year"]
+
+new.age.df <- dplyr::bind_rows(com.marg, mod$dat$agecomp[which(mod$dat$agecomp$fleet > 1),])
+mod$dat$agecomp <- new.age.df
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Marginal commercial age comps'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
+# ============================================================================ #
+# noNegYear
+
+## Use all data: Replace all negative year with positive --------------------------------------------------------
+
+new_name <- 'noNegYear'
+
+mod <- base_mod
+
+mod$dat$agecomp[which(mod$dat$agecomp$year < 0), "year"] <- -mod$dat$agecomp[which(mod$dat$agecomp$year < 0), "year"]
+mod$dat$lencomp[which(mod$dat$lencomp$year < 0), "year"] <- -mod$dat$lencomp[which(mod$dat$lencomp$year < 0), "year"]
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Marginal commercial age comps'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
+# ============================================================================ #
+# noAgeErr
+
+## Remove ageing error --------------------------------------------------------
+
+new_name <- 'noAgeErr'
+
+mod <- base_mod
+
+mod$dat$ageerror[1,] <- -1
+mod$dat$ageerror[2,] <- 0.01
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'No ageing error'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
+# ============================================================================ #
 # Biology sensitivities -----
 # ============================================================================ #
 
