@@ -567,6 +567,558 @@ SSsummarize(xx) |>
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+# ============================================================================ #
+# FAA
+
+## Fleets as areas --------------------------------------------------------
+
+#These data are confidential IF splitting the commercial fleet. However this run
+#is the version where the commercial fleet is not split so this is not confidential.
+
+new_name <- "FAA_resetCom"
+
+mod <- base_mod
+
+
+##
+#Make Changes
+##
+
+#Update fleet information for model, lengths, ages, and indices
+mod$dat$Nfleets <- 6
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo[1,],
+                           c("type" = 1, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Recreational_North"),
+                           mod$dat$fleetinfo[-1,])
+mod$dat$fleetinfo$fleetname[3] <- paste0(mod$dat$fleetinfo$fleetname[3], "_South")
+
+mod$dat$len_info <- rbind(mod$dat$len_info[1,],
+                          "CA_Recreational_North" = mod$dat$len_info[2,],
+                          mod$dat$len_info[-1,])
+rownames(mod$dat$len_info)[3] <- paste0(rownames(mod$dat$len_info)[3], "_South")
+
+mod$dat$age_info <- rbind(mod$dat$age_info[1,],
+                          "CA_Recreational_North" = mod$dat$age_info[2,],
+                          mod$dat$age_info[-1,])
+rownames(mod$dat$age_info)[3] <- paste0(rownames(mod$dat$age_info)[3], "_South")
+
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo[1,],
+                          "CA_Recreational_North" =  mod$dat$CPUEinfo[2,],
+                          mod$dat$CPUEinfo[-1,])
+rownames(mod$dat$CPUEinfo)[3] <- paste0(rownames(mod$dat$CPUEinfo)[3], "_South")
+mod$dat$CPUEinfo$fleet <- c(1:6)
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(area = c("All", "North", "South", "All", "All", "All")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5, 6)) %>%
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::select(fleetname, fleet, area, joint, fleet_num)
+
+
+## Set up the data
+
+# Catches
+#Just update the rec catches
+catches <- read.csv(here("data", "confidential_noShare", "CAquillback_total_removals_faa.csv"))
+catches[is.na(catches)] <- 0
+
+updated.rec.catch.df <- catches %>%
+  dplyr::select(c(Year, rec_tot_North, rec_tot_South)) %>%
+  tidyr::pivot_longer(cols = -Year, names_to = c('fleet', 'type', 'area'), values_to = 'catch', 
+                      names_sep = '_') %>% #ideally I want to separate by second hyphen but this is a workaround
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::left_join(fleet.converter %>% dplyr::select(joint, fleet_num), by = c("joint" = "joint")) %>%
+  dplyr::mutate(seas = 1, 
+                catch_se = 0.05) %>%
+  dplyr::select(year = Year, seas, fleet = fleet_num, catch, catch_se) %>%
+  dplyr::arrange(fleet, year) %>%
+  as.data.frame()
+
+updated.catch.df <- dplyr::bind_rows(mod$dat$catch[which(mod$dat$catch$fleet == 1),], updated.rec.catch.df)
+mod$dat$catch <- updated.catch.df
+
+
+# Length comps 
+# Update the rec lengths, negative year when sampels <5, and increase fleet number for fleets after
+rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_FAA_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = gsub('_', "", fleet)) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., 
+                                         dplyr::select(fleet.converter %>% dplyr::mutate(joint = tolower(joint)), -fleet), 
+                                         by = c("fleet" = "joint"))$fleet_num) %>%
+  as.data.frame()
+names(rec.lengths) <- names(mod$dat$lencomp)
+rec.lengths[which(rec.lengths$Nsamp <= 5), "year"] <- -rec.lengths[which(rec.lengths$Nsamp <= 5), "year"]
+
+#Update previous fleet number for unupdated fleets after the rec fleet
+noFAA.lengths <- mod$dat$lencomp[-which(mod$dat$lencomp$fleet %in% c(1, 2)), ]
+noFAA.lengths$fleet <- noFAA.lengths$fleet + 1
+
+#Combine lengths together
+updated.length.df <- dplyr::bind_rows(mod$dat$lencomp[which(mod$dat$lencomp$fleet == 1),],
+                                    rec.lengths,
+                                    noFAA.lengths)
+mod$dat$lencomp <- updated.length.df
+
+
+# Age comps
+#Just need to update fleet numbers
+mod$dat$agecomp[which(mod$dat$agecomp$fleet > 1), "fleet"] <- 
+  mod$dat$agecomp[which(mod$dat$agecomp$fleet > 1), "fleet"] + 1
+
+
+# CPUE data
+#Add rec index splits and redo numbering on fleets with greater number
+pr_index_n <- read.csv(here("data", "forSS3", "PR_index_forSS_FAS_N.csv")) %>%
+  dplyr::mutate(fleet = "recNorth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  dplyr::rename("se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+pr_index_s <- read.csv(here("data", "forSS3", "PR_index_forSS_FAS_S.csv")) %>%
+  dplyr::mutate(fleet = "recSouth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  dplyr::rename("se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+noFAA.cpue <- mod$dat$CPUE[-which(mod$dat$CPUE$index %in% c(1, 2)), ]
+noFAA.cpue$index <- noFAA.cpue$index + 1
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index_n, pr_index_s, noFAA.cpue)
+
+
+## Set up the parameters and options based on updated data
+
+# Selectivity tables
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types[1,],
+                                  "CA_Recreational_North" = mod$ctl$size_selex_types[2,],
+                                  mod$ctl$size_selex_types[-1,])
+rownames(mod$ctl$size_selex_types)[3] <- paste0(rownames(mod$ctl$size_selex_types)[3], "_South")
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types[1,],
+                                 "CA_Recreational_North" = mod$ctl$age_selex_types[2,],
+                                 mod$ctl$age_selex_types[-1,])
+rownames(mod$ctl$age_selex_types)[3] <- paste0(rownames(mod$ctl$age_selex_types)[3], "_South")
+
+
+# Selectivity parameterization
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms[1:6,], #com north
+                                  mod$ctl$size_selex_parms[7:12,], #rec north
+                                  mod$ctl$size_selex_parms[7:12,], #rec south
+                                  mod$ctl$size_selex_parms[-c(1:12),])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |> as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |> unlist()
+rownames(mod$ctl$size_selex_parms) <- selex_names
+
+selex_new <- mod$ctl$size_selex_parms
+
+#Use main block parameters to setup parameter names
+selex_tv_pars_blocks <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+#But maintain base model parameterization
+selex_tv_pars <- dplyr::bind_rows(mod$ctl$size_selex_parms_tv,
+                                  mod$ctl$size_selex_parms_tv[7:9,])
+rownames(selex_tv_pars) <- rownames(selex_tv_pars_blocks) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars_blocks$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars_blocks$Block], selex_tv_pars_blocks$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars
+
+
+# Add q setup for surveys with index data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets,
+                                                  fleet.converter[cpuefleets, "fleetname"],
+                                                  sep = "_"))
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = 2,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets,
+                                                fleet.converter[cpuefleets, "fleetname"],
+                                                sep = "_"))
+
+
+# Add variance adjustment factor for rec split and renumber other fleets
+mod$ctl$Variance_adjustment_list[which(mod$ctl$Variance_adjustment_list$fleet > 2), "fleet"] <-
+  mod$ctl$Variance_adjustment_list[which(mod$ctl$Variance_adjustment_list$fleet > 2), "fleet"] + 1
+
+mod$ctl$Variance_adjustment_list <- dplyr::bind_rows(mod$ctl$Variance_adjustment_list[c(1:2),],
+                                                     mod$ctl$Variance_adjustment_list[2,],
+                                                     mod$ctl$Variance_adjustment_list[-c(1:2),])
+mod$ctl$Variance_adjustment_list[3, "fleet"] <- 3
+
+
+##
+#Output files and run
+##
+
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all_faa(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'FAA'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
+
+# ============================================================================ #
+# FAAreblock
+
+## Fleets as areas reblock --------------------------------------------------------
+
+#The FAA model doesn't fit recreational south length comps very well. 
+#Consider reverting to more complete blocking structure for rec fleets
+
+new_name <- "FAA_resetCom_reblock"
+
+mod <- base_mod
+
+
+##
+#Make Changes
+##
+
+#Update fleet information for model, lengths, ages, and indices
+mod$dat$Nfleets <- 6
+mod$dat$fleetinfo <- rbind(mod$dat$fleetinfo[1,],
+                           c("type" = 1, "surveytiming" = -1, "area" = 1, "units" = 1, "need_catch_mult" = 0,
+                             "fleetname" = "CA_Recreational_North"),
+                           mod$dat$fleetinfo[-1,])
+mod$dat$fleetinfo$fleetname[3] <- paste0(mod$dat$fleetinfo$fleetname[3], "_South")
+
+mod$dat$len_info <- rbind(mod$dat$len_info[1,],
+                          "CA_Recreational_North" = mod$dat$len_info[2,],
+                          mod$dat$len_info[-1,])
+rownames(mod$dat$len_info)[3] <- paste0(rownames(mod$dat$len_info)[3], "_South")
+
+mod$dat$age_info <- rbind(mod$dat$age_info[1,],
+                          "CA_Recreational_North" = mod$dat$age_info[2,],
+                          mod$dat$age_info[-1,])
+rownames(mod$dat$age_info)[3] <- paste0(rownames(mod$dat$age_info)[3], "_South")
+
+mod$dat$CPUEinfo <- rbind(mod$dat$CPUEinfo[1,],
+                          "CA_Recreational_North" =  mod$dat$CPUEinfo[2,],
+                          mod$dat$CPUEinfo[-1,])
+rownames(mod$dat$CPUEinfo)[3] <- paste0(rownames(mod$dat$CPUEinfo)[3], "_South")
+mod$dat$CPUEinfo$fleet <- c(1:6)
+
+fleet.converter <- mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet = c("com", "rec", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::mutate(area = c("All", "North", "South", "All", "All", "All")) %>%
+  dplyr::mutate(fleet_num = c(1, 2, 3, 4, 5, 6)) %>%
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::select(fleetname, fleet, area, joint, fleet_num)
+
+
+# Update blocks
+#Revert to more detailed blocks for recreational fleets
+mod$ctl$N_Block_Designs <- 3
+mod$ctl$blocks_per_pattern <- c(2, 4, 3)
+mod$ctl$Block_Design <- list(mod$ctl$Block_Design[[1]], #commercial fleet
+                             c(2001, 2007, 2008, 2022, 2023, 2023, 2024, 2024), #recreational north fleet
+                             c(2001, 2016, 2017, 2022, 2023, 2024)) #recreational south fleet
+
+
+## Set up the data
+
+# Catches
+#Just update the rec catches
+catches <- read.csv(here("data", "confidential_noShare", "CAquillback_total_removals_faa.csv"))
+catches[is.na(catches)] <- 0
+
+updated.rec.catch.df <- catches %>%
+  dplyr::select(c(Year, rec_tot_North, rec_tot_South)) %>%
+  tidyr::pivot_longer(cols = -Year, names_to = c('fleet', 'type', 'area'), values_to = 'catch', 
+                      names_sep = '_') %>% #ideally I want to separate by second hyphen but this is a workaround
+  dplyr::mutate(joint = paste0(fleet, area)) %>%
+  dplyr::left_join(fleet.converter %>% dplyr::select(joint, fleet_num), by = c("joint" = "joint")) %>%
+  dplyr::mutate(seas = 1, 
+                catch_se = 0.05) %>%
+  dplyr::select(year = Year, seas, fleet = fleet_num, catch, catch_se) %>%
+  dplyr::arrange(fleet, year) %>%
+  as.data.frame()
+
+updated.catch.df <- dplyr::bind_rows(mod$dat$catch[which(mod$dat$catch$fleet == 1),], updated.rec.catch.df)
+mod$dat$catch <- updated.catch.df
+
+
+# Length comps 
+# Update the rec lengths, negative year when sampels <5, and increase fleet number for fleets after
+rec.lengths <- read.csv(here("data", "forSS3", "Lcomps_recreational_FAA_unsexed_raw_10_50.csv")) %>%
+  dplyr::select(-Nsamp) %>%
+  dplyr::mutate(fleet = gsub('_', "", fleet)) %>%
+  dplyr::mutate(fleet = dplyr::left_join(., 
+                                         dplyr::select(fleet.converter %>% dplyr::mutate(joint = tolower(joint)), -fleet), 
+                                         by = c("fleet" = "joint"))$fleet_num) %>%
+  as.data.frame()
+names(rec.lengths) <- names(mod$dat$lencomp)
+rec.lengths[which(rec.lengths$Nsamp <= 5), "year"] <- -rec.lengths[which(rec.lengths$Nsamp <= 5), "year"]
+
+#Update previous fleet number for unupdated fleets after the rec fleet
+noFAA.lengths <- mod$dat$lencomp[-which(mod$dat$lencomp$fleet %in% c(1, 2)), ]
+noFAA.lengths$fleet <- noFAA.lengths$fleet + 1
+
+#Combine lengths together
+updated.length.df <- dplyr::bind_rows(mod$dat$lencomp[which(mod$dat$lencomp$fleet == 1),],
+                                      rec.lengths,
+                                      noFAA.lengths)
+mod$dat$lencomp <- updated.length.df
+
+
+# Age comps
+#Just need to update fleet numbers
+mod$dat$agecomp[which(mod$dat$agecomp$fleet > 1), "fleet"] <- 
+  mod$dat$agecomp[which(mod$dat$agecomp$fleet > 1), "fleet"] + 1
+
+
+# CPUE data
+#Add rec index splits and redo numbering on fleets with greater number
+pr_index_n <- read.csv(here("data", "forSS3", "PR_index_forSS_FAS_N.csv")) %>%
+  dplyr::mutate(fleet = "recNorth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  dplyr::rename("se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+pr_index_s <- read.csv(here("data", "forSS3", "PR_index_forSS_FAS_S.csv")) %>%
+  dplyr::mutate(fleet = "recSouth") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleet), by = c("fleet" = "joint"))$fleet_num) %>%
+  dplyr::rename("se_log" = logse,
+                "index" = fleet) %>%
+  as.data.frame()
+
+noFAA.cpue <- mod$dat$CPUE[-which(mod$dat$CPUE$index %in% c(1, 2)), ]
+noFAA.cpue$index <- noFAA.cpue$index + 1
+
+mod$dat$CPUE <- dplyr::bind_rows(pr_index_n, pr_index_s, noFAA.cpue)
+
+
+## Set up the parameters and options based on updated data
+
+# Selectivity tables
+mod$ctl$size_selex_types <- rbind(mod$ctl$size_selex_types[1,],
+                                  "CA_Recreational_North" = mod$ctl$size_selex_types[2,],
+                                  mod$ctl$size_selex_types[-1,])
+rownames(mod$ctl$size_selex_types)[3] <- paste0(rownames(mod$ctl$size_selex_types)[3], "_South")
+
+mod$ctl$age_selex_types <- rbind(mod$ctl$age_selex_types[1,],
+                                 "CA_Recreational_North" = mod$ctl$age_selex_types[2,],
+                                 mod$ctl$age_selex_types[-1,])
+rownames(mod$ctl$age_selex_types)[3] <- paste0(rownames(mod$ctl$age_selex_types)[3], "_South")
+
+
+# Selectivity parameterization
+mod$ctl$size_selex_parms <- rbind(mod$ctl$size_selex_parms[1:6,], #com north
+                                  mod$ctl$size_selex_parms[7:12,], #rec north
+                                  mod$ctl$size_selex_parms[7:12,], #rec south
+                                  mod$ctl$size_selex_parms[-c(1:12),])
+
+selex_fleets <- rownames(mod$ctl$size_selex_types)[mod$ctl$size_selex_types$Pattern == 24] |> as.list()
+selex_names <- purrr::map(selex_fleets,
+                          ~ glue::glue('SizeSel_P_{par}_{fleet_name}({fleet_no})',
+                                       par = 1:6,
+                                       fleet_name = .x,
+                                       fleet_no = fleet.converter$fleet_num[fleet.converter$fleetname == .x])) |> unlist()
+rownames(mod$ctl$size_selex_parms) <- selex_names
+
+mod$ctl$size_selex_parms[intersect(grep("CA_Recreational_South", rownames(mod$ctl$size_selex_parms)),
+                                   which(mod$ctl$size_selex_parms$Block == 2)), "Block"] <- 3
+
+#Allow domed shaped back for rec parameter 4 for SOUTH only
+#Explorations with domed for north suggest asymptotic for all blocks
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational_South(3)", c("HI", "INIT", "PHASE")] <-
+  mod$ctl$size_selex_parms["SizeSel_P_3_CA_Recreational_South(3)", c("HI", "INIT", "PHASE")]
+# mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational_North(2)", c("HI", "INIT", "PHASE")] <-
+#   mod$ctl$size_selex_parms["SizeSel_P_3_CA_Recreational_North(2)", c("HI", "INIT", "PHASE")]
+
+
+#Set up time varying parameters for rec only (keep origian tv parms for commercial)
+selex_new <- mod$ctl$size_selex_parms
+
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+updated.selex.tv.df <- dplyr::bind_rows(mod$ctl$size_selex_parms_tv[grep('Commercial', rownames(mod$ctl$size_selex_parms_tv)),],
+                                        selex_tv_pars[grep('Recreational', rownames(selex_tv_pars)),])
+mod$ctl$size_selex_parms_tv <- updated.selex.tv.df %>%
+  dplyr::select(-Block, -id)
+
+
+# Add q setup for surveys with index data
+cpuefleets <- unique(c(unique(mod$dat$CPUE$index)))
+mod$ctl$Q_options <- data.frame("fleet" = cpuefleets,
+                                "link" = 1,
+                                "link_info" = 0,
+                                "extra_se" = 0,
+                                "biasadj" = 0,
+                                "float" = 0,
+                                row.names = paste(cpuefleets,
+                                                  fleet.converter[cpuefleets, "fleetname"],
+                                                  sep = "_"))
+mod$ctl$Q_parms <- data.frame("LO" = rep(-25, length(cpuefleets)),
+                              "HI" = 25,
+                              "INIT" = 0,
+                              "PRIOR" = 0,
+                              "PR_SD" = 1,
+                              "PR_type" = 0,
+                              "PHASE" = 2,
+                              "env_var&link" = 0,
+                              "dev_link" = 0,
+                              "dev_minyr" = 0,
+                              "dev_maxyr" = 0,
+                              "dev_PH" = 0,
+                              "Block" = 0,
+                              "Block_Fxn" = 0,
+                              row.names = paste("LnQ", "base", cpuefleets,
+                                                fleet.converter[cpuefleets, "fleetname"],
+                                                sep = "_"))
+
+
+# Add variance adjustment factor for rec split and renumber other fleets
+mod$ctl$Variance_adjustment_list[which(mod$ctl$Variance_adjustment_list$fleet > 2), "fleet"] <-
+  mod$ctl$Variance_adjustment_list[which(mod$ctl$Variance_adjustment_list$fleet > 2), "fleet"] + 1
+
+mod$ctl$Variance_adjustment_list <- dplyr::bind_rows(mod$ctl$Variance_adjustment_list[c(1:2),],
+                                                     mod$ctl$Variance_adjustment_list[2,],
+                                                     mod$ctl$Variance_adjustment_list[-c(1:2),])
+mod$ctl$Variance_adjustment_list[3, "fleet"] <- 3
+
+
+##
+#Output files and run
+##
+
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all_faa(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'FAA_resetCom_reblock')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'FAA full block'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
+# ============================================================================ #
+# FAAreweight
+
+## Fleets as areas reweight --------------------------------------------------------
+
+#Reweight the FAA sensitivity run starting from 1
+
+new_name <- "FAA_resetCom_reblock_reweight"
+old_name <- "FAA_resetCom_reblock"
+
+copy_SS_inputs(dir.old = here(sens_dir, old_name), 
+               dir.new = here(sens_dir, new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here(sens_dir, new_name))
+
+mod$ctl$Variance_adjustment_list$value <- 1
+
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+#Reweight
+pp <- SS_output(here(sens_dir, new_name))
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here(sens_dir, new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = 3, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all_faa(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', "FAA_resetCom_reblock"),
+                                                   file.path('_sensitivities', "FAA_resetCom_reblock_reweight")))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'FAA reblock',
+                                     'FAA reblock reweight'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+#Reweighted south length fits are really off for 2017-2021 when reweighting. 
+#Selectivity shifts pretty far right in the north and the south selex for 2017-2021 is 
+#really off. I dont trust the reweighted version. When setting all weights to 1
+#the model is much more well behaved. Overall, doesn't seem to suggest wide differences
+#at existing weights with non-FAA model. Early explorations should reweighting didn't
+#give as large of differences and that was done with reweighting first and then
+#updating blocks. 
+
 
 # ============================================================================ #
 # Biology sensitivities -----
