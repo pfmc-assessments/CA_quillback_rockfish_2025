@@ -1,0 +1,38 @@
+## Fishery-dependent data
+
+<!-- Commercial fisheries landings by state, year, and gear (PacFIN is the standard source for recent domestic commercial landings), historical catch estimates, discards, recreational fisheries catches, foreign removals; sample size information for length- and age-composition data by state, year and gear, including both the number of trips and fish sampled. Description of methods to estimate abundance indices, sample size information by survey and year. Include complete tables and figures and date of data extraction. -->
+
+### Total Removals {#removals}
+
+Removals (1916--2024) for `r spp` were compiled from multiple data sources. This assessment uses total removals (landings plus dead discards) for all fishing fleets. Sources for total removals are described below. In instances where separate data sources were used for landings and dead discards, each component is described separately. The values for total removals used in the base model are provided in Table \ref{tab:catches1} and Figure \ref{fig:catches}.
+**FROG: Fix table and figure references**
+
+#### Commercial Landings
+
+Commercial landings for `r spp` were combined into a single fleet by aggregating across gear types and fish landed live vs. dead. This choice was driven by similarities in the length distributions among gear types and between fish landed live vs. dead, based on samples within \gls{pacfin}.
+
+Commercial landings data were available from 1916--2024. Historical landings (1916--1980) were obtained from the California Catch Reconstruction Project (@ralston_documentation_2010). While all port groups were sampled, only the northern port groups of Crescent City, Eureka, and Fort Bragg have positive landings for `r spp`. Additional landings caught off the coast of Oregon or Washington but landed in California for 1948--1968 were added to the reconstruction to represent total landings at California ports. These additional landings were not incorporated within the analysis by (@ralston_documentation_2010), though their magnitude is small; no more than 0.08 mt in any one year and a total of approximately 0.3 mt across all years. Landings for 1969--1980 came from \gls{calcom}, and were negliable for `r spp`. 
+
+Recent (1981--2024) landings were obtained from \gls{pacfin} (extracted on 03/14/2025). There were no landings for `r spp` within \gls{pacfin} in 1981--1983, and 1985. Sampling occurred during these years, and so estimates of zero were not due to a lack of sampling. Given that landings in the immediately preceding years were negligible, we kept landings for `r spp` in these years at zero, rather than interpolate based on neighboring values.
+
+
+#### Commercial Discards
+
+**FROG: Not sure we want this paragraph but this provides justification for our choice of adding dead discards to landings.**
+Discarding can be modeled in multiple ways. Among West Coast assessments, three methods for modeling discards are often utilized. Either dead discards are added to landings to obtain total removals, which are then modeled together; dead discards are modeled as a separate fleet from the fleet based on landings; or dead discards are estimated through the use of a retention curve applied to the fleet based on landings. The first method assumes that discarded fish are similar to retained fish, whereas the later two options allow separate selectivity processes to operate on each component. Biological samples of `r spp` were available 2004--2022, but very sparse for all years other than 2022. Therefore, there was limited information with which to estimate selectivity of the discarding process, and therefore dead discards were added to landings to obtain total removals. 
+
+Commercial discard data for `r spp` are collected through NOAA's \gls{wcgop}. Estimates of dead discards in 2002--2023 for each sector of the commercial fleet are provided in the \gls{gemm} product (@somers_gemm_2023). Dead discards as reported in the \gls{gemm} product were added to landings estimates from the sources described above to obtain total removals for 2002--2023. Total removals prior to 2002, for which no \gls{wcgop} data are available, were calculated based on assuming an average ratio of dead discards to landings (0.25 percent), based on data from the nearshore sector in 2002--2021. The nearshore sector was selected as it most likely represented expected fishery behavior prior to 2002, and data from 2001 to 2021 were used because the ratio of dead discards increased in 2022 and 2023, likely as a consequence of management changes in the fishery. Preliminary estimates of dead discards for 2024 were provided by \gls{nwfsc} \gls{fos} program on 3/31/2025 and added to landings in that year to obtain total removals in 2024.   
+
+  
+
+
+#### Recreational Landings
+
+#### Recreational Discards
+
+
+### Discards
+
+### Biological data (length compositions and age compositions)
+
+### Abundance indices
