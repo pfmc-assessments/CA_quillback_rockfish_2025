@@ -1,12 +1,393 @@
-## Executive Summary {#sec-exec-sum}
+# Executive Summary
 
-<!--- Where possible, the executive summary should paraphrase the shared content of the body of the report to minimize redundancy.--->
+## Stock{-}
 
-### Assessment Model
 
-<!-- Include a short statement describing the assessment model used for the current management cycle and any data updates. -->
 
-### Reference Points, Stock Status, and Projections
+<!-- Species/area, including an evaluation of any potential biological basis for regional management -->
 
-<!-- Short summary of reference points, stock status, and projections. When using `asar`, tables of reference points and projections will be automatically generated. -->
+## Catches{-}
+
+ (@tbl-es-catches, @fig-es-landings). 
+
+<!-- \clearpage -->
+
+```{r, tbl-es-catches, results = "asis"}
+#| label: tbl-es-catches
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) catches_es_cap 
+#| tbl-pos: H
+
+catches_es_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = 2:4, # depends on number of fleets with catch
+    decimals = 0
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    # if want to not have tables the width of the page include the below option:
+    latex.use_longtable = TRUE 
+  ) |>
+  gt::cols_align(
+    align = "center"
+  ) |>
+  #cols_width(
+  #  everything() ~ px(75)
+  #) |>
+  gt::as_latex()
+
+```
+
+```{r, fig-es-landings} 
+#| label: fig-es-landings
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Landings in metric tons (mt) by year for each fleet."
+#| fig-alt: "See Table 9 for values."
+
+knitr::include_graphics("r4ss_plots/catch2_landings_stacked.png")
+
+```
+<!-- \clearpage -->
+
+## Data and assessment{-}
+
+
+<!-- Date of last assessment, type of assessment model, data available, new information, and information lacking. -->
+
+## Stock spawning output and dynamics{-}
+
+<!-- Trends and current levels relative to virgin or historic levels, description of uncertainty-include table for last 10 years and graph with long term estimates. -->
+
+<!-- \clearpage  -->
+ (@fig-es-sb, @fig-es-depl)
+ (@tbl-es-sb). 
+
+```{r, tbl-es-sb, results = "asis"}
+#| label: tbl-es-sb
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) ssb_es_cap 
+#| tbl-pos: H
+
+ssb_es_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = 2:4,
+    decimals = 2
+  ) |>
+  gt::fmt_number(
+    columns = 5:7,
+    decimals = 3
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE 
+  ) |>
+  gt::cols_align(
+    align = "center"
+  ) |>
+  gt::cols_width(
+    tidyselect::everything() ~ px(75)
+  ) |>
+  gt::as_latex()
+```
+
+```{r} 
+#| label: fig-es-sb
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Estimated time series of spawning output (trillions of eggs) for the base model."
+#| fig-alt: "See table 26 for values."
+#| fig-pos: H
+
+knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
+
+```
+
+```{r} 
+#| label: fig-es-depl
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Estimated time series of fraction of unfished spawning output for the base model."
+#| fig-alt: ""
+#| fig-pos: H
+
+knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
+
+```
+
+## Recruitment{-}
+
+ (@tbl-es-recr, @fig-es-recruits). 
+
+<!-- Trends and current levels relative to virgin or historic levels-include table for last 10 years and graph with long term estimates. -->
+
+```{r, tbl-es-recr, results = "asis"}
+#| label: tbl-es-recr
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) recr_es_cap 
+#| tbl-pos: H
+
+recr_es_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = 2:4,
+    decimals = 0
+  ) |>
+  gt::fmt_number(
+    columns = 5:7,
+    decimals = 3
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE 
+  ) |>
+  gt::cols_align(
+    align = "center"
+  ) |>
+  gt::cols_width(
+    tidyselect::everything() ~ px(75)
+  ) |>
+  gt::as_latex()
+
+```
+
+```{r} 
+#| label: fig-es-recruits
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Estimated time series of age-0 recruits for the base model."
+#| fig-alt: ""
+#| fig-pos: H
+
+knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png")
+
+```
+
+<!-- 
+```{r} 
+#| label: fig-es-recdevs
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Estimated time series of recruitment deviations for the base model."
+#| fig-alt: ""
+#| fig-pos: H
+
+knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
+
+```
+-->
+
+<!-- \clearpage -->
+## Exploitation status{-}
+
+ (@tbl-es-spr, @fig-es-kobe).
+
+<!-- Exploitation rates (i.e., total catch divided by exploitable biomass, or the annual SPR harvest rate) - include a table with the last 10 years of data and a graph showing the trend in fishing mortality relative to the target (y-axis) plotted against the trend in biomass relative to the target (x-axis). -->
+
+```{r, tbl-es-spr, results = "asis"}
+#| label: tbl-es-spr
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) spr_es_cap 
+#| tbl-pos: H
+
+spr_es_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = 2:7,
+    decimals = 3
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE 
+  ) |>
+  gt::cols_align(
+    align = "center"
+  ) |>
+  gt::cols_width(
+    tidyselect::everything() ~ px(80)
+  ) |>
+  gt::as_latex()
+
+```
+
+```{r} 
+#| label: fig-es-kobe
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Phase plot of fishing intensity versus fraction unfished."
+#| fig-alt: "See table @tbl-ts for the values of the fraction unfished and fishing intensity which are related in this figure."
+#| fig-pos: H
+
+knitr::include_graphics("r4ss_plots/SPR4_phase.png")
+
+```
+
+<!-- \clearpage -->
+
+## Ecosystem considerations{-}
+
+
+
+## Reference points{-}
+
+@tbl-ref-points-es
+
+<!-- Management targets and definitions of overfishing, including the harvest rate that brings the stock to equilibrium at B24% for flatfishes and B40% for all other groundfish stocks (BMSY proxies) and the equilibrium stock size that results from fishing at the default harvest rate (the FMSY proxy). Include a summary table that compares estimated reference points for SSB, SPR, Exploitation Rate and Yield based on SSB proxy for MSY, SPR proxy for MSY, and estimated MSY values. -->
+
+\clearpage
+
+```{r, tbl-ref-points-es, results = "asis"}
+#| label: tbl-ref-points-es
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) reference_points_cap 
+#| tbl-pos: H
+
+reference_points_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = 2:4,
+    rows = c(2:4, 7, 10, 12, 15, 17, 20),
+    decimals = 0
+  ) |>
+  gt::fmt_number(
+    columns = 2:4,
+    rows = 1,
+    decimals = 1
+  ) |>
+  gt::fmt_number(
+    columns = 2:4,
+    rows = c(5, 8, 9, 13:14, 18:19),
+    decimals = 3
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE 
+  ) |>  
+  gt::tab_style(
+    style = list(
+      gt::cell_text(style = "italic")
+    ),
+    locations = gt::cells_body(
+      columns = "Reference Point",
+      rows = dplyr::starts_with("Reference")
+    )
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    missing_text = "---"
+  ) |>
+  gt::as_latex()
+
+```
+
+## Management performance{-}
+
+ (@tbl-es-management)
+<!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
+
+```{r, tbl-es-management, results = "asis"}
+#| label: tbl-es-management
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: "Recent trend in the overfishing limits (OFL), the acceptable biological catches (ABCs), the annual catch limits (ACLs), and the total dead catch (landings + discards) all in metric tons (mt)."
+#| tbl-pos: H
+
+recent_management_table |>
+  rename(`Total dead catch (mt)` = `Catch (mt)`) |>
+  gt::gt() |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE 
+  ) |>
+#   gt::cols_align(
+#     align = "center"
+#   ) |>
+  gt::as_latex()
+
+```
+
+## Unresolved problems and major uncertainties{-}
+
+
+
+<!-- Any special issues that complicate scientific assessment, questions about the best model scenario, etc. -->
+
+## Decision table and harvest projections{-}
+
+ @tbl-es-projections
+
+<!-- Projected yields (OFL, ABC and ACL), spawning biomass / output, and stock depletion levels for each year. OFL calculations should be based on the assumption that future catches equal ABCs and not OFLs. -->
+
+::: {.landscape}
+
+```{r, tbl-es-projections, results = "asis"}
+#| label: tbl-es-projections
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) projections_cap 
+#| tbl-pos: H
+
+projections_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = c(2:5, 7:8),
+    decimals = 0
+  ) |>
+  gt::fmt_number(
+    columns = c(6, 9:10),
+    decimals = 3
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE 
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    missing_text = "---"
+  ) |>
+  gt::cols_align(
+    align = "center"
+  ) |>
+  gt::cols_width(
+    everything() ~ px(75)
+  ) |>
+  gt::as_latex()
+
+```
+
+:::
+
+## Scientific uncertainty{-}
+
+The model estimate of the log-scale standard deviation of the overfishing limit (OFL) in 2025 is `r round(mod_out$OFL_sigma, 3)`. 
+
+## Research and data needs{-}
+
+
+{{< pagebreak >}}
+
+## Risk Table{-}
+
+
+{{< pagebreak >}}
 

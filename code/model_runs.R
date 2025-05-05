@@ -9235,6 +9235,10 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
+r4ss::table_all(replist = pp, dir = here::here("documents","report"))
+
+
+
 
 ####------------------------------------------------#
 ## 4_2_1a_propBase ----

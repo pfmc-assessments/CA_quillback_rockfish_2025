@@ -4,6 +4,7 @@ library(r4ss)
 library(ggplot2)
 library(cowplot)
 base_model <- '4_2_1_propBase'
+
 getLtable=function(modelsum, legend.labels=NULL) {
   parameters <- modelsum$pars[modelsum$pars$recdev==FALSE, c(modelsum$n+1,1:modelsum$n)]
   parms.that.change <- parameters[apply(parameters[2:(modelsum$n+1)], 1, function(x) length(unique(x))>1),]
@@ -55,31 +56,12 @@ profile <- r4ss::profile(
   exe = here('models/ss3_win.exe')
 )
 
-# set 2 ####
-#par_table2=rbind(expand.grid(M=seq(0.145,0.15,by = 0.005),h=seq(0.60,0.90,by = 0.05)),
-#                 expand.grid(M=seq(0.11,0.15,by = 0.005),h=0.95))
-#par_table3=rbind(par_table,par_table2)
-#
-#profile <- SS_profile(
-#  dir = mydir, # directory
-#  masterctlfile = "control.ss_new",
-#  newctlfile = "control_modified.ss",
-#  linenum = c(70, 118), #mortality, steepness
-#  profilevec = par_table3,
-#  whichruns = 29:51,
-#  extras = "-nohess -nox"
-#)
-
 # get model output
 profilemodels <- r4ss::SSgetoutput(
-  dirvec = mydir,
+  dirvec = here('models','_bivariate_profiles','M_and_h'),
   keyvec = 1:nrow(par_table))
 
-#add base model (optional)
-# basemodel <- SS_output("Southern CA Vermilion post-STAR base/")
-# profilemodels[["base"]] <- basemodel
-
-profilesummary <- SSsummarize(profilemodels)
+profilesummary <- r4ss::SSsummarize(profilemodels)
 
 ptable = getLtable(profilesummary)
 sumtable = subset(ptable, Label %in% c("TOTAL", "NatM_uniform_Fem_GP_1", "SR_BH_steep",
@@ -123,7 +105,7 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=NLL)) +
   scale_x_continuous(expand = c(0,0), breaks = unique(Sdgrid$M)) + 
   scale_y_continuous(expand = c(0,0), breaks = unique(Sdgrid$h)) +
   theme_bw(base_size = 18)
-ggsave("_plots/S_Mhgrid_nll_both_sex_m_2.99.png",width = 10, height = 10)
+ggsave(here('models', '_bivariate_profiles','M_and_h','Mhgrid_nll.png'),width = 10, height = 10)
 
 ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
   geom_tile() +
@@ -135,7 +117,8 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
   scale_x_continuous(expand = c(0,0), breaks = unique(Sdgrid$M)) + 
   scale_y_continuous(expand = c(0,0), breaks = unique(Sdgrid$h)) +
   theme_bw(base_size = 18)
-ggsave("_plots/S_Mhgrid_depletion_both_sex_m_2.99.png",width = 10, height = 10)
+  ggsave(here('models', '_bivariate_profiles','M_and_h','Mhgrid_depletion.png'),width = 10, height = 10)
+
 
 #p3=ggplot(Sdgrid,aes(x=M,y=h,fill=EquilMSY)) +
 #  geom_tile() +
@@ -159,8 +142,10 @@ ggsave("_plots/S_Mhgrid_depletion_both_sex_m_2.99.png",width = 10, height = 10)
 #  scale_y_continuous(expand = c(0,0), breaks = unique(Sdgrid$h))
 #ggsave("bivariate_post-STAR/S_Mhgrid_OFL.png",width = 5.5,height = 4)
 
+#change above to p1 and p2 to do this
 plot_grid(p1,p2, nrow = 2)
-ggsave("bivariate_post-STAR/S_Mhgrid_ALL.png",width = 12,height = 18)
+ggsave(here('models', '_bivariate_profiles','M_and_h','Mhgrid_ALL.png'),width = 12, height = 18)
+
 
 
 #================================
@@ -216,5 +201,6 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
       legend.title = element_text(size = 15)) +
     guides(fill = guide_legend(title = "Change in NLL")) +
     theme_bw(base_size = 16)
-ggsave(file.path(getwd(), "_plots", "joint_m_h_profile_ggsave.png"), width = 14, height = 12)
+ggsave(here('models', '_bivariate_profiles','M_and_h',"joint_m_h_profile_ggsave.png"),width = 14, height = 12)
+
 #dev.off()

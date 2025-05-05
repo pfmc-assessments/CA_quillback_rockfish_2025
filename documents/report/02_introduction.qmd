@@ -1,6 +1,6 @@
 # Introduction
 
-This assessment reports the status of the `r spp` (*Sebastes maliger*) stock off the coast of California through 2024. The PFMC defined California stock of quillback rockfish was on November 13, 2023 as part of a process to define stocks for management. 
+This assessment reports the status of the `r spp` (*Sebastes maliger*) stock off the coast of California through 2024. The \gls{pfmc} defined California stock of quillback rockfish was on November 13, 2023 as part of a process to define stocks for management. 
 
 <!-- Scientific name, distribution, the basis for the choice of stock structure, including regional differences in life history or other biological characteristics that should form the basis of management units. A map showing the scope of the assessment and depicting boundaries for fisheries or data collection strata.  -->
 

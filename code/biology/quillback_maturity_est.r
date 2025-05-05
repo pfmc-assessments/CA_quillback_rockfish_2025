@@ -25,13 +25,13 @@ library(ggplot2)
 # Quill.mat<-read.csv("Quillbackmaturity.csv")
 
 Quill.mat <- read.csv(here("data-raw", "maturity","Quillbackmaturity_update02282025.csv"))
-data <- Quill.mat
+data <- Quill.mat %>% filter(Project_ID != 'ODFW')
 View(data)
 summary(as.factor(data$Certainty))
 
 
 # using 'certainty=1' data, functional maturity only
-#removes 17 quillback 
+#removes 7 quillback 
 data_cert <- data %>%
   filter(Certainty == 1, 
          !is.na(Certainty),
@@ -61,7 +61,7 @@ data.glm <- glm(Functional_maturity ~ Length_cm, data=data_cert,
                 family = binomial(link ="logit"))
 summary(data.glm)
 
-##see if area is significant - yes, but low sample sizes in the north
+##
 data.glm1 <- glm(Functional_maturity ~ Length_cm, data=data_cert, 
                 family = binomial(link ="logit"))
 summary(data.glm1)
@@ -88,7 +88,7 @@ f <- function(x, a=coef(data.glm)[1], b=coef(data.glm)[2])
 #png(filename = "ilion_functional_maturity.png", width = 7, height = 5, units = "in", res = 600)
 with(obs.prop.df, plot(FL_2cm+1, obs.prop, 
                        xlim=c(0,50), bty='l', 
-                       xlab="Fork Length [cm]", 
+                       xlab="Fork Length (cm)", 
                        ylab="Proportion Mature", 
                        main = "Predicted Proportion Mature",
                        cex.lab = 2, cex.main = 2,
@@ -101,7 +101,11 @@ ggplot(data_cert, aes(x = Length_cm, y = Functional_maturity)) +
   geom_point(cex = 6, shape = 1 ) +
   theme_bw() +
   theme(text=element_text(size=21)) +
+  labs(x = "Fork Length (cm)", 
+       y = "Proportion Functionally Mature") +
   geom_function( fun = f, xlim = c(0,50), lwd = 2, colour  = "red")
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "maturity_fit.png"),
+       width = 10, height = 8)
 
 
 

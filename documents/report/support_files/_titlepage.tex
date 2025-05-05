@@ -34,7 +34,7 @@ $if(subtitle)${\large{$subtitle$}}\\[4\baselineskip]$endif$
 
 %%%%%% Cover image
 $if(cover)$
-\pdftooltip{\includegraphics[width=6in]{$cover$}}{An illustration of Quillback rockfish}
+\pdftooltip{\includegraphics[width=6in]{$cover$}}{An illustration of Yellowtail rockfish}
 % cover page customization need to be inserted here
 %\pdftooltip{\includegraphics{$cover$}}{Alt text}
 $endif$
@@ -97,7 +97,7 @@ $endif$%
 $if(by-affiliation.address)$%
 % Ross recommends putting address on one line
 $if(by-affiliation.name)$, $else$$if(by-affiliation.department)$, $endif$$endif$%
-{$it.address$}%
+{$it.address$, $it.city$, $it.postal-code$}%
 $endif$%
 $sep$\par\hangindent=1em\hangafter=1%
 $endfor$
@@ -126,6 +126,7 @@ $endfor$
 U.S. Department of Commerce\newline
 National Oceanic and Atmospheric Administration\newline
 National Marine Fisheries Service\newline
+Northwest Fisheries Science Center\newline
 
 \end{minipage}
 $if(titlepage-geometry)$

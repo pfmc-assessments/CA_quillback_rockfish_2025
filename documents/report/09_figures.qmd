@@ -1,4 +1,4 @@
-## Figures {#sec-figures}
+# Figures {#sec-figures}
  
 ```{r} 
 #| label: 'set-rda-dir-figs'
@@ -8,188 +8,69 @@
 rda_dir <- here::here("documents", "rda_files")
 ``` 
 
-```{r} 
-#| label: 'fig-recruitment-setup'
-#| echo: false 
-#| warning: false 
-#| eval: true 
-# if the recruitment figure rda exists:
-if (file.exists(file.path(rda_dir, 'recruitment_figure.rda'))){
 
-  # load rda
-  load(file.path(rda_dir, 'recruitment_figure.rda'))
 
-  # save rda with plot-specific name
-  recruitment_plot_rda <- rda
+{{< pagebreak >}}
 
-  # remove generic rda object
-  rm(rda)
+## Data
 
-  # save figure, caption, and alt text as separate objects; set eval to TRUE
-  recruitment_plot <- recruitment_plot_rda$figure
-  recruitment_cap <- recruitment_plot_rda$cap
-  recruitment_alt_text <- recruitment_plot_rda$alt_text
-  eval_recruitment <- TRUE
 
-# if the recruitment figure rda does not exist, don't evaluate the next chunk
-} else {eval_recruitment <- FALSE}
-``` 
+```{r}
+#| label: fig-data
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Data avaialable by year for each fleet, where circle area is relative within a data type. Circles are proportional to total catch for catches; to precision for indices, discards, and mean body weight observations; and to total sample size for compositions and mean weight- or length-at-age observations. Observations excluded from the likelihood have equal size for all years."
+#| fig-alt: "Tabular information for this figure can be found in the data file."
 
-```{r} 
-#| label: 'fig-recruitment'
-#| echo: false 
-#| warning: false 
-#| eval: !expr eval_recruitment 
-#| fig-cap: !expr if(eval_recruitment) recruitment_cap 
-#| fig-alt: !expr if(eval_recruitment) recruitment_alt_text
-recruitment_plot
-``` 
+knitr::include_graphics(
+    "r4ss_plots/data_plot2.png"
+)
+```
 
-```{r} 
-#| label: 'fig-spawning_biomass-setup'
-#| echo: false 
-#| warning: false 
-#| eval: true 
-# if the spawning biomass figure rda exists:
-if (file.exists(file.path(rda_dir, 'spawning.biomass_figure.rda'))){
 
-  # load rda
-  load(file.path(rda_dir, 'spawning.biomass_figure.rda'))
 
-  # save rda with plot-specific name
-  spawning_biomass_plot_rda <- rda
 
-  # remove generic rda object
-  rm(rda)
+### Indices
 
-  # save figure, caption, and alt text as separate objects; set eval to TRUE
-  spawning_biomass_plot <- spawning_biomass_plot_rda$figure
-  spawning_biomass_cap <- spawning_biomass_plot_rda$cap
-  spawning_biomass_alt_text <- spawning_biomass_plot_rda$alt_text
-  eval_spawning_biomass <- TRUE
 
-# if the spawning biomass figure rda does not exist, don't evaluate the next chunk
-} else {eval_spawning_biomass <- FALSE}
-``` 
 
-```{r} 
-#| label: 'fig-spawning_biomass'
-#| echo: false 
-#| warning: false 
-#| eval: !expr eval_spawning_biomass 
-#| fig-cap: !expr if(eval_spawning_biomass) spawning_biomass_cap 
-#| fig-alt: !expr if(eval_spawning_biomass) spawning_biomass_alt_text
-spawning_biomass_plot
-``` 
+### Composition data
 
-```{r} 
-#| label: 'fig-biomass-setup'
-#| echo: false 
-#| warning: false 
-#| eval: true 
-# if the biomass figure rda exists:
-if (file.exists(file.path(rda_dir, 'biomass_figure.rda'))){
 
-  # load rda
-  load(file.path(rda_dir, 'biomass_figure.rda'))
+### Biological data
 
-  # save rda with plot-specific name
-  biomass_plot_rda <- rda
+{{< pagebreak >}}
 
-  # remove generic rda object
-  rm(rda)
 
-  # save figure, caption, and alt text as separate objects; set eval to TRUE
-  biomass_plot <- biomass_plot_rda$figure
-  biomass_cap <- biomass_plot_rda$cap
-  biomass_alt_text <- biomass_plot_rda$alt_text
-  eval_biomass <- TRUE
+## Model
 
-# if the biomass figure rda does not exist, don't evaluate the next chunk
-} else {eval_biomass <- FALSE}
-``` 
 
-```{r} 
-#| label: 'fig-biomass'
-#| echo: false 
-#| warning: false 
-#| eval: !expr eval_biomass 
-#| fig-cap: !expr if(eval_biomass) biomass_cap 
-#| fig-alt: !expr if(eval_biomass) biomass_alt_text
-biomass_plot
-``` 
 
-```{r} 
-#| label: 'fig-landings-setup'
-#| echo: false 
-#| warning: false 
-#| eval: true 
-# if the landings figure rda exists:
-if (file.exists(file.path(rda_dir, 'landings_figure.rda'))){
+### Bridging
 
-  # load rda
-  load(file.path(rda_dir, 'landings_figure.rda'))
 
-  # save rda with plot-specific name
-  landings_plot_rda <- rda
 
-  # remove generic rda object
-  rm(rda)
+### Biology
 
-  # save figure, caption, and alt text as separate objects; set eval to TRUE
-  landings_plot <- landings_plot_rda$figure
-  landings_cap <- landings_plot_rda$cap
-  landings_alt_text <- landings_plot_rda$alt_text
-  eval_landings <- TRUE
 
-# if the landings figure rda does not exist, don't evaluate the next chunk
-} else {eval_landings <- FALSE}
-``` 
+### Selectivity
 
-```{r} 
-#| label: 'fig-landings'
-#| echo: false 
-#| warning: false 
-#| eval: !expr eval_landings 
-#| fig-cap: !expr if(eval_landings) landings_cap 
-#| fig-alt: !expr if(eval_landings) landings_alt_text
-landings_plot
-``` 
 
-```{r} 
-#| label: 'fig-recruitment_deviations-setup'
-#| echo: false 
-#| warning: false 
-#| eval: true 
-# if the recruitment deviations figure rda exists:
-if (file.exists(file.path(rda_dir, 'recruitment.deviations_figure.rda'))){
 
-  # load rda
-  load(file.path(rda_dir, 'recruitment.deviations_figure.rda'))
+### Fits to Data
 
-  # save rda with plot-specific name
-  recruitment_deviations_plot_rda <- rda
 
-  # remove generic rda object
-  rm(rda)
+### Time-series
 
-  # save figure, caption, and alt text as separate objects; set eval to TRUE
-  recruitment_deviations_plot <- recruitment_deviations_plot_rda$figure
-  recruitment_deviations_cap <- recruitment_deviations_plot_rda$cap
-  recruitment_deviations_alt_text <- recruitment_deviations_plot_rda$alt_text
-  eval_recruitment_deviations <- TRUE
+{{< pagebreak >}}
 
-# if the recruitment deviations figure rda does not exist, don't evaluate the next chunk
-} else {eval_recruitment_deviations <- FALSE}
-``` 
 
-```{r} 
-#| label: 'fig-recruitment_deviations'
-#| echo: false 
-#| warning: false 
-#| eval: !expr eval_recruitment_deviations 
-#| fig-cap: !expr if(eval_recruitment_deviations) recruitment_deviations_cap 
-#| fig-alt: !expr if(eval_recruitment_deviations) recruitment_deviations_alt_text
-recruitment_deviations_plot
-``` 
+## Model diagnostics
 
+
+
+### Sensitivity analyses
+
+
+### Retrospectives and likelihood profiles
