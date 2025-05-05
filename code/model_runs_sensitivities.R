@@ -1560,3 +1560,145 @@ SSsummarize(xx) |>
                                      'Estimate M and h'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+#========================================================================================
+# Selectivity Alternatives -----
+#========================================================================================
+
+## Alternative Commercial Blocks --------------------------------------------------------
+
+new_name <- 'AltComBlocks'
+
+mod <- base_mod
+
+mod$ctl$blocks_per_pattern <- c(2, 3)
+mod$ctl$Block_Design <- list(c(2003, 2022, 2023, 2024), #commercial fleet
+                             c(2001, 2016, 2017 ,2022, 2023 ,2024)) #recreational fleet
+
+mod3218 <- SS_read(here('models', '3_2_18_SimplifyComBlocks'))
+
+mod[["ctl"]][["size_selex_parms_tv"]] <- mod3218[["ctl"]][["size_selex_parms_tv"]]
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+## No Blocks --------------------------------------------------------
+
+new_name <- 'NoBlocks'
+
+mod <- base_mod
+
+mod$ctl$N_Block_Designs <- 0
+#mod$ctl$N_Block_Designs <- paste0("#",mod$ctl$blocks_per_pattern)
+mod$ctl$size_selex_parms$Block  = 0
+mod$ctl$size_selex_parms$Block_Fxn  = 0
+mod$ctl$size_selex_parms_tv <- 0
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+## ROV and CCFRP Domed --------------------------------------------------------
+
+new_name <- 'ROVandCCFRPDomed'
+
+mod <- base_mod
+
+mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name),
+                                                   file.path('_sensitivities', "AltComBlocks"),
+                                                   file.path('_sensitivities', "NoBlocks")))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'ROV & CCFRP Domed', "Simplify Commercial Blocks", "No Blocks"),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+## More Rec Blocks with Early Period Asymptotic --------------------------------------------------------
+# Leave CCFRP and ROV asymptotic
+
+new_name <- 'EarlyRecAsymp'
+
+mod <- base_mod
+
+mod[["ctl"]][["blocks_per_pattern"]][["blocks_per_pattern_2"]] <- 3
+mod[["ctl"]][["Block_Design"]][[2]] <- c(2001,2016,2017,2022,2023,2024)
+
+tv <- mod[["ctl"]][["size_selex_parms_tv"]]
+tv <- rbind(tv, tv[rep(7, 2),])
+tv <- tv[c(1:6, 10,11, 7:9),]
+tv <- rbind(tv, tv[rep(10, 2),])
+tv <- tv[c(1:9, 12,13, 10,11),]
+tv <- rbind(tv, tv[rep(13, 2),])
+row.names(tv)[7:15] <- c("SizeSel_P_1_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_1_CA_Recreational(2)_BLK2repl_2023", "SizeSel_P_2_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_2_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_2_CA_Recreational(2)_BLK2repl_2023", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2023")
+
+tv[13:15,2] <- 9
+tv[13:15,3] <- 5.54518
+tv[13:15,7] <- 5
+
+mod[["ctl"]][["size_selex_parms_tv"]] <- tv
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'More Rec Blocks'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
