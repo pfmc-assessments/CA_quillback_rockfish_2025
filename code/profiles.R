@@ -281,3 +281,108 @@ run_mcmc_diagnostics(
     interactive = FALSE,
     verbose = FALSE
   )
+
+
+
+# ============================================================================ #
+# Profile over M while estimating h
+#need to modify the base model to estimate h
+#making a copy of the base model and changing the phase 
+bivar_directory <- here('models', '_bivariate_profiles')
+copy_SS_inputs(dir.old = here('models', base_model), 
+               dir.new = here('models', '_bivariate_profiles', base_model),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', '_bivariate_profiles', base_model))
+#estimate h
+mod$ctl$SR_parms['SR_BH_steep', c('PHASE')] <- 4
+
+SS_write(mod,
+         dir = here('models', '_bivariate_profiles', base_model),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', '_bivariate_profiles', base_model), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+#Note that names of parmaeters need to be from ss_new files
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'NatM_uniform_Fem_GP_1', 
+  low = -0.02, 
+  high = 0.03,
+  step_size = 0.005,
+  param_space = 'relative') 
+
+settings <- nwfscDiag::get_settings(
+  mydir = bivar_directory,
+  settings = list(
+    base_name = base_model,
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
+
+# set up parallel stuff - runs about 4x faster
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+tictoc::tic()
+run_diagnostics(mydir = here('models','_bivariate_profiles'), model_settings = settings)
+tictoc::toc()
+
+# back to sequential processing
+future::plan(future::sequential)
+
+
+# ============================================================================ #
+# Profile over h while estimating M
+#use the same base model just change the parameters
+copy_SS_inputs(dir.old = here('models', base_model), 
+               dir.new = here('models', '_bivariate_profiles', base_model),
+               overwrite = TRUE)
+mod <- SS_read(here('models', '_bivariate_profiles', base_model))
+#estimate M
+mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('PHASE')] <- 4
+
+SS_write(mod,
+         dir = here('models', '_bivariate_profiles', base_model),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', '_bivariate_profiles', base_model), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+#set up the profiles for steepness
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'SR_BH_steep', 
+  low = 0.5, 
+  high = 0.95,
+  step_size = 0.05,
+  param_space = 'real') 
+
+settings <- nwfscDiag::get_settings(
+  mydir = bivar_directory,
+  settings = list(
+    base_name = base_model,
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
+
+# set up parallel stuff
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+tictoc::tic()
+run_diagnostics(mydir = here('models','_bivariate_profiles'), model_settings = settings)
+tictoc::toc()
+
+# back to sequential processing
+future::plan(future::sequential)
+

@@ -13,7 +13,7 @@ library(ggplot2)
 source(here('code/selexComp.R'))
 
 #Enter in base model from which to base sensitivities
-#base_mod_name <- '3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
+#base_mod_name <-'3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
 base_mod_name <- '4_2_1_propBase' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
@@ -1286,7 +1286,7 @@ SSsummarize(xx) |>
 
 
 # ============================================================================ #
-#  Maturity_2021est
+# Maturity_2021est
 
 ### Maturity to 2021 estimates ----
 
@@ -1551,6 +1551,9 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
+
+
 
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
                                         subdir = c(base_mod_name,
