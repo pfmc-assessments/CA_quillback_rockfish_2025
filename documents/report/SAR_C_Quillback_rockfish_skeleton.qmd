@@ -54,7 +54,8 @@ params:
    cf: 'Commercial fleet'
    rf: 'Recreational fleet'
 bibliography: 
--  asar_references.bib 
+-  asar_references.bib
+-  extra_quillback_references.bib
 ---
 ```{r} 
 #| label: 'output_and_quantities'
@@ -182,7 +183,7 @@ a <- knitr::knit_child('01_executive_summary.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
+ {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'introduction'
@@ -201,6 +202,17 @@ cat(a, sep = '\n')
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03_data.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+ 
+```{r, results='asis'}
+#| label: 'data-fish-depend'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('03a_data_fishery_dependent.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
