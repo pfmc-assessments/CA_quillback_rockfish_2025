@@ -10,9 +10,9 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
 
 1.  Data regarding total removals of `r spp` encompassing years 1916--2024 were obtained from several sources:
 
-    a.  Landed commercial catches (1916--2024) come from historical reconstructions (@ralston_documentation_2010), \gls{calcom}, and \gls{pacfin}.
-    b.  Landed recreational catches (1928--2024) come from historical reconstructions (@ralston_documentation_2010), \gls{mrfss}, and \gls{recfin}. Both \gls{mrfss} and \gls{recfin} also include estimates of recreational dead discards.
-    c.  Commercial dead discards for recent years (2002--2023) come from the \gls{gemm} annual mortality report which uses data from a variety of sources including the \gls{wcgop}, and are [publicly available](https://connect.fisheries.noaa.gov/gemm_csv/).
+    a.  Landed commercial catches (1916--2024) come from historical reconstructions [@ralston_documentation_2010], \gls{calcom}, and \gls{pacfin}.
+    b.  Landed recreational catches (1928--2024) come from historical reconstructions [@ralston_documentation_2010], \gls{mrfss}, and \gls{recfin}. Both \gls{mrfss} and \gls{recfin} also include estimates of recreational dead discards.
+    c.  Commercial dead discards for recent years (2002--2023) come from the \gls{gemm} product which aggregates data from a variety of sources including the \gls{wcgop}, and are [publicly available](https://connect.fisheries.noaa.gov/gemm_csv/).
 
 2.  Fishery-dependent length and age composition data were obtained from the following sources:
 

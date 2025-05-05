@@ -57,8 +57,10 @@ params:
    rf: 'Recreational fleet'
 bibliography: 
 -  asar_references.bib 
+-  extra_quillback_references.bib
 csl: 'canadian-journal-of-fisheries-and-aquatic-sciences.csl'
 ---
+
 
 ```{r}
 #| label: 'read_base_model'
@@ -77,10 +79,6 @@ mod_in <- r4ss::SS_read(here('models', base_model))
 mod_out <- r4ss::SS_output(here('models', base_model), verbose = FALSE, printstats = FALSE)
 
 ```
-
-
-
-
 
 
 ```{r} 
@@ -222,7 +220,7 @@ a <- knitr::knit_child('01_executive_summary.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
+ {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'introduction'
@@ -241,6 +239,17 @@ cat(a, sep = '\n')
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03_data.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+ 
+```{r, results='asis'}
+#| label: 'data-fish-depend'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('03a_data_fishery_dependent.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
