@@ -71,8 +71,9 @@ models/*retro*/
 !data_explore_figs/*.png
 #and those within subfolders of exploratory figures
 !data_explore_figs/**/*.png
-!documents/document_figures/*.png
-
+!documents/report/figures/*.png
+!documents/report/figures/*.jpg
+!documents/report/**
 
 # ignore stock synthesis files
 admodel.cov
