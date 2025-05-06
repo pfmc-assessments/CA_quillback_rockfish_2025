@@ -21,8 +21,6 @@ Discarding can be modeled in multiple ways. Among West Coast assessments, three 
 
 Commercial discard data for `r spp` are collected through NOAA's \gls{wcgop}. Estimates of dead discards in 2002--2023 for each sector of the commercial fleet are provided in the \gls{gemm} product [@somers_gemm_2023]. Dead discards from the \gls{gemm} product were added to landings estimates from the sources described above to obtain total removals for 2002--2023. Total removals prior to 2002, for which no \gls{wcgop} data are available, were calculated based on assuming an average ratio of dead discards to landings (0.25 percent), based on data from the nearshore sector in 2002--2021. The nearshore sector was selected as it most likely represents expected fishery behavior prior to 2002, and data from 2001 to 2021 were used because the ratio of dead discards increased in 2022 and 2023, likely as a consequence of management changes to the fishery. Preliminary estimates of dead discards for 2024 were provided by \gls{nwfsc} \gls{fos} program on 3/31/2025 and added to landings in that year to obtain total removals for 2024.   
 
-  
-
 
 #### Recreational Landings and Discards
 
@@ -33,14 +31,6 @@ A number of years with missing or incomplete estimates for recreational total re
 **FROG: THIS SECTION IS A HOLDOVER FROM THE LAST ASSESSMENT. DO WE WANT TO KEEP? IT SOUNDS MORE LIKE RESULTS. IF KEEP ADD A SECTION FOR COMMERCIAL**
 The recreational fishery is the main source of mortality for quillback rockfish in California (Table 1 and Figure 1). Recreational removals peaked in the late 1970s and early 1980s, with two years of exceptionally large catches in 1984 and 1993. Removals declined sharply in 1994, but increased to levels similar to the late 1970s and early 1980s in the mid 2000s and again in recent years.
 
-
-
-
-
-#### Recreational Discards
-
-
-### Discards
 
 ### Biological data (length compositions and age compositions)
 
