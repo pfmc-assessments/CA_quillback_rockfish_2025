@@ -1573,13 +1573,9 @@ new_name <- 'AltComBlocks'
 
 mod <- base_mod
 
-mod$ctl$blocks_per_pattern <- c(2, 3)
+mod$ctl$blocks_per_pattern <- c(2, 1)
 mod$ctl$Block_Design <- list(c(2003, 2022, 2023, 2024), #commercial fleet
-                             c(2001, 2016, 2017 ,2022, 2023 ,2024)) #recreational fleet
-
-mod3218 <- SS_read(here('models', '3_2_18_SimplifyComBlocks'))
-
-mod[["ctl"]][["size_selex_parms_tv"]] <- mod3218[["ctl"]][["size_selex_parms_tv"]]
+                             c(2017, 2024)) #recreational fleet
 
 # Write model and run
 SS_write(mod, here(sens_dir, new_name),
@@ -1676,7 +1672,7 @@ tv <- tv[c(1:6, 10,11, 7:9),]
 tv <- rbind(tv, tv[rep(10, 2),])
 tv <- tv[c(1:9, 12,13, 10,11),]
 tv <- rbind(tv, tv[rep(13, 2),])
-row.names(tv)[7:15] <- c("SizeSel_P_1_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_1_CA_Recreational(2)_BLK2repl_2023", "SizeSel_P_2_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_2_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_2_CA_Recreational(2)_BLK2repl_2023", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2023")
+row.names(tv)[7:15] <- c("SizeSel_P_1_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_1_CA_Recreational(2)_BLK2repl_2023", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_3_CA_Recreational(2)_BLK2repl_2023", "SizeSel_P_4_CA_Recreational(2)_BLK2repl_2001", "SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017", "SizeSel_P_4_CA_Recreational(2)_BLK2repl_2023")
 
 tv[13:15,2] <- 9
 tv[13:15,3] <- 5.54518
@@ -1704,4 +1700,69 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'More Rec Blocks'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+## More Rec Blocks with Early Period Asymptotic --------------------------------------------------------
+# Leave CCFRP and ROV asymptotic
+
+new_name <- 'EarlyRecAsympDomeSurveys'
+
+mod <- SS_read(here('models', '_sensitivities', 'EarlyRecAsymp'))
+
+mod[["ctl"]][["size_selex_parms"]][["PHASE"]][16] <- 5 # Turn on estimation of parameter 4 for CCFRP
+mod[["ctl"]][["size_selex_parms"]][["PHASE"]][22] <- 5 # Turn on estimation of parameter 4 for ROV
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'EarlyRecAsymp'),
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Late Rec Blocks Domed',
+                                     'Late Rec Blocks & Surveys Domed'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+## Commercial Aymptotic --------------------------------------------------------
+
+new_name <- 'ComAsymp'
+
+mod <- base_mod
+
+mod[["ctl"]][["size_selex_parms"]][["PHASE"]][4] <- -5
+mod[["ctl"]][["size_selex_parms"]][["INIT"]][4] <- 15
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Commercial Asymptotic'),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))

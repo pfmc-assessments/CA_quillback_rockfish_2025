@@ -5,9 +5,9 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-ost/ss3-source-code
 
-StartTime: Mon May  5 07:47:28 2025
-EndTime: Mon May  5 07:48:39 2025
-This run took: 0 hours, 1 minutes, 11 seconds.
+StartTime: Tue May  6 09:54:10 2025
+EndTime: Tue May  6 09:55:26 2025
+This run took: 0 hours, 1 minutes, 16 seconds.
 Data_File: 2025_ca_quillback.dat
 Control_File: 2025_ca_quillback.ctl
 
@@ -19,20 +19,20 @@ total_LogL: 676.346
 
 Starter_Comments
 #C file created using an r4ss function
-#C file write time: 2025-05-05  07:47:24
+#C file write time: 2025-05-06  09:54:09
 
 Data_Comments
 #California Quillback Rockfish 2025 assessment Brian Langseth, Melissa Monk, Julia Coates
 #C file created using an r4ss function
-#C file write time: 2025-05-05  07:47:24
+#C file write time: 2025-05-06  09:54:09
 
 Control_Comments
 #C file created using an r4ss function
-#C file write time: 2025-05-05  07:47:26
+#C file write time: 2025-05-06  09:54:09
 
 Forecast_Comments
 #C file created using an r4ss function
-#C file write time: 2025-05-05  07:47:26
+#C file write time: 2025-05-06  09:54:10
 
 #_KeyWords_of_tables_available_in_report_sso
 #_NOTE: table_number_is_order_in_which_tables_are_output
@@ -6688,7 +6688,7 @@ Area Bio_Pattern Sex BirthSeas Settlement Platoon Morph Yr Seas Time Beg/Mid Era
 
 Growth_Parameters report:45
  Count Yr Sex Platoon A1 A2 L_a_A1 L_a_A2 K A_a_L0 Linf CVmin CVmax natM_amin natM_max M_age0 M_nages WtLen1 WtLen2 Mat1 Mat2 Fec1 Fec2
- 1 1916 1  1 1 999 9.97009 42.9134 0.124543 -1.12293 42.9134 0.181697 0.0865865 6.117e-313 6.117e-313 0.0643 0.0643 1.57769e-05 3.08018 28.96 -0.606 4.216e-08 4.44
+ 1 1916 1  1 1 999 9.97009 42.9134 0.124543 -1.12293 42.9134 0.181697 0.0865865 2.68184e-312 2.68184e-312 0.0643 0.0643 1.57769e-05 3.08018 28.96 -0.606 4.216e-08 4.44
 
 Biology_at_age_in_endyr report:47
 in_endyr_with_CV=f(LAA)
