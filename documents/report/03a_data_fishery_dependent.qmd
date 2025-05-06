@@ -24,7 +24,18 @@ Commercial discard data for `r spp` are collected through NOAA's \gls{wcgop}. Es
   
 
 
-#### Recreational Landings
+#### Recreational Landings and Discards
+
+Recreational landings data were available from 1928--2024. Historical landings (1928--1980) were obtained from the historical reconstruction [@ralston_documentation_2010]. Since 1980, recreational data sources provide estimates of total removals, which combine landings and dead discards together. Data during these years were obtained from \gls{recfin} via the \gls{mrfss} (1981--2004) and \gls{crfs} (2005--2024) sampling programs. The \gls{mrfss} sampling program also includes removals for 1980, however because @ralston_documentation_2010 considered their 1980 estimate to be more reliable than that of \gls{mrfss}, and due to survey quality problems related to 1980 being the first year of \gls{mrfss} [@Karpov1995; @cope_status_2009], landings from the historical reconstruction were preferred for 1980. Estimates of dead discards for the historical years (1928--1980) were calculated based on an average ratio of dead discards to landings (1.1 percent) from \gls{mrfss} data across all years 1980--2004. A direct breakdown of the landed and dead discarded fish by weight was not available within the \gls{mrfss} data, so the proportion by number of total dead catch that was unavailable to the sampler, which included dead discarded fish, was calculated (\gls{mrfss} column ESTHARV divided by the sum of columns ESTHARV and ESTCLAIM) and used to derive the ratio. Landings and dead discards for the historical years were then added together to obtain estimates of total removals. 
+
+A number of years with missing or incomplete estimates for recreational total removals were filled in. First, 207 \gls{crfs} catch records in \gls{recfin} between 2014--2022 had a zero estimate for dead discards by weight but not by number. Catches were based on weight, so to ensure these records were included, an average weight per fish for dead discards was calculated from records with both weight and number, and used to derive estimates of dead discards in weight. Filling in these gaps increased the estimated total removals from between 0.02 mt to at most 1.2 mt in any one year. Second, the \gls{mrfss} sampling program did not sample between 1990--1992, and did not sample the party/charter (PC) mode north of San Luis Obispo between 1993--1995. Estimates for PC mode in 1993--1995 were calculated as the average of PC removals among \gls{mrfss} years (1980--2004) and then added to the private/rental (PR) mode estimates in 1993--1995 to obtain total removals for those years. Estimates of total removals for both the PR and PC modes in 1990--1992 were obtained as averages from neighboring years. Total removals in 1990 were estimated as the average of total removals from 1987--1989, total removals in 1991 as the average from 1987--1989 and 1993--1995, and total removals in 1992 as the average from 1993--1995. Estimate of total recreational removals in 1993 were some of the largest for the recreational fleet across all years. The effects of assuming an average catch in 1991 and 1992 based on the 1993 estimate was explored through sensitivity analyses (see @sec-assmt-sens). 
+
+**FROG: THIS SECTION IS A HOLDOVER FROM THE LAST ASSESSMENT. DO WE WANT TO KEEP? IT SOUNDS MORE LIKE RESULTS. IF KEEP ADD A SECTION FOR COMMERCIAL**
+The recreational fishery is the main source of mortality for quillback rockfish in California (Table 1 and Figure 1). Recreational removals peaked in the late 1970s and early 1980s, with two years of exceptionally large catches in 1984 and 1993. Removals declined sharply in 1994, but increased to levels similar to the late 1970s and early 1980s in the mid 2000s and again in recent years.
+
+
+
+
 
 #### Recreational Discards
 
