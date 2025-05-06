@@ -1563,9 +1563,9 @@ SSsummarize(xx) |>
                                      'Estimate M and h'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-#========================================================================================
+#========================================================================================#
 # Selectivity Alternatives -----
-#========================================================================================
+#========================================================================================#
 
 ## Alternative Commercial Blocks --------------------------------------------------------
 
@@ -1734,9 +1734,10 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Late Rec Blocks Domed',
                                      'Late Rec Blocks & Surveys Domed'),
-                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-## Commercial Aymptotic --------------------------------------------------------
+## Commercial Asymptotic --------------------------------------------------------
+#Asymptotic for final block (keeping earliest block as domed)
 
 new_name <- 'ComAsymp'
 
@@ -1765,4 +1766,68 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Commercial Asymptotic'),
-                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+## Commercial All Asymptotic --------------------------------------------------------
+#Asymptotic for all blocks
+
+new_name <- 'ComAsymp_allBlocks'
+
+mod <- base_mod
+
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", "PHASE"] <- -5
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", "INIT"] <- 15
+
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Commercial(1)_BLK1repl_1916", 
+                            c("HI", "INIT", "PHASE")] <- c(20, 15, -5)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Commercial Asymptotic All blocks'),
+                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+##Compare likelihoods of selectivity sensitivities - for testing purposes
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("4_2_1_propBase",
+                                                 file.path("_sensitivities", "AltComBlocks"),
+                                                 file.path("_sensitivities", "NoBlocks"),
+                                                 file.path("_sensitivities", "ROVandCCFRPDomed"),
+                                                 file.path("_sensitivities", "EarlyRecAsymp"),
+                                                 file.path("_sensitivities", "EarlyRecAsympDomeSurveys"),
+                                                 file.path("_sensitivities", "ComAsymp"),
+                                                 file.path("_sensitivities", "ComAsymp_allBlocks"))))
+
+#Compare likelihoods
+xx.sum <- SSsummarize(xx)
+xx.tab <- SStableComparisons(xx.sum, 
+                             modelnames = c("Base",
+                                            "Alt com blocks",
+                                            "No blocks",
+                                            "ROV and CCFRP Domed",
+                                            "Alt rec blocks domed",
+                                            "Alt rec blocks, ROV and CCFRP domed",
+                                            "Last com block asymptotic",
+                                            "All com block asymptotic")) |>
+  dplyr::mutate(across(-Label, ~ round(., 2))) |>
+  dplyr::rename(' ' = Label)
+xx.val <- rbind(xx.sum$npars, xx.tab[,-1]) #add number of parameters
+rownames(xx.val) <- c("Npars", xx.tab[,1]) #add rownames so dataframe stays numerical
+write.csv(t(xx.val[1:5,]), here(sens_dir, new_name, 'like_comp.csv'), row.names = TRUE)
