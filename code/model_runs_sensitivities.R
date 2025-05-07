@@ -1851,6 +1851,7 @@ mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130,
 # Expanding that to all habitat results in 1194236 fish.
 # Summary biomass in numbers of fish in 2020 is estimated by the base model to be 408690. 
 
+pp <- SS_output(here('models', '4_2_1_propBase'))
 numbers_at_age <- pp$natage
 pp$natageOnePlus_numbers <- numbers_at_age %>%
   filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
