@@ -9284,3 +9284,318 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 sum(pp$recruit[pp$recruit$era == "Main", "dev"]) # sum of devs = 5.335102
+
+
+####------------------------------------------------#
+## 4_3_1_commFitExplore_noMidBlock1 ----
+####------------------------------------------------#
+
+#Explore what would improve fits to commercial lengths comps
+#Assimilate the 2003-2013 block into the first block
+
+new_name <- "4_3_1_commFitExplore_noMidBlock1"
+old_name <- "4_2_1_propBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Block_Design[[1]][2] <- 2013
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 4_3_2_commFitExplore_noMidBlock2 ----
+####------------------------------------------------#
+
+#Explore what would improve fits to commercial lengths comps
+#Assimilate the 2003-2013 block into the second block
+
+new_name <- "4_3_2_commFitExplore_noMidBlock2"
+old_name <- "4_2_1_propBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Block_Design[[1]][3] <- 2003 
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 4_3_3_commFitExplore_Block2008 ----
+####------------------------------------------------#
+
+#Explore what would improve fits to commercial lengths comps
+#Change the 2003-2014 block to start in 2008
+
+new_name <- "4_3_3_commFitExplore_Block2008"
+old_name <- "4_2_1_propBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Block_Design[[1]][2] <- 2007 
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 4_3_4_commFitExplore_Block2008withLater ----
+####------------------------------------------------#
+
+#Explore what would improve fits to commercial lengths comps
+#Change the 2003-2014 block to start in 2008 and assimilate into the 2014-2021 block
+
+new_name <- "4_3_4_commFitExplore_Block2008withLater"
+old_name <- "4_2_1_propBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$ctl$Block_Design[[1]][2] <- 2007 
+mod$ctl$Block_Design[[1]][3] <- 2008 
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#This looks probably the best but overall fits matter very little. There are few
+#data here and it is not driving the boat, so even if we are missing the fits, the
+#consequence of doing so is minimal
+
+
+####------------------------------------------------#
+## 4_3_5_commFitExplore_Upweight ----
+####------------------------------------------------#
+
+#Explore what would improve fits to commercial lengths comps
+#Increase effective sample sizes for 2009-2013
+
+new_name <- "4_3_5_commFitExplore_Upweight"
+old_name <- "4_2_1_propBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$dat$lencomp[which(mod$dat$lencomp$year %in% c(2009:2013) & 
+                mod$dat$lencomp$fleet == 1), "Nsamp"] <- 100
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+####------------------------------------------------#
+## 4_3_6_commFitExplore_remove ----
+####------------------------------------------------#
+
+#Explore what would improve fits to commercial lengths comps
+#Remove samples with sample sizes less than 10
+
+new_name <- "4_3_6_commFitExplore_remove"
+old_name <- "4_2_1_propBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes
+##
+
+mod$dat$lencomp[which(mod$dat$lencomp$Nsamp < 10  & 
+                        mod$dat$lencomp$fleet == 1), "year"] <-
+  -abs(mod$dat$lencomp[which(mod$dat$lencomp$Nsamp < 10  & 
+                              mod$dat$lencomp$fleet == 1), "year"])
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("4_2_1_propBase",
+                                                 "4_3_6_commFitExplore_remove")))
+
+#Compare outputs
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'Remove comm lengths < 10'),
+                    subplots = c(1,3), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', new_name))
+dev.off()
+
