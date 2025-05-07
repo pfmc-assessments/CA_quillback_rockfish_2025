@@ -1903,3 +1903,33 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 
 # Multiplying catches by 3 gets us close with a biomass in mid-year 2020 of 1168857
+
+## Find values of M, h, and growth that produce survey estimate without adjusting base catch ----------------------
+# Quick way by just replacing ROV index values
+
+new_name <- 'ROV_Abs_2'
+
+mod <- base_mod
+
+mod[["dat"]][["CPUE"]][["obs"]][27:28] <- c(155225, 298559)
+mod[["dat"]][["CPUE"]][["se_log"]][27:28] <- c(0.118, 0.0666)
+
+mod[["ctl"]][["MG_parms"]][1,7] <- 2  # Allow M to be estimated
+
+mod[["ctl"]][["Q_parms"]][3,3] <- 1 # Set ROV index q=1 and fix
+mod[["ctl"]][["Q_parms"]][3,7] <- -2
+
+# Run and see what this does to M and growth params
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
