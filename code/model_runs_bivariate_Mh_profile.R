@@ -1,4 +1,5 @@
 #Copied directly from copper rockfish
+#Modified 
 
 library(r4ss)
 library(ggplot2)
@@ -143,8 +144,8 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
 #ggsave("bivariate_post-STAR/S_Mhgrid_OFL.png",width = 5.5,height = 4)
 
 #change above to p1 and p2 to do this
-plot_grid(p1,p2, nrow = 2)
-ggsave(here('models', '_bivariate_profiles','M_and_h','Mhgrid_ALL.png'),width = 12, height = 18)
+#plot_grid(p1,p2, nrow = 2)
+#ggsave(here('models', '_bivariate_profiles','M_and_h','Mhgrid_ALL.png'),width = 12, height = 18)
 
 
 
@@ -188,7 +189,7 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
     annotate("text", x = 0.12, y = 0.72, label = "Base Model", size =10, col = 'white') +
     geom_text_contour(aes(z = Delta_NLL), 
        breaks = c(3, 5, 7, seq(10, 30, 10)), size = 7, color = 'white') +
-    xlab("Natural Mortality (F)") +
+    xlab("Natural Mortality (M)") +
     ylab("Steepness (h)") +
     scale_x_continuous(breaks = seq(0.05, 0.15, 0.01)) +
     scale_y_continuous(breaks = seq(0.20, 0.90, 0.1)) +
