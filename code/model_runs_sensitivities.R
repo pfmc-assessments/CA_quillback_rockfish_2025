@@ -42,8 +42,8 @@ fleet.converter <- base_mod$dat$fleetinfo %>%
 # 3. remove (but then the selectivity is mostly defined by the bounds and do we want this?)
 #Ultimately going with option 3 just to see. 
 
-######
-# leaveOut_rec_lengths  -----------------------------
+######-
+### leaveOut_rec_lengths  -----------------------------
 
 # Rec lengths
 new_name <- 'leaveOut_rec_lengths'
@@ -77,8 +77,8 @@ SSsummarize(xx) |>
                                      'Remove rec lengths'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######
-# leaveOut_com_lengths ---------------------------------
+######-
+### leaveOut_com_lengths ---------------------------------
 
 # Commercial lengths
 
@@ -118,8 +118,8 @@ SSsummarize(xx) |>
 ## Drop age data by fleet ----
 # ============================================================================ #
 
-######
-# leaveOut_com_ages --------------------------------
+######-
+### leaveOut_com_ages --------------------------------
 
 # Commercial ages
 
@@ -154,8 +154,8 @@ SSsummarize(xx) |>
                                      'Remove com ages'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######
-# leaveOut_growth_ages ------------------------------------
+######-
+### leaveOut_growth_ages ------------------------------------
 
 # Growth fleet ages
 
@@ -196,8 +196,8 @@ SSsummarize(xx) |>
 ## Drop index fleets ----
 # ============================================================================ #
 
-######
-#Drop CCFRP ------------------------------------
+######-
+### Drop CCFRP ------------------------------------
 
 new_name <- 'leaveOut_ccfrp'
 
@@ -241,8 +241,8 @@ SSsummarize(xx) |>
                                      'Remove CCFRP fleet'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######
-#Drop ROV ---------------------------------
+######-
+### Drop ROV ---------------------------------
 
 new_name <- 'leaveOut_rov'
 
@@ -287,8 +287,8 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-######
-# Drop PR index (example for dropping by using lambda)
+######-
+### Drop PR index (example for dropping by using lambda)
 
 new_name <- 'leaveOut_prIndex'
 
@@ -332,7 +332,8 @@ SSsummarize(xx) |>
 ####------------------------------------------------#
 # Catch sensitivities ----
 ####------------------------------------------------#
-######
+
+######-
 ## Increase Catch SE --------------------------------------------------------
 
 new_name <- 'increaseCatchSE'
@@ -364,7 +365,7 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-######
+######-
 ## Adjusting High Catch Outliers --------------------------------------------------------
 
 new_name <- 'CatchOutliers'
@@ -416,7 +417,7 @@ SSsummarize(xx) |>
 # Other sensitivities ----
 ####------------------------------------------------#
 
-######
+######-
 ## Leave out 2024 recreational lengths --------------------------------------------------------
 
 new_name <- 'NoRecLen2024'
@@ -449,7 +450,7 @@ SSsummarize(xx) |>
                                      'No Rec Length 2024'),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######
+######-
 ## Add extra SE to indices --------------------------------------------------------------------
 
 # ============================================================================ #
@@ -553,7 +554,7 @@ SSsummarize(xx) |>
 
 
 
-######
+######-
 ## Fleets as areas --------------------------------------------------------
 
 #These data are confidential IF splitting the commercial fleet. However this run
@@ -787,7 +788,7 @@ dev.off()
 
 
 
-######
+######-
 ## Fleets as areas reblock --------------------------------------------------------
 
 #The FAA model doesn't fit recreational south length comps very well. 
@@ -1041,7 +1042,7 @@ dev.off()
 
 
 
-######
+######-
 ## Fleets as areas reweight --------------------------------------------------------
 
 #Reweight the FAA sensitivity run starting from 1
@@ -1101,7 +1102,7 @@ dev.off()
 #updating blocks. 
 
 
-######## 
+########-
 ## Use all data: Replace all negative year with positive --------------------------------------------------------
 
 ## Replace commercial CAAL with marginal age comps --------------------------------------------------------
@@ -1147,7 +1148,7 @@ SSsummarize(xx) |>
 dev.off()
 
 
-######
+######-
 ## Use all data: Replace all negative year with positive --------------------------------------------------------
 
 new_name <- 'noNegYear'
@@ -1183,7 +1184,7 @@ dev.off()
 
 
 
-######
+######-
 ## Remove ageing error --------------------------------------------------------
 
 new_name <- 'noAgeErr'
@@ -1221,7 +1222,7 @@ dev.off()
 # Biology sensitivities -----
 # ============================================================================ #
 
-######
+######-
 ## Fecundity to E.J.'s Pteropodus values' ----------
 new_name <- 'fecundity_EJest'
 
@@ -1260,8 +1261,8 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-######
-### Maturity to 2021 estimates ----
+######-
+## Maturity to 2021 estimates ----
 
 new_name <- 'Maturity_2021est'
 
@@ -1307,7 +1308,7 @@ SSsummarize(xx) |>
 # Natural mortality and steepness ----
 # ============================================================================ #
 
-######
+######-
 ## Estimate M --------------------------------------------------------
 new_name <- 'Estimate_M'
 
@@ -1338,7 +1339,7 @@ SSsummarize(xx) |>
                                      'Estimate M'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######
+######-
 ## Max Age 70 --------------------------------------------------------
 new_name <- 'maxAge70'
 
@@ -1378,7 +1379,7 @@ SSsummarize(xx) |>
 
 
 
-######
+######-
 ## Max Age 75 --------------------------------------------------------
 new_name <- 'maxAge75'
 
@@ -1417,7 +1418,7 @@ SSsummarize(xx) |>
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
-######
+######-
 ## Max Age 80 --------------------------------------------------------
 new_name <- 'maxAge80'
 
@@ -1457,7 +1458,7 @@ SSsummarize(xx) |>
 
 
 
-######
+######-
 ## Estimate h --------------------------------------------------------
 new_name <- 'estimate_h'
 
@@ -1489,7 +1490,7 @@ SSsummarize(xx) |>
                                      'Estimate h'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######
+######-
 ## Estimate M and h --------------------------------------------------------
 new_name <- 'estimate_M_and_h'
 
@@ -1528,7 +1529,7 @@ SSsummarize(xx) |>
 # Selectivity Alternatives -----
 #========================================================================================#
 
-######
+######-
 ## Alternative Commercial Blocks --------------------------------------------------------
 
 new_name <- 'AltComBlocks'
@@ -1553,7 +1554,7 @@ pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-######
+######-
 ## No Blocks --------------------------------------------------------
 
 new_name <- 'NoBlocks'
@@ -1579,7 +1580,8 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
-######
+
+######-
 ## ROV and CCFRP Domed --------------------------------------------------------
 
 new_name <- 'ROVandCCFRPDomed'
@@ -1618,7 +1620,87 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'ROV & CCFRP Domed', "Simplify Commercial Blocks", "No Blocks"),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
-######
+
+######-
+## ROV and CCFRP and Rec Domed --------------------------------------------------------
+
+new_name <- 'AllDomed'
+
+mod <- base_mod
+
+mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+
+mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+#Setting init for p4 for rec to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational(2)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Just Rec Domed --------------------------------------------------------
+
+new_name <- 'RecDomed'
+
+mod <- base_mod
+
+#Setting init for p4 for rec to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational(2)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', "ROVandCCFRPDomed"),
+                                                   file.path('_sensitivities', "RecDomed"),
+                                                   file.path('_sensitivities', "AllDomed")))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'ROV & CCFRP Domed',
+                                     'Rec domed',
+                                     "ROV & CCFRP & Rec Domed"),
+                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+######-
 ## More Rec Blocks with Early Period Asymptotic --------------------------------------------------------
 # Leave CCFRP and ROV asymptotic
 
@@ -1664,7 +1746,8 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'More Rec Blocks'),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
-######
+
+######-
 ## More Rec Blocks with Early Period Asymptotic --------------------------------------------------------
 # Leave CCFRP and ROV asymptotic
 
@@ -1698,7 +1781,7 @@ SSsummarize(xx) |>
                                      'Late Rec Blocks Domed',
                                      'Late Rec Blocks & Surveys Domed'),
                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
-######
+######-
 ## Commercial Asymptotic --------------------------------------------------------
 #Asymptotic for final block (keeping earliest block as domed)
 
@@ -1731,7 +1814,7 @@ SSsummarize(xx) |>
                                      'Commercial Asymptotic'),
                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######
+######-
 ## Commercial All Asymptotic --------------------------------------------------------
 #Asymptotic for all blocks
 
@@ -1773,6 +1856,8 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  file.path("_sensitivities", "AltComBlocks"),
                                                  file.path("_sensitivities", "NoBlocks"),
                                                  file.path("_sensitivities", "ROVandCCFRPDomed"),
+                                                 file.path("_sensitivities", "RecDomed"),
+                                                 file.path("_sensitivities", "AllDomed"),
                                                  file.path("_sensitivities", "EarlyRecAsymp"),
                                                  file.path("_sensitivities", "EarlyRecAsympDomeSurveys"),
                                                  file.path("_sensitivities", "ComAsymp"),
@@ -1785,6 +1870,8 @@ xx.tab <- SStableComparisons(xx.sum,
                                             "Alt com blocks",
                                             "No blocks",
                                             "ROV and CCFRP Domed",
+                                            "Rec Domed",
+                                            "ROV and CCFRP and Rec Domed",
                                             "Alt rec blocks domed",
                                             "Alt rec blocks, ROV and CCFRP domed",
                                             "Last com block asymptotic",
@@ -1795,11 +1882,12 @@ xx.val <- rbind(xx.sum$npars, xx.tab[,-1]) #add number of parameters
 rownames(xx.val) <- c("Npars", xx.tab[,1]) #add rownames so dataframe stays numerical
 write.csv(t(xx.val[1:5,]), here(sens_dir, new_name, 'like_comp.csv'), row.names = TRUE)
 
-#========================================================================================
-# ROV Absolute Abundance -----
-#========================================================================================
 
-######
+#========================================================================================#
+# ROV Absolute Abundance -----
+#========================================================================================#
+
+######-
 ## Fix M, h, and growth at base values.  Apply a multiplier to catch. --------------------------------------
 
 new_name <- 'ROV_Abs_1'
@@ -1868,7 +1956,7 @@ pp <- SS_output(here(sens_dir, new_name))
 
 # Multiplying catches by 3 gets us close with a biomass in mid-year 2020 of 1168857
 
-######
+######-
 ## Find values of M, h, and growth that produce survey estimate without adjusting base catch ----------------------
 # Quick way by just replacing ROV index values
 
