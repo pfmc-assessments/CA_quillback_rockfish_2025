@@ -1891,7 +1891,6 @@ write.csv(t(xx.val[1:5,]), here(sens_dir, new_name, 'like_comp.csv'), row.names 
 # ROV Absolute Abundance -----
 #========================================================================================#
 
-######-
 ## Fix M, h, and growth at base values.  Apply a multiplier to catch. --------------------------------------
 
 new_name <- 'ROV_Abs_1'
@@ -1902,12 +1901,11 @@ mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
 
 mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
 
-# I estimated the proportion of quillback habitat in MPAs to be 0.25.  Need to check with Melissa on this.
-# Tanya estimated 298559 fish in MPAs in 2020.
-# Expanding that to all habitat results in 1194236 fish.
-# Summary biomass in numbers of fish in 2020 is estimated by the base model to be 408690. 
+# The estimated proportion of quillback habitat in MPAs is 0.20.
+# Tanya estimated 155225 fish in MPAs in 2020.
+# Expanding that to all habitat results in 776125 fish.
 
-pp <- SS_output(here('models', '4_2_1_propBase'))
+pp <- SS_output(here('models', base_mod_name))
 numbers_at_age <- pp$natage
 pp$natageOnePlus_numbers <- numbers_at_age %>%
   filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
@@ -1915,30 +1913,9 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   dplyr::select(c("Time", "numberOfFish"))
 
 # Using the code above from Melissa to look at numbers of fish in the middle of the year,
-# we get 389656 fish in 2020.  
+# we get 319170 fish in 2015.  
 
-# The ROV estimate is 3.065 times the model estimate.  
-# See what happens to summary biomass when we multiply catches x 5.
-
-mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 5
-
-# Write model and run
-SS_write(mod, here(sens_dir, new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here(sens_dir, new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
-
-pp <- SS_output(here(sens_dir, new_name))
-
-numbers_at_age <- pp$natage
-pp$natageOnePlus_numbers <- numbers_at_age %>%
-  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
-  mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
-  dplyr::select(c("Time", "numberOfFish"))
+# The ROV estimate is 2.432 times the model estimate.  
 
 # Try increasing catch x 3
 mod <- base_mod
@@ -1958,7 +1935,37 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 
-# Multiplying catches by 3 gets us close with a biomass in mid-year 2020 of 1168857
+numbers_at_age <- pp$natage
+pp$natageOnePlus_numbers <- numbers_at_age %>%
+  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
+  mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
+  dplyr::select(c("Time", "numberOfFish"))
+
+# This results in 957451 fish in 2015.  That's too many.  Let's try multiplying catch by 2.4.  
+mod <- base_mod
+mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
+mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
+mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 2.4
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+
+numbers_at_age <- pp$natage
+pp$natageOnePlus_numbers <- numbers_at_age %>%
+  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
+  mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
+  dplyr::select(c("Time", "numberOfFish"))
+
+# This gives 765966 fish in 2015 - pretty close to the ROV estimate.  
 
 ######-
 ## Find values of M, h, and growth that produce survey estimate without adjusting base catch ----------------------
