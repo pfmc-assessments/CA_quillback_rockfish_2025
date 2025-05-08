@@ -10319,12 +10319,12 @@ dev.off()
 
 
 ####------------------------------------------------#
-## 5_1_3_hessian ----
+## 5_1_3_preStarBase ----
 ####------------------------------------------------#
 
 #Run model 512 with hessian
 
-new_name <- "5_1_3_hessian"
+new_name <- "5_1_3_preStarBase"
 old_name <- "5_1_2_reweight"
 
 
