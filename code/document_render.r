@@ -1,7 +1,7 @@
 ###################################################
 #  Render the 2025 California Quillback report
 #
-#
+# Including steps to update the base model
 #
 #
 ###################################################

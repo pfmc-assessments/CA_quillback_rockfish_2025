@@ -77,7 +77,7 @@ library(dplyr)
 base_model <- '4_2_1_propBase'
 mod_in <- r4ss::SS_read(here('models', base_model))
 mod_out <- r4ss::SS_output(here('models', base_model), verbose = FALSE, printstats = FALSE)
-
+setwd(here("documents", "report"))
 ```
 
 

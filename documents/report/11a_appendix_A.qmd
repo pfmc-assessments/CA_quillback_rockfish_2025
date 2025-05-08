@@ -15,7 +15,7 @@ We modeled quillback catch with an effort offset of angler trips using the R pac
 
 Further exploration of alternative model distributions in sdmTMB showed that a delta-lognormal distribution performed better than negative binomial. Delta-lognormal models using year-district interactions failed dianostics and given that patterns among the districts are similar (@fig-pr_avgcpue_district), we excluded the interaction from the final model which included year, district, and wave.
 
-The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr_model_cpue) and this trend is also reflected in raw CPUE over time (**FROG: ADD REFERENCE TO FIGURE pr_index_average_cpue.png - I think ok to leave this one out**). The Q-Q plot indicates a reasonable fit (@fig-pr_index_qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in** FROG: ADD REFERENCE TO TABLE PR_index_values.csv\*\*.
+The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr_model_cpue) and this trend is also reflected in raw CPUE over time (**FROG: ADD REFERENCE TO FIGURE pr_index_average_cpue.png - I think ok to leave this one out**). The Q-Q plot indicates a reasonable fit (@fig-pr_index_qq, @tbl-pr_index). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in** FROG: ADD REFERENCE TO TABLE PR_index_values.csv\*\*.
 
 ### MRFSS PR Dockside Index of Abundance
 **MOVE TO data sources considered, but not used with just a description and no tables or figures**
@@ -24,15 +24,6 @@ MRFSS samplers collected data on both observed and unobserved fish. Observed fis
 We further filtered this dataset to include trips more likely to catch quillback and more representative of possible quillback effort (**FROG: ADD REFERENCE TO TABLE mrfss_index_data_filters.csv**). Two fishing location fields were used to exclude inland waters such as bays and estuaries. We excluded southern California counties where quillback is rare. The time of year was organized into two-month “waves”, and we excluded the first wave representing January and February. Fishing for rockfish was prohibited in these months in 2003 for some central and northern California districts. We included only trips with angler reported primary targets of bottomfish and rockfish which also excluded years between 1980 to 1992 when species target data was not collected. Finally, we removed a trip in 1993 with an extreme outlier catch of 120 quillback. While these filters reduced the overall number of samples by an order of magnitude, quillback remained rare with only about 2.9% positive samples. The resulting average catch per angler trip (cpue) was low with large standard deviations and showed little contrast across the time series (**FROG: ADD REFERENCE TO FIGURE mrfs_pr_cpue.png** - leave out if not using). Therefore, we did not consider this data for further modeling to produce an index.
 
 <!--Figures -->
-```{r}
-library(tidyr)
-library(gt)
-library(here)
-
-AList <- read.csv(here("documents/captions_alt_text.csv")) 
-
-```
-
 
 ```{r} 
 #| label: fig-pr_sm
@@ -42,7 +33,7 @@ AList <- read.csv(here("documents/captions_alt_text.csv"))
 #| fig-cap: "FROG"
 #| fig-alt: "FROG"
 
-knitr::include_graphics("figures/Quill_PR_Index_S-M_coef.png")
+knitr::include_graphics("figures/pr_index_SM.png")
 
 ```
 
@@ -55,7 +46,7 @@ knitr::include_graphics("figures/Quill_PR_Index_S-M_coef.png")
 #| fig-cap: "FROG"
 #| fig-alt: "FROG"
 
-knitr::include_graphics("figures/Quillback_PR_Index_S-M_ROC.png")
+knitr::include_graphics("figures/pr_index_SM_ROC.png")
 
 ```
 
@@ -121,11 +112,14 @@ knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/pr_index_data_filters.csv"))
+pr_filter <- read.csv("tables/pr_index_data_filters.csv", check.names = F)
 pr_filter |>
     gt() |>
-     tab_options(
-    table.font.size = 12) |>
+     cols_width(starts_with("Description") ~ px(250),
+                starts_with("Positive") ~ px(100),
+                starts_with("Filter") ~ px(100)) |>
+     tab_options(table.font.size = 12) |>
+     fmt_number(sep_mark = ",", decimals = 0) |>
     as_latex()
 
 ```
@@ -136,16 +130,27 @@ pr_filter |>
 #| echo: false
 #| warning: false
 #| tbl-cap: "FROG"
-library(tidyr)
-library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/pr_index_model_selection.csv"))
+pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = F)
 pr_filter |>
     gt() |>
-     tab_options(
-    table.font.size = 12) |>
+     tab_options(table.font.size = 12) |>
+     cols_width(everything() ~ px(60)) |>
     as_latex()
 
 ```
 
+```{r}
+#| label: tbl-pr_index
+#| echo: false
+#| warning: false
+#| tbl-cap: "FROG"
 
+pr_filter <- read.csv("tables/pr_index_values.csv")
+pr_filter |>
+    gt() |>
+    tab_options(table.font.size = 12) |>
+    cols_width(everything() ~ px(60)) |>
+    as_latex()
+
+```

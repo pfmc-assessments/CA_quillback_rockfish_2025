@@ -40,6 +40,86 @@ knitr::include_graphics(
 
 ### Biological data
 
+```{r}
+#| label: fig-weightlength
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Weight-length relationship with data for California quillback rockfish."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_length_weight.png"
+)
+```
+
+```{r}
+#| label: fig-fecundity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Fecundity estimated from samples collected by the SWFSC from across the range of California quillback rockfish."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_fecundity_fit.png"
+)
+```
+
+```{r}
+#| label: fig-maturity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Data and the estimated functional maturity for California quillback rockfish."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_maturity_fit.png"
+)
+```
+
+```{r}
+#| label: fig-growthdata
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_growth_by_area.png"
+)
+```
+
+
+```{r}
+#| label: fig-growth
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Model estimated length-at-age in the beginning of the year. Shaded area indicates 95 percent distribution of length-at-age around the estimated growth curve."
+#| fig-alt: "Growth curves for females and males diverge are similar up to about age 8 after which females are notably larger. For both sexes the growth asymptotes around age 20. See parameter table for growth parameters."
+
+knitr::include_graphics(
+    "r4ss_plots/bio1_sizeatage.png"
+)
+```
+
+```{r}
+#| label: fig-age_error
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_age_error.png"
+)
+```
+
+
 {{< pagebreak >}}
 
 
