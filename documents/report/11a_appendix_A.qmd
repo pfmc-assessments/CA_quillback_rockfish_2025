@@ -27,6 +27,7 @@ We further filtered this dataset to include trips more likely to catch quillback
 ```{r}
 library(tidyr)
 library(gt)
+library(here)
 
 AList <- read.csv(here("documents/captions_alt_text.csv")) 
 
@@ -41,7 +42,7 @@ AList <- read.csv(here("documents/captions_alt_text.csv"))
 #| fig-cap: "FROG"
 #| fig-alt: "FROG"
 
-#knitr::include_graphics("figures/Quill_PR_Index_S-M_coef.png")
+knitr::include_graphics("figures/Quill_PR_Index_S-M_coef.png")
 
 ```
 
@@ -146,7 +147,5 @@ pr_filter |>
     as_latex()
 
 ```
-
-
 
 

@@ -20,4 +20,3 @@ library(here)
 # render the document
 quarto::quarto_render(here("documents","report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
 
-

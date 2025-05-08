@@ -73,11 +73,6 @@ colnames(sumtablelong) = c("M", "h", "NLL", "Depletion")
 rownames(sumtablelong) = NULL
 Sdgrid = as.data.frame(sumtablelong)
 
-#john's results
-#Sdgrid1=readxl::read_xlsx("bivariate_post-STAR/southbase.bivariate.table.xlsx",sheet = "longformat")
-#Sdgrid=rbind(Sdgrid1,Sdgrid)
-#Sdgrid=dplyr::arrange(Sdgrid,h,M)
-#write.csv(Sdgrid,"bivariate_post-STAR/south_bivariate_table.csv",row.names = F)
 
 #base model
 basemodel <- SS_output(here('models',base_model))
@@ -153,7 +148,7 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
 #================================
 out.mle = nllbase
 output <- Sdgrid
-base_vec <- c(0.108, 0.72, out.mle, basemodel$current_depletion)
+base_vec <- c(Mbase, hbase, out.mle, basemodel$current_depletion)
 output <- rbind(output, base_vec)
 colnames(output) <- c("M", "h", "negLogLike", "Depletion")
 
@@ -184,10 +179,10 @@ min_nll <- mtrx_melt[mtrx_melt$Delta_NLL, ]
 #HandyCody::pngfun(wd = getwd(), file = "joint_m_profile_ggplot_large_range.png", w = 14, h = 12, pt = 12)
 ggplot(mtrx_melt, aes(x = M, y = h)) +
     geom_contour_filled(aes(z = Delta_NLL), breaks = c(0, 2, 3, 4, 6, 10, 20, 50, seq(100, 600, 100))) +
-    geom_point(aes (x = 0.108, y = 0.72),  size = 4, col = "white") +
+    geom_point(aes (x = Mbase, y = 0.72),  size = 4, col = "white") +
     geom_point(aes (x = find[,1], y = find[,2]),  size = 4, col = "white") +
     annotate("text", x = find[,1] + 0.015, y = find[,2], label = "Lowest NLL", size =10, col = 'white') +
-    annotate("text", x = 0.12, y = 0.72, label = "Base Model", size =10, col = 'white') +
+    annotate("text", x = Mbase, y = 0.7, label = "Base Model", size =10, col = 'white') +
     geom_text_contour(aes(z = Delta_NLL), 
        breaks = c(3, 5, 7, seq(10, 30, 10)), size = 7, color = 'white') +
     xlab("Natural Mortality (M)") +
