@@ -10364,4 +10364,26 @@ pp <- SS_output(here('models', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
+# #If convergence is a concern can rerun with '-hess_nostep' which will get
+# #gradient to 0 (beyond precision). Results are same across the 501+ runs, and
+# #this with -hess_nostep so I am not concerned by the current gradient
+# r4ss::run(dir = here('models', new_name),
+#           exe = here('models/ss3_win.exe'),
+#           extras = '-hess_step',
+#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
+#           skipfinished = FALSE)
+# 
+# pp <- SS_output(here('models', new_name))
+# SS_plots(pp, plot = c(1:26))
+# 
+# xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+#                                       subdir = c("5_1_2_reweight",
+#                                                  "5_1_3_hessian")))
+# SSsummarize(xx) |>
+#   SSplotComparisons(legendlabels = c('512: reweight 511',
+#                                      '513: hessian with -hess_nostep'),
+#                     subplots = c(1,3), print = TRUE, legendloc = "topright",
+#                     plotdir = here('models', new_name))
+# dev.off()
+
 
