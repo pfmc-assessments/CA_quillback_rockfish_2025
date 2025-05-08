@@ -5,12 +5,12 @@
 #| echo: false 
 #| warning: false 
 #| eval: true 
-rda_dir <- here::here("documents", "report", "rda_files")
+   rda_dir <- here::here("rda_files")
 ``` 
 
 
 
-{{< pagebreak >}}
+
 
 ## Data
 
@@ -34,6 +34,24 @@ knitr::include_graphics(
 
 
 ### Composition data
+
+
+```{r}
+#| label: fig-len-all-bubbles
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length composition data for all fleets (red female, blue male, grey unsexed)."
+#| fig-alt: "See 'Obs' column in CompReport.sso for values."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat__multi-fleet_comparison.png"
+)
+```
+
+
+
+{{< pagebreak >}}
 
 
 ### Biological data
@@ -134,9 +152,101 @@ knitr::include_graphics(
 
 ### Selectivity
 
+```{r}
+#| label: fig-sel-age
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Time-varying selectivity at length."
+#| fig-alt: "ZEBRA"
+
+knitr::include_graphics(
+    "figures/selectivityPlot.png"
+)
+```
+
 
 
 ### Fits to Data
+
+
+```{r}
+#| label: fig-len-agg-fit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length composition aggregated across years by fleet with the model with estimated fit to the data by sex (red female, blue male, green unsexed)"
+#| fig-alt: "Aggregated length comps are fit reasonably well."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit__aggregated_across_time.png"
+)
+```
+
+```{r}
+#| label: fig-len-all-pearson
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Pearson residuals for fit to length composition data for all fleets (red female, blue male, grey unsexed). Closed bubbles are positive residuals (observed > expected) and open bubbles are negative residuals (observed < expected)."
+#| fig-alt: "See 'Pearson' column in CompReport.sso for values."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit__multi-fleet_comparison.png"
+)
+```
+
+```{r}
+#| label: fig-mean-len-com
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for Commercial with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_Commercial.png"
+)
+```
+
+```{r}
+#| label: fig-mean-len-rec
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for Recreational with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_Recreational.png"
+)
+```
+
+```{r}
+#| label: fig-mean-len-ccfrp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for CCFRP with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_CCFRP.png"
+)
+```
+
+```{r}
+#| label: fig-mean-len-rov
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png"
+)
+```
 
 
 ### Time-series

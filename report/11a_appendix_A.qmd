@@ -6,27 +6,23 @@ Catch and effort data from the CRFS dockside sampling of private boats between 2
 
 Quillback are a relatively rare rockfish species in California and therefore the large majority of recreational trips catch no quillback. The STAT used many techniques to filter the total PR dataset to focus on trips that did catch, or had potential to catch, quillback. Records were limited to the primary private and rental boats public-access sites, PR1 sites, which encompass over 90 percent of the total private boat effort. PR2 sites are more commonly associated with trips targeting highly migratory species and would be unlikely to include quillback. Given that quillback are relatively rare, they are lesser known to recreational anglers and may be misidentified. The STAT elected to use only catch data that was observed by a CRFS sampler. Unobserved retained catches and releases were not included.
 
-The remaining data filters are detailed in @tbl-pr_filter. First, CRFS districts 1 and 2 representing southern California were removed. Data from 2020 was removed due to changes in sampling protocol during the COVID-19 response. Samplers were prohibited from working for a period of the year and when sampling resumed, often could not approach anglers closely enough to identify the catch. Data from 2023 was removed given restrictions on quillback catch implemented in that year. Only trips occurring in ocean areas (not inland bays and estuaries) and trips using hook and line or troll gear as the primary gear type were retained. Trips during January through March were removed because those months are closed to the fishery in central and northern California. CRFS sample sites where five or fewer quillback were caught were excluded.
+The remaining data filters are detailed in @tbl-pr-filter. First, CRFS districts 1 and 2 representing southern California were removed. Data from 2020 was removed due to changes in sampling protocol during the COVID-19 response. Samplers were prohibited from working for a period of the year and when sampling resumed, often could not approach anglers closely enough to identify the catch. Data from 2023 was removed given restrictions on quillback catch implemented in that year. Only trips occurring in ocean areas (not inland bays and estuaries) and trips using hook and line or troll gear as the primary gear type were retained. Trips during January through March were removed because those months are closed to the fishery in central and northern California. CRFS sample sites where five or fewer quillback were caught were excluded.
 
 The final step in data filtering further limits the dataset to trips that either caught a quillback or were likely to catch a quillback, given associations between quillback and other species observed in the recreational catch. The method developed by Stephens and MacCall (2004) predicts the probability of catching a target species by constructing a logistic model predicting the target presence based on the presence and absence of other species in the catch. Species that are rarely encountered will provide little information about the likelihood of catching a quillback. Therefore, we removed species comprising less than 0.1% of the records as well as species that never co-occurred with quillback. Pacific bonito and Pacific sardine were the only species that never co-occurred with quillback and represented greater than 0.1% of the records. Catch of the remaining species in a given trip was coded as presence/absence (1/0) and treated as a categorical variable in the Stephens-MacCall logistic regression analysis.\
-The Stephens-MacCall logistic regression was fit to the remaining set of 52 indicator species (@fig-pr_sm). The top five species with high probability of co-occurrence with quillback were tiger rockfish, copper rockfish, canary rockfish, lingcod, and rock sole. The species with the lowest probability of co-occurrence were kelp rockfish, starry flounder, California halibut, ocean whitefish, and treefish. These species are not commonly caught during the same trip as quillback, presumably due to different habitat associations and fishing techniques. The Area Under the Characteristic curve (AUC) for this model is 0.88, a significant improvement over a random classifier (AUC = 0.5). AUC represents the probability that a randomly chosen positive trip would be assigned a higher ranked prediction by the GLM than a randomly chosen trip that did not catch a black rockfish (@fig-pr_sm_roc). Stephens and MacCall (2004) proposed ignoring trips below a threshold probability, based on a criterion of balancing the number of false positives and false negatives. False positives (FP) are trips that are predicted to catch a quillback based on the species composition of the catch, but did not. False negatives (FN) are trips that were not predicted to catch a quillback, given the catch composition, but caught at least one. For the CRFS PR data set, the threshold probability (0.186) that balances FP and FN excluded 117,458 trips that did not catch a quillback, and 2,681 trips that caught a quillback. Given the low prevalence of quillback in the original data, we retained the false negative trips, assuming that catching a quillback indicates that a non-negligible fraction of the fishing effort occurred in appropriate habitat. Only “true negatives” based on the baseline threshold (the 117,458 trips that neither caught quillback, nor were predicted to catch them by the model) were excluded from the index standardization. This final filtering step resulted in a data set of 6,527 samples or trips with almost 60% catching one or more quillback (@tbl-pr_filter).
+The Stephens-MacCall logistic regression was fit to the remaining set of 52 indicator species (@fig-pr-sm). The top five species with high probability of co-occurrence with quillback were tiger rockfish, copper rockfish, canary rockfish, lingcod, and rock sole. The species with the lowest probability of co-occurrence were kelp rockfish, starry flounder, California halibut, ocean whitefish, and treefish. These species are not commonly caught during the same trip as quillback, presumably due to different habitat associations and fishing techniques. The Area Under the Characteristic curve (AUC) for this model is 0.88, a significant improvement over a random classifier (AUC = 0.5). AUC represents the probability that a randomly chosen positive trip would be assigned a higher ranked prediction by the GLM than a randomly chosen trip that did not catch a black rockfish. Stephens and MacCall (2004) proposed ignoring trips below a threshold probability, based on a criterion of balancing the number of false positives and false negatives. False positives (FP) are trips that are predicted to catch a quillback based on the species composition of the catch, but did not. False negatives (FN) are trips that were not predicted to catch a quillback, given the catch composition, but caught at least one. For the CRFS PR data set, the threshold probability (0.186) that balances FP and FN excluded 117,458 trips that did not catch a quillback, and 2,681 trips that caught a quillback. Given the low prevalence of quillback in the original data, we retained the false negative trips, assuming that catching a quillback indicates that a non-negligible fraction of the fishing effort occurred in appropriate habitat. Only “true negatives” based on the baseline threshold (the 117,458 trips that neither caught quillback, nor were predicted to catch them by the model) were excluded from the index standardization. This final filtering step resulted in a data set of 6,527 samples or trips with almost 60% catching one or more quillback (@tbl-pr-filter).
 
-We modeled quillback catch with an effort offset of angler trips using the R package sdmTMB. Covariates considered included year, month, 3-month time period (wave), and district. Sparse quillback in the data set meant that many months had no positive quillback samples and required that we increase the commonly used 2-month wave to three months to improve the distribution of positive samples. There were also several years in which no quillback were observed in district 3. Several district 3 sites were already removed during the filtering process. Therefore, we included the remaining district 3 sites into district 4. Exploration of alternative negative binomial models showed the full model including all covariates and a year:district interaction had the lowest AIC and log-likelihood but was also equal in these scores to a model excluding wave (@tbl-pr_model_select).
+We modeled quillback catch with an effort offset of angler trips using the R package sdmTMB. Covariates considered included year, month, 3-month time period (wave), and district. Sparse quillback in the data set meant that many months had no positive quillback samples and required that we increase the commonly used 2-month wave to three months to improve the distribution of positive samples. There were also several years in which no quillback were observed in district 3. Several district 3 sites were already removed during the filtering process. Therefore, we included the remaining district 3 sites into district 4. Exploration of alternative negative binomial models showed the full model including all covariates and a year:district interaction had the lowest AIC and log-likelihood but was also equal in these scores to a model excluding wave (@tbl-pr-model-select).
 
-Further exploration of alternative model distributions in sdmTMB showed that a delta-lognormal distribution performed better than negative binomial. Delta-lognormal models using year-district interactions failed dianostics and given that patterns among the districts are similar (@fig-pr_avgcpue_district), we excluded the interaction from the final model which included year, district, and wave.
+Further exploration of alternative model distributions in sdmTMB showed that a delta-lognormal distribution performed better than negative binomial. Delta-lognormal models using year-district interactions failed dianostics and given that patterns among the districts are similar (@fig-pr-avgcpue-district), we excluded the interaction from the final model which included year, district, and wave.
 
-The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr_model_cpue) and this trend is also reflected in raw CPUE over time (**FROG: ADD REFERENCE TO FIGURE pr_index_average_cpue.png - I think ok to leave this one out**). The Q-Q plot indicates a reasonable fit (@fig-pr_index_qq, @tbl-pr_index). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in **FROG: ADD REFERENCE TO TABLE PR_index_values.csv**.
+The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr-model-cpue) and this trend is also reflected in raw CPUE over time. The Q-Q plot indicates a reasonable fit (@fig-pr-index-qq, @tbl-pr-index). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in **FROG: ADD REFERENCE TO TABLE PR_index_values.csv**.
 
-### MRFSS PR Dockside Index of Abundance
-**MOVE TO data sources considered, but not used with just a description and no tables or figures**
-The MRFSS program was a federally administered recreational marine fisheries survey conducted between 1980 and 2003. Samplers interviewed private/rental (PR) anglers at launch ramps and other onshore sites similar to today’s CRFS program run by CDFW. We explored the potential to produce a fishery-dependent index of abundance using this PR data. Historic MRFSS records retained by CDFW were used to combine angler and trip data (type 1) with sampler examined catch data (type 3). Type 1 data includes information about fishing mode, location, number of anglers, and their primary and secondary target species for the trip. Type 3 data provides catch information by species including the numbers of fish and their lengths.\
-MRFSS samplers collected data on both observed and unobserved fish. Observed fish could be identified to species by the sampler and measured. Unobserved fish were reported by the angler but unavailable to the sampler for a variety of reasons. Because quillback is a relatively rare species in California that may not be correctly identified by anglers, we used only data on observed fish. Additionally, using exclusively observed fish simplifies the calculation of effort (number of anglers) contributing to that catch. Data on observed and unobserved fish were collected on separate forms that lead to complications in accounting for all anglers contributing to a given vessel trip when adding the catch of observed and unobserved fish. The first angler interviewed has been referred to as the “leader” and all subsequent anglers as “followers”. Combining type 1 and type 3 data accounts for all observed fish caught by leaders and followers. We also included only trips with fishing effort and complete interviews.\
-We further filtered this dataset to include trips more likely to catch quillback and more representative of possible quillback effort (**FROG: ADD REFERENCE TO TABLE mrfss_index_data_filters.csv**). Two fishing location fields were used to exclude inland waters such as bays and estuaries. We excluded southern California counties where quillback is rare. The time of year was organized into two-month “waves”, and we excluded the first wave representing January and February. Fishing for rockfish was prohibited in these months in 2003 for some central and northern California districts. We included only trips with angler reported primary targets of bottomfish and rockfish which also excluded years between 1980 to 1992 when species target data was not collected. Finally, we removed a trip in 1993 with an extreme outlier catch of 120 quillback. While these filters reduced the overall number of samples by an order of magnitude, quillback remained rare with only about 2.9% positive samples. The resulting average catch per angler trip (cpue) was low with large standard deviations and showed little contrast across the time series (**FROG: ADD REFERENCE TO FIGURE mrfs_pr_cpue.png** - leave out if not using). Therefore, we did not consider this data for further modeling to produce an index.
+
 
 <!--Figures -->
 
 ```{r} 
-#| label: fig-pr_sm
+#| label: fig-pr-sm
 #| echo: false 
 #| warning: false 
 #| eval: true 
@@ -39,19 +35,7 @@ knitr::include_graphics("figures/pr_index_SM.png")
 
 
 ```{r} 
-#| label: fig-pr_sm_roc
-#| echo: false 
-#| warning: false 
-#| eval: true 
-#| fig-cap: "FROG"
-#| fig-alt: "FROG"
-
-knitr::include_graphics("figures/pr_index_SM_ROC.png")
-
-```
-
-```{r} 
-#| label: fig-pr_avg_cpue
+#| label: fig-pr-avg-cpue
 #| echo: false 
 #| warning: false 
 #| eval: true 
@@ -65,7 +49,7 @@ knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 
 
 ```{r} 
-#| label: fig-pr_model_cpue
+#| label: fig-pr-model-cpue
 #| echo: false 
 #| warning: false 
 #| eval: true 
@@ -77,7 +61,7 @@ knitr::include_graphics("figures/pr_index_model_cpue_by_year.png")
 ```
 
 ```{r} 
-#| label: fig-pr_index_qq
+#| label: fig-pr-index-qq
 #| echo: false 
 #| warning: false 
 #| eval: true 
@@ -90,7 +74,7 @@ knitr::include_graphics("figures/pr_index_qq.png")
 
 
 ```{r} 
-#| label: fig-pr_avgcpue_district
+#| label: fig-pr-avgcpue-district
 #| echo: false 
 #| warning: false 
 #| eval: true 
@@ -104,7 +88,7 @@ knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 <!--Tables -->
 
 ```{r}
-#| label: tbl-pr_filter
+#| label: tbl-pr-filter
 #| echo: false
 #| warning: false
 #| tbl-cap: "FROG"
@@ -126,22 +110,25 @@ pr_filter |>
 
 
 ```{r}
-#| label: tbl-pr_model_select
+#| label: tbl-pr-model-select
 #| echo: false
 #| warning: false
 #| tbl-cap: "FROG"
 
-pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = F)
+pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = F) |>
+            dplyr::select(-c('Log-Likelihood', 'AICc')) 
+
 pr_filter |>
     gt() |>
-     tab_options(table.font.size = 12) |>
-     cols_width(everything() ~ px(80)) |>
+     tab_options(table.font.size = 11) |>
+   #  cols_width(everything() ~ px(80)) |>
+     cols_label(Delta = 'delta AIC') |>
     as_latex()
 
 ```
 
 ```{r}
-#| label: tbl-pr_index
+#| label: tbl-pr-index
 #| echo: false
 #| warning: false
 #| tbl-cap: "FROG"
@@ -149,7 +136,7 @@ pr_filter |>
 pr_filter <- read.csv("tables/pr_index_values.csv")
 pr_filter |>
     gt() |>
-    tab_options(table.font.size = 12) |>
+    tab_options(table.font.size = 12, table.width = px(200)) |>
     cols_width(everything() ~ px(60)) |>
     as_latex()
 
