@@ -289,19 +289,20 @@ run_mcmc_diagnostics(
 #need to modify the base model to estimate h
 #making a copy of the base model and changing the phase 
 bivar_directory <- here('models', '_bivariate_profiles')
+new.dir <- here('models', '_bivariate_profiles',glue::glue(base_model,'_est_h'))
 copy_SS_inputs(dir.old = here('models', base_model), 
-               dir.new = here('models', '_bivariate_profiles', base_model),
+               dir.new = new.dir,
                overwrite = TRUE)
 
-mod <- SS_read(here('models', '_bivariate_profiles', base_model))
+mod <- SS_read(new.dir)
 #estimate h
 mod$ctl$SR_parms['SR_BH_steep', c('PHASE')] <- 4
 
 SS_write(mod,
-         dir = here('models', '_bivariate_profiles', base_model),
+         dir = new.dir,
          overwrite = TRUE)
 
-r4ss::run(dir = here('models', '_bivariate_profiles', base_model), 
+r4ss::run(dir = new.dir, 
           exe = here('models/ss3_win.exe'), 
           extras = '-nohess', 
           show_in_console = TRUE, 
@@ -318,7 +319,7 @@ profile.settings <- nwfscDiag::get_settings_profile(
 settings <- nwfscDiag::get_settings(
   mydir = bivar_directory,
   settings = list(
-    base_name = base_model,
+    base_name = glue::glue(base_model, 'est_h'),
     run = "profile",
     profile_details = profile.settings,
     exe = exe_loc,

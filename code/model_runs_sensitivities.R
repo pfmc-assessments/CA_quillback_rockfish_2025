@@ -1514,7 +1514,11 @@ pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-
+numbers_at_age <- pp$natage
+pp$natageOnePlus_numbers <- numbers_at_age %>%
+  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
+  mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
+  dplyr::select(c("Time", "numberOfFish"))
 
 
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),

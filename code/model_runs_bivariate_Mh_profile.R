@@ -44,6 +44,7 @@ starter[["prior_like"]] <- 1
 SS_writestarter(starter, dir = mydir, overwrite = TRUE)
 
 par_table = expand.grid(M = seq(0.04, 0.14, by = 0.01), h = seq(0.25, 0.95, by = 0.05))
+par_table
 #tester
 # par_table=expand.grid(M=seq(0.11,0.115,by = 0.005),h=seq(0.75,0.80,by = 0.05))
 

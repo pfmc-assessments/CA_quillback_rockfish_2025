@@ -1,51 +1,21 @@
-## Tables {#sec-tables}
- 
+# Tables {#sec-tables}
+
+
+## Data
+
+
+### Fishery-dependent data
+
 ```{r} 
 #| label: 'set-rda-dir-tbls'
 #| echo: false 
 #| warning: false 
 #| eval: true 
 #| include: false
-library(flextable)
-rda_dir <- here::here("documents", "rda_files")
+#library(flextable)
+#rda_dir <- here::here("documents", "rda_files")
+library(tidyr)
+library(gt)
 ``` 
-
-```{r} 
-#| label: 'tbl-bnc-setup'
-#| echo: false 
-#| warning: false 
-#| eval: true 
-#| include: false
-# if the bnc table rda exists:
-if (file.exists(file.path(rda_dir, 'bnc_table.rda'))){
-
-  # load rda
-  load(file.path(rda_dir, 'bnc_table.rda'))
-
-  # save rda with plot-specific name
-  bnc_table_rda <- rda
-
-  # remove generic rda object
-  rm(rda)
-
-  # save table, caption as separate objects; set eval to TRUE
-  bnc_table <- bnc_table_rda$table
-  bnc_cap <- bnc_table_rda$cap
-  eval_bnc <- TRUE
-
-# if the bnc table rda does not exist, don't evaluate the next chunk
-} else {eval_bnc <- FALSE}
-``` 
-
-```{r} 
-#| label: 'tbl-bnc'
-#| echo: false 
-#| warning: false 
-#| eval: !expr eval_bnc 
-#| tbl-cap: !expr if(eval_bnc) bnc_cap 
-#| include: !expr eval_bnc
-bnc_table
-``` 
-
 
 {{< pagebreak >}}

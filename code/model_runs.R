@@ -9240,7 +9240,7 @@ r4ss::table_all(replist = pp, dir = here::here("documents","report"))
 
 
 
-####------------------------------------------------#
+####------------------------------------------------
 ## 4_2_1a_propBase ----
 ####------------------------------------------------#
 #Set recdev option to be a more complicated version (set to 2)
