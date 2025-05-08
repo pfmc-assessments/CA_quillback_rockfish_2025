@@ -1,0 +1,56 @@
+## Biological Parameters
+
+ FROG NAMED MELISSA
+
+### Natural Mortality
+
+
+Natural mortality was not directly measured, so life-history based empirical relationships were used. The @hamel_development_2022 method for developing a prior on natural mortality for West Coast groundfish stock assessments combines meta-analytic approaches relating the $M$ rate to other life-history parameters such as longevity, size, growth rate, and reproductive effort to provide a prior for $M$. The @hamel_development_2022 method re-evaluated the data used by Then et al. [-@then_evaluating_2015] by fitting the one-parameter $A_{\text{max}}$ model under a log-log transformation (such that the slope is forced to be -1 in the transformed space [@hamel_method_2015], the point estimate and median of the prior for $M$ is:
+
+\begin{centering}
+
+$M=\frac{5.4}{A_{\text{max}}}$
+
+\end{centering}
+
+\vspace{0.5cm}
+
+where $A_{\text{max}}$ is the maximum age. The prior is defined as a log-normal distribution with parameters $\mu = ln(5.4/A_{\text{max}})$ and $\sigma = 0.438$. Using a maximum age of 95 years, the point estimate and median of the prior for $M$ is `r model$parameters["NatM_p_1_Fem_GP_1","Value"]` per year.
+
+The maximum age assumed for calculating natural mortality in the base model was 80 years. FROG
+
+
+### Weight-at-length
+
+The length-weight relationship for `r spp` was estimated outside the model using available California biological data collected from fishery-independent and fishery-dependent data sources (@fig-weightlength). **FROG Sources included the WCGBTS, and recreational and commercial samples**. Only directly measured weight and length values were used; any values with more than two decimal places were assumed to be calculated from another measurement and were excluded.The estimated length-weight relationship for `r spp` was $W$ = `r format(model$MGparmAdj$Wtlen_1_Fem[1], scientific = TRUE)`$L$^`r round(model$MGparmAdj$Wtlen_2_Fem[1],2)`^ where $L$ is fork length in cm and $W$ is weight in kg.
+
+
+### Maturity
+
+From 2019 to 2025 a total of 88 histological samples were collected from female quillback rockfish caught off the coast of California (16 by CCFRP and 72 by the SWFSC). The samples were read by Melissa Head at the NWFSC to for identification of microscopic functional maturity stage. Functional maturity accounts abortive manturation and the proportion of oocytes in atresia (cellular breakdown and reabsorption), which could indicate skipped spawning (Melissa Head, personal communication, NWFSC, NOAA). Seven samples were excluded due to uncertainy in whether the female was spent/resting or experienced abortive maturation, due in part to the timeinin of the collections during the non-spawning months.  
+
+The remaining 81 samples ranged in size from 21-45 cm.  The six females collected from north of Pt. Arena (Crescent City and Eureka) were all mature.  The SWFSC collected 22 females in January 2025 that contributed to our estimate of maturity-at-length, but are not included in the growth fleet.  The 2021 California quillback rockfish assessment used the estimates from Oregon of L50 = 29.3 cm. 
+Our estimate of maturity for California quillback is L50 = 28.5 cm (SE = 0.506) (@fig-maturity).  
+
+### Fecundity
+
+The fecundity-at-length was based on ovary samples collected by the SWFSC Santa Cruz lab in 2023 and 2024. The fecundity relationship for `r spp` was estimated to be equal to `r format(model$MGparmAdj$Eggs_scalar_Fem[1], scientific = TRUE)`$L$^`r round(model$MGparmAdj$Eggs_exp_len_Fem[1],2)`^ in millions of eggs where $L$ is fork length in cm (@fig-fecundity).  Of the females collected during the spawning months, 24 fish were at stage 2, with pre-fertilized vitellogenic eggs. 
+
+### Growth (Length-at-Age)
+
+The majority of length-at-age data available for California quillback rockfish were collected in hte alst five years. The California Cooperative Groundfish Survey is the only source of standardized  commercial sampling program is the only fishery-dependent
+
+Age composition data used in the model were from break-and-burn otolith reads. Aged `r spp` used in the assessment were aged by the Cooperative Ageing Project (CAP) in Newport, Oregon. Within-lab ageing error was estimated by the CAP based on one primary age reader and a second reader producing double reads from 418 otoliths collected from California (@fig-age_error). 
+
+An ageing error estimate was made based on these double reads using an ADMB computational tool specifically developed for estimating ageing error [@punt_quantifying_2008] and using release 1.3.1 of the R package \href{https://github.com/pfmc-assessments/nwfscAgeingError}{nwfscAgeingError} [@thorson_nwfscageingerror_2012] for input and output diagnostics. A series of 24 ageing error models were run to look across the suite of bias and ageing precision. The model selected by AIC (and used in the assessment) assumes the first reader was unbiased and a constanct coefficient of variation, i.e., sigma is a linear fuction of true age.
+
+
+## Environmental and ecosystem data
+
+This model does not explicityl include envrionmental or ecosystem data.  `r Spp` are a rocky habitat associated species and the area of available habitat was consdiered when developing indices of abundance for the fishery-independent survyes. 
+
+<!-- Environmental or ecosystem data or model products used in the stock assessment model and/or in the preparation of data or estimation of biological parameters. If environmental or ecosystem data are incorporated in the stock assessment model, provide a report of consultations with technical teams that evaluate ecosystem data or methodologies used in  -->
+
+
+
+
