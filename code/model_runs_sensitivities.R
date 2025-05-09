@@ -1633,7 +1633,7 @@ SSsummarize(xx) |>
 ######-
 ## ROV and CCFRP and Rec Domed --------------------------------------------------------
 
-new_name <- 'sel_AllDomed'
+new_name <- 'sel_ROVandCCFRPandRecDomed'
 
 mod <- base_mod
 
@@ -1651,6 +1651,78 @@ mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational(2)",
                          c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
 mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017",
                             c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## All Domed --------------------------------------------------------
+
+new_name <- 'sel_AllDomed'
+
+mod <- base_mod
+
+mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+#Setting init for p4 for rec to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational(2)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+
+#Setting init for p4 for com to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Just Com Domed --------------------------------------------------------
+
+new_name <- 'sel_ComDomed'
+
+mod <- base_mod
+
+#Setting init for p4 for com to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
 
 
 # Write model and run
@@ -1700,12 +1772,16 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
                                         subdir = c(base_mod_name,
                                                    file.path('_sensitivities', "sel_ROVandCCFRPDomed"),
                                                    file.path('_sensitivities', "sel_RecDomed"),
+                                                   file.path('_sensitivities', "sel_ROVandCCFRPandRecDomed"),
+                                                   file.path('_sensitivities', "sel_ComDomed"),
                                                    file.path('_sensitivities', "sel_AllDomed")))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'ROV & CCFRP Domed',
-                                     'Rec domed',
-                                     "ROV & CCFRP & Rec Domed"),
+                                     'Rec Domed',
+                                     "ROV & CCFRP & Rec Domed",
+                                     "Com Domed",
+                                     'All Domed'),
                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
@@ -1860,6 +1936,8 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  file.path("_sensitivities", "sel_NoBlocks"),
                                                  file.path("_sensitivities", "sel_ROVandCCFRPDomed"),
                                                  file.path("_sensitivities", "sel_RecDomed"),
+                                                 file.path("_sensitivities", "sel_ROVandCCFRPandRecDomed"),
+                                                 file.path("_sensitivities", "sel_ComDomed"),
                                                  file.path("_sensitivities", "sel_AllDomed"),
                                                  file.path("_sensitivities", "sel_EarlyRecAsymp"),
                                                  file.path("_sensitivities", "sel_EarlyRecAsympDomeSurveys"),
@@ -1872,6 +1950,8 @@ SSsummarize(xx) |>
                                      "ROV and CCFRP Domed",
                                      "Rec Domed",
                                      "ROV and CCFRP and Rec Domed",
+                                     "Com Domed",
+                                     "All Domed",
                                      "Alt rec blocks domed",
                                      "Alt rec blocks, ROV and CCFRP domed",
                                      #"Last com block asymptotic",
@@ -1887,6 +1967,8 @@ xx.tab <- SStableComparisons(xx.sum,
                                             "ROV and CCFRP Domed",
                                             "Rec Domed",
                                             "ROV and CCFRP and Rec Domed",
+                                            "Com Domed",
+                                            "All Domed",
                                             "Alt rec blocks domed",
                                             "Alt rec blocks, ROV and CCFRP domed",
                                             #"Last com block asymptotic",
