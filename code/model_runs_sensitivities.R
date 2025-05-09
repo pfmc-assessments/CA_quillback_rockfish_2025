@@ -1220,6 +1220,45 @@ SSsummarize(xx) |>
 dev.off()
 
 
+######-
+## Remove small sample com length comps --------------------------------------------------------
+
+#Remove sample sizes with N < 10 in commercial length comps makes fit look better
+#even though its functionally the same
+
+new_name <- 'comLenSampleSize'
+
+mod <- base_mod
+
+mod$dat$lencomp[which(mod$dat$lencomp$Nsamp < 10  & 
+                        mod$dat$lencomp$fleet == 1), "year"] <-
+  -abs(mod$dat$lencomp[which(mod$dat$lencomp$Nsamp < 10  & 
+                               mod$dat$lencomp$fleet == 1), "year"])
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'No ageing error'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
 # ============================================================================ #
 # Biology sensitivities -----
 # ============================================================================ #
