@@ -365,59 +365,6 @@ SSsummarize(xx) |>
                                      'Increase Catch SE'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
-######-
-## Data weighting - Dirichlet --------------------------------------------------------
-
-new_name <- 'dw_dirichlet'
-
-mod <- base_mod
-
-# R.utils::copyDirectory(from = here('models', base_mod_name),
-#                        to = new_dir,
-#                        overwrite = TRUE,
-#                        recursive = FALSE)
-# SS_output(dir = new_dir) |>
-#   r4ss::tune_comps(option = 'DM',
-#                    dir = new_dir,
-#                    niters_tuning = 1,
-#                    exe = here('models/ss_win.exe'),
-#                    extras = '-nohess')
-# 
-# xx <- SS_output(dir = new_dir)
-# 
-# xx$Dirichlet_Multinomial_pars
-# # the run times alone on this are prohibitive.
-
-
-#Run based on weights set to one
-mod$ctl$Variance_adjustment_list$value <-  1
-
-SS_write(mod, here(sens_dir, new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here(sens_dir, new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
-
-pp <- SS_output(here(sens_dir, new_name))
-
-dw <- r4ss::tune_comps(replist = pp, 
-                       option = 'DM', 
-                       dir = here(sens_dir, new_name), 
-                       exe = here('models/ss3_win.exe'),
-                       niters_tuning = 1, 
-                       extras = '-nohess',
-                       show_in_console = TRUE)
-
-pp <- SS_output(here(sens_dir, new_name))
-pp$Dirichlet_Multinomial_pars
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
-
-
-
 
 ######-
 ## Adjusting High Catch Outliers --------------------------------------------------------
@@ -465,6 +412,95 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Reduce Catch Outliers'),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+####------------------------------------------------#
+# Data weighting sensitivities ----
+####------------------------------------------------#
+
+######-
+## Data weighting - Dirichlet --------------------------------------------------------
+
+new_name <- 'dw_dirichlet'
+
+mod <- base_mod
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'DM', 
+                       dir = here(sens_dir, new_name), 
+                       exe = here('models/ss3_win.exe'),
+                       niters_tuning = 1, 
+                       extras = '-nohess',
+                       show_in_console = TRUE)
+
+pp <- SS_output(here(sens_dir, new_name))
+pp$Dirichlet_Multinomial_pars
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+#DM weights are nearly all close to 1
+
+
+######-
+## Data weighting - MI --------------------------------------------------------
+
+new_name <- 'dw_MI'
+
+mod <- base_mod
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+
+#Do three iterations
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'MI', 
+                       dir = here(sens_dir, new_name), 
+                       exe = here('models/ss3_win.exe'),
+                       niters_tuning = 3, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', "dw_dirichlet"),
+                                                   file.path('_sensitivities', "dw_MI")))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Dirichlet data weighting',
+                                     'MI weighting'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
 
 
 ####------------------------------------------------#
@@ -1307,7 +1343,7 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
                                                    file.path('_sensitivities', new_name)))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
-                                     'No ageing error'),
+                                     'Remove com lengths with sample size < 10'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 dev.off()
 
