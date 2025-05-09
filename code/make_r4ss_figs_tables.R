@@ -3,7 +3,7 @@
 
 # location of base model (TODO: change as needed)
 # path is relative to /report/
-# base_mod should match what's set in /report/SAR_USWC_Yellowtail_rockfish_skeleton.qmd
+# base_mod should match what's set in /report/SAR_C_Quillback_rockfish_skeleton.qmd
 # so is not set here to avoid accidental mismatch
 if (!exists("base_model")) {
   cli::cli_abort(
