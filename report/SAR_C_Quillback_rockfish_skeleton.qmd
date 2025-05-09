@@ -56,8 +56,7 @@ params:
    cf: 'Commercial fleet'
    rf: 'Recreational fleet'
 bibliography: 
--  asar_references.bib 
--  extra_quillback_references.bib
+-  asar_references.bib
 csl: 'canadian-journal-of-fisheries-and-aquatic-sciences.csl'
 ---
 
