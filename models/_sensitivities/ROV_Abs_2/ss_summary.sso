@@ -1,7 +1,7 @@
 #V3.30.23.1;_safe;_compile_date:_Dec  5 2024;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_13.2
 2025_ca_quillback.dat #_DataFile 
 2025_ca_quillback.ctl #_Control 
-Run_Date: Thu May  8 16:03:17 2025
+Run_Date: Fri May  9 14:50:44 2025
 Final_phase: 6  N_iterations: 561
 #_LIKELIHOOD 
 Label logL*Lambda

@@ -1,8 +1,4 @@
 Note 1 Information: Max data length bin: 50  < max pop len bins: 59; so will accumulate larger pop len bins
 Warning 1 : At least one block pattern ends in endyr. Check the output parameter value time series to see if the values in forecast years are as intended.
-<<<<<<< HEAD
-Warning 2 : Final gradient: 0.000180271 is larger than final_conv: 1e-05
-=======
-Warning 2 : Final gradient: 7.93044e-05 is larger than final_conv: 1e-05
->>>>>>> 9d5156d86b5068ff6457acbdd9962d489a2f5aa9
+Warning 2 : Final gradient: 0.000359942 is larger than final_conv: 1e-05
  2 warnings  and 1 note 

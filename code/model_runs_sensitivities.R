@@ -2047,9 +2047,9 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   dplyr::select(c("Time", "numberOfFish"))
 
 # Using the code above from Melissa to look at numbers of fish in the middle of the year,
-# we get 319170 fish in 2015.  
+# we get 348697 fish in 2015.  
 
-# The ROV estimate is 2.432 times the model estimate.  
+# The ROV estimate is 2.226 times the model estimate.  
 
 # Try increasing catch x 3
 mod <- base_mod
@@ -2075,11 +2075,11 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
   dplyr::select(c("Time", "numberOfFish"))
 
-# This results in 957451 fish in 2015.  That's too many.  Let's try multiplying catch by 2.4.  
+# This results in 957451 fish in 2015.  That's too many.  Let's try multiplying catch by 2.2.  
 mod <- base_mod
 mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
 mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
-mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 2.4
+mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 2.2
 
 # Write model and run
 SS_write(mod, here(sens_dir, new_name),
@@ -2099,7 +2099,7 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
   dplyr::select(c("Time", "numberOfFish"))
 
-# This gives 765966 fish in 2015 - pretty close to the ROV estimate.  
+# This gives 766230 fish in 2015 - pretty close to the ROV estimate.  
 
 ######-
 ## Find values of M, h, and growth that produce survey estimate without adjusting base catch ----------------------
@@ -2131,3 +2131,5 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
+
+# M is estimated at 0.112
