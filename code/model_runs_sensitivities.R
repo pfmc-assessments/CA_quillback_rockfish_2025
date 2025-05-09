@@ -1995,14 +1995,12 @@ mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
 mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
 
 # The estimated proportion of quillback habitat in MPAs is 0.20.
-# Tanya estimated 155225 fish in MPAs in 2020.
+# Tanya estimated 155225 fish in MPAs in 2015.
 # Expanding that to all habitat results in 776125 fish.
 
-<<<<<<< HEAD
 pp <- SS_output(here('models', base_mod_name))
-=======
 pp <- SS_output(here('models', '5_1_3_preStarBase'))
->>>>>>> 9d5156d86b5068ff6457acbdd9962d489a2f5aa9
+
 numbers_at_age <- pp$natage
 pp$natageOnePlus_numbers <- numbers_at_age %>%
   filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
