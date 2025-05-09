@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-04-30  09:30:48
+#C file write time: 2025-05-08  14:59:27
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -49,7 +49,7 @@
 #
 #_growth_parms
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env_var&link	dev_link	dev_minyr	dev_maxyr	dev_PH	Block	Block_Fxn
- 0.01	0.15	     0.0643	      -2.74	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
+ 0.01	0.15	      0.068	       -2.7	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
     0	  20	          8	      3.986	    0	0	 3	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
    35	  50	    41.1812	    41.1812	    0	0	 3	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
  0.03	 0.3	     0.1782	     0.1782	    0	0	 3	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
@@ -150,7 +150,7 @@
  11	51	     36	0	0	0	 4	0	0	0	0	0	1	2	#_SizeSel_P_1_CA_Commercial(1)  
 -20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Commercial(1)  
   0	 9	 5.2575	0	0	0	 5	0	0	0	0	0	1	2	#_SizeSel_P_3_CA_Commercial(1)  
-  0	20	5.48064	0	0	0	 5	0	0	0	0	0	1	2	#_SizeSel_P_4_CA_Commercial(1)  
+  0	20	     15	0	0	0	-5	0	0	0	0	0	1	2	#_SizeSel_P_4_CA_Commercial(1)  
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Commercial(1)  
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Commercial(1)  
  11	51	     34	0	0	0	 4	0	0	0	0	0	2	2	#_SizeSel_P_1_CA_Recreational(2)
@@ -194,12 +194,12 @@
 #
 # Input variance adjustments factors: 
 #_factor	fleet	value
-    4	1	0.350104	#_Variance_adjustment_list1
-    4	2	0.183025	#_Variance_adjustment_list2
-    4	4	0.237556	#_Variance_adjustment_list3
-    4	5	0.170138	#_Variance_adjustment_list4
-    5	1	0.084542	#_Variance_adjustment_list5
-    5	3	  0.6286	#_Variance_adjustment_list6
+    4	1	0.376798	#_Variance_adjustment_list1
+    4	2	 0.18024	#_Variance_adjustment_list2
+    4	4	0.235537	#_Variance_adjustment_list3
+    4	5	0.170488	#_Variance_adjustment_list4
+    5	1	0.080575	#_Variance_adjustment_list5
+    5	3	0.612391	#_Variance_adjustment_list6
 -9999	0	       0	#_terminator               
 #
 1 #_maxlambdaphase

@@ -3,7 +3,7 @@
 
 # location of base model (TODO: change as needed)
 # path is relative to /report/
-# base_mod should match what's set in /report/SAR_USWC_Yellowtail_rockfish_skeleton.qmd
+# base_mod should match what's set in /report/SAR_C_Quillback_rockfish_skeleton.qmd
 # so is not set here to avoid accidental mismatch
 if (!exists("base_model")) {
   cli::cli_abort(
@@ -14,18 +14,18 @@ if (!exists("base_model")) {
 # read model output using r4ss
 pp <- r4ss::SS_output(
   dir = here('models', base_model),
-  SpawnOutputLabel = "Spawning output (XXillions of eggs)",
+  SpawnOutputLabel = "Spawning output (Millions of eggs)",
   printstats = FALSE,
   verbose = FALSE
 )
 
 # make new r4ss plots
 # TODO: add better fleetnames if desired
-r4ss::SS_plots(pp, printfolder = "", dir= here("documents", "report","r4ss_plots"), uncertainty = TRUE)
+r4ss::SS_plots(pp, printfolder = "", dir= here("report","r4ss_plots"), uncertainty = TRUE)
 
 # make new tables
 # TODO: add better fleetnames if desired
-r4ss::table_all(replist = pp, dir = here::here("documents", "report"))
+r4ss::table_all(replist = pp, dir = here::here("report"))
 
 # custom calls to r4ss functions
 

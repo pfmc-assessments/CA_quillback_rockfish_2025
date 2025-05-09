@@ -14,7 +14,8 @@ source(here('code/selexComp.R'))
 
 #Enter in base model from which to base sensitivities
 #base_mod_name <-'3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
-base_mod_name <- '4_2_1_propBase' #<---------------UPDATE WHEN CHANGE
+#base_mod_name <- '4_2_1_propBase' #<---------------UPDATE WHEN CHANGE
+base_mod_name <- '5_1_3_preStarBase' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
 #Create the sensitivities directory
@@ -336,7 +337,7 @@ SSsummarize(xx) |>
 ######-
 ## Increase Catch SE --------------------------------------------------------
 
-new_name <- 'increaseCatchSE'
+new_name <- 'catchIncreaseSE'
 
 mod <- base_mod
 
@@ -368,7 +369,7 @@ SSsummarize(xx) |>
 ######-
 ## Adjusting High Catch Outliers --------------------------------------------------------
 
-new_name <- 'CatchOutliers'
+new_name <- 'catchOutliers'
 
 mod <- base_mod
 
@@ -448,13 +449,10 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'No Rec Length 2024'),
-                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 ######-
 ## Add extra SE to indices --------------------------------------------------------------------
-
-# ============================================================================ #
-# IndexExtraSE
 
 #Make changes from discussion of issue #63
 #Set up extraSE for the indices but keep phase negative
@@ -1097,19 +1095,23 @@ dev.off()
 #Selectivity shifts pretty far right in the north and the south selex for 2017-2021 is 
 #really off. I dont trust the reweighted version. When setting all weights to 1
 #the model is much more well behaved. Overall, doesn't seem to suggest wide differences
-#at existing weights with non-FAA model. Early explorations should reweighting didn't
+#at existing weights with non-FAA model. Early explorations showed reweighting didn't
 #give as large of differences and that was done with reweighting first and then
 #updating blocks. 
 
 
 ########-
-## Use all data: Replace all negative year with positive --------------------------------------------------------
-
 ## Replace commercial CAAL with marginal age comps --------------------------------------------------------
 
 new_name <- 'marginalComAge'
 
 mod <- base_mod
+
+#Reset fleet.converter
+fleet.converter <- base_mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet_no_num = 1:5,
+                fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::select(fleetname, fleet_no_num, fleet)
 
 com.marg <- read.csv(here("data", "forSS3", "Acomps_PacFIN_unsexed_expanded_1_60.csv")) %>%
   dplyr::mutate(ageerr = 1) %>%
@@ -1419,13 +1421,13 @@ SSsummarize(xx) |>
 
 
 ######-
-## Max Age 80 --------------------------------------------------------
-new_name <- 'maxAge80'
+## Max Age 84 --------------------------------------------------------
+new_name <- 'maxAge84'
 
 mod <- base_mod
 
 #change values
-maxAge <- 80 
+maxAge <- 84 
 m_init <- round(5.4/maxAge, 4)
 m_se <- 0.31
 m_prior <- 3 #log-normal
@@ -1453,7 +1455,7 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
                                                    file.path('_sensitivities', new_name)))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
-                                     'Max age 80'),
+                                     'Max age 84'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
@@ -1536,13 +1538,16 @@ SSsummarize(xx) |>
 ######-
 ## Alternative Commercial Blocks --------------------------------------------------------
 
-new_name <- 'AltComBlocks'
+new_name <- 'sel_AltComBlocks'
 
 mod <- base_mod
 
 mod$ctl$blocks_per_pattern <- c(2, 1)
 mod$ctl$Block_Design <- list(c(2003, 2022, 2023, 2024), #commercial fleet
                              c(2017, 2024)) #recreational fleet
+
+#main block is now the first so set that to be domed (based on previous INIT)
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", c("INIT", "PHASE")] <- c(5.48064, 5)
 
 # Write model and run
 SS_write(mod, here(sens_dir, new_name),
@@ -1561,7 +1566,7 @@ plot_sel_all(pp)
 ######-
 ## No Blocks --------------------------------------------------------
 
-new_name <- 'NoBlocks'
+new_name <- 'sel_NoBlocks'
 
 mod <- base_mod
 
@@ -1588,7 +1593,7 @@ plot_sel_all(pp)
 ######-
 ## ROV and CCFRP Domed --------------------------------------------------------
 
-new_name <- 'ROVandCCFRPDomed'
+new_name <- 'sel_ROVandCCFRPDomed'
 
 mod <- base_mod
 
@@ -1618,8 +1623,8 @@ plot_sel_all(pp)
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
                                         subdir = c(base_mod_name,
                                                    file.path('_sensitivities', new_name),
-                                                   file.path('_sensitivities', "AltComBlocks"),
-                                                   file.path('_sensitivities', "NoBlocks")))))
+                                                   file.path('_sensitivities', "sel_AltComBlocks"),
+                                                   file.path('_sensitivities', "sel_NoBlocks")))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'ROV & CCFRP Domed', "Simplify Commercial Blocks", "No Blocks"),
@@ -1628,7 +1633,7 @@ SSsummarize(xx) |>
 ######-
 ## ROV and CCFRP and Rec Domed --------------------------------------------------------
 
-new_name <- 'AllDomed'
+new_name <- 'sel_ROVandCCFRPandRecDomed'
 
 mod <- base_mod
 
@@ -1664,9 +1669,81 @@ plot_sel_all(pp)
 
 
 ######-
+## All Domed --------------------------------------------------------
+
+new_name <- 'sel_AllDomed'
+
+mod <- base_mod
+
+mod$ctl$size_selex_parms[intersect(grep("CCFRP", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+#Setting init for p4 for rec to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational(2)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+
+#Setting init for p4 for com to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Just Com Domed --------------------------------------------------------
+
+new_name <- 'sel_ComDomed'
+
+mod <- base_mod
+
+#Setting init for p4 for com to its original from model 322
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014",
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
 ## Just Rec Domed --------------------------------------------------------
 
-new_name <- 'RecDomed'
+new_name <- 'sel_RecDomed'
 
 mod <- base_mod
 
@@ -1693,14 +1770,18 @@ plot_sel_all(pp)
 
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
                                         subdir = c(base_mod_name,
-                                                   file.path('_sensitivities', "ROVandCCFRPDomed"),
-                                                   file.path('_sensitivities', "RecDomed"),
-                                                   file.path('_sensitivities', "AllDomed")))))
+                                                   file.path('_sensitivities', "sel_ROVandCCFRPDomed"),
+                                                   file.path('_sensitivities', "sel_RecDomed"),
+                                                   file.path('_sensitivities', "sel_ROVandCCFRPandRecDomed"),
+                                                   file.path('_sensitivities', "sel_ComDomed"),
+                                                   file.path('_sensitivities', "sel_AllDomed")))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'ROV & CCFRP Domed',
-                                     'Rec domed',
-                                     "ROV & CCFRP & Rec Domed"),
+                                     'Rec Domed',
+                                     "ROV & CCFRP & Rec Domed",
+                                     "Com Domed",
+                                     'All Domed'),
                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
@@ -1708,7 +1789,7 @@ SSsummarize(xx) |>
 ## More Rec Blocks with Early Period Asymptotic --------------------------------------------------------
 # Leave CCFRP and ROV asymptotic
 
-new_name <- 'EarlyRecAsymp'
+new_name <- 'sel_EarlyRecAsymp'
 
 mod <- base_mod
 
@@ -1749,15 +1830,15 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'More Rec Blocks'),
-                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 ######-
 ## More Rec Blocks with Early Period Asymptotic --------------------------------------------------------
 # Leave CCFRP and ROV asymptotic
 
-new_name <- 'EarlyRecAsympDomeSurveys'
+new_name <- 'sel_EarlyRecAsympDomeSurveys'
 
-mod <- SS_read(here('models', '_sensitivities', 'EarlyRecAsymp'))
+mod <- SS_read(here('models', '_sensitivities', 'sel_EarlyRecAsymp'))
 
 mod[["ctl"]][["size_selex_parms"]][["PHASE"]][16] <- 5 # Turn on estimation of parameter 4 for CCFRP
 mod[["ctl"]][["size_selex_parms"]][["PHASE"]][22] <- 5 # Turn on estimation of parameter 4 for ROV
@@ -1778,56 +1859,58 @@ plot_sel_all(pp)
 
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
                                         subdir = c(base_mod_name,
-                                                   file.path('_sensitivities', 'EarlyRecAsymp'),
+                                                   file.path('_sensitivities', 'sel_EarlyRecAsymp'),
                                                    file.path('_sensitivities', new_name)))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Late Rec Blocks Domed',
                                      'Late Rec Blocks & Surveys Domed'),
                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
+
 ######-
 ## Commercial Asymptotic --------------------------------------------------------
 #Asymptotic for final block (keeping earliest block as domed)
-
-new_name <- 'ComAsymp'
-
-mod <- base_mod
-
-mod[["ctl"]][["size_selex_parms"]][["PHASE"]][4] <- -5
-mod[["ctl"]][["size_selex_parms"]][["INIT"]][4] <- 15
-
-# Write model and run
-SS_write(mod, here(sens_dir, new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here(sens_dir, new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
-
-pp <- SS_output(here(sens_dir, new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
-
-xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
-                                        subdir = c(base_mod_name,
-                                                   file.path('_sensitivities', new_name)))))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('Base model',
-                                     'Commercial Asymptotic'),
-                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
+#This applies only for sens from model 421 as it was implemented for model 513
+ 
+# new_name <- 'sel_ComAsymp'
+# 
+# mod <- base_mod
+# 
+# mod[["ctl"]][["size_selex_parms"]][["PHASE"]][4] <- -5
+# mod[["ctl"]][["size_selex_parms"]][["INIT"]][4] <- 15
+# 
+# # Write model and run
+# SS_write(mod, here(sens_dir, new_name),
+#          overwrite = TRUE)
+# 
+# r4ss::run(dir = here(sens_dir, new_name), 
+#           exe = here('models/ss3_win.exe'), 
+#           extras = '-nohess', 
+#           show_in_console = TRUE, 
+#           skipfinished = FALSE)
+# 
+# pp <- SS_output(here(sens_dir, new_name))
+# SS_plots(pp, plot = c(1:26))
+# plot_sel_all(pp)
+# 
+# xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+#                                         subdir = c(base_mod_name,
+#                                                    file.path('_sensitivities', new_name)))))
+# SSsummarize(xx) |>
+#   SSplotComparisons(legendlabels = c('Base model',
+#                                      'Commercial Asymptotic'),
+#                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 ######-
 ## Commercial All Asymptotic --------------------------------------------------------
 #Asymptotic for all blocks
 
-new_name <- 'ComAsymp_allBlocks'
+new_name <- 'sel_ComAsymp_allBlocks'
 
 mod <- base_mod
 
-mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", "PHASE"] <- -5
-mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", "INIT"] <- 15
+#mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", "PHASE"] <- -5
+#mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", "INIT"] <- 15
 
 mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Commercial(1)_BLK1repl_1916", 
                             c("HI", "INIT", "PHASE")] <- c(20, 15, -5)
@@ -1846,26 +1929,34 @@ pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
-                                        subdir = c(base_mod_name,
-                                                   file.path('_sensitivities', new_name)))))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('Base model',
-                                     'Commercial Asymptotic All blocks'),
-                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
-
 ##Compare likelihoods of selectivity sensitivities - for testing purposes
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
-                                      subdir = c("4_2_1_propBase",
-                                                 file.path("_sensitivities", "AltComBlocks"),
-                                                 file.path("_sensitivities", "NoBlocks"),
-                                                 file.path("_sensitivities", "ROVandCCFRPDomed"),
-                                                 file.path("_sensitivities", "RecDomed"),
-                                                 file.path("_sensitivities", "AllDomed"),
-                                                 file.path("_sensitivities", "EarlyRecAsymp"),
-                                                 file.path("_sensitivities", "EarlyRecAsympDomeSurveys"),
-                                                 file.path("_sensitivities", "ComAsymp"),
-                                                 file.path("_sensitivities", "ComAsymp_allBlocks"))))
+                                      subdir = c("5_1_3_preStarBase",
+                                                 file.path("_sensitivities", "sel_AltComBlocks"),
+                                                 file.path("_sensitivities", "sel_NoBlocks"),
+                                                 file.path("_sensitivities", "sel_ROVandCCFRPDomed"),
+                                                 file.path("_sensitivities", "sel_RecDomed"),
+                                                 file.path("_sensitivities", "sel_ROVandCCFRPandRecDomed"),
+                                                 file.path("_sensitivities", "sel_ComDomed"),
+                                                 file.path("_sensitivities", "sel_AllDomed"),
+                                                 file.path("_sensitivities", "sel_EarlyRecAsymp"),
+                                                 file.path("_sensitivities", "sel_EarlyRecAsympDomeSurveys"),
+                                                 #file.path("_sensitivities", "sel_ComAsymp"),
+                                                 file.path("_sensitivities", "sel_ComAsymp_allBlocks"))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c("Base",
+                                     "Alt com blocks",
+                                     "No blocks",
+                                     "ROV and CCFRP Domed",
+                                     "Rec Domed",
+                                     "ROV and CCFRP and Rec Domed",
+                                     "Com Domed",
+                                     "All Domed",
+                                     "Alt rec blocks domed",
+                                     "Alt rec blocks, ROV and CCFRP domed",
+                                     #"Last com block asymptotic",
+                                     "All com block asymptotic"),
+                    subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 #Compare likelihoods
 xx.sum <- SSsummarize(xx)
@@ -1876,9 +1967,11 @@ xx.tab <- SStableComparisons(xx.sum,
                                             "ROV and CCFRP Domed",
                                             "Rec Domed",
                                             "ROV and CCFRP and Rec Domed",
+                                            "Com Domed",
+                                            "All Domed",
                                             "Alt rec blocks domed",
                                             "Alt rec blocks, ROV and CCFRP domed",
-                                            "Last com block asymptotic",
+                                            #"Last com block asymptotic",
                                             "All com block asymptotic")) |>
   dplyr::mutate(across(-Label, ~ round(., 2))) |>
   dplyr::rename(' ' = Label)
@@ -1905,7 +1998,11 @@ mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130,
 # Tanya estimated 155225 fish in MPAs in 2020.
 # Expanding that to all habitat results in 776125 fish.
 
+<<<<<<< HEAD
 pp <- SS_output(here('models', base_mod_name))
+=======
+pp <- SS_output(here('models', '5_1_3_preStarBase'))
+>>>>>>> 9d5156d86b5068ff6457acbdd9962d489a2f5aa9
 numbers_at_age <- pp$natage
 pp$natageOnePlus_numbers <- numbers_at_age %>%
   filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
