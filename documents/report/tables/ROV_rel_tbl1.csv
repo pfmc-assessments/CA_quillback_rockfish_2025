@@ -1,0 +1,18 @@
+Variable,Description
+SurveyYear,Year in which the actual survey occurred. 
+SuperYear,Survey coverages are completed over three years resulting in compilation to 2015 (2014-2016) and 2020 (2019-2021). Treated as a categorical factor. 
+MPAGroup,MPA name that identifies records from MPA sites and associated reference areas. 
+Site,CDFW/MARE historical site code. A site generally designates a 500 meter wide rectangle with varying length and depth range. May be preferable to use MPA Group given spatial proximate of sites within a group and scale of spatial autocorrelation. Number of transects may not be equal between sites.
+Avg_Latitude,Average of longitudinal positions within a transect.
+Latitude Squared,The Square of the Avg_Latitude within a transect.
+Avg_Longitude,Average of latitudinal positions within a transect. 
+Avg_Depth,Average depth in meters recorded within a transect. 
+Depth Squared,Average depth squared was calculated by squaring the Avg_Depth values after scaling so that these values were also centered on the mean.
+PropHard,The proportion of hard usable habitat along a transect. 
+PropMixed,The proportion of mixed usable habitat along a transect.
+PropHardMixed,The proportion of hard or mixed usable habitat along a transect. 
+Protection,Whether the segment in question is in a no take closed Marine Protected Area (1) or open to fishing (0).  Treated as a categorical factor. 
+ProtectionYrs,The number of years the site has been protected since implementation in the survey year.
+Portdistance,Distance in meters from nearest port to the centroid coordinates of the sub-unit. Derived from port distance raster layer provided by Becky Miller (SWFSC).
+Quillback Rockfish,Total number of quillback rockfish individuals counted within sub-unit. Numerator of the dependent variable of density.
+Usable_Area_Fish,"Summed two dimensional area (m^2) of all microframes (one second of ROV area swept) within a sub-unit determined by multiplying Total_XYdist with estimated width at horizontal center of video frame for each microframe, where video parameters are within useable parameters. Denominator of the dependent variable of density implemented as an offset."

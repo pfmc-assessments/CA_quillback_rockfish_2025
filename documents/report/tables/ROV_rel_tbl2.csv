@@ -1,0 +1,6 @@
+Filter,Description,Transects Remaining ,Quillback Rockfish Remaining,Positive Transects
+Start,Prior to Filters,3273,1566,440
+South of Point Sur,Removing sample locations south of Point Sur where quillback rockfish are not found,1252,1563,437
+Prior to 2014 ,Removing sampling before 2014 prior to the first full coverage of the state in the first super year 2015 ( 2014-2016),1004,1548,434
+Depth Range,Relegating the depth range of the analysis to within 110 m depth range where quillback rockfish were observed by the ROV,994,1536,431
+Soft Bottom GIS,Removal of any sites where only soft bottom was indicated by GIS layers for seafloor type,967,1535,430

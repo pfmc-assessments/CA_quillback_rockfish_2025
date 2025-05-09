@@ -15,7 +15,24 @@ We modeled quillback catch with an effort offset of angler trips using the R pac
 
 Further exploration of alternative model distributions in sdmTMB showed that a delta-lognormal distribution performed better than negative binomial. Delta-lognormal models using year-district interactions failed dianostics and given that patterns among the districts are similar (@fig-pr_avgcpue_district), we excluded the interaction from the final model which included year, district, and wave.
 
-The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr_model_cpue) and this trend is also reflected in raw CPUE over time (**FROG: ADD REFERENCE TO FIGURE pr_index_average_cpue.png - I think ok to leave this one out**). The Q-Q plot indicates a reasonable fit (@fig-pr_index_qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in** FROG: ADD REFERENCE TO TABLE PR_index_values.csv\*\*.
+The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr_model_cpue) and this trend is also reflected in raw CPUE over time. The Q-Q plot indicates a reasonable fit (@fig-pr_index_qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in @tbl-pr_index_values.
+
+### Remotely Operated Vehicle (ROV) Index of Abundance
+Remotely operated vehicle (ROV) surveys have been used to monitor California’s mid-depth habitats (30-100 m) since 2004.  The surveys are a collaboration between CDFW and Marine Applied Research and Exploration (MARE) which was initially developed to assess the Marine Protected Area (MPA) network.  A full description of survey methods is available in Lauermann et al. (2017).  Briefly, sampling has been conducted at MPAs along the entire California coast (@fig-ROV_rel_fig1) with 500-meter transects conducted within rocky reef habitat inside and outside each MPA (@fig-ROV_rel_fig2).  Data includes counts of fish by species, fish sizes, and a variety of characteristics of the transect location (@tbl-ROV_rel_tbl1).   
+
+The full dataset was filtered for data quality and representativeness of quillback habitat ((@tbl-ROV_rel_tbl2).  The filtered dataset consists of 967 transects conducted across 34 locations ((@tbl-ROV_rel_tbl3).  While surveys have been conducted since 2004, it has only been possible to conduct surveys at a few locations each year.  Efforts to systematically select survey locations representative of the full California coastline began in 2014 and a full complement of these locations has taken three years to complete.  Therefore, locations monitored in 2014-2016 and 2019-2021 are considered to represent complete surveys and were analyzed as two super years centered on the mid-point of each period (2015 and 2020).   
+Counts of quillback rockfish on each transect were modeled using a negative binomial generalized linear mixed model with the R package glmerMod.  While each transect is 500 m in length, the total area visible in the collected video is variable.  Therefore, an effort offset representing the log of this area, termed Usable_Area_Fish, was used.  Potential covariates for inclusion in the model were evaluated based on their significance in the full model including all variables as well as their correlations among each other.  Based on these criteria, temperature, proportion hard bottom, years since protection in an MPA, distance to port, and backsides (a variable relating to video quality) were not included.  Continuous variables were scaled by centering on the mean and dividing by their standard deviations.  AIC values, dispersion, and Q-Q plot fits were examined for a variety alternative error distributions using a simplified model with no random effects and the negative binomial was selected.   AIC values and maximum likelihood fits of candidate negative binomial models are shown in Table 4.  
+
+The selected model included site as a random effect, a super year and protection status interaction, the proportion of hard or mixed substrate, average latitude, latitude squared, depth, and depth squared.  Latitude squared was included to address non-linearity in the residuals observed in a model with latitude alone.  Diagnostics included a Q-Q plot (@fig-ROV_rel_fig3), Kolmogorov-Smirnov and overdispersion tests, and examination of outliers.  
+
+Indices of abundance providing density (fish/hectare) for each super year, both inside and outside of MPAs, were calculated using the ‘general linear hypothesis testing’ (glht) function from the multcomp package in R. This package allows the calculations of means and confidence intervals from linear combinations of beta coefficients. The estimated means and confidence intervals were back transformed to the response scale (density) by exponentiating the resultant means and upper and lower 95% confidence intervals.  Index values were calculated for the following combinations:
+●	The intercept represents the mean density in reference areas in 2015
+●	The intercept + the estimate for super year 2020 represents the mean density for reference areas in 2020
+●	The intercept + the estimate for protection represents the mean density for MPAs in 2015
+●	The intercept + the estimate for super year 2020 + the estimate for protection represents the mean density for MPAs in 2020
+This assumes that all other covariates were held constant at their mean.  The resulting indices inside and outside of MPAs were weighted in each super year by the proportion of rocky reef habitat inside and outside MPAs, with 80% outside MPAs and 20%  inside based seafloor mapping within the 100 m depth contour (@tbl-ROV_rel_tbl5 and @tbl-ROV_rel_tbl6).  The results show an increase in quillback rockfish density both inside and outside MPAs with a greater increase inside (@fig-ROV_rel_fig4).    
+
+Fork lengths collected by stereo camera and software for image analysis allow for estimation of the survey selectivity.  Because the ROV is a visual survey, small fish are more apparent in the data than for other survey or fishery data sources derived from hook and line catches.  ROV transects are conducted between 20-100 m depth.  In comparison, the CCFRP surveys depths shallower than 20 m but goes no deeper than 60 m.  
 
 ### MRFSS PR Dockside Index of Abundance
 **MOVE TO data sources considered, but not used with just a description and no tables or figures**
@@ -39,7 +56,7 @@ AList <- read.csv(here("documents/captions_alt_text.csv"))
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "FROG"
+#| fig-cap: "Species coefficients (blue bars) from the binomial GLM for presence/absence of quillback in the PR data.  Horizontal black bars are 95% confidence intervals."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/Quill_PR_Index_S-M_coef.png")
@@ -52,7 +69,7 @@ knitr::include_graphics("figures/Quill_PR_Index_S-M_coef.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "FROG"
+#| fig-cap: "Receiver operating characteristic (ROC) curve for Stephens-MacCall logistic regression model.  AUC is the probability that a randomly chosen observation of presence would be assigned a higher ranked prediction than a randomly chosen observation of absence."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/Quillback_PR_Index_S-M_ROC.png")
@@ -64,7 +81,7 @@ knitr::include_graphics("figures/Quillback_PR_Index_S-M_ROC.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "FROG"
+#| fig-cap: "Average CPUE by CRFS district prior to standardization."
 #| fig-alt: "FROG"
 
 
@@ -78,7 +95,7 @@ knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "FROG"
+#| fig-cap: "Index for the CRFS dockside PR survey."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/pr_index_model_cpue_by_year.png")
@@ -90,24 +107,10 @@ knitr::include_graphics("figures/pr_index_model_cpue_by_year.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "FROG"
+#| fig-cap: "Q-Q plot for the CRFS dockside PR survey."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/pr_index_qq.png")
-
-```
-
-
-
-```{r} 
-#| label: fig-pr_avgcpue_district
-#| echo: false 
-#| warning: false 
-#| eval: true 
-#| fig-cap: "FROG"
-#| fig-alt: "FROG"
-
-knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 
 ```
 
@@ -117,7 +120,7 @@ knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 #| label: tbl-pr_filter
 #| echo: false
 #| warning: false
-#| tbl-cap: "FROG"
+#| tbl-cap: "Data filtering steps for the CRFS dockside PR survey."
 library(tidyr)
 library(gt)
 
@@ -135,7 +138,7 @@ pr_filter |>
 #| label: tbl-pr_model_select
 #| echo: false
 #| warning: false
-#| tbl-cap: "FROG"
+#| tbl-cap: "Model selection for the CRFS dockside PR survey.  The selected final model is highlighted in yellow."
 library(tidyr)
 library(gt)
 
@@ -149,3 +152,175 @@ pr_filter |>
 ```
 
 
+```{r}
+#| label: tbl-pr_index_values
+#| echo: false
+#| warning: false
+#| tbl-cap: "Estimated relative index of abundance for the CRFS dockside PR survey."
+library(tidyr)
+library(gt)
+
+pr_filter <- read.csv(here("documents", "report", "tables/pr_index_values.csv"))
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+
+```
+
+
+
+```{r} 
+#| label: ROV_rel_fig1
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Sample locations for the California ROV sampling project."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/ROV_rel_fig1.png")
+
+```
+
+
+```{r} 
+#| label: ROV_rel_fig2
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Sampling design at an example MPA. Boxes identify sampling locations over hard substrate. Transect lines are 500 m long and align with bathymetry contours."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/ROV_rel_fig2.png")
+
+```
+
+```{r} 
+#| label: ROV_rel_fig3
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Q-Q Plot for the ROV abundance index model with results of KS test, dispersion test and outlier test."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/ROV_rel_fig3.png")
+
+```
+
+```{r} 
+#| label: ROV_rel_fig4
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Index and confidence limit estimates for the ROV abundance index model inside and outside MPAs."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/ROV_rel_fig4.png")
+
+```
+
+
+```{r}
+#| label: ROV_rel_tbl1
+#| echo: false
+#| warning: false
+#| tbl-cap: "Description of variables available for use in the ROV GLMM index analysis."
+library(tidyr)
+library(gt)
+
+pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl1.csv"))
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+
+```
+
+```{r}
+#| label: ROV_rel_tbl2
+#| echo: false
+#| warning: false
+#| tbl-cap: "ROV data filtering steps."
+library(tidyr)
+library(gt)
+
+pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl2.csv"))
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+
+```
+
+
+```{r}
+#| label: ROV_rel_tbl3
+#| echo: false
+#| warning: false
+#| tbl-cap: "Sampled locations and number of transects per survey year after filtering."
+library(tidyr)
+library(gt)
+
+pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl3.csv"))
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+
+```
+
+```{r}
+#| label: ROV_rel_tbl4
+#| echo: false
+#| warning: false
+#| tbl-cap: "Model selection for the ROV survey."
+library(tidyr)
+library(gt)
+
+pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl4.csv"))
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+
+```
+
+
+```{r}
+#| label: ROV_rel_tbl5
+#| echo: false
+#| warning: false
+#| tbl-cap: "Index (fish/hectare) values and confidence limits for inside and outside MPAs in each super year."
+library(tidyr)
+library(gt)
+
+pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl5.csv"))
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+
+```
+
+```{r}
+#| label: ROV_rel_tbl6
+#| echo: false
+#| warning: false
+#| tbl-cap: "Weighted index values based on percent of nearshore rocky reef inside (20%) and outside MPAs (80%), as well as confidence limits, log standard error (SE) and percent change in abundance between the 2015 and 2020 super years."
+library(tidyr)
+library(gt)
+
+pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl6.csv"))
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+
+```
