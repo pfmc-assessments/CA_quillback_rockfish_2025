@@ -476,12 +476,12 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 
-#Do three iterations
+#Just one iteration
 dw <- r4ss::tune_comps(replist = pp, 
                        option = 'MI', 
                        dir = here(sens_dir, new_name), 
                        exe = here('models/ss3_win.exe'),
-                       niters_tuning = 3, 
+                       niters_tuning = 1, 
                        extras = '-nohess',
                        allow_up_tuning = TRUE,
                        show_in_console = TRUE)
