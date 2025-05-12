@@ -1,6 +1,6 @@
-### Appendix A:
+# Appendix A:
 
-### CRFS PR Dockside Index of Abundance
+## CRFS PR Dockside Index of Abundance
 
 Catch and effort data from the CRFS dockside sampling of private boats between 2004 and 2023 were provided by CDFW. The “i” sample files were used to re-create interview or trip-level data from 2004 to 2014. The CRFS program began producing estimates in a different, annual format in later years and data in this format was used from 2015 to 2023. The data included catch by species, number of anglers contributing to the catch, angler-reported area of fishing, gear, county, port, interview site, year, month, and CRFS district. The catch included the number of fish observed by the CRFS sampler, the number of unobserved retained and released fish reported by the angler.
 
@@ -17,7 +17,7 @@ Further exploration of alternative model distributions in sdmTMB showed that a d
 
 The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr_model_cpue) and this trend is also reflected in raw CPUE over time. The Q-Q plot indicates a reasonable fit (@fig-pr_index_qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in @tbl-pr_index_values.
 
-### Remotely Operated Vehicle (ROV) Index of Abundance
+## Remotely Operated Vehicle (ROV) Index of Abundance
 Remotely operated vehicle (ROV) surveys have been used to monitor California’s mid-depth habitats (30-100 m) since 2004.  The surveys are a collaboration between CDFW and Marine Applied Research and Exploration (MARE) which was initially developed to assess the Marine Protected Area (MPA) network.  A full description of survey methods is available in Lauermann et al. (2017).  Briefly, sampling has been conducted at MPAs along the entire California coast (@fig-ROV_rel_fig1) with 500-meter transects conducted within rocky reef habitat inside and outside each MPA (@fig-ROV_rel_fig2).  Data includes counts of fish by species, fish sizes, and a variety of characteristics of the transect location (@tbl-ROV_rel_tbl1).   
 
 The full dataset was filtered for data quality and representativeness of quillback habitat ((@tbl-ROV_rel_tbl2).  The filtered dataset consists of 967 transects conducted across 34 locations ((@tbl-ROV_rel_tbl3).  While surveys have been conducted since 2004, it has only been possible to conduct surveys at a few locations each year.  Efforts to systematically select survey locations representative of the full California coastline began in 2014 and a full complement of these locations has taken three years to complete.  Therefore, locations monitored in 2014-2016 and 2019-2021 are considered to represent complete surveys and were analyzed as two super years centered on the mid-point of each period (2015 and 2020).   
@@ -124,7 +124,7 @@ knitr::include_graphics("figures/pr_index_qq.png")
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/pr_index_data_filters.csv"))
+pr_filter <- read.csv(here("report", "tables/pr_index_data_filters.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -142,7 +142,7 @@ pr_filter |>
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/pr_index_model_selection.csv"))
+pr_filter <- read.csv(here("report", "tables/pr_index_model_selection.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -160,7 +160,7 @@ pr_filter |>
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/pr_index_values.csv"))
+pr_filter <- read.csv(here("report", "tables/pr_index_values.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -229,7 +229,7 @@ knitr::include_graphics("figures/ROV_rel_fig4.png")
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl1.csv"))
+pr_filter <- read.csv(here( "report", "tables/ROV_rel_tbl1.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -246,7 +246,7 @@ pr_filter |>
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl2.csv"))
+pr_filter <- read.csv(here("report", "tables/ROV_rel_tbl2.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -264,7 +264,7 @@ pr_filter |>
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl3.csv"))
+pr_filter <- read.csv(here("report", "tables/ROV_rel_tbl3.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -281,7 +281,7 @@ pr_filter |>
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl4.csv"))
+pr_filter <- read.csv(here("report", "tables/ROV_rel_tbl4.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -299,7 +299,7 @@ pr_filter |>
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl5.csv"))
+pr_filter <- read.csv(here("report", "tables/ROV_rel_tbl5.csv"))
 pr_filter |>
     gt() |>
      tab_options(
@@ -316,7 +316,7 @@ pr_filter |>
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv(here("documents", "report", "tables/ROV_rel_tbl6.csv"))
+pr_filter <- read.csv(here("report", "tables/ROV_rel_tbl6.csv"))
 pr_filter |>
     gt() |>
      tab_options(

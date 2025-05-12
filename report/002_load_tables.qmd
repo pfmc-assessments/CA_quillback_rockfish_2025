@@ -1,8 +1,8 @@
 ```{r}
 #| echo: false
 
-if (file.exists(here::here("documents/report/tables"))) {
-  all_files <- list.files(here::here("documents/report/tables"), full.names = TRUE)
+if (file.exists(here::here("report/tables"))) {
+  all_files <- list.files(here::here("/report/tables"), full.names = TRUE)
   all_rda_files <- all_files[grep(".rda", all_files)]
   for (a in 1:length(all_rda_files)) {
     load(all_rda_files[a])
