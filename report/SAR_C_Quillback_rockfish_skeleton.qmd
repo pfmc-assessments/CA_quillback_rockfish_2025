@@ -407,16 +407,6 @@ a <- knitr::knit_child('09_figures.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
-
-```{r, results='asis'}
-#| label: 'appendix'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('11_appendix.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
 
  {{< pagebreak >}} 
 
