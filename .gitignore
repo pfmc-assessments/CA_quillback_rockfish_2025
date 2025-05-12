@@ -71,9 +71,9 @@ models/*retro*/
 !data_explore_figs/*.png
 #and those within subfolders of exploratory figures
 !data_explore_figs/**/*.png
-!documents/report/figures/*.png
-!documents/report/figures/*.jpg
-!documents/report/**
+!report/figures/*.png
+!report/figures/*.jpg
+!report/**
 
 # ignore stock synthesis files
 admodel.cov
@@ -125,8 +125,8 @@ _main.Rmd
 *.lof
 
 #but keep supporting files needed for report creation, mix of latex and png files
-!documents/report/support_files/*
-!documents/report/sa4ss_glossaries.tex
+!report/support_files/*
+!report/sa4ss_glossaries.tex
 
 # Windows files
 *Thumbs.db

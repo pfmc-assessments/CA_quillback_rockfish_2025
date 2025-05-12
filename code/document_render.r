@@ -18,5 +18,5 @@ library(here)
 #       already exists
 
 # render the document
-quarto::quarto_render(here("documents","report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
+quarto::quarto_render(here("report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
 
