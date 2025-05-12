@@ -1,0 +1,96 @@
+# Appendix C: California Collaborative Fisheries Research Progam Index of Abundance
+
+The California Collaborative Fisheries Research Program, [\gls(CCFRP)](https://www.mlml.calstate.edu/ccfrp/), is a fishery-independent hook-and-line survey designed to monitor nearshore fish populations at a series of sampling locations both inside and adjacent to MPAs [@starr_variation_2015a; @wendt_collaborative_2009].  The CCFRP survey began in 2007 along the central coast of California and was designed in collaboration with academics, NMFS scientists and fishermen. In 2017, the CCFRP expanded coastwide within California. Quillback rockfish were rarely observed south of the Farallon Islands.  The index represents the MPAs and reference sites from the Farallon Islands and north. 
+
+The survey design for CCFRP consists 500 x 500 m cells both within and adjacent to each MPA. On any given survey day site cells are randomly  selected within a stratum (MPA and/or reference cells). CPFVs are chartered for the survey and the fishing captain is allowed to search within the cell for a fishing location.  During a sampling event, each cell is fished for a total of 30-45 minutes by volunteer anglers. Each fish encountered is recorded, measured, and released (or descended to depth) and can later be linked back to a particular angler. CCFRP samples shallower depths to avoid barotrauma-induced mortality. Starting in 2017, a subset of fish have been retained to collect otoliths and fin clips that provide needed biological information for nearshore species. For the index of abundance, CPUE was modeled at the level of the drift.
+
+The CCFRP data are quality controlled at the time they are key punched and little filtering was needed for the index. Cells not consistently sampled over time were excluded as well as cells that never encountered `r spp`. The full dataset for northern California contained 2,699 drifts, 19% of which encountered `r spp`.  After applying filters to remove drifts marked for exclusion or taht fished less than two minutes, 2,582 drifts remained for for index standardization, with 481 of those drifts encountering `r spp` (@tbl-ccfrp-filter).
+
+From south to north, CCFRP index includes the Southeast Farallon Islands, Bodega Head, Stewart's Point, Ten Mile, and South Cape Mendocino. The southeast Farallons Islands MPA was sampled in 2017, 2018 and 2025 and the average CPUE increased inside and outside the MPA in 2025 relative to 2017 and 2018.  The other four MPAs were sampled annually. The final index (@tbl-ccfrp-index) represents a similar trend to the arithmetic mean of the annual CPUE (@fig-ccfrp-avg-cpue). An interaction between year and area (location along the coast) was not considered in model selection due to inconsistent sampling of the Farallons. To account for the closed areas within the MPAs, the interaction of year and MPA or reference site was incoporated in the final model.
+
+A negative binomial model was fit to the drift-level data (catch with a log offset for angler hours). Because the average observed CPUE inside MPAs and in the reference sites exhibited differing trends, we explored a year:mpa/reference site interaction, which was selected as the best fit model by AIC (@tbl-ccfrp-model-select), The final model included year, mpa or reference site factor, depth as a spline, area (location along hte coast), and a year:mpa/reference interaction. The simulates residuals indicate a good fit of the model (@fig-ccfrp-qq). The model was fit using the sdmTMB R package (version 0.3.0) and residuals simulated in the DHARMa package. 
+
+Based on work completed at the SWFSC, we estimate that the percent of rocky reef habitat from Point Conception to the California/Oregon border within California state waters is 892 $km^2$, of which approximately 23% is in MPAs that prohibit the harvest of groundfish (pers comm. Rebecca Miller, UCSC). There is recreational fishing outside of state waters, but habitat maps are not available at the same 2-m resolution and do not allow for direct comparisons. The final index was weighted, giving 20% of the model weight to MPAs and 80% of model weight to the "open" areas within state waters.
+
+```{r} 
+#| label: fig-ccfrp-avg-cpue
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Average CPUE (fish per angler hour) for each location and site."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/ccfrp_avg_cpue.png")
+
+```
+
+
+```{r} 
+#| label: fig-ccfrp-depth-cpue
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "CPUE across 40 foot depth bins."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/ccfrp_depth_cpue.png")
+
+```
+
+```{r} 
+#| label: fig-ccfrp-qq
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "QQ plot from 500 simulated residuals for the final CCFRP model."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/ccfrp_qq.png")
+
+```
+
+
+
+```{r}
+#| label: tbl-ccfrp-filter
+#| echo: false
+#| warning: false
+#| tbl-cap: "CCFRP data filtering steps."
+
+pr_filter <- read.csv("tables/ccfrp_data_filters.csv", check.names = FALSE)
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+```
+
+
+```{r}
+#| label: tbl-ccfrp-model-select
+#| echo: false
+#| warning: false
+#| tbl-cap: "CCFRP model selection."
+
+pr_filter <- read.csv("tables/ccfrp_model_selection.csv", check.names = FALSE)
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+```
+
+
+```{r}
+#| label: tbl-ccfrp-index
+#| echo: false
+#| warning: false
+#| tbl-cap: "Final index and log-standard error for CCFRP."
+
+pr_filter <- read.csv("tables/ccfrp_index.csv", check.names = FALSE)
+pr_filter |>
+    gt() |>
+     tab_options(
+    table.font.size = 12) |>
+    as_latex()
+```

@@ -115,8 +115,18 @@ ggplot(year_site_mpa, aes(x = year, y = avg_cpue, colour = MPAorREF, group = MPA
   geom_point(size = 2) +
   geom_path() +
   facet_wrap(~siteName) +
+  labs(x = 'Year', y = 'Average CPUE')+
   scale_color_viridis_d(begin = .2, end = .5)
-ggsave(file = file.path(dir, "mpa_site_cpue.png"), width = 7, height = 7)
+ggsave(file = file.path(dir, "mpa_site_cpue.png"), width = 9, height = 9)
+
+
+#cpue by depth
+ggplot(dat %>% filter(cpue >0), aes(x = depth_bin, y = cpue)) +
+  geom_boxplot() +
+ # geom_path() +
+  labs(x = 'Depth Bin (ft)', y = 'CPUE')+
+  scale_color_viridis_d(begin = .2, end = .5)
+ggsave(file = file.path(dir, "depth_cpue.png"), width = 9, height = 9)
 
 
 #same as above but flip the facet
@@ -240,7 +250,7 @@ diag.fit.mod <- simulate(fit.mod, nsim = 500, type = 'mle-mvn')
 sum(dat$Target == 0) / length(dat$Target)
 sum(diag.fit.mod == 0)/length(diag.fit.mod)
 #check residuals
-dharma_residuals(diag.fit.mod, fit.mod)
+simulata_residuals(diag.fit.mod, fit.mod)
 
 
 #sanity check
@@ -261,6 +271,7 @@ index <- calc_index(
     month = 7,
     fleet = 4
   )
+
 
 
 #########################################################################################################

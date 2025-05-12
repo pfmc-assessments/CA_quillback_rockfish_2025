@@ -1,0 +1,4 @@
+Filter,Description,Samples,Positive_Samples
+None,All data,2699,504
+Drift errors,Remove drifts marked for exclusion,2604,483
+Time fished,Remove drifts less than two minutes,2582,481
