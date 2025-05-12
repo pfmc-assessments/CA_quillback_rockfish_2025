@@ -1,67 +1,67 @@
----
-title: 'Status of the Quillback rockfish stock in U.S. waters off the coast of California in 2025'
-author:
-  - name: 'Brian J. Langseth'
-    affiliations:
-      - name: 'NOAA Fisheries Northwest Fisheries Science Center'
-        address: '2725 Montlake Boulevard East'
-        city: 'Seattle, WA'
-        state: 'WA'
-        postal-code: '98112'
-  - name: 'Melissa H. Monk'
-    affiliations:
-      - name: 'NOAA Fisheries Southwest Fisheries Science Center'
-        address: '110 McAllister Way'
-        city: 'Santa Cruz, CA'
-        state: 'CA'
-        postal-code: '95060'
-  - name: 'Julia H. Coates'
-    affiliations:
-      - name: 'California Department of Fish and Wildlife Marine Region'
-        address: '1933 Cliff Drive, Suite 9'
-        city: 'Santa Barbara, CA'
-        state: 'CA'
-        postal-code: '93109'
-date: today
-lang: en 
-keep-tex: true 
-cover: figures/cover_photo_recfin.jpg
-pdf-engine: lualatex
-format: 
-  pdf: 
-    documentclass: scrartcl
-    number-sections: true
-    template-partials:
-      - 'support_files/before-body.tex'
-      - 'support_files/_titlepage.tex'
-    include-in-header:
-      - 'support_files/in-header.tex'
-      - 'support_files/pfmc.tex'
-    toc: true
-    lof: false
-    lot: false
-    titlepage-geometry: 
-      - top=2in
-      - bottom=1in
-      - right=1in
-      - left=1in
-    link-citations: true
-    fig-pos: 'H'
-output-file: 'Quillback_rockfish_SAR_2025' 
-params:
-   office: 'SWFSC'
-   species: 'Quillback rockfish'
-   spp_latin: 'Sebastes maliger'
-   region: 'California'
-   cf: 'Commercial fleet'
-   rf: 'Recreational fleet'
-bibliography: 
--  asar_references.bib
-csl: 'canadian-journal-of-fisheries-and-aquatic-sciences.csl'
----
-
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #| label: 'read_base_model'
 #| eval: true
 #| echo: false
@@ -78,10 +78,10 @@ mod_in <- r4ss::SS_read(here('models', base_model))
 mod_out <- r4ss::SS_output(here('models', base_model), verbose = FALSE, printstats = FALSE)
 
 setwd(here('report'))
-```
-
-
-```{r} 
+#
+#
+#
+#
 #| label: 'output_and_quantities'
 #| echo: false 
 #| warning: false 
@@ -177,299 +177,301 @@ R0 <- output |>
 spp <- "quillback rockfish"
 Spp <- "Quillback rockfish"
 state <- "California"
-``` 
-
-{{< pagebreak >}} 
-
-Please cite this publication as: 
-
-Langseth, B.J., M.H. Monk, J.H. Coates, 2025. Status of the Quillback rockfish stock in U.S. waters off the coast of California in 2025. Pacific Fishery Management Council, Portland, OR. Available from https://www.pcouncil.org/stock-assessments-and-fishery-evaluation-safe-documents/.
-
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #| label: 'disclaimer'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('01a_disclaimer.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
+#
+#
 #| label: 'load_tables'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('002_load_tables.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
-  {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'executive_summary'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('01_executive_summary.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}}
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'introduction'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('02_introduction.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'data'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03_data.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'data-fish-com'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03a_data_com.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'data-fish-depend'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03a_data_fishery_dependent.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'data-fish-rec'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03b_data_rec.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'data-surveys'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03c_data_surveys.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'data-bio'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03d_data_bio.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'data-notused'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03e_data_notused.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}}
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'model-history'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('04a_model_history.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'model-structure'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('04b_model_structure.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'model-bridging'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('04c_model_bridging.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'model-results'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('04d_model_results.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'model-diagnostics'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('04e_model_diagnostics.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'model-sensitivity'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('04f_model_sensitivity.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}}
- 
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'uncertainties'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('04g_uncertainties.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}}
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'management'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('05_management.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'research-needs'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('05b_research_needs.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'acknowledgments'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('06_acknowledgments.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'references'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('07_references.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'tables'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('08_tables.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'figures'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('09_figures.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
+#
 #| label: 'appendix-a'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('11a_appendix_A.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
+#
+#
+#
+#
+#
 #| label: 'appendix-b'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('11b_appendix_B.qmd', quiet = TRUE)
 cat(a, sep = '\n')
-```
+#
+#
+#

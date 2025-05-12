@@ -77,7 +77,7 @@ knitr::include_graphics("figures/ROV_rel_fig4.png")
 library(tidyr)
 library(gt)
 
-pr_filter <- read.csv("tables/ROV_rel_tbl1.csv")
+pr_filter <- read.csv("tables/ROV_rel_tbl1.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
      tab_options(
@@ -92,7 +92,7 @@ pr_filter |>
 #| warning: false
 #| tbl-cap: "ROV data filtering steps."
 
-pr_filter <- read.csv("tables/ROV_rel_tbl2.csv")
+pr_filter <- read.csv("tables/ROV_rel_tbl2.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
      tab_options(
@@ -108,7 +108,7 @@ pr_filter |>
 #| warning: false
 #| tbl-cap: "Sampled locations and number of transects per survey year after filtering."
 
-pr_filter <- read.csv("tables/ROV_rel_tbl3.csv")
+pr_filter <- read.csv("tables/ROV_rel_tbl3.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
      tab_options(
@@ -123,7 +123,7 @@ pr_filter |>
 #| warning: false
 #| tbl-cap: "Model selection for the ROV survey."
 
-pr_filter <- read.csv("tables/ROV_rel_tbl4.csv")
+pr_filter <- read.csv("tables/ROV_rel_tbl4.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
      tab_options(
@@ -139,7 +139,7 @@ pr_filter |>
 #| warning: false
 #| tbl-cap: "Index (fish/hectare) values and confidence limits for inside and outside MPAs in each super year."
 
-pr_filter <- read.csv("tables/ROV_rel_tbl5.csv")
+pr_filter <- read.csv("tables/ROV_rel_tbl5.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
      tab_options(
@@ -152,9 +152,9 @@ pr_filter |>
 #| label: tbl-ROV-rel-tbl6
 #| echo: false
 #| warning: false
-#| tbl-cap: "Weighted index values based on percent of nearshore rocky reef inside (20%) and outside MPAs (80%), as well as confidence limits, log standard error (SE) and percent change in abundance between the 2015 and 2020 super years."
+#| tbl-cap: "Weighted index values based on percent of nearshore rocky reef inside (20%) and outside MPAs (80%), as well as confidence limits, log standard error (SE) and percent change in relative abundance between the 2015 and 2020 super years."
 
-pr_filter <- read.csv("tables/ROV_rel_tbl6.csv")
+pr_filter <- read.csv("tables/ROV_rel_tbl6.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
      tab_options(

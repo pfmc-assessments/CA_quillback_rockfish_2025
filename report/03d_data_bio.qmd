@@ -1,11 +1,9 @@
 ## Biological Parameters
 
- FROG NAMED MELISSA
-
 ### Natural Mortality
 
 
-Natural mortality was not directly measured, so life-history based empirical relationships were used. The @hamel_development_2022 method for developing a prior on natural mortality for West Coast groundfish stock assessments combines meta-analytic approaches relating the $M$ rate to other life-history parameters such as longevity, size, growth rate, and reproductive effort to provide a prior for $M$. The @hamel_development_2022 method re-evaluated the data used by Then et al. [-@then_evaluating_2015] by fitting the one-parameter $A_{\text{max}}$ model under a log-log transformation (such that the slope is forced to be -1 in the transformed space [@hamel_method_2015], the point estimate and median of the prior for $M$ is:
+Natural mortality was not directly measured, so life-history based empirical relationships were used. The @hamel_development_2022 method for developing a prior on natural mortality for West Coast groundfish stock assessments combines meta-analytic approaches relating the $M$ rate to other life-history parameters such as longevity, size, growth rate, and reproductive effort to provide a prior for $M$. The @hamel_development_2022 method re-evaluated the data used by Then et al. [-@then_evaluating_2015] by fitting the one-parameter $A_{\text{max}}$ model under a log-log transformation (such that the slope is forced to be -1 in the transformed space [@hamel_method_2015]), the point estimate and median of the prior for $M$ is:
 
 \begin{centering}
 
@@ -15,14 +13,14 @@ $M=\frac{5.4}{A_{\text{max}}}$
 
 \vspace{0.5cm}
 
-where $A_{\text{max}}$ is the maximum age. The prior is defined as a log-normal distribution with parameters $\mu = ln(5.4/A_{\text{max}})$ and $\sigma = 0.438$. Using a maximum age of 95 years, the point estimate and median of the prior for $M$ is `r model$parameters["NatM_p_1_Fem_GP_1","Value"]` per year.
+where $A_{\text{max}}$ is the maximum age. The prior is defined as a log-normal distribution with parameters $\mu = ln(5.4/A_{\text{max}})$ and $\sigma = 0.438$. Using a maximum age of 80 years, the point estimate and median of the prior for $M$ is `r mod_in$ctl$MG_parms['NatM_p_1_Fem_GP_1','INIT']` per year.
 
 The maximum age assumed for calculating natural mortality in the base model was 80 years. FROG
 
 
 ### Weight-at-length
 
-The length-weight relationship for `r spp` was estimated outside the model using available California biological data collected from fishery-independent and fishery-dependent data sources (@fig-weightlength). **FROG Sources included the WCGBTS, and recreational and commercial samples**. Only directly measured weight and length values were used; any values with more than two decimal places were assumed to be calculated from another measurement and were excluded.The estimated length-weight relationship for `r spp` was $W$ = `r format(model$MGparmAdj$Wtlen_1_Fem[1], scientific = TRUE)`$L$^`r round(model$MGparmAdj$Wtlen_2_Fem[1],2)`^ where $L$ is fork length in cm and $W$ is weight in kg.
+The length-weight relationship for `r spp` was estimated outside the model using available California biological data collected from fishery-independent and fishery-dependent data sources (@fig-weightlength). **FROG Sources included the WCGBTS, and recreational and commercial samples**. Only directly measured weight and length values were used; any values with more than two decimal places were assumed to be calculated from another measurement and were excluded.The estimated length-weight relationship for `r spp` was $W = `r format(mod_in$ctl$MG_parms['Wtlen_1_Fem_GP_1', 'INIT'], scientific = TRUE)`L^`r mod_in$ctl$MG_parms['Wtlen_2_Fem_GP_1','INIT']`$ where $L$ is fork length in cm and $W$ is weight in kg.
 
 
 ### Maturity
@@ -34,7 +32,7 @@ Our estimate of maturity for California quillback is L50 = 28.5 cm (SE = 0.506) 
 
 ### Fecundity
 
-The fecundity-at-length was based on ovary samples collected by the SWFSC Santa Cruz lab in 2023 and 2024. The fecundity relationship for `r spp` was estimated to be equal to `r format(model$MGparmAdj$Eggs_scalar_Fem[1], scientific = TRUE)`$L$^`r round(model$MGparmAdj$Eggs_exp_len_Fem[1],2)`^ in millions of eggs where $L$ is fork length in cm (@fig-fecundity).  Of the females collected during the spawning months, 24 fish were at stage 2, with pre-fertilized vitellogenic eggs. 
+The fecundity-at-length was based on ovary samples collected by the SWFSC Santa Cruz lab in 2023 and 2024. The fecundity relationship for `r spp` was estimated to be equal to $`r mod_in$ctl$MG_parms['Eggs_alpha_Fem_GP_1', 'INIT']`L^`r mod_in$ctl$MG_parms['Eggs_beta_Fem_GP_1', 'INIT']`$ in millions of eggs where $L$ is fork length in cm (@fig-fecundity).  Of the females collected during the spawning months, 24 fish were at stage 2, with pre-fertilized vitellogenic eggs. 
 
 ### Growth (Length-at-Age)
 
