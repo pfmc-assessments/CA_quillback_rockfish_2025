@@ -44,7 +44,7 @@ catches |>
 #| label: tbl-comm_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment."
+#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment. Also included in the input sample size used in the assessment following the formula described in the text."
 
 commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
@@ -106,7 +106,7 @@ reclengths <- reclengths |>
   dplyr::mutate(tot_Nfish = rowSums(reclengths[,c("recfin_Nfish", "mrfss_Nfish", "deb_Nfish", "GeiCol_Nfish", "MilGei_Nfish", "MilGot_Nfish")], na.rm = TRUE)) |>
   dplyr::mutate(tot_Ntrip = rowSums(reclengths[,c("recfin_Ntrip", "mrfss_Ntrip", "deb_Ntrip", "GeiCol_Ntrip", "MilGei_Ntrip", "MilGot_Ntrip")], na.rm = TRUE)) |> 
   dplyr::select(c(Year, tot_Nfish, tot_Ntrip)) |>
-  dplyr::filter(!is.na(tot_Nfish))
+  dplyr::filter(tot_Nfish!=0)
 reclengths |>
   gt() |>
   tab_options(
