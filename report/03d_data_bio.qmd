@@ -12,7 +12,7 @@ $M=\frac{5.4}{A_{\text{max}}}$
 
 \vspace{0.5cm}
 
-where $A_{\text{max}}$ is the maximum age. The prior is defined as a log-normal distribution with parameters $\mu = ln(5.4/A_{\text{max}})$ and $\sigma = 0.438$. Using a maximum age of 80 years, the point estimate and median of the prior for $M$ is `r mod_in$ctl$MG_parms['NatM_p_1_Fem_GP_1','INIT']` per year.
+where $A_{\text{max}}$ is the maximum age. The prior is defined as a log-normal distribution with parameters $\mu = ln(5.4/A_{\text{max}})$ and $\sigma = 0.31$. Using a maximum age of 80 years, the point estimate and median of the prior for $M$ is `r mod_in$ctl$MG_parms['NatM_p_1_Fem_GP_1','INIT']` per year.
 
 
 ### Weight-at-length

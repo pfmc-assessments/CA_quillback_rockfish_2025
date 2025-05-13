@@ -245,17 +245,6 @@ cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
- 
-```{r, results='asis'}
-#| label: 'data-fish-com'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('03a_data_com.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
 
 ```{r, results='asis'}
 #| label: 'data-fish-depend'
@@ -263,17 +252,6 @@ cat(a, sep = '\n')
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('03a_data_fishery_dependent.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
-
-```{r, results='asis'}
-#| label: 'data-fish-rec'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('03b_data_rec.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 

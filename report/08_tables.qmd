@@ -1,11 +1,6 @@
 # Tables {#sec-tables}
 
 
-## Data
-
-
-### Fishery-dependent data
-
 ```{r} 
 #| label: 'set-rda-dir-tbls'
 #| echo: false 
@@ -16,6 +11,116 @@
 #rda_dir <- here::here("documents", "rda_files")
 library(tidyr)
 library(gt)
+library(here)
 ``` 
+
+
+## Data
+
+```{r}
+#| label: tbl-catches
+#| echo: false
+#| warning: false
+#| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Com) and recreational (Rec) fleets as used in the assessment model. See text for description of sources."
+
+catches <- read.csv(here::here("data", "CAquillback_total_removals.csv"), check.names = FALSE) |>
+  dplyr::select(c(Year, com_tot, rec_tot))
+catches[is.na(catches)] <- 0
+catches |>
+  gt() |>
+  cols_label(
+    Year = "Year",
+    com_tot = "Commercial",
+    rec_tot = "Recreational") |>
+  tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE) |>
+  as_latex()
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: tbl-comm_lengths
+#| echo: false
+#| warning: false
+#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment. Also included in the input sample size used in the assessment following the formula described in the text."
+
+commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
+  dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
+  dplyr::mutate(pacfin_Ninput = 
+                  ifelse(pacfin_Nfish/pacfin_Ntrip < 44, 
+                         pacfin_Ntrip + 0.138 * pacfin_Nfish,
+                         7.06 * pacfin_Ntrip)) |>
+  dplyr::filter(!is.na(pacfin_Ninput))
+commlengths|>
+  gt() |>
+  tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+cols_label(
+    Year = "Year",
+    pacfin_Nfish = "N Lengths",
+    pacfin_Ntrip = "N Trips",
+    pacfin_Ninput = "N Input"
+  ) |>
+  as_latex()
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: tbl-comm_ages
+#| echo: false
+#| warning: false
+#| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the stock assessment."
+
+commages <- read.csv(here::here('data', "SampleSize_age.csv"), check.names = FALSE) |>
+  dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
+  dplyr::filter(!is.na(pacfin_Nfish))
+commages|>
+  gt() |>
+  tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+ cols_label(
+    Year = "Year",
+    pacfin_Nfish = "N Ages",
+    pacfin_Ntrip = "N Trips"
+  ) |>
+  as_latex()
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: tbl-rec_lengths
+#| echo: false
+#| warning: false
+#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the stock assessment. Duplicate PC mode lengths from the MRFSS sampling program in 1997-1998 are not included."
+
+reclengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) 
+reclengths <- reclengths |> 
+  dplyr::mutate(tot_Nfish = rowSums(reclengths[,c("recfin_Nfish", "mrfss_Nfish", "deb_Nfish", "GeiCol_Nfish", "MilGei_Nfish", "MilGot_Nfish")], na.rm = TRUE)) |>
+  dplyr::mutate(tot_Ntrip = rowSums(reclengths[,c("recfin_Ntrip", "mrfss_Ntrip", "deb_Ntrip", "GeiCol_Ntrip", "MilGei_Ntrip", "MilGot_Ntrip")], na.rm = TRUE)) |> 
+  dplyr::select(c(Year, tot_Nfish, tot_Ntrip)) |>
+  dplyr::filter(tot_Nfish!=0)
+reclengths |>
+  gt() |>
+  tab_options(
+    table.font.size = 11,
+    latex.use_longtable = TRUE
+  ) |>
+cols_label(
+    Year = "Year",
+    tot_Nfish = "N Lengths",
+    tot_Ntrip = "N Trips"
+  ) |>
+  as_latex()
+```
+
+### Fishery-dependent data
 
 {{< pagebreak >}}
