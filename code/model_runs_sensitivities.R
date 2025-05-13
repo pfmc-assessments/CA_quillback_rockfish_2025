@@ -2222,3 +2222,36 @@ pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 
 # M is estimated at 0.112
+
+
+#========================================================================================#
+# Selex using 24 but more flexible -----
+#========================================================================================#
+
+
+
+new_name <- 'sel_SpecialROV'
+
+mod <- base_mod
+
+mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_4", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, 4)
+
+mod$ctl$size_selex_parms[intersect(grep("ROV", rownames(mod$ctl$size_selex_parms)),
+                                   grep("P_6", rownames(mod$ctl$size_selex_parms))), 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(-12, 20, 15, 4)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+#paramter not well estimted - lo
