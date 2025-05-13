@@ -96,26 +96,37 @@ pr_filter |>
 #| echo: false
 #| warning: false
 #| tbl-cap: "Model selection for the CRFS dockside PR survey.  The selected final model is highlighted in yellow."
-library(tidyr)
-library(gt)
 
 pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
-     tab_options(
-    table.font.size = 12) |>
+     tab_options(table.font.size = 12) |>
+     cols_label(starts_with("Delta") ~ "$\\delta$ AIC" ) |>
     as_latex()
 
 ```
 
 
 ```{r}
+#| label: tbl-pr-model-select1
+#| echo: false
+#| warning: false
+#| tbl-cap: "Model selection for the CRFS dockside PR survey.  The selected final model is highlighted in yellow."
+
+pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
+pr_filter |>
+    gt() |>
+     tab_options(table.font.size = 12) |>
+     cols_label(starts_with("Delta") ~ "\u0394" ) |>
+    as_latex()
+
+```
+
+```{r}
 #| label: tbl-pr-index-values
 #| echo: false
 #| warning: false
 #| tbl-cap: "Estimated relative index of abundance for the CRFS dockside PR survey."
-library(tidyr)
-library(gt)
 
 pr_filter <- read.csv("tables/pr_index_values.csv", check.names = FALSE)
 pr_filter |>

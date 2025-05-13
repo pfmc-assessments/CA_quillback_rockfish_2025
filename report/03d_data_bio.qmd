@@ -2,7 +2,6 @@
 
 ### Natural Mortality
 
-
 Natural mortality was not directly measured, so life-history based empirical relationships were used. The Hamel and Cope -@hamel_development_2022 method for developing a prior on natural mortality ($M$) for West Coast groundfish stock assessments combines meta-analytic approaches relating the $M$ rate to other life-history parameters such as longevity, size, growth rate, and reproductive effort to provide a prior for $M$. They re-evaluated the data used by Then et al. [-@then_evaluating_2015] by fitting the one-parameter $A_{\text{max}}$ model under a log-log transformation such that the slope is forced to be -1 in the transformed space [@hamel_method_2015]. The point estimate and median of the prior is:
 
 \begin{centering}
@@ -36,8 +35,10 @@ where $L$ is fork length in cm and $W$ is weight in kg.
 
 From 2019 to 2025 a total of 88 histological samples were collected from female quillback rockfish caught off the coast of California (16 by CCFRP and 72 by the SWFSC). The samples were read by Melissa Head at the NWFSC to for identification of microscopic functional maturity stage. Functional maturity accounts abortive manturation and the proportion of oocytes in atresia (cellular breakdown and reabsorption), which could indicate skipped spawning (Melissa Head, personal communication, NWFSC, NOAA). Seven samples were excluded due to uncertainy in whether the female was spent/resting or experienced abortive maturation, due in part to the timeinin of the collections during the non-spawning months.  
 
-The remaining 81 samples ranged in size from 21-45 cm.  The six females collected from north of Pt. Arena (Crescent City and Eureka) were all mature.  The SWFSC collected 22 females in January 2025 that contributed to our estimate of maturity-at-length, but are not included in the growth fleet.  The 2021 California quillback rockfish assessment used the estimates from Oregon of $L_{50}$ = 29.3 cm. 
- $L_{50}$ = `r mod_in$ctl$MG_parms['Mat50%_Fem_GP_1', 'INIT']` cm with a slope of `r mod_in$ctl$MG_parms['Mat_slope_Fem_GP_1', 'INIT']` (@fig-maturity).  
+The remaining 81 samples ranged in size from 21-45 cm.  The six females collected from north of Pt. Arena (Crescent City and Eureka) were all mature.  The SWFSC collected 22 females in January 2025 that contributed to our estimate of maturity-at-length, but are not included in the growth fleet. The estimated maturity ogive for Califronia quillback was 
+ $L_{50\%}$ = `r mod_in$ctl$MG_parms['Mat50%_Fem_GP_1', 'INIT']` cm with a slope of `r mod_in$ctl$MG_parms['Mat_slope_Fem_GP_1', 'INIT']` (@fig-maturity).  
+
+The 2021 California quillback rockfish assessment used the estimates from Oregon of $L_{50\%}$ = 29.3 cm.
 
 ### Fecundity
 
@@ -59,7 +60,7 @@ An ageing error estimate was made based on these double reads using an ADMB comp
 
 ## Environmental and ecosystem data
 
-This model does not explicitly include envrionmental or ecosystem data.  `r Spp` are a rocky habitat associated species and the area of available habitat was consdiered when developing indices of abundance for the fishery-independent survyes. 
+This model does not explicitly include envrionmental or ecosystem data.  `r Spp` are a rocky habitat associated species and the area of available habitat was consdiered when developing indices of abundance for the fishery-independent surveys. 
 
 <!-- Environmental or ecosystem data or model products used in the stock assessment model and/or in the preparation of data or estimation of biological parameters. If environmental or ecosystem data are incorporated in the stock assessment model, provide a report of consultations with technical teams that evaluate ecosystem data or methodologies used in  -->
 

@@ -37,7 +37,7 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
     f.  Age and length samples from the same fish were collected from various sources and included as a growth fleet in the model.  
 
-The timing of these data sources as used in the base model are illustrated in Figure \ref{fig:data-plot}.
+The timing of these data sources as used in the base model are illustrated in Figure \ref{@fig-data-plot}.
 
 ## Fishery-dependent data
 
@@ -54,5 +54,11 @@ The timing of these data sources as used in the base model are illustrated in Fi
 ## Fishery-independent data
 
 <!-- Fishery-independent data: Description of surveys used in the assessment, description of methods to estimate abundance indices, sample size information for length- and age- composition data by survey and year, including both the number of tows (or drops or sites for hook and line data) and fish sampled. Include complete tables and figures and date of data extraction.   -->
+
+
+
+
+
+
 
 
