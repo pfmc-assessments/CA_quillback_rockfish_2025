@@ -215,7 +215,108 @@ knitr::include_graphics(
 
 ### Bridging
 
+```{r}
+#| label: fig-bridgeSS3_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison of estimated spawning output of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
+#| fig-alt: "Figure showing that the trajectory of spawning output from the 2021 assessment is similar when using the newest version of stock synthesis."
 
+knitr::include_graphics(
+    "figures/bridgeSS3_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeBio_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output. Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
+
+knitr::include_graphics(
+    "figures/bridgeBiology_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeBio_relbio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output relative to unfished. Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished from the 2021 assessment changes most with updates to growth and mortality."
+
+knitr::include_graphics(
+    "figures/bridgeBiology_relbio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeData_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparisons showing estimated spawning output when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating it is based off the previous step, and final one (Update All Data and Estiamte Growth), which combines across all data steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output generally doesnt change except when age data are included and growth is not estimated."
+
+knitr::include_graphics(
+    "figures/bridgeData_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeData_relbio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison showing estimated spawning output relative to unfished when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating its based off of the previous step, and final one (Update All Data and Estiamte Growth), which combines across all data steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished generally doesnt change except in the combined situation when age data are included but growth is not estimated."
+
+knitr::include_graphics(
+    "figures/bridgeData_relbio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeOther_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparisons showing estimated spawning output when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
+#| fig-alt: "Figure showing that the trajectory of spawning output generally doesnt change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
+
+knitr::include_graphics(
+    "figures/bridgeOther_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeOther_relbio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparisons showing estimated spawning output relative to unfished when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
+#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished from generally doesnt change based on changes to selectivity or reweighting, and that the reate of recovery is larger since 2000 compared to the 2021 assessment."
+
+knitr::include_graphics(
+    "figures/bridgeOther_relbio.png"
+)
+```
 
 ### Biology
 

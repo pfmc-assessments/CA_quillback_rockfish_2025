@@ -2635,8 +2635,8 @@ SSsummarize(xx) |>
                                      'Update Catch',
                                      'Update Length comps of existing fleets',
                                      'Update Length/age comps of existing fleets',
-                                     '+ add growth fleet and estimate growth',
-                                     'Add New index fleets (indices and comps)',
+                                     '+ estimate growth',
+                                     'Add Indices (indices and comps for index fleets)',
                                      #'Update All data but do not estimate growth',
                                      'Update All data and estimate growth'),
                     subplots = c(1), print = TRUE, legendloc = "bottomleft", 
@@ -2649,8 +2649,8 @@ SSsummarize(xx) |>
                                      'Update Catch',
                                      'Update Length comps of existing fleets',
                                      'Update Length/age comps of existing fleets',
-                                     '+ add growth fleet and estimate growth',
-                                     'Add New index fleets (nindices and comps)',
+                                     '+ estimate growth',
+                                     'Add Indices (indices and comps for index fleets)',
                                      #'Update All data but do not estimate growth',
                                      'Update All data and estimate growth'),
                     subplots = c(3), print = TRUE, legendloc = c(0, 0.85), 
@@ -2664,21 +2664,23 @@ file.rename(from = here('report', "figures", "compare3_Bratio.png"),
 ####------------------------------------------------#
 
 
-CONTINUE HERE
-
-xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
-                                      subdir = c("0_2_0_updateAllData",
-                                                 "0_3_5_selexBlocks_fixWarnings",
-                                                 "0_3_6_finalBlocks",
-                                                 "0_4_1_addVarAdj",
-                                                 "0_4_2_reweight")))
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("_bridging_runs/0_0_1_2025rename",
+                                                 "_bridging_runs/0_1_0_updateAllBio",
+                                                 "_bridging_runs/0_2_0_updateAllData",
+                                                 "_bridging_runs/0_3_6_finalBlocks",
+                                                 "_bridging_runs/0_4_2_reweight",
+                                                 "5_1_3_preStarBase")))
 SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('Update all data',
-                                     'Update selectivity params and add blocks',
+  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+                                     'Update All biology',
+                                     'Update All data and estimate growth',
                                      'Update blocks and selectivity type',
-                                     'Add variance adjustment set to 1',
-                                     'Reweight'),
-                    print = TRUE, legendloc = "topleft",
-                    plotdir = here('models', "_bridging_runs", new_name))
-
-dev.off()
+                                     'Reweight',
+                                     'Base model'),
+                    subplots = c(1, 3), print = TRUE, legendloc = "topright",
+                    plotdir = here('report', "figures"))
+file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+            to = here('report', "figures", "bridgeOther_bio.png"))
+file.rename(from = here('report', "figures", "compare3_Bratio.png"),
+            to = here('report', "figures", "bridgeOther_relbio.png"))
