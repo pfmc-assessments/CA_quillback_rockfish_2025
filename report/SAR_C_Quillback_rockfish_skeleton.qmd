@@ -40,8 +40,8 @@ format:
     toc: true
     lof: false
     lot: false
-    mainfont: 'Arial'
-    sansfont: 'Arial'
+    mainfont: 'Cambria'
+    sansfont: 'Cambria'
     titlepage-geometry: 
       - top=2in
       - bottom=1in

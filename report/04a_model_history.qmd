@@ -8,8 +8,7 @@ In 2021, quillback rockfish was assessed coastwide with separate catch and lengt
 
 The 2021 assessment was initially reviewed at the \gls{ssc} Groundfish Subcommittee Workshop in June 2021.  The STAT responses to requests from the June meeting were presented during a follow-up meeting in August 2021. Additional requests were made of the STAT in August surrounding the model sensitivity to growth thata were presented at a Mop-Up Review Panel. In Setpember 2021, the \gls{ssc} endorsed the assessment as the best scientific information available as a category 2 stock. The \gls{ssc} endorsed the assessment for use in stock status determination during the November 2021 Council meeting and the Council adopted the assessment and rebuilding analysis at the November 2021 meeting. 
 
-During the process for selecting stocks for the 2023 assessment cycle, public comments were made by Drs. Ray Hilborn and Mark Maunder at the November 2023 Council meeting. Both scientists submitted reports reviewed by the Groundfish subcommitted of the SSC in January 2024. 
-The GFSC "concluded that the issues raised were considered as part of the 2021 stock assessment or not appropriate given the data limitations and TOR for data-moderate assessments at the time....The SSC continues to recommend use of the 2021 stock assessment and the adoption of the 2023 rebuilding analysis for California quillback rockfish." The GFSC statement to the Council from March 2024 can be read in [Agenda Item F.2.a, Supplemental SSC Report 1, March 2024](https://tinyurl.com/pfmc2024a) and the GFSC report from the January 2024 meeting is available [here](https://tinyurl.com/PFMC2024b).
+During the process for selecting stocks for the 2023 assessment cycle, public comments were made by Drs. Ray Hilborn and Mark Maunder at the November 2023 Council meeting. Both scientists submitted reports reviewed by the Groundfish subcommitted of the SSC in January 2024. The GFSC "concluded that the issues raised were considered as part of the 2021 stock assessment or not appropriate given the data limitations and TOR for data-moderate assessments at the time....The SSC continues to recommend use of the 2021 stock assessment and the adoption of the 2023 rebuilding analysis for California quillback rockfish." The GFSC statement to the Council from March 2024 can be read in [Agenda Item F.2.a, Supplemental SSC Report 1, March 2024](https://tinyurl.com/pfmc2024a) and the GFSC report from the January 2024 meeting is available [here](https://tinyurl.com/PFMC2024b).
 
 After the November 2023 Council meeting, PFMC Execuive Director Burden posed a series of questions to the NWFSC regarding the 2021 stock assessment of California quillback rockfish.  The NWFSC provided details responses in an Informational Report [Informational Report 2, March 2024](https://tinyurl.com/PFMC2024c) in March 2024 addressing those questions. 
 
@@ -41,7 +40,6 @@ quillback rockfish differs between California and Washington and Oregon.
 * The decline in abundance appears to be driven by the estimated decline in recruitment deviates from 1990-2010, some of which may be compensating for unmodelled changes in selectivity (Maunder).
 
 * The current assessment suggests that the current exploitation rate is very high, and this seems inconsistent for a stock with a significant area of its habitat closed to fishing or unfished (Hilborn).
-
 
 The GFSC also proposed future work and the quillback specific recommendations include:
 
