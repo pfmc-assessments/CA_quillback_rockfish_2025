@@ -8,12 +8,7 @@
    rda_dir <- here::here("rda_files")
 ``` 
 
-
-
-
-
 ## Data
-
 
 ```{r}
 #| label: fig-data
@@ -23,9 +18,7 @@
 #| fig-cap: "Data avaialable by year for each fleet, where circle area is relative within a data type. Circles are proportional to total catch for catches; to precision for indices, discards, and mean body weight observations; and to total sample size for compositions and mean weight- or length-at-age observations. Observations excluded from the likelihood have equal size for all years."
 #| fig-alt: "Tabular information for this figure can be found in the data file."
 
-knitr::include_graphics(
-    "r4ss_plots/data_plot2.png"
-)
+knitr::include_graphics("r4ss_plots/data_plot2.png")
 ```
 
 
@@ -43,8 +36,6 @@ knitr::include_graphics(
 ```
 
 ### Indices
-
-
 
 ### Composition data
 
@@ -152,6 +143,8 @@ knitr::include_graphics(
 )
 ```
 
+{{< pagebreak >}}
+
 ```{r}
 #| label: fig-maturity
 #| echo: false
@@ -210,8 +203,6 @@ knitr::include_graphics(
 
 
 ## Model
-
-
 
 ### Bridging
 
@@ -320,26 +311,66 @@ knitr::include_graphics(
 
 ### Biology
 
+### Results
 
-### Selectivity
+### Parameter Estimates
 
 ```{r}
-#| label: fig-sel-age
+#| label: fig-selex
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Time-varying selectivity at length."
+#| fig-cap: "Length-based selectivity showing the time-varying selectivity for the recreational and commercial fleets."
 #| fig-alt: "ZEBRA"
 
-knitr::include_graphics(
-    "figures/selectivityPlot.png"
-)
+knitr::include_graphics("figures/selectivityPlot.png")
 ```
 
+```{r}
+#| label: fig-recruits
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of age-0 recruits with uncertainty for the base model.""
+#| fig-alt: "ZEBRA"
 
+knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png")
+```
+
+```{r}
+#| label: fig-rec-devs
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: Estimated time series of recruitment deviations for the base model.""
+#| fig-alt: "ZEBRA"
+
+knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
+```
+
+```{r}
+#| label: fig-bias-adjust
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: Bias adjustment."
+#| fig-alt: "ZEBRA"
+
+knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
+```
+
+```{r}
+#| label: fig-rec-bh-curve
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Stock-recruit curve. Point colors indicate year, with warmer colors indicating earlier years and cooler colors in showing later years"
+#| fig-alt:  "Beverton-holt stock recruitment relationship with a steepness of 0.72 with spawning output and the resulting recruitment estimates."
+
+knitr::include_graphics("r4ss_plots/SR_curve2.png")
+```
 
 ### Fits to Data
-
 
 ```{r}
 #| label: fig-len-agg-fit
@@ -353,6 +384,8 @@ knitr::include_graphics(
     "r4ss_plots/comp_lenfit__aggregated_across_time.png"
 )
 ```
+
+{{< pagebreak >}}
 
 ```{r}
 #| label: fig-len-all-pearson
@@ -406,6 +439,8 @@ knitr::include_graphics(
 )
 ```
 
+{{< pagebreak >}}
+
 ```{r}
 #| label: fig-mean-len-rov
 #| echo: false
@@ -414,13 +449,47 @@ knitr::include_graphics(
 #| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
 #| fig-alt: "FROG"
 
-knitr::include_graphics(
-    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png"
-)
+knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
 ```
 
 
 ### Time-series
+
+```{r}
+#| label: fig-ssb
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of spawning output in millions of eggs."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
+```
+
+```{r}
+#| label: fig-tot-bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of total biomass."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
+```
+
+```{r}
+#| label: fig-depl
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of fraction of unfished spawning output."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
+```
+
+
+
 
 {{< pagebreak >}}
 

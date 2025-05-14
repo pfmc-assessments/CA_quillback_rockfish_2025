@@ -6,27 +6,25 @@ The base model fixed parameters and estimates along with approximate asymptotic 
 
 The log($R_0$) was estimated at `r round(mod_out$parameters['SR_LN(R0)', 'Value'], 3)`.
 
-The model estimated reasonable growth parameters and variability for $L_{age=2}$ = `r round(mod_out$parameters['L_at_Amin_Fem_GP_1', 'Value'], 3)` (CV = `r round(mod_out$parameters['CV_young_Fem_GP_1', 'Value'], 3)`) and $L_{\infty}$ = `r round(mod_out$parameters['L__at_Amax_Fem_GP_1', 'Value'], 3)` (CV = `r round(mod_out$parameters['CV_old_Fem_GP_1', 'Value'], 3)`).  The $k$ parameter was esimtated as  `r round(mod_out$parameters['VonBert_K_Fem_GP_1', 'Value'], 3)`. The estimated $L_{\infty}$ is 0.29 cm smaller than the value it was fixed at for the 2021 assessment and $k$ is estimated to be lower than the 2021 fixed value of 0.199.
+The model estimated reasonable growth parameters and variability for 
+$L_{age=2}$ = `r round(mod_out$parameters['L_at_Amin_Fem_GP_1', 'Value'], 3)` 
+(CV = `r round(mod_out$parameters['CV_young_Fem_GP_1', 'Value'], 3)`) and 
+$L_{\infty}$ = `r round(mod_out$parameters['L_at_Amax_Fem_GP_1', 'Value'], 3)` 
+(CV = `r round(mod_out$parameters['CV_old_Fem_GP_1', 'Value'], 3)`).  The $k$ parameter was esimtated as 
+`r round(mod_out$parameters['VonBert_K_Fem_GP_1', 'Value'], 3)`. The estimated $L_{\infty}$ is 0.29 cm smaller than the value it was fixed at for the 2021 assessment and $k$ is estimated to be lower than the 2021 fixed value of 0.199.
 
-Length-based selectivity curves were estimated for the fishery and survey fleets, and age-based selectivity of 1.0 starting at age 1 for the growth fleet. Model explorations included parameterizing the fleets with double normal selectivity and explorations of time blocks. 
+Length-based selectivity curves were estimated for the fishery and survey fleets, and age-based selectivity of 1.0 starting at age 1 for the growth fleet (@fig-selex). Model explorations included parameterizing the fleets with double normal selectivity and explorations of time blocks. 
 
-The survey fleets did not include time blocks and the double normal selectivity pattern was were fixed to asymptotic size selectivity.  The ROV survey observed a wider range of sizes than CCFRP.  The peak size for the ROV survey was estimated at `r round(mod_out$parameters['Size_DblN_peak_CA_ROV(5)', 'Value'], 3)` cm and `r round(mod_out$parameters['Size_DblN_peak_CA_CCFRP(4)', 'Value'], 3)` cm for CCFRP.
+The survey fleets did not include time blocks and the double normal selectivity pattern was were fixed to asymptotic size selectivity.  The ROV survey observed a wider range of sizes than CCFRP.  The peak size for the ROV survey was estimated at
+`r round(mod_out$parameters['Size_DblN_peak_CA_ROV(5)', 'Value'], 3)` cm and 
+`r round(mod_out$parameters['Size_DblN_peak_CA_CCFRP(4)', 'Value'], 3)` cm for CCFRP.
 
-The fishery selectivities were all well estimated estimated and fixed to be asymptotic except for the early time period of the commercial fleet that esimated the peak domed selectivity at `r round(mod_out$parameters[`r round(mod_out$parameters['Size_DblN_peak_CA_ROV(5)', 'Value'], 3)`', 'Value'], 3)` indicating preferential size selection during that period.
+The fishery selectivities were all well estimated estimated and fixed to be asymptotic except for the early time period of the commercial fleet that esimated the peak domed selectivity at `r round(mod_out$parameters['Size_DblN_peak_CA_Commercial(1)_BLK1repl_1916', 'Value'], 3)`, indicating preferential size selection during that period.
 
 
 The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-pararms] in log-space.
 
-The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs]. The bias adjustment applied to the annual recruitment deviations across time is shown in Figure -@fig-bias-adjust]. The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern is cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024  @fig-bh-curve. The recruitment bias adjustment was applied within the model across years is shown in Figure [-@fig-bias-adjust].
-
-<!-- Table listing all explicit parameters in the stock assessment model used for base model, their purpose (e.g., recruitment parameter, selectivity parameter) and whether or not the parameter was actually estimated in the stock assessment model. Include the associated asymptotic standard error estimates.  -->
-
-<!-- Population numbers and biomass at age × year × sex (if sex-specific M, growth, or selectivity) (may be provided as a text, csv, or spreadsheet file). This is not required while undergoing review. Can be included in electronic appendices (SS report files), should be provided as supplementary material for assessments developed with alternative assessment platforms.  -->
-
-<!-- 4. Selectivity estimates (if not included elsewhere). 5. Stock-recruitment relationship. 6. Clear description of units for all outputs.  -->
-
-<!-- Parameter uncertainty (variance estimation conditioned on a given model, estimation framework, data set choice, and weighting scheme). This element for evaluating uncertainty includes expressing uncertainty in derived outputs of the model and estimating CVs using appropriate methods (e.g., bootstrap, asymptotic methods, Bayesian approaches, such as MCMC).   -->
-
+The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs]. The bias adjustment applied to the annual recruitment deviations across time is shown in Figure [FROG - include? fig-bias-adjust]. The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern is cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024  @fig-bh-curve. 
 
 ### Fits to the Data
 
@@ -39,7 +37,7 @@ The estimated annual recruitment and recruitment deviations are shown in  Figure
 
 ### Population Trajectory
 
-The population declined slowly with the onset of fishing, with three more significant annual declines in years of high catch @ref-tab-timeseries and @fig-ssb. The population remained at lower levels from 1994--1999 before increasing from 2000--2007. Catches increase again in 2015 resulting in a declining population through 2023.  
+The population declined slowly with the onset of fishing, with three more significant annual declines in years of high catch @tab-timeseries and @fig-ssb. The population remained at lower levels from 1994--1999 before increasing from 2000--2007. Catches increase again in 2015 resulting in a declining population through 2023.  
 
 The estimated spawning output relative to unfished reached a minimum of 0.328 in 1998 and then increased over the recent time period, with an ending year estimate of 0.428 in 2024 @fig-depl.
 

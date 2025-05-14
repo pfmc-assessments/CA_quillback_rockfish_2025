@@ -1,0 +1,202 @@
+# Figures
+ 
+```{r} 
+#| label: 'set-rda-dir-figs'
+#| echo: false 
+#| warning: false 
+#| eval: true 
+ #  rda_dir <- here::here("rda_files")
+``` 
+
+## Data
+
+```{r}
+#| label: fig-data
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Data avaialable by year for each fleet, where circle area is relative within a data type. Circles are proportional to total catch for catches; to precision for indices, discards, and mean body weight observations; and to total sample size for compositions and mean weight- or length-at-age observations. Observations excluded from the likelihood have equal size for all years."
+#| fig-alt: "Tabular information for this figure can be found in the data file."
+
+knitr::include_graphics("r4ss_plots/data_plot2.png")
+```
+
+
+```{r}
+#| label: fig-catches
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Total removals for quillback rockfish in California from 1916-2024 for the commercial (blue bars; CA_Commercial) and recreational (red bars; CA_Recreational) fleets."
+#| fig-alt: "Stacked bar plot showing total removals were low through the 1940s, rising from the 1960s through 2000 and remaining relatively stable thereafter, with the majority of removals being from the recreational fleet, with removals from the commercial fleet largest in the 1990s."
+
+knitr::include_graphics(
+    "r4ss_plots/catch2_landings_stacked.png"
+)
+```
+
+### Indices
+
+### Composition data
+
+```{r}
+#| label: fig-len-comm-bubbles
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length composition data for the commercial fleet where bubbles correspond to the proportional sample size by bin within each year."
+#| fig-alt: "Bubble plot of California commercial length compositions. See text for description."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_bubflt1mkt0_page2.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-lenMean-comm
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length for the commercial fleet with 95 percent confidence intervals based on current samples sizes."
+#| fig-alt: "Line plot showing mean length along with uncertainty in each year with an increasing trend in mean length from 1995 to 2015."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_data_weighting_TA1-8_CA_Commercial.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-caal-comm
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Conditional age-at-length data for the commercial fleet where bubbles correspond to the proportional sample size by age for each length bin."
+#| fig-alt: "Bubble plot of California commercial age at length compositions roughly following shape of growth curve."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALdat_bubflt1mkt0.png"
+)
+```
+
+{{< pagebreak >}}
+
+
+```{r}
+#| label: fig-len-rec-bubbles
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length composition data for the recreational fleet where bubbles correspond to the proportional sample size by bin within each year."
+#| fig-alt: "Bubble plot of California recreational length compositions. See text for description"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_bubflt2mkt0_page2.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-lenMean-rec
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length for the recreational fleet with 95 percent confidence intervals based on current samples sizes."
+#| fig-alt: "Line plot showing mean length along with uncertainty in each year with an declining trend in mean length from 1980 to 1995 and slowing increasing trend to 2015."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_data_weighting_TA1-8_CA_Recreational.png"
+)
+```
+
+{{< pagebreak >}}
+
+### Biological data
+
+```{r}
+#| label: fig-weightlength
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Weight-length relationship with data for California quillback rockfish."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_length_weight.png"
+)
+```
+
+```{r}
+#| label: fig-fecundity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Fecundity estimated from samples collected by the SWFSC from across the range of California quillback rockfish."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_fecundity_fit.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-maturity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Data and the estimated functional maturity for California quillback rockfish."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_maturity_fit.png"
+)
+```
+
+```{r}
+#| label: fig-growthdata
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_growth_by_area.png"
+)
+```
+
+
+```{r}
+#| label: fig-growth
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Model estimated length-at-age in the beginning of the year. Shaded area indicates 95 percent distribution of length-at-age around the estimated growth curve."
+#| fig-alt: "Growth curves for females and males diverge are similar up to about age 8 after which females are notably larger. For both sexes the growth asymptotes around age 20. See parameter table for growth parameters."
+
+knitr::include_graphics(
+    "r4ss_plots/bio1_sizeatage.png"
+)
+```
+
+```{r}
+#| label: fig-age_error
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "figures/bio_age_error.png"
+)
+```
+
+
+

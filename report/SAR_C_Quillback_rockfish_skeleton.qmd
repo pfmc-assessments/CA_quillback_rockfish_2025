@@ -423,14 +423,24 @@ cat(a, sep = '\n')
  {{< pagebreak >}} 
 
 ```{r, results='asis'}
-#| label: 'figures'
+#| label: 'figures-data'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('09_figures.qmd', quiet = TRUE)
+a <- knitr::knit_child('09_figures_data.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
+{{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'figures-model'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('09_figures_model.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
 
  {{< pagebreak >}} 
 

@@ -1,0 +1,300 @@
+## Model
+
+
+### Bridging
+
+```{r}
+#| label: fig-bridgeSS3_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison of estimated spawning output of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
+#| fig-alt: "Figure showing that the trajectory of spawning output from the 2021 assessment is similar when using the newest version of stock synthesis."
+
+knitr::include_graphics(
+    "figures/bridgeSS3_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeBio_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output. Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
+
+knitr::include_graphics(
+    "figures/bridgeBiology_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeBio_relbio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output relative to unfished. Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished from the 2021 assessment changes most with updates to growth and mortality."
+
+knitr::include_graphics(
+    "figures/bridgeBiology_relbio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeData_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparisons showing estimated spawning output when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating it is based off the previous step, and final one (Update All Data and Estiamte Growth), which combines across all data steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output generally doesnt change except when age data are included and growth is not estimated."
+
+knitr::include_graphics(
+    "figures/bridgeData_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeData_relbio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison showing estimated spawning output relative to unfished when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating its based off of the previous step, and final one (Update All Data and Estiamte Growth), which combines across all data steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished generally doesnt change except in the combined situation when age data are included but growth is not estimated."
+
+knitr::include_graphics(
+    "figures/bridgeData_relbio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeOther_bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparisons showing estimated spawning output when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
+#| fig-alt: "Figure showing that the trajectory of spawning output generally doesnt change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
+
+knitr::include_graphics(
+    "figures/bridgeOther_bio.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeOther_relbio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparisons showing estimated spawning output relative to unfished when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
+#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished from generally doesnt change based on changes to selectivity or reweighting, and that the reate of recovery is larger since 2000 compared to the 2021 assessment."
+
+knitr::include_graphics(
+    "figures/bridgeOther_relbio.png"
+)
+```
+### Biology
+
+### Results
+
+### Parameter Estimates
+
+```{r}
+#| label: fig-selex
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length-based selectivity showing the time-varying selectivity for the recreational and commercial fleets."
+#| fig-alt: "ZEBRA"
+
+knitr::include_graphics("figures/selectivityPlot.png")
+```
+
+```{r}
+#| label: fig-recruits
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of age-0 recruits with uncertainty for the base model."
+#| fig-alt: "ZEBRA"
+
+knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png")
+```
+
+```{r}
+#| label: fig-rec-devs
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: Estimated time series of recruitment deviations for the base model."
+#| fig-alt: "ZEBRA"
+
+knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
+```
+
+```{r}
+#| label: fig-bias-adjust
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: Bias adjustment."
+#| fig-alt: "ZEBRA"
+
+#knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
+```
+
+```{r}
+#| label: fig-rec-bh-curve
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Stock-recruit curve. Point colors indicate year, with warmer colors indicating earlier years and cooler colors in showing later years"
+#| fig-alt:  "Beverton-holt stock recruitment relationship with a steepness of 0.72 with spawning output and the resulting recruitment estimates."
+
+knitr::include_graphics("r4ss_plots/SR_curve2.png")
+```
+
+### Fits to Data
+
+```{r}
+#| label: fig-len-agg-fit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length composition aggregated across years by fleet with the model with estimated fit to the data by sex (red female, blue male, green unsexed)"
+#| fig-alt: "Aggregated length comps are fit reasonably well."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit__aggregated_across_time.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-len-all-pearson
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Pearson residuals for fit to length composition data for all fleets (red female, blue male, grey unsexed). Closed bubbles are positive residuals (observed > expected) and open bubbles are negative residuals (observed < expected)."
+#| fig-alt: "See 'Pearson' column in CompReport.sso for values."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit__multi-fleet_comparison.png"
+)
+```
+
+```{r}
+#| label: fig-mean-len-com
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for Commercial with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_Commercial.png"
+)
+```
+
+```{r}
+#| label: fig-mean-len-rec
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for Recreational with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_Recreational.png"
+)
+```
+
+```{r}
+#| label: fig-mean-len-ccfrp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for CCFRP with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_CCFRP.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-mean-len-rov
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
+```
+
+
+### Time-series
+
+```{r}
+#| label: fig-ssb
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of spawning output in millions of eggs."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
+```
+
+```{r}
+#| label: fig-tot-bio
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of total biomass."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
+```
+
+```{r}
+#| label: fig-depl
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of fraction of unfished spawning output."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
+```
+
+
+
+
+{{< pagebreak >}}
+
+
+## Model diagnostics
+
+
+
+### Sensitivity analyses
+
+
+### Retrospectives and likelihood profiles
