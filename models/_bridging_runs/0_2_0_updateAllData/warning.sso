@@ -7,7 +7,7 @@ Warning 5 : ; 2025 is <= last_rd_yr; overwrite will occur
 Warning 6 : ; 2024 is <= endyr; set to endyr+1 
 Warning 7 : ; 2025 is <= last_rd_yr; overwrite will occur 
 Warning 8 : ; 2025 is <= last_rd_yr; overwrite will occur 
-Warning 9 : 1st iteration warning: ssb(endyr)/ssb(styr)= 4.55411e-05; suggest start with larger R0 to get near 0.4; or use depletion fleet option
+Warning 9 : 1st iteration warning: ssb(endyr)/ssb(styr)= 5.26156e-05; suggest start with larger R0 to get near 0.4; or use depletion fleet option
 Warning 10 : 1st iteration warning: catch logL > 50% total logL; check configuration; suggest start with larger R0
-Warning 11 : Final gradient: 7.675e-05 is larger than final_conv: 1e-05
+Warning 11 : Final gradient: 0.000593926 is larger than final_conv: 1e-05
  11 warnings  and 1 note 
