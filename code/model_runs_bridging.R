@@ -147,7 +147,7 @@ mod <- SS_read(here('models', "_bridging_runs", new_name))
 #Make Changes
 ##
 
-maxAge <- 84 #this is the maximum age among BC entries in Claires dataset
+maxAge <- 80 #this is the maximum age among BC entries in Claires dataset
 m_init <- round(5.4/maxAge, 4)
 m_se <- 0.31
 m_prior <- 3 #log-normal
@@ -420,7 +420,7 @@ mod <- SS_read(here('models', "_bridging_runs", new_name))
 
 ### Update M prior
 
-maxAge <- 84 #this is the maximum age among BC entries in Claires dataset
+maxAge <- 80 #this is the maximum age among BC entries in Claires dataset
 m_init <- round(5.4/maxAge, 4)
 m_se <- 0.31
 m_prior <- 3 #log-normal
@@ -524,34 +524,14 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "0_1_5_updateFecundity",
                                                  "0_1_0_updateAllBio")))
 SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('2025 exe',
-                                     'Natural Mortality',
-                                     'Growth',
-                                     'Length weight',
-                                     'Maturity',
-                                     'Fecundity',
-                                     'All relationships'),
-                    subplots = c(1,3), print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
-
-dev.off()
-
-####Additional comparisons
-
-xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
-                                      subdir = c("0_0_1_2025rename",
-                                                 "0_1_1_updateM",
-                                                 "0_1_2_updateGrowth",
-                                                 "0_1_3_updateLW",
-                                                 "0_1_4_updateMaturity",
-                                                 "0_1_5_updateFecundity")))
-SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('2021 model',
                                      'Update Natural Mortality',
                                      'Update Growth',
                                      'Update Length weight',
                                      'Update Maturity',
-                                     'Update Fecundity'),
-                    , print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
+                                     'Update Fecundity',
+                                     'Update All'),
+                    print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
 
 
 
@@ -1623,15 +1603,15 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "0_2_0_updateAllData")))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('2021 base',
-                                     'All bio relationships',
+                                     'Update all bio relationships',
                                      'Update catch',
                                      'Update length comps of existing fleets',
                                      'Update length/age comps of existing fleets',
                                      '+ add growth fleet and estimate growth',
                                      'Add new index fleets (new indices and comps)',
-                                     'All data but do not estimate growth',
-                                     'All data and estimate growth'),
-                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                                     'Update all data but do not estimate growth',
+                                     '+ estimate growth'),
+                    print = TRUE, legendloc = "topleft",
                     plotdir = here('models', "_bridging_runs", new_name))
 
 dev.off()
@@ -2354,6 +2334,85 @@ SSsummarize(xx) |>
 dev.off()
 
 
+####------------------------------------------------#
+## 0_3_6_finalBlocks ----
+####------------------------------------------------#
+
+#Update final blocking structure and shapes
+
+new_name <- "0_3_6_finalBlocks"
+old_name <- "0_3_5_selexBlocks_fixWarnings"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name), 
+               dir.new = here('models', "_bridging_runs", new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models', "_bridging_runs", new_name))
+
+
+##
+#Make Changes
+##
+
+# Final blocking structure
+mod$ctl$blocks_per_pattern <- c(2, 1)
+mod$ctl$Block_Design <- list(c(1916, 2002, 2014, 2021), #commercial fleet; set 2022-2024 same as 2003-2013 
+                             c(2017, 2024)) #recreational fleet
+
+
+# Rec size selectivity asymptotic in both blocks
+#Changes here will be reflect in tv once update
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational(2)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
+
+
+# Set up time varying selectivity table
+selex_new <- mod$ctl$size_selex_parms
+
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+
+# Commercial asymptotic in two most recent blocks
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
+
+mod$ctl$size_selex_parms_tv["SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014", 
+                            c("LO", "HI", "INIT", "PHASE")] <- c(0, 20, 15, -4)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', "_bridging_runs", new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', "_bridging_runs", new_name),
+          exe = here('models/ss3_win.exe'),
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
 ##-------------------------------------------------------------------##
 #------------------------Reweight------------------------------------
 ##-------------------------------------------------------------------##
@@ -2366,7 +2425,7 @@ dev.off()
 # Add variance adjust terms for all comps
 
 new_name <- "0_4_1_addVarAdj"
-old_name <- "0_3_5_selexBlocks_fixWarnings"
+old_name <- "0_3_6_finalBlocks"
 
 
 ##
@@ -2420,7 +2479,7 @@ plot_sel_all(pp)
 ## 0_4_2_reweight ----
 ####------------------------------------------------#
 
-# Add variance adjust terms for all comps
+# Add variance adjust terms for all comps and reweight 3 times based on starting from 1
 
 new_name <- "0_4_2_reweight"
 old_name <- "0_4_1_addVarAdj"
@@ -2434,16 +2493,6 @@ copy_SS_inputs(dir.old = here('models', "_bridging_runs", old_name),
                dir.new = here('models', "_bridging_runs", new_name),
                overwrite = TRUE)
 
-file.copy(from = file.path(here('models', "_bridging_runs", old_name),"Report.sso"),
-          to = file.path(here('models', "_bridging_runs", new_name),"Report.sso"), overwrite = TRUE)
-file.copy(from = file.path(here('models', "_bridging_runs", old_name),"CompReport.sso"),
-          to = file.path(here('models', "_bridging_runs", new_name),"CompReport.sso"), overwrite = TRUE)
-file.copy(from = file.path(here('models', "_bridging_runs", old_name),"warning.sso"),
-          to = file.path(here('models', "_bridging_runs", new_name),"warning.sso"), overwrite = TRUE)
-file.copy(from = file.path(here('models', "_bridging_runs", old_name),"covar.sso"),
-          to = file.path(here('models', "_bridging_runs", new_name),"covar.sso"), overwrite = TRUE)
-
-
 mod <- SS_read(here('models', "_bridging_runs", new_name))
 
 
@@ -2451,45 +2500,30 @@ mod <- SS_read(here('models', "_bridging_runs", new_name))
 #Make Changes
 ##
 
-pp <- SS_output(here('models', "_bridging_runs", new_name))
-dw <- r4ss::tune_comps(replist = pp, 
-                       option = 'Francis', 
-                       dir = here('models', "_bridging_runs", new_name), 
-                       exe = here('models/ss3_win.exe'), 
-                       niters_tuning = 0, 
-                       extras = '-nohess',
-                       allow_up_tuning = TRUE,
-                       show_in_console = TRUE)
-
-#If run twice get this. Isn't that much different so run just once for now
-# $weights[[2]]
-#   factor fleet    value
-# 1      4     1 0.406335
-# 2      4     2 0.199728
-# 3      4     4 0.242004
-# 4      4     5 0.216700
-# 5      5     1 0.255340
-# 6      5     3 0.816932
-
-colnames(dw)[1] = "factor"
-new_var_adj <- dplyr::left_join(mod$ctl$Variance_adjustment_list, dw,
-                                by = dplyr::join_by(factor, fleet))
-mod$ctl$Variance_adjustment_list$value <-  new_var_adj$New_Var_adj
-
-
-##
-#Output files and run
-##
+#Run based on weights set to one (even though 041 already has set to 1)
+mod$ctl$Variance_adjustment_list$value <-  1
 
 SS_write(mod,
          dir = here('models', "_bridging_runs", new_name),
          overwrite = TRUE)
 
-r4ss::run(dir = here('models', "_bridging_runs", new_name),
-          exe = here('models/ss3_win.exe'),
+r4ss::run(dir = here('models', "_bridging_runs", new_name), 
+          exe = here('models/ss3_win.exe'), 
           extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          show_in_console = TRUE,
           skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', "_bridging_runs", new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', "_bridging_runs", new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
 
 pp <- SS_output(here('models', "_bridging_runs", new_name))
 SS_plots(pp, plot = c(1:26))
@@ -2501,15 +2535,152 @@ plot_sel_all(pp)
 ##
 
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
-                                      subdir = c("0_3_5_selexBlocks_fixWarnings",
+                                      subdir = c("0_2_0_updateAllData",
+                                                 "0_3_5_selexBlocks_fixWarnings",
+                                                 "0_3_6_finalBlocks",
                                                  "0_4_1_addVarAdj",
                                                  "0_4_2_reweight")))
 SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('Update selectivity params and add blocks',
+  SSplotComparisons(legendlabels = c('Update all data',
+                                     'Update selectivity params and add blocks',
+                                     'Update blocks and selectivity type',
                                      'Add variance adjustment set to 1',
                                      'Reweight'),
-                    subplots = c(1,3), print = TRUE, legendloc = "topleft",
+                    print = TRUE, legendloc = "topleft",
                     plotdir = here('models', "_bridging_runs", new_name))
 
 dev.off()
 
+
+##-------------------------------------------------------------------##
+#------------------------Other minor changes-------------------------
+##-------------------------------------------------------------------##
+
+## List of remaining changes to get to base that we aren't running doing
+
+#Remove small sample sizes
+#Change L at first size to 1
+#Bias adjust factors
+#Final reweight
+
+
+##-------------------------------------------------------------------##
+#------------------------Report Figures-------------------------
+##-------------------------------------------------------------------##
+
+
+####------------------------------------------------#
+## SS3 version----
+####------------------------------------------------#
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = 
+                                        c("//nwcfile.nmfs.local/FRAM/Assessments/Archives/QuillbackRF/QuillbackRF_2021/2_base_model/CA",
+                                          here('models', "_bridging_runs")),
+                                      subdir = c("10_0_0_postNov_base", "0_0_1_2025rename")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021: SS3v3.30.16',
+                                     '2021: SS3v3.30.23.1'),
+                    subplots = c(1), print = TRUE, plotdir = here('report', "figures"))
+file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+            to = here('report', "figures", "bridgeSS3_bio.png"))
+
+
+####------------------------------------------------#
+## Bio figures----
+####------------------------------------------------#
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_0_1_2025rename",
+                                                 "0_1_1_updateM",
+                                                 "0_1_2_updateGrowth",
+                                                 "0_1_3_updateLW",
+                                                 "0_1_4_updateMaturity",
+                                                 "0_1_5_updateFecundity",
+                                                 "0_1_0_updateAllBio")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+                                     'Update Natural mortality',
+                                     'Update Growth',
+                                     'Update Length weight',
+                                     'Update Maturity',
+                                     'Update Fecundity',
+                                     'Update All biology'),
+                    subplots = c(1,3, 18), print = TRUE, 
+                    plotdir = here('report', "figures"))
+file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+            to = here('report', "figures", "bridgeBiology_bio.png"))
+file.rename(from = here('report', "figures", "compare3_Bratio.png"),
+            to = here('report', "figures", "bridgeBiology_relbio.png"))
+file.rename(from = here('report', "figures", "compare18_smrybio.png"),
+            to = here('report', "figures", "bridgeBiology_smrybio.png"))
+
+
+####------------------------------------------------#
+## Data figures----
+####------------------------------------------------#
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_0_1_2025rename",
+                                                 "0_1_0_updateAllBio",
+                                                 "0_2_1_updateCatch",
+                                                 "0_2_2_update_Lcomps_oldFleets",
+                                                 "0_2_3_update_Comps_oldFleets",
+                                                 "0_2_4_update_Comps_addGrowth",
+                                                 "0_2_5_update_Indices_noGrowth",
+                                                 #"0_2_6_updateAllData_nogrowth",
+                                                 "0_2_0_updateAllData")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+                                     'Update All biology',
+                                     'Update Catch',
+                                     'Update Length comps of existing fleets',
+                                     'Update Length/age comps of existing fleets',
+                                     '+ estimate growth',
+                                     'Add Indices (indices and comps for index fleets)',
+                                     #'Update All data but do not estimate growth',
+                                     'Update All data and estimate growth'),
+                    subplots = c(1), print = TRUE, legendloc = "bottomleft", 
+                    plotdir = here('report', "figures"))
+file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+            to = here('report', "figures", "bridgeData_bio.png"))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+                                     'Update All biology',
+                                     'Update Catch',
+                                     'Update Length comps of existing fleets',
+                                     'Update Length/age comps of existing fleets',
+                                     '+ estimate growth',
+                                     'Add Indices (indices and comps for index fleets)',
+                                     #'Update All data but do not estimate growth',
+                                     'Update All data and estimate growth'),
+                    subplots = c(3), print = TRUE, legendloc = c(0, 0.85), 
+                    plotdir = here('report', "figures"))
+file.rename(from = here('report', "figures", "compare3_Bratio.png"),
+            to = here('report', "figures", "bridgeData_relbio.png"))
+
+
+####------------------------------------------------#
+## Selectivity/Reweight figures
+####------------------------------------------------#
+
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c("_bridging_runs/0_0_1_2025rename",
+                                                 "_bridging_runs/0_1_0_updateAllBio",
+                                                 "_bridging_runs/0_2_0_updateAllData",
+                                                 "_bridging_runs/0_3_6_finalBlocks",
+                                                 "_bridging_runs/0_4_2_reweight",
+                                                 "5_1_3_preStarBase")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+                                     'Update All biology',
+                                     'Update All data and estimate growth',
+                                     'Update blocks and selectivity type',
+                                     'Reweight',
+                                     'Base model'),
+                    subplots = c(1, 3), print = TRUE, legendloc = "topright",
+                    plotdir = here('report', "figures"))
+file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+            to = here('report', "figures", "bridgeOther_bio.png"))
+file.rename(from = here('report', "figures", "compare3_Bratio.png"),
+            to = here('report', "figures", "bridgeOther_relbio.png"))

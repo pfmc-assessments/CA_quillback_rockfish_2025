@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-04-16  09:20:39
+#C file write time: 2025-05-14  09:34:05
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -17,10 +17,10 @@
 #_Cond 1 1 1 2 4 10 # example move definition for seas=1, morph=1, source=1 dest=2, age1=4, age2=10
 #
 2 #_Nblock_Patterns
-3 3 #_blocks_per_pattern
+2 1 #_blocks_per_pattern
 #_begin and end years of blocks
-2003 2013 2014 2021 2022 2024
-2001 2016 2017 2022 2023 2024
+1916 2002 2014 2021
+2017 2024
 #
 # controls for all timevary parameters 
 1 #_env/block/dev_adjust_method for all time-vary parms (1=warn relative to base parm bounds; 3=no bound check)
@@ -49,7 +49,7 @@
 #
 #_growth_parms
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env_var&link	dev_link	dev_minyr	dev_maxyr	dev_PH	Block	Block_Fxn
- 0.01	0.15	     0.0643	      -2.74	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
+ 0.01	0.15	     0.0675	       -2.7	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
     0	  20	    7.15451	    7.15451	    0	0	 2	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
    35	  50	    41.1812	    41.1812	    0	0	 2	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
  0.03	 0.3	     0.1782	     0.1782	    0	0	 2	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
@@ -147,13 +147,13 @@
  11	51	     36	0	0	0	 4	0	0	0	0	0	1	2	#_SizeSel_P_1_CA_Commercial(1)  
 -20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Commercial(1)  
   0	 9	 5.2575	0	0	0	 5	0	0	0	0	0	1	2	#_SizeSel_P_3_CA_Commercial(1)  
-  0	 9	5.48064	0	0	0	 5	0	0	0	0	0	1	2	#_SizeSel_P_4_CA_Commercial(1)  
+  0	20	     15	0	0	0	-4	0	0	0	0	0	1	2	#_SizeSel_P_4_CA_Commercial(1)  
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Commercial(1)  
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Commercial(1)  
  11	51	     34	0	0	0	 4	0	0	0	0	0	2	2	#_SizeSel_P_1_CA_Recreational(2)
 -20	20	    -15	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_2_CA_Recreational(2)
   0	 9	5.17048	0	0	0	 5	0	0	0	0	0	2	2	#_SizeSel_P_3_CA_Recreational(2)
-  0	 9	5.54518	0	0	0	 5	0	0	0	0	0	2	2	#_SizeSel_P_4_CA_Recreational(2)
+  0	20	     15	0	0	0	-4	0	0	0	0	0	2	2	#_SizeSel_P_4_CA_Recreational(2)
 -20	30	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_5_CA_Recreational(2)
 -10	10	   -999	0	0	0	-9	0	0	0	0	0	0	0	#_SizeSel_P_6_CA_Recreational(2)
  11	51	     30	0	0	0	 4	0	0	0	0	0	0	0	#_SizeSel_P_1_CA_CCFRP(4)       
@@ -172,24 +172,15 @@
 #_No age_selex_parm
 # timevary selex parameters 
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE
-11	51	     36	0	0	0	4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2003  
-11	51	     36	0	0	0	4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2014  
-11	51	     36	0	0	0	4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2022  
- 0	 9	 5.2575	0	0	0	5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2003  
- 0	 9	 5.2575	0	0	0	5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2014  
- 0	 9	 5.2575	0	0	0	5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2022  
- 0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2003  
- 0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014  
- 0	 9	5.48064	0	0	0	5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2022  
-11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2001
-11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017
-11	51	     34	0	0	0	4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2023
- 0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2001
- 0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017
- 0	 9	5.17048	0	0	0	5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2023
- 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2001
- 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
- 0	 9	5.54518	0	0	0	5	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2023
+11	51	     36	0	0	0	 4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_1916  
+11	51	     36	0	0	0	 4	#_SizeSel_P_1_CA_Commercial(1)_BLK1repl_2014  
+ 0	 9	 5.2575	0	0	0	 5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_1916  
+ 0	 9	 5.2575	0	0	0	 5	#_SizeSel_P_3_CA_Commercial(1)_BLK1repl_2014  
+ 0	 9	5.48064	0	0	0	 5	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_1916  
+ 0	20	     15	0	0	0	-4	#_SizeSel_P_4_CA_Commercial(1)_BLK1repl_2014  
+11	51	     34	0	0	0	 4	#_SizeSel_P_1_CA_Recreational(2)_BLK2repl_2017
+ 0	 9	5.17048	0	0	0	 5	#_SizeSel_P_3_CA_Recreational(2)_BLK2repl_2017
+ 0	20	     15	0	0	0	-4	#_SizeSel_P_4_CA_Recreational(2)_BLK2repl_2017
 # info on dev vectors created for selex parms are reported with other devs after tag parameter section
 #
 0 #  use 2D_AR1 selectivity(0/1):  experimental feature
@@ -200,12 +191,12 @@
 #
 # Input variance adjustments factors: 
 #_factor	fleet	value
-    4	1	0.426453	#_Variance_adjustment_list1
-    4	2	 0.21794	#_Variance_adjustment_list2
-    4	4	0.245939	#_Variance_adjustment_list3
-    4	5	0.211325	#_Variance_adjustment_list4
-    5	1	0.313711	#_Variance_adjustment_list5
-    5	3	0.792034	#_Variance_adjustment_list6
+    4	1	0.415924	#_Variance_adjustment_list1
+    4	2	0.188879	#_Variance_adjustment_list2
+    4	4	0.235229	#_Variance_adjustment_list3
+    4	5	 0.20054	#_Variance_adjustment_list4
+    5	1	 0.21492	#_Variance_adjustment_list5
+    5	3	0.757223	#_Variance_adjustment_list6
 -9999	0	       0	#_terminator               
 #
 1 #_maxlambdaphase
