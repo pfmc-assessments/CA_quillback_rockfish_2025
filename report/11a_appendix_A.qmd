@@ -99,28 +99,15 @@ pr_filter |>
 
 pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
 pr_filter |>
-    gt() |>
+   dplyr::select(-c("Log-Likelihood","AICc")) |>
+    gt() |> 
      tab_options(table.font.size = 12) |>
-     cols_label(starts_with("Delta") ~ "$\\delta$ AIC" ) |>
+     cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
     as_latex()
 
 ```
 
 
-```{r}
-#| label: tbl-pr-model-select1
-#| echo: false
-#| warning: false
-#| tbl-cap: "Model selection for the CRFS dockside PR survey.  The selected final model is highlighted in yellow."
-
-pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
-pr_filter |>
-    gt() |>
-     tab_options(table.font.size = 12) |>
-     cols_label(starts_with("Delta") ~ "\u0394" ) |>
-    as_latex()
-
-```
 
 ```{r}
 #| label: tbl-pr-index-values

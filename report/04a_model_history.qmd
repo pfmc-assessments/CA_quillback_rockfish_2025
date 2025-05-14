@@ -6,12 +6,56 @@
 
 In 2021, quillback rockfish was assessed coastwide with separate catch and length-based (SS-CL) data moderate methods for each of the three states, Washington, Oregon and California. The portion of the stock in California was found to be overfished and was declared overfished by NMFS in december 2024 after California quillback rockfish was defined as a stock. The 2021 spawning output relative to unfished was estimated at 0.14.  The model fixed steepness at the prior of 0.72 and natural mortality at 0.057 per year, which corresonds to a maximum age of 95 years [@Langseth_quillback_2021]. 
 
-The 2021 assessment was initially reviewed at the \gls{ssc} Groundfish Subcommittee Workshop in June 2021. The \gls{pfmc} delayed the adoption of the assessment at the June 2021 Council meeting and requested additional analyses that were presented during a follow-up meeting in August 2021. In Setpember 2021, the \gls{ssc} endorsed the assessment as the best scientific information available as a category 2 stock. The \gls{ssc} endorsed the assessment for use in stock status determination during the November 2021 Council meeting, after the Mop-Up Review Panel. The Council adopted the assessment and rebuilding analysis at the November 2021 meeting. 
+The 2021 assessment was initially reviewed at the \gls{ssc} Groundfish Subcommittee Workshop in June 2021.  The STAT responses to requests from the June meeting were presented during a follow-up meeting in August 2021. Additional requests were made of the STAT in August surrounding the model sensitivity to growth thata were presented at a Mop-Up Review Panel. In Setpember 2021, the \gls{ssc} endorsed the assessment as the best scientific information available as a category 2 stock. The \gls{ssc} endorsed the assessment for use in stock status determination during the November 2021 Council meeting and the Council adopted the assessment and rebuilding analysis at the November 2021 meeting. 
 
+During the process for selecting stocks for the 2023 assessment cycle, public comments were made by Drs. Ray Hilborn and Mark Maunder at the November 2023 Council meeting. Both scientists submitted reports reviewed by the Groundfish subcommitted of the SSC in January 2024. 
+The GFSC "concluded that the issues raised were considered as part of the 2021 stock assessment or not appropriate given the data limitations and TOR for data-moderate assessments at the time....The SSC continues to recommend use of the 2021 stock assessment and the adoption of the 2023 rebuilding analysis for California quillback rockfish." The GFSC statement to the Council from March 2024 can be read in [Agenda Item F.2.a, Supplemental SSC Report 1, March 2024](https://tinyurl.com/pfmc2024a) and the GFSC report from the January 2024 meeting is available [here](https://tinyurl.com/PFMC2024b).
 
+After the November 2023 Council meeting, PFMC Execuive Director Burden posed a series of questions to the NWFSC regarding the 2021 stock assessment of California quillback rockfish.  The NWFSC provided details responses in an Informational Report [Informational Report 2, March 2024](https://tinyurl.com/PFMC2024c) in March 2024 addressing those questions. 
 
 
 ## Response to most recent STAR panel and SSC recommendations  {#star-recs}
+
+A STAR panel was not convened for the review of the 2021 California quillback rockfish assessment. The following responses are a compilation from across the reviews spanning 2021-2024 that include the recommended research and data needs from 2021.
+
+### Recommendations from 2021
+
+* At the time of the assessment due to issues in California data in PacFIN (i.e., condition code) length samples landed live vs. dead from the commercial were unable to be identified. The ability to examine sample sizes and lengths from each type of landings would allow for future assessments to account for a greater range of commercial fishing behavior.
+
+* Improved understanding of where recreational fishing is commonly occurring (areas and depths) and the range of sizes available by depth would better inform the selectivity form, which currently is the near the shape for maturity.
+
+* Age data were predominantly from Oregon and Washington waters. Collecting length and otolith samples from recreational and commercial catches in California would result in samples from the entire U.S. West Coast informing growth. Otoliths from the WCGBTS survey would also help inform growth. California otoliths identified and aged during model reivews were insufficient to robustly estimate a separate California-specific length-age relationship given the limited sample size of young quillback rockfish from California. More data, particularly of young and old fish, are needed to be able to robustly estimate a California-specific growth curve and confirm whether growth of
+quillback rockfish differs between California and Washington and Oregon.
+
+* Recruitment patterns showed lower than average recruitment in the 2000s. Additional data to support such patterns in recruitment would provide additional support for model estimates.
+
+* Catches of quillback rockfish were particularly high in a few years for both the recreational and commercial fleet. Better understanding the factors contributing to these high catches as well as potential resolutions, should they be needed, would aid in ensuring catch time series are accurate.
+
+
+### Recommendations from 2024
+
+[Table 1](https://tinyurl.com/PFMC2024b) in the GFSC's "Report on the Additional Review of Quillback Rockfish in California" provides a a summary table of issues raised by Drs. Hilborn and Maunder. The following are a subset of the issues from Table 1 that the GFSC either concluded was still a potential issue or recommendation for future work.
+
+* It is not clear if the maximum age used represents the California component of the population (Maunder).
+
+* The decline in abundance appears to be driven by the estimated decline in recruitment deviates from 1990-2010, some of which may be compensating for unmodelled changes in selectivity (Maunder).
+
+* The current assessment suggests that the current exploitation rate is very high, and this seems inconsistent for a stock with a significant area of its habitat closed to fishing or unfished (Hilborn).
+
+
+The GFSC also proposed future work and the quillback specific recommendations include:
+
+* The prior for h should be revisited given the results of recent assessments and recent advancements in methods for constructing h priors, such as the approach developed by Marc Mangel (e.g., Mangel et al., 2010).
+
+* The next assessment of quillback rockfish in California should explore the development of a recreational and/or CCFRP-based index of abundance, comparable to those developed in recent assessments for vermilion, copper, and other  earshore rockfish species.
+
+* The meeting noted that rejecting the 2021 assessment of quillback rockfish would mean that OFLs for quillback would be based on DB-SRA, a “catch-only” method of stock assessment, which is known to be very inaccurate (Free et al., 2020). Research should be conducted to assess what constitutes “too uncertain” given the default of returning to the last assessment, especially in the context of assessments for which there are no previous full or data-moderate assessments.
+
+* Dr. Maunder noted that turning off the sum-to-zero constraint on penalty in Stock Synthesis increases the value of terminal year depletion. This issue was not raised in the earlier Public Comment, and the SSC should consider this matter when revising the GTORA and
+APGSA.
+
+* Dr. Maunder noted that the estimated variances for some recruitment deviations exceeded the value of σR, which is unusual (though has occasionally been seen in other assessments) and unexpected, and may indicate model misspecification. This issue was not raised in the earlier Public Comment and should form the basis for further exploration and could be a diagnostic for future data-moderate assessments.
+
 
 <!-- Response to the most recent previous STAR panel and SSC recommendations for remedying deficiencies in the most recent previous full assessment. This is not required for an update assessment.  
 Is this required if there are no "deficiencies"? -->
