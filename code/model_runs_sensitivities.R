@@ -2255,3 +2255,126 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 #paramter not well estimted - lo
+
+
+
+#========================================================================================#
+# RecDev sensitivities -----
+#========================================================================================#
+
+######-
+## Turn off recdevs --------------------------------------------------------
+
+new_name <- 'recdev_Off'
+
+mod <- base_mod
+
+mod$ctl$do_recdev <- 0
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Start recdevs at 1990 --------------------------------------------------------
+
+new_name <- 'recdev_1990'
+
+mod <- base_mod
+
+mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+mod$ctl$MainRdevYrFirst <- 1990
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Use recdev option 2 --------------------------------------------------------
+
+new_name <- 'recdev_opt2'
+
+mod <- base_mod
+
+mod$ctl$do_recdev <- 2
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Use recdev option 2 with main devs set at 1990 --------------------------------------------------------
+
+new_name <- 'recdev_1990opt2'
+
+mod <- base_mod
+
+mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+mod$ctl$MainRdevYrFirst <- 1990
+mod$ctl$do_recdev <- 2
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'recdev_off'),
+                                                   file.path('_sensitivities', 'recdev_opt2'),
+                                                   file.path('_sensitivities', 'recdev_1990'),
+                                                   file.path('_sensitivities', 'recdev_1990opt2')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'No recdevs',
+                                     "Recdev option 2",
+                                     "Recdevs start at 1990",
+                                     "Recdevs options 2 start at 1990"),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+
+
