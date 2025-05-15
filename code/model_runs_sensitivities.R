@@ -2417,5 +2417,214 @@ SSsummarize(xx) |>
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+##########################################################################################-
+#
+# Summary Tables and Figures ----
+#
+##########################################################################################-
+
+# The following outputs an overall sensitivity figure and table as well as 
+# individual sensitivity figures and tables for each specified grouping 
+
+make_detailed_sensitivites <- function(biglist, 
+                                       mods_to_include, 
+                                       pretty_names = mods_to_include, 
+                                       outdir, 
+                                       grp_name) {
+  
+  shortlist <-   big_sensitivity_output[c('base', mods_to_include)] |>
+    r4ss::SSsummarize() 
+  
+  r4ss::SSplotComparisons(shortlist,
+                          subplots = c(2,4), 
+                          print = TRUE,  
+                          plot = FALSE,
+                          plotdir = file.path(outdir, 'figures'), 
+                          filenameprefix = paste0('sens_', grp_name, "_"),
+                          legendlabels = c('Base', pretty_names))
+  
+  SStableComparisons(shortlist, 
+                     modelnames = c('Base', pretty_names),
+                     names =c("npars", "Recr_Virgin", "R0", "steep", "NatM", "L_at_Amax", "VonBert_K", "SSB_Virg",
+                              "Bratio_2025", "SPRratio_2024")) |>
+    dplyr::mutate(dplyr::across(-Label, ~ sapply(., format, digits = 3, nsmall = 3, scientific = FALSE) |>
+                                  stringr::str_replace('NA', ''))) |>
+    `names<-`(c(' ', 'Base', pretty_names)) %>%
+    rbind(c("Npar", shortlist$npars), .) |>
+    write.csv(file.path(outdir, 'tables', paste0('sens_', grp_name, '_table.csv')), 
+              row.names = FALSE)
+}
+
+# Selectivity models
+
+selec_models <- c('sel_AllDomed', 
+                  'sel_ComDomed',
+                  'sel_RecDomed',
+                  'sel_ROVandCCFRPDomed',
+                  'sel_NoBlocks',
+                  'sel_ComAsymp_allBlocks',
+                  'sel_EarlyRecAsympDomeSurveys',
+                  'sel_fullBlocks_DomedRecCom')
+
+selec_pretty <- c('All fleets domed',
+                  'Com domed',
+                  'Rec domed',
+                  'Surveys domed',
+                  'No blocks',
+                  'All asymptotic',
+                  'Full rec block with domed',
+                  'Full rec and com block with domed')
+
+
+#Weighting models
+
+weighting_models <- c('dw_dirichlet',
+                      'dw_MI',
+                      'IndexExtraSE')
+
+weighting_pretty <- c('Dirichlet',
+                      'McAllister-Ianelli',
+                      'Index Extra SD')
+
+
+#Data related models
+
+data_models <- c('catchIncreaseSE',
+                 'catchOutliers',
+                 #'comLenSampleSize', #minor
+                 'FAA_resetCom_reblock_reweight', 
+                 'marginalComAge',
+                 'noAgeErr',
+                 'noNegYear',
+                 'NoRecLen2024')
+
+data_pretty <- c('Increase catch se',
+                 'Reduce large catches',
+                 #'Remove com length comps with N < 10',
+                 'Fleets as areas',
+                 'Use marginal com age comps',
+                 'Remove ageing error',
+                 'Add all low sample size comps',
+                 'Remove rec length comp in 2024')
+
+
+#Leave out explorations
+
+leaveOut_models <- c('leaveOut_com_ages',
+                     'leaveOut_com_lengths',
+                     'leaveOut_rec_lengths',
+                     'leaveOut_growth_ages', 
+                     'leaveOut_prIndex',
+                     'leaveOut_rov',
+                     'leaveOut_ccfrp')
+
+leaveOut_pretty <- c('Remove com ages',
+                     'Remove com lengths',
+                     'Remove rec lengths',
+                     'Remove growth ages',
+                     'Remove PR index',
+                     'Remove ROV index',
+                     'Remove CCFRP index')
+
+
+#Productivity models
+
+productivity_models <- c('estimate_h',
+                         'estimate_M',
+                         'estimate_M_and_h',
+                         'recdev_1990',
+                         'recdev_Off')
+
+productivity_pretty <- c('Estimate h',
+                         'Estimate M',
+                         'Estimate M and h',
+                         'Start recdevs in 1990',
+                         'Turn off recdevs')
+
+
+#Biology models
+
+biology_models <- c('Maturity_2021est',
+                    'fecundity_EJest',
+                    'maxAge84',
+                    'maxAge70')
+
+biology_pretty <- c('Oregon maturity',
+                    'Dick 2017 fecundity',
+                    'Max age 70',
+                    'Max age 84')
+
+
+# List all groups of models together
+
+models_all <- c(selec_models,
+                data_models,
+                weighting_models,
+                leaveOut_models,
+                productivity_models, 
+                biology_models)
+
+pretty_all <- c(selec_pretty,
+                data_pretty,
+                weighting_pretty,
+                leaveOut_pretty,
+                productivity_pretty,
+                biology_pretty)
+
+big_sensitivity_output <- SSgetoutput(dirvec = c(
+  here('models', base_mod_name),
+  glue::glue("{models}/{subdir}", 
+             models = here('models', '_sensitivities'),
+             subdir = models_all))) |>
+  `names<-`(c('base', models_all))
+
+
+# test to make sure reading
+which(sapply(big_sensitivity_output, length) < 180) # if integer(0) then good
+
+# Directory that contains the figures and tables folders
+# FROG: Right now the tables are being output to the figures folder. Im aware. 
+#It just easier to test. Ultimately will move. 
+
+outdir <- here('report')
+
+make_detailed_sensitivites(big_sensitivity_output,
+                           mods_to_include = selec_models,
+                           outdir = outdir,
+                           grp_name = 'selectivity',
+                           pretty_names = selec_pretty)
+
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = weighting_models,
+                           outdir = outdir,
+                           grp_name = 'weighting',
+                           pretty_names = weighting_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = data_models,
+                           outdir = outdir,
+                           grp_name = 'data',
+                           pretty_names = data_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = productivity_models,
+                           outdir = outdir,
+                           grp_name = 'productivity',
+                           pretty_names = productivity_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = leaveOut_models,
+                           outdir = outdir,
+                           grp_name = 'leaveOut',
+                           pretty_names = leaveOut_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = biology_models,
+                           outdir = outdir,
+                           grp_name = 'biology',
+                           pretty_names = biology_pretty)
+
+
 
 
