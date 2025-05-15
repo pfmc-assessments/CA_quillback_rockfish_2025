@@ -1,11 +1,25 @@
 #Copied directly from copper rockfish
-#Modified 
+#Modified for quillback 2025
 
 library(r4ss)
 library(ggplot2)
 library(cowplot)
-base_model <- '4_2_1_propBase'
+base_model <- '5_1_3_preStarBase' #<============== UPDATE
 
+setwd(here('models','_bivariate_profiles', 'M_and_h', base_model))
+mydir = getwd()
+#copy over base model and run it in the new folder
+copy_SS_inputs(dir.old = here('models', base_model), 
+               dir.new = mydir,
+               overwrite = TRUE)
+r4ss::run(dir = mydir, 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+##
+#Set up ncessary functions
 getLtable=function(modelsum, legend.labels=NULL) {
   parameters <- modelsum$pars[modelsum$pars$recdev==FALSE, c(modelsum$n+1,1:modelsum$n)]
   parms.that.change <- parameters[apply(parameters[2:(modelsum$n+1)], 1, function(x) length(unique(x))>1),]
@@ -29,11 +43,6 @@ getLtable=function(modelsum, legend.labels=NULL) {
   return(model.comparison.table)
 }
 
-#setwd("~/Rockfish/Rockfish assessment/vermillion 2021/SSmodel")
-setwd(here('models','_bivariate_profiles', 'M_and_h'))
-
-# set 1 #####
-mydir = getwd()
 starter <- SS_readstarter(file.path(mydir, "starter.ss"))
 # change control file name in the starter file
 starter[["ctlfile"]] <- "control_modified.ss"
@@ -43,7 +52,7 @@ starter[["prior_like"]] <- 1
 # write modified starter file
 SS_writestarter(starter, dir = mydir, overwrite = TRUE)
 
-par_table = expand.grid(M = seq(0.04, 0.14, by = 0.01), h = seq(0.25, 0.95, by = 0.05))
+par_table = expand.grid(M = seq(0.04, 0.15, by = 0.01), h = seq(0.25, 1.0, by = 0.05))
 par_table
 #tester
 # par_table=expand.grid(M=seq(0.11,0.115,by = 0.005),h=seq(0.75,0.80,by = 0.05))

@@ -5,9 +5,9 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-ost/ss3-source-code
 
-StartTime: Thu May  8 11:43:29 2025
-EndTime: Thu May  8 11:45:40 2025
-This run took: 0 hours, 2 minutes, 11 seconds.
+StartTime: Thu May 15 08:44:54 2025
+EndTime: Thu May 15 08:48:23 2025
+This run took: 0 hours, 3 minutes, 29 seconds.
 Data_File: 2025_ca_quillback.dat
 Control_File: 2025_ca_quillback.ctl
 
