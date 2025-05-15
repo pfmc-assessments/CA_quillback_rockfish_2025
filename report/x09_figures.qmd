@@ -311,6 +311,34 @@ knitr::include_graphics(
 
 ### Biology
 
+### Model Structure and Assumptions
+
+```{r}
+#| label: com_regs_vis
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "California commercial regulatory history relevant to quillback rockfish between the years 2000 and 2023. Two-month periods are shown on the y-axis. Black text within cells indicates  maximum allowable depth, with textless blue shaded cells indicating no depth constraint. Blue shaded cells indicate the maximum allowable complex trip limit during times when the nearshore fishery was open. Yellow shaded cells indicate either a closed period or prohibition on retention. Prior to 2003 nearshore trip limits were different for limited entry fixed gear (LEFG) and open access sectors (OA), cells prior to 2003 are representative of the OA sector. In 2003, trip limits were equivalent for the OA and LEFG sectors. In 2003 CDFW began the limited entry deeper nearshore permit program which capped participants at 280, the number of permits has declined each year following. Trip limits prior to 2022 were a cumulative of all nearshore rockfish species, meaning although the theoretical quillback rockfish maximum is the trip limit, the limit applies to all deeper nearshore species combined during that period and it is likely quillback made a small fraction of that period limit. Limits specific to quillback rockfish were implemented in 2023."
+#| fig-alt: 
+
+knitr::include_graphics(
+    "figures/com_regs_vis_250408.png"
+)
+```
+
+```{r}
+#| label: fishing_regs_rec
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "The CDFW recreational season length and depth restriction for nearshore rockfish by month from 2000 to 2003. A triangle indicates a regulation change mid-month. The regions defined base on the following latitudes: Northern (42∘00′ N. lat. to 40∘10′ N. lat.), Mendocino (40∘10′ N. lat. to 38∘57′ N. lat.), San Francisco (38∘57′ N. lat. to 37∘11′ N. lat.), Central (37∘11′ N. lat. to 34∘27′ N. lat.), Southern (34∘27′ N. lat. to U.S./Mexico border). Not all management areas have been consistently defined over time. The northern and southern management areas have remained the same. From 2001-2003 the Central management area was defined as 40∘10′ N. lat. to 34∘27′ N. lat. In 2004, the Central area was split into a North-Central and South-Central areas at 36∘00′ N. lat. In 2005, the regions from 40∘10′ N lat. to 34∘27′ N. lat. were redefined. The North-Central encompasses 40∘10′ N. lat. to 37∘11′ N. lat., Monterey South-Central from 37∘11′ N. lat. to 36∘00′ N. lat., and Morro Bay South-Central from 36∘00′ N. lat. to 34∘27′ N. lat."
+#| fig-alt: 
+
+knitr::include_graphics(
+    "figures/fishing_regs_rec.png"
+)
+```
+
 ### Results
 
 ### Parameter Estimates
