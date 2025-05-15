@@ -298,3 +298,26 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 
 
 ### Retrospectives and likelihood profiles
+
+
+```{r}
+#| label: fig-Mh-contour
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bivariate profile of natural mortality and steepness relative to the model with the lowest negative log-likelihood. THe model with the lowest NLL has an appoximate value of 0.08 for M and 0.9 for h."
+#| fig-alt: "The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
+
+knitr::include_graphics("figures/profile_m_h_contour.png")
+```
+
+```{r}
+#| label: fig-Mh-NLL
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bivariate profile of natural mortality and steepness relative with the NLL value for each model run shown with a white dot indicating the pre-STAR base model values."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/profile_Mhgrid_nll.png")
+```

@@ -69,7 +69,7 @@ profile <- r4ss::profile(
 
 # get model output
 profilemodels <- r4ss::SSgetoutput(
-  dirvec = here('models','_bivariate_profiles','M_and_h'),
+  dirvec = mydir,
   keyvec = 1:nrow(par_table))
 
 profilesummary <- r4ss::SSsummarize(profilemodels)
@@ -84,7 +84,7 @@ Sdgrid = as.data.frame(sumtablelong)
 
 
 #base model
-basemodel <- SS_output(here('models',base_model))
+basemodel <- SS_output(here('models', base_model))
 
 
 Mbase=basemodel$parameters["NatM_uniform_Fem_GP_1","Value"]
@@ -111,7 +111,7 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=NLL)) +
   scale_x_continuous(expand = c(0,0), breaks = unique(Sdgrid$M)) + 
   scale_y_continuous(expand = c(0,0), breaks = unique(Sdgrid$h)) +
   theme_bw(base_size = 18)
-ggsave(here('models', '_bivariate_profiles','M_and_h','Mhgrid_nll.png'),width = 10, height = 10)
+ggsave(file.path(mydir,'Mhgrid_nll.png'),width = 10, height = 10)
 
 ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
   geom_tile() +
@@ -123,7 +123,7 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
   scale_x_continuous(expand = c(0,0), breaks = unique(Sdgrid$M)) + 
   scale_y_continuous(expand = c(0,0), breaks = unique(Sdgrid$h)) +
   theme_bw(base_size = 18)
-  ggsave(here('models', '_bivariate_profiles','M_and_h','Mhgrid_depletion.png'),width = 10, height = 10)
+  ggsave(file.path(mydir,'Mhgrid_depletion.png'),width = 10, height = 10)
 
 
 #p3=ggplot(Sdgrid,aes(x=M,y=h,fill=EquilMSY)) +
@@ -190,14 +190,14 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
     geom_contour_filled(aes(z = Delta_NLL), breaks = c(0, 2, 3, 4, 6, 10, 20, 50, seq(100, 600, 100))) +
     geom_point(aes (x = Mbase, y = 0.72),  size = 4, col = "white") +
     geom_point(aes (x = find[,1], y = find[,2]),  size = 4, col = "white") +
-    annotate("text", x = find[,1] + 0.015, y = find[,2], label = "Lowest NLL", size =10, col = 'white') +
+    annotate("text", x = find[,1] + 0.016, y = find[,2], label = "Lowest NLL", size =10, col = 'white') +
     annotate("text", x = Mbase, y = 0.7, label = "Base Model", size =10, col = 'white') +
     geom_text_contour(aes(z = Delta_NLL), 
        breaks = c(3, 5, 7, seq(10, 30, 10)), size = 7, color = 'white') +
     xlab("Natural Mortality (M)") +
     ylab("Steepness (h)") +
-    scale_x_continuous(breaks = seq(0.05, 0.15, 0.01)) +
-    scale_y_continuous(breaks = seq(0.20, 0.90, 0.1)) +
+    scale_x_continuous(breaks = seq(0.04, 0.15, 0.01)) +
+   scale_y_continuous(breaks = seq(0.25, 1, 0.1)) +
     theme(
       axis.text.y = element_text(size = 15, color = 1),
       axis.text.x = element_text(size = 15, color = 1), 
@@ -207,6 +207,6 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
       legend.title = element_text(size = 15)) +
     guides(fill = guide_legend(title = "Change in NLL")) +
     theme_bw(base_size = 16)
-ggsave(here('models', '_bivariate_profiles','M_and_h',"joint_m_h_profile_ggsave.png"),width = 14, height = 12)
+ ggsave(file.path(mydir, "joint_m_h_profile_ggsave.png"),width = 14, height = 12)
 
 #dev.off()

@@ -267,5 +267,3 @@ projections_table |>
 
 :::
 
-
-::: {.landscape}

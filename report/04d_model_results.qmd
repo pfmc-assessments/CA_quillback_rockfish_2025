@@ -22,7 +22,7 @@ The survey fleets did not include time blocks and the double normal selectivity 
 The fishery selectivities were all well estimated estimated and fixed to be asymptotic except for the early time period of the commercial fleet that esimated the peak domed selectivity at `r round(mod_out$parameters['Size_DblN_peak_CA_Commercial(1)_BLK1repl_1916', 'Value'], 3)`, indicating preferential size selection during that period.
 
 
-The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-pararms] in log-space.
+The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-params] in log-space.
 
 The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs]. The bias adjustment applied to the annual recruitment deviations across time is shown in Figure [FROG - include? fig-bias-adjust]. The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern is cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024  @fig-bh-curve. 
 

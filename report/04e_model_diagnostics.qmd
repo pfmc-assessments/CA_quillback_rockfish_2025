@@ -16,3 +16,7 @@ If possible, ranges depicting uncertainty should include at least three runs: (a
 ### Likelihood Profiles
 
 <!-- Evaluation of model parameters. Likelihood profile for the base model over key parameters (typically natural morality, stock-recruit steepness, and equilibrium recruitment, or R0). The profile should indicate all likelihood values for individual components (e.g., indices by survey, compositional data for each type and fleet).   -->
+
+
+@fig-Mh-contour
+@fig-Mh-NLL
