@@ -102,19 +102,9 @@ knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptot
 knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 ```
 
-```{r}
-#| label: fig-bias-adjust
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: Bias adjustment."
-#| fig-alt: "ZEBRA"
-
-#knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
-```
 
 ```{r}
-#| label: fig-rec-bh-curve
+#| label: fig-bh-curve
 #| echo: false
 #| warning: false
 #| eval: true
@@ -127,7 +117,7 @@ knitr::include_graphics("r4ss_plots/SR_curve2.png")
 ### Fits to Data
 
 ```{r}
-#| label: fig-len-agg-fit
+#| label: fig-lenfit-all
 #| echo: false
 #| warning: false
 #| eval: true
@@ -142,7 +132,7 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
-#| label: fig-len-all-pearson
+#| label: fig-len-pearson-all
 #| echo: false
 #| warning: false
 #| eval: true
@@ -155,11 +145,11 @@ knitr::include_graphics(
 ```
 
 ```{r}
-#| label: fig-mean-len-com
+#| label: fig-meanlen-com
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean length (cm) for Commercial with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-cap: "Mean length (cm) for commercial fleet with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
 #| fig-alt: "FROG"
 
 knitr::include_graphics(
@@ -168,11 +158,38 @@ knitr::include_graphics(
 ```
 
 ```{r}
-#| label: fig-mean-len-rec
+#| label: fig-meanage-comm
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean length (cm) for Recreational with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-cap: "Mean age from conditional data (aggregated across length bins) for the commercial fleet with 95% confidence intervals based on current samples sizes."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALfit_data_weighting_TA1-8_condAgeCA_Commercial.png"
+)
+```
+
+
+```{r}
+#| label: fig-age-pearson-comm
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Pearson residuals for the commercial conditional age at length composition."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALfit_residsflt1mkt0.png"
+)
+```
+
+```{r}
+#| label: fig-meanlen-rec
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for recreational fleet with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
 #| fig-alt: "FROG"
 
 knitr::include_graphics(
@@ -181,7 +198,20 @@ knitr::include_graphics(
 ```
 
 ```{r}
-#| label: fig-mean-len-ccfrp
+#| label: fig-age-pearson-grow
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Pearson residuals for the commercial fleet conditional age at length composition."
+#| fig-alt: "FROG"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALfit_residsflt3mkt0.png"
+)
+```
+
+```{r}
+#| label: fig-meanlen-ccfrp
 #| echo: false
 #| warning: false
 #| eval: true
@@ -196,7 +226,7 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
-#| label: fig-mean-len-rov
+#| label: fig-meanlen-rov
 #| echo: false
 #| warning: false
 #| eval: true

@@ -200,7 +200,7 @@ compweight_table |>
 ```
 
 ```{r, results = "asis"}
-#| label: tbl-ts
+#| label: tbl-timeseries
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 

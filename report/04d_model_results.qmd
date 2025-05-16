@@ -2,13 +2,9 @@
 
 ### Parameter Estimates
 
-@tbl-n-param
+A total of 121 parameters were estimated for the base model @tbl-n-param. The parameters, fixed and estimates along with approximate asymptotic standard errors are shown in @tbl-pars and the likelihood components are shown in @tbl-likelihood. Estimates of stock size and status over time are shown  @tbl-timeseries. 
 
-The base model fixed parameters and estimates along with approximate asymptotic standard errors are shown in @tbl-parms and the likelihood components are shown in @tbl-likelihood. Estimates of stock size and status over time are shown  @tbl-timeseries. 
-
-The log($R_0$) was estimated at `r round(mod_out$parameters['SR_LN(R0)', 'Value'], 3)`.
-
-The model estimated reasonable growth parameters and variability for 
+The log($R_0$) was estimated at `r round(mod_out$parameters['SR_LN(R0)', 'Value'], 3)`. The model estimated reasonable growth parameters and variability for 
 $L_{age=2}$ = `r round(mod_out$parameters['L_at_Amin_Fem_GP_1', 'Value'], 3)` 
 (CV = `r round(mod_out$parameters['CV_young_Fem_GP_1', 'Value'], 3)`) and 
 $L_{\infty}$ = `r round(mod_out$parameters['L_at_Amax_Fem_GP_1', 'Value'], 3)` 
@@ -23,34 +19,36 @@ The survey fleets did not include time blocks and the double normal selectivity 
 
 The fishery selectivities were all well estimated estimated and fixed to be asymptotic except for the early time period of the commercial fleet that esimated the peak domed selectivity at `r round(mod_out$parameters['Size_DblN_peak_CA_Commercial(1)_BLK1repl_1916', 'Value'], 3)`, indicating preferential size selection during that period.
 
+The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-pars] in log-space.
 
-The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-params] in log-space.
-
-The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs]. The bias adjustment applied to the annual recruitment deviations across time is shown in Figure [FROG - include? fig-bias-adjust]. The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern is cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024  @fig-bh-curve. 
+The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs].  The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern has been cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024 @fig-bh-curve. The early recruitment deviations were all negative
 
 ### Fits to the Data
 
 #### Fits to length and age composition
 
-The aggregated fits to the length composition are reasonable @fig-lencomp-agg given the overall sparcity of data and variable sample sizes by year.  
+The aggregated fits to the length composition are reasonable [@fig-lenfit-all] given the overall sparcity of data and variable sample sizes by year [@fig-len-pearson-all].
 
-The fits to the ROV and CCFRP surveys did not change significantly with changes in selectivity patterns. The higher Pearson residuals for CCFRP in 2017, 2018 and 2024 around 30 cm are likley due to the fact that the Farallons were sampled in these years and have high densities of quillback rockfish.  The ROV survey lengths were fit to the invidiual years of data and indicate an increase in mean size form 2019 to 2021 that was not captured by the model. The CCFRP mean lenght was uncertain across years and the increased mean lenght in 2019 was not well fit.
 
- The mean lengths observed by year from the commercial fleet were uncertain but the time-varying selecitivty captures the changes in mean length relatively well in all but one year, 2007. The commercial lengths samples from 2010--2014 only represent the two most northern ports, but there were not regulatory changes that supported the observed patter in increasing length. There were limited aged available for the commercial fleet from a limited number of years. There are a few remaining large Pearson residuals in individual years, but the mean age from the conditional data were well captured by the model @fig-caal-fit-comm.
+The mean lengths observed by year from the commercial fleet were uncertain but the time-varying selecitivty captures the changes in mean length relatively well in all but one year, 2007 [@fig-meanlen-comm]. The commercial lengths samples from 2010--2014 only represent the two most northern ports, but there were not regulatory changes that supported the observed patter in increasing length. There were limited aged available for the commercial fleet from a limited number of years. There are a few remaining large Pearson residuals in individual years, but the mean age from the conditional data were well captured by the model [@fig-age-pearson-comm and @fig-meanage-comm].
 
-There were no ages available from the recreational fleet collect as part of the CDFW \{crfs} sampling program. The model fit the tails of the recreational length composition well, but expected a peak length larger than the data suggested.  For years in which the large sample sizes of recreational lengths the data were well fit. The Pearson residuals were variable by year and no patterns of general misfit are visible. The mean length in the recreational fishery was more uncertain prior to 1993.  The mean length in 1983 was not fit with marked higher Pearson residuals for lareger fish in the early 1980s.  There were no regulations nor major changes in the recreational fishery prior to 1999 that would suggest the need for an additional time block to aid in fitting these data. 
+There were no ages available from the recreational fleet collect as part of the CDFW \gls{crfs} sampling program. The model fit the tails of the aggregated recreational length composition well, but expected a peak length larger than the data suggested [@fig-lenfit-all].  For years in which the large sample sizes of recreational lengths the data were well fit. The Pearson residuals were variable by year and no patterns of general misfit are visible. The mean length in the recreational fishery was more uncertain prior to 1993 [@fig-meanlen-rec].  The mean length in 1983 was not fit with marked higher Pearson residuals for lareger fish in the early 1980s.  There were no regulations nor major changes in the recreational fishery prior to 1999 that would suggest the need for an additional time block to aid in fitting these data. 
 
+
+The fits to the ROV and CCFRP surveys did not change significantly with changes in selectivity patterns. The ROV lengths represent different areas in each of the years sampled. The ROV survey lengths were fit to the invidiual years of data and indicate an increase in mean size form 2019 to 2021 that was not captured by the model [@fig-meanlen-rov]. The CCFRP mean length was uncertain across years and the increased mean lenght in 2019 was not well  [@fig-meanlen-ccfrp]. The higher Pearson residuals for CCFRP in 2017, 2018 and 2024 around 30 cm are likley due to the fact that the Farallons were sampled in these years and have higher densities of quillback rockfish than other sites [@fig-len-pearson-all].
+
+There are large Pearson residuals for the growth fleet conditional ages that may be due to ageing reading errors or the biased sampling for the data aggregated into the growth fleet [@fig-age-pearson-grow]. None of the data were excluded from the growth fleet.
 
 #### Fits to Indices of Abundance
 
 The first year of the recreational index was not fit, and may be contribued to it being the first year of the CRFS. The model fit the overall trend in the recreaitonal index reasonably well, and the change in time varying selectivity in 2017 is evident.
 
-The relative indices from CCFRP and the ROV survey both indicated increases in the later years of the survey that the model fit underestimates. However, both indices were fit well without hte need to add extra variation to capture changes.  The decreased value in 2019 for CCFRP was not captured by the model and may be a result of factors not considered in index development, i.e., higher than average catches of a midwater species.
+The relative indices from CCFRP and the ROV survey both indicated increases in the later years of the survey that the model fit underestimates. However, both indices were fit well withoutth need to add extra variation to capture changes.  The decreased value in 2019 for CCFRP was not captured by the model and may be a result of factors not considered in index development, i.e., higher than average catches of a midwater species.
 
 ### Population Trajectory
 
-The population declined slowly with the onset of fishing, with three more significant annual declines in years of high catch @tab-timeseries and @fig-ssb. The population remained at lower levels from 1994--1999 before increasing from 2000--2007. Catches increase again in 2015 resulting in a declining population through 2023.  
+The population declined slowly with the onset of fishing, with three more significant annual declines in years of high catch [@tbl-timeseries,  @fig-ssb]. The population remained at lower levels from 1994--1999 before increasing from 2000--2007. Catches increase again in 2015 and result in a slightly declining population through 2023.  
 
-The estimated spawning output relative to unfished reached a minimum of 0.328 in 1998 and then increased over the recent time period, with an ending year estimate of 0.428 in 2024 @fig-depl.
+The estimated spawning output relative to unfished reached a minimum of 0.328 in 1998 and then increased over the recent time period, with an ending year estimate of 0.428 in 2024 [@fig-depl].
 
 <!-- Time-series of total biomass, summary biomass, and spawning biomass (and/or spawning output), depletion relative to B0, recruitment and fishing mortality (1-SPR) (or exploitation rate estimates if fishing mortality not available) (table and figures).  -->

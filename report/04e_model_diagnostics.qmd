@@ -5,15 +5,23 @@ If possible, ranges depicting uncertainty should include at least three runs: (a
 
 ### Convergence
 
+Proper convergence was determined by starting the minimization process from dispersed values of the maximum likelihood estimates to determine if the model found a better minimum. Starting parameters were jittered using the jitter function built into Stock Synthesis, using jitter input of 0.5.  This was repeated 100 times with FROG out of 100 runs returning to the base model likelihood. 
+
 <!-- Convergence status and convergence criteria for the base-run model (or proposed base run). Randomization of starting parameter value run (e.g., jitter) results or other evidence of search for global best estimates.  -->
 
 ### Retrospective Analysis
+
+A fifteen-year retrospective analysis was conducted by successively removing years of data ranging from 2008--2023, i.e., “Data -1 Years” corresponds to data through 2023. The estimated spawning output for all retrospectives was lower at the start of the time series for all runs and lower for the final model years except for the first two runs, Data -1 and Data -2 years [@fig-retro-ssb]. A substantial amount of data were collected over the past five years for quillback rockfish.  Removing more than 5 years of data result sin a stock that is estimated closer to the \gls{msst} in the end year of a peeled model run. Removing 13 to 15 years of data results in changes in the recruitment patterns ore dramatically tha removing fewer years.  When 15 years of data are removed the high recruitment pulse in 1994 is no longer estimated and recruitment is on average higher than other model runs across the entire timeseries [@fig-retro-recruit].
 
 <!-- Retrospective analysis, where the model is fitted to a series of shortened input data sets, with the most recent years of input data being dropped.  -->
  
 <!-- Historical analysis (plot of actual estimates from current and previous assessments).  -->
 
 ### Likelihood Profiles
+
+Likelihood profiles were conducted for $ln{R_0}$, steepness, and natural mortality values separately, as well as bivariate profiles for steepness and natural mortality, and profiles over steepness while estimating natural mortality and for natural mortality while estimating steepness. The priors for all parameters, including the parameter being profiled, were included in every likelihood model. For example, including the prior on natural mortality across the profiled values of natural mortality provides information on the likelihood contribution of that prior as if it were estimated in the model.  
+
+
 
 <!-- Evaluation of model parameters. Likelihood profile for the base model over key parameters (typically natural morality, stock-recruit steepness, and equilibrium recruitment, or R0). The profile should indicate all likelihood values for individual components (e.g., indices by survey, compositional data for each type and fleet).   -->
 
