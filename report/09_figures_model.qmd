@@ -296,5 +296,102 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 
 ### Sensitivity analyses
 
+```{r}
+#| label: fig-sens-overall
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Comparison of various management quantities across all sensitivities. Metrics are terminal year relative spawning output, fishing mortality rate at SPR = 0.5, yield at SPR = 0.5, unfished spawning output, and terminal year spawning output. Bars at the top of the figure represent 95% confidence intervals for the metrics in the base model. See legend for which metric each color represents."
+#| fig-alt: "Figure summarizing how estimates of derived quantities differ between sensitivity models and base model and that changes to assumptions related to model productivity result in the largest changes whereas most other quantities fall within the 95 percent confidence intervals for the respective derived quantities."
+
+knitr::include_graphics(
+  "figures/sens_summary.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-biology
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for biology related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to fecundity result in the greatest change, which is a decrease in spawning output."
+
+knitr::include_graphics(
+  "figures/sens_biology_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-productivity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for productivity related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to natural mortality result in greater recovery in recent years, and not estimating recrutiment deviations scales spawning output upward."
+
+knitr::include_graphics(
+  "figures/sens_productivity_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-leaveOut
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for sensitivities related to leaving out data sources."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_leaveOut_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-data
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for data related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_data_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-weighting
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for data weighting related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_weighting_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-selectivity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for selectivity related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_selectivity_comparison.png")
+```
+
+
 
 ### Retrospectives and likelihood profiles
