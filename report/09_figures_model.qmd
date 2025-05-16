@@ -9,7 +9,7 @@
 #| warning: false
 #| eval: true
 #| fig-cap: "Bridge comparison of estimated spawning output of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
-#| fig-alt: "Figure showing that the trajectory of spawning output from the 2021 assessment is similar when using the newest version of stock synthesis."
+#| fig-alt: "Figure showing that the trajectory from the 2021 assessment is similar when using the newest version of stock synthesis."
 
 knitr::include_graphics(
     "figures/bridgeSS3_bio.png"
@@ -19,92 +19,50 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
-#| label: fig-bridgeBio_bio
+#| label: fig-bridgeBio_comp
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output. Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
-#| fig-alt: "Figure showing that the trajectory of spawning output from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom). Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output and spawning output relative to unfished from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
 
 knitr::include_graphics(
-    "figures/bridgeBiology_bio.png"
+    "figures/bridgeBiology_comparison.png"
 )
 ```
 
 {{< pagebreak >}}
 
 ```{r}
-#| label: fig-bridgeBio_relbio
+#| label: fig-bridgeData_comp
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output relative to unfished. Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
-#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished from the 2021 assessment changes most with updates to growth and mortality."
+#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estiamte Growth), which combines across all data steps."
+#| fig-alt: "Figure showing that the trajectory generally doesnt change except when age data are included and growth is not estimated."
 
 knitr::include_graphics(
-    "figures/bridgeBiology_relbio.png"
+    "figures/bridgeData_comparison.png"
 )
 ```
 
 {{< pagebreak >}}
 
 ```{r}
-#| label: fig-bridgeData_bio
+#| label: fig-bridgeOther_comp
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparisons showing estimated spawning output when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating it is based off the previous step, and final one (Update All Data and Estiamte Growth), which combines across all data steps."
-#| fig-alt: "Figure showing that the trajectory of spawning output generally doesnt change except when age data are included and growth is not estimated."
+#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
+#| fig-alt: "Figure showing that the trajectory generally doesnt change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
 
 knitr::include_graphics(
-    "figures/bridgeData_bio.png"
+    "figures/bridgeOther_comparison.png"
 )
 ```
 
 {{< pagebreak >}}
 
-```{r}
-#| label: fig-bridgeData_relbio
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Bridge comparison showing estimated spawning output relative to unfished when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating its based off of the previous step, and final one (Update All Data and Estiamte Growth), which combines across all data steps."
-#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished generally doesnt change except in the combined situation when age data are included but growth is not estimated."
-
-knitr::include_graphics(
-    "figures/bridgeData_relbio.png"
-)
-```
-
-{{< pagebreak >}}
-
-```{r}
-#| label: fig-bridgeOther_bio
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Bridge comparisons showing estimated spawning output when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
-#| fig-alt: "Figure showing that the trajectory of spawning output generally doesnt change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
-
-knitr::include_graphics(
-    "figures/bridgeOther_bio.png"
-)
-```
-
-{{< pagebreak >}}
-
-```{r}
-#| label: fig-bridgeOther_relbio
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Bridge comparisons showing estimated spawning output relative to unfished when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
-#| fig-alt: "Figure showing that the trajectory of spawning output relative to unfished from generally doesnt change based on changes to selectivity or reweighting, and that the reate of recovery is larger since 2000 compared to the 2021 assessment."
-
-knitr::include_graphics(
-    "figures/bridgeOther_relbio.png"
-)
-```
 ### Biology
 
 ### Results
@@ -295,6 +253,103 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 
 
 ### Sensitivity analyses
+
+```{r}
+#| label: fig-sens-overall
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Comparison of various management quantities across all sensitivities. Metrics are terminal year relative spawning output, fishing mortality rate at SPR = 0.5, yield at SPR = 0.5, unfished spawning output, and terminal year spawning output. Bars at the top of the figure represent 95% confidence intervals for the metrics in the base model. See legend for which metric each color represents."
+#| fig-alt: "Figure summarizing how estimates of derived quantities differ between sensitivity models and base model and that changes to assumptions related to model productivity result in the largest changes whereas most other quantities fall within the 95 percent confidence intervals for the respective derived quantities."
+
+knitr::include_graphics(
+  "figures/sens_summary.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-biology
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for biology related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to fecundity result in the greatest change, which is a decrease in spawning output."
+
+knitr::include_graphics(
+  "figures/sens_biology_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-productivity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for productivity related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to natural mortality result in greater recovery in recent years, and not estimating recrutiment deviations scales spawning output upward."
+
+knitr::include_graphics(
+  "figures/sens_productivity_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-leaveOut
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for sensitivities related to leaving out data sources."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_leaveOut_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-data
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for data related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_data_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-weighting
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for data weighting related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_weighting_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-selectivity
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for selectivity related sensitivities."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+
+knitr::include_graphics(
+  "figures/sens_selectivity_comparison.png")
+```
+
 
 
 ### Retrospectives and likelihood profiles

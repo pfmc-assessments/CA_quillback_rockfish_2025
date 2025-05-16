@@ -2417,5 +2417,290 @@ SSsummarize(xx) |>
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+##########################################################################################-
+#
+# Summary Tables and Figures ----
+#
+##########################################################################################-
+
+# The following outputs an overall sensitivity figure and table as well as 
+# individual sensitivity figures and tables for each specified grouping 
+
+make_detailed_sensitivites <- function(biglist, 
+                                       mods_to_include, 
+                                       pretty_names = mods_to_include, 
+                                       outdir, 
+                                       grp_name) {
+  
+  shortlist <-   biglist[c('base', mods_to_include)] |>
+    r4ss::SSsummarize() 
+  
+  # r4ss::SSplotComparisons(shortlist,
+  #                         subplots = c(2,4), 
+  #                         print = FALSE,  
+  #                         plot = FALSE,
+  #                         plotdir = file.path(outdir, 'figures'), 
+  #                         filenameprefix = paste0('sens_', grp_name, "_"),
+  #                         legendlabels = c('Base', pretty_names))
+  
+  r4ss::plot_twopanel_comparison(biglist[c('base', mods_to_include)],
+                                 dir = file.path(outdir, 'figures'), 
+                                 filename = paste0("sens_", grp_name, '_comparison.png'),
+                                 legendlabels = c('Base', pretty_names), 
+                                 legendloc = 'bottomleft',
+                                 endyrvec = 2025)
+  
+  SStableComparisons(shortlist, 
+                     modelnames = c('Base', pretty_names),
+                     names =c("npars", "Recr_Virgin", "R0", "steep", "NatM", "L_at_Amax", "VonBert_K", "SSB_Virg",
+                              "SSB_2025", "Bratio_2025", "SPRratio_2024")) |>
+    dplyr::mutate(dplyr::across(-Label, ~ sapply(., format, digits = 3, nsmall = 3, scientific = FALSE) |>
+                                  stringr::str_replace('NA', ''))) |>
+    `names<-`(c(' ', 'Base', pretty_names)) %>%
+    rbind(c("Npar", shortlist$npars), .) |>
+    write.csv(file.path(outdir, 'tables', paste0('sens_', grp_name, '_table.csv')), 
+              row.names = FALSE)
+}
+
+# Selectivity models
+
+selec_models <- c('sel_AllDomed', 
+                  'sel_ComDomed',
+                  'sel_RecDomed',
+                  'sel_ROVandCCFRPDomed',
+                  'sel_NoBlocks',
+                  'sel_ComAsymp_allBlocks',
+                  'sel_EarlyRecAsympDomeSurveys',
+                  'sel_fullBlocks_DomedRecCom')
+
+selec_pretty <- c('All fleets domed',
+                  'Com domed',
+                  'Rec domed',
+                  'Surveys domed',
+                  'No blocks',
+                  'All asymptotic',
+                  'Full rec block with domed',
+                  'Full rec and com block with domed')
+
+
+#Weighting models
+
+weighting_models <- c('dw_dirichlet',
+                      'dw_MI',
+                      'IndexExtraSE')
+
+weighting_pretty <- c('Dirichlet',
+                      'McAllister-Ianelli',
+                      'Index Extra SD')
+
+
+#Data related models
+
+data_models <- c('catchIncreaseSE',
+                 'catchOutliers',
+                 #'comLenSampleSize', #minor
+                 'FAA_resetCom_reblock_reweight', 
+                 'marginalComAge',
+                 'noAgeErr',
+                 'noNegYear',
+                 'NoRecLen2024')
+
+data_pretty <- c('Increase catch se',
+                 'Reduce large catches',
+                 #'Remove com length comps with N < 10',
+                 'Fleets as areas',
+                 'Use marginal com age comps',
+                 'Remove ageing error',
+                 'Add all low sample size comps',
+                 'Remove rec length comp in 2024')
+
+
+#Leave out explorations
+
+leaveOut_models <- c('leaveOut_com_ages',
+                     'leaveOut_com_lengths',
+                     'leaveOut_rec_lengths',
+                     'leaveOut_growth_ages', 
+                     'leaveOut_prIndex',
+                     'leaveOut_rov',
+                     'leaveOut_ccfrp')
+
+leaveOut_pretty <- c('Remove com ages',
+                     'Remove com lengths',
+                     'Remove rec lengths',
+                     'Remove growth ages',
+                     'Remove PR index',
+                     'Remove ROV index',
+                     'Remove CCFRP index')
+
+
+#Productivity models
+
+productivity_models <- c('estimate_h',
+                         'estimate_M',
+                         'estimate_M_and_h',
+                         'recdev_1990',
+                         'recdev_Off')
+
+productivity_pretty <- c('Estimate h',
+                         'Estimate M',
+                         'Estimate M and h',
+                         'Start recdevs in 1990',
+                         'Turn off recdevs')
+
+
+#Biology models
+
+biology_models <- c('Maturity_2021est',
+                    'fecundity_EJest',
+                    'maxAge84',
+                    'maxAge70')
+
+biology_pretty <- c('Oregon maturity',
+                    'Dick 2017 fecundity',
+                    'Max age 84',
+                    'Max age 70')
+
+
+# List all groups of models together
+
+models_all <- c(selec_models,
+                data_models,
+                weighting_models,
+                leaveOut_models,
+                productivity_models, 
+                biology_models)
+
+pretty_all <- c(selec_pretty,
+                data_pretty,
+                weighting_pretty,
+                leaveOut_pretty,
+                productivity_pretty,
+                biology_pretty)
+
+big_sensitivity_output <- SSgetoutput(dirvec = c(
+  here('models', base_mod_name),
+  glue::glue("{models}/{subdir}", 
+             models = here('models', '_sensitivities'),
+             subdir = models_all))) |>
+  `names<-`(c('base', models_all))
+
+
+# test to make sure reading
+which(sapply(big_sensitivity_output, length) < 180) # if integer(0) then good
+
+# Directory that contains the figures and tables folders
+# FROG: Right now the tables are being output to the figures folder. Im aware. 
+#It just easier to test. Ultimately will move. 
+
+outdir <- here('report')
+
+make_detailed_sensitivites(big_sensitivity_output,
+                           mods_to_include = selec_models,
+                           outdir = outdir,
+                           grp_name = 'selectivity',
+                           pretty_names = selec_pretty)
+
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = weighting_models,
+                           outdir = outdir,
+                           grp_name = 'weighting',
+                           pretty_names = weighting_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = data_models,
+                           outdir = outdir,
+                           grp_name = 'data',
+                           pretty_names = data_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = productivity_models,
+                           outdir = outdir,
+                           grp_name = 'productivity',
+                           pretty_names = productivity_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = leaveOut_models,
+                           outdir = outdir,
+                           grp_name = 'leaveOut',
+                           pretty_names = leaveOut_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output, 
+                           mods_to_include = biology_models,
+                           outdir = outdir,
+                           grp_name = 'biology',
+                           pretty_names = biology_pretty)
+
+
+## Big plot
+current.year <- 2025
+CI <- 0.95
+
+sensitivity_output <- SSsummarize(big_sensitivity_output) 
+
+lapply(big_sensitivity_output, function(.)
+  .$warnings[grep('gradient', .$warnings)]) # check gradients
+
+dev.quants.SD <- c(
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == "SSB_Initial", 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == paste0("SSB_", current.year), 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == paste0("Bratio_", current.year), 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == "Dead_Catch_SPR", 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == "annF_SPR", 1]
+)
+
+dev.quants <- rbind(
+  sensitivity_output$quants[sensitivity_output$quants$Label == "SSB_Initial", 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == paste0("SSB_", current.year), 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == paste0("Bratio_", current.year), 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == "Dead_Catch_SPR", 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == "annF_SPR", 
+                            1:(dim(sensitivity_output$quants)[2] - 2)]
+) |>
+  cbind(baseSD = dev.quants.SD) |>
+  dplyr::mutate(Metric = c("SB0", paste0("SSB_", current.year), paste0("Bratio_", current.year), "MSY_SPR", "F_SPR")) |>
+  tidyr::pivot_longer(-c(base, Metric, baseSD), names_to = 'Model', values_to = 'Est') |>
+  dplyr::mutate(relErr = (Est - base)/base,
+                logRelErr = log(Est/base),
+                mod_num = rep(1:length(models_all), 5))
+
+metric.labs <- c(
+  SB0 = expression(SB[0]),
+  SSB_2023 = as.expression(bquote("SB"[.(current.year)])),
+  Bratio_2023 = bquote(frac(SB[.(current.year)], SB[0])),
+  MSY_SPR = expression(Yield['SPR=0.50']),
+  F_SPR = expression(F['SPR=0.50'])
+)
+
+CI.quants <- dev.quants |>
+  dplyr::filter(Model == unique(dev.quants$Model)[1]) |>
+  dplyr::select(base, baseSD, Metric) |>
+  dplyr::mutate(CI = qnorm((1-CI)/2, 0, baseSD)/base)
+
+ggplot(dev.quants, aes(x = relErr, y = mod_num, col = Metric, pch = Metric)) +
+  geom_vline(xintercept = 0, linetype = 'dotted') +
+  geom_point() +
+  geom_segment(aes(x = CI, xend = abs(CI), col = Metric,
+                   y = length(models_all) + 1.5 + seq(-0.5, 0.5, length.out = length(metric.labs)),
+                   yend = length(models_all) + 1.5 + seq(-0.5, 0.5, length.out = length(metric.labs))), 
+               data = CI.quants, linewidth = 2, show.legend = FALSE, lineend = 'round') +
+  theme_bw() +
+  scale_shape_manual(
+    values = c(15:18, 12),
+    # name = "",
+    labels = metric.labs
+  ) +
+  # scale_color_discrete(labels = metric.labs) +
+  scale_y_continuous(breaks = 1:length(models_all), name = '', labels = pretty_all, 
+                     limits = c(1, length(models_all) + 2), minor_breaks = NULL) +
+  xlab("Relative change") +
+  viridis::scale_color_viridis(discrete = TRUE, labels = metric.labs)
+ggsave(file.path(outdir, 'figures', 'sens_summary.png'),  dpi = 300,  
+       width = 6, height = 7, units = "in")
 
 
