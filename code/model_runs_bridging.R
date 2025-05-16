@@ -2597,22 +2597,38 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "0_1_4_updateMaturity",
                                                  "0_1_5_updateFecundity",
                                                  "0_1_0_updateAllBio")))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
-                                     'Update Natural mortality',
-                                     'Update Growth',
-                                     'Update Length weight',
-                                     'Update Maturity',
-                                     'Update Fecundity',
-                                     'Update All biology'),
-                    subplots = c(1,3, 18), print = TRUE, 
-                    plotdir = here('report', "figures"))
-file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
-            to = here('report', "figures", "bridgeBiology_bio.png"))
-file.rename(from = here('report', "figures", "compare3_Bratio.png"),
-            to = here('report', "figures", "bridgeBiology_relbio.png"))
-file.rename(from = here('report', "figures", "compare18_smrybio.png"),
-            to = here('report', "figures", "bridgeBiology_smrybio.png"))
+# For individual figures for spawning output and relative spawning output
+# SSsummarize(xx) |>
+#   SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+#                                      'Update Natural mortality',
+#                                      'Update Growth',
+#                                      'Update Length weight',
+#                                      'Update Maturity',
+#                                      'Update Fecundity',
+#                                      'Update All biology'),
+#                     subplots = c(1,3,18), print = TRUE, 
+#                     plotdir = here('report', "figures"))
+# file.rename(from = here('report', "figures", "compare18_smrybio.png"),
+#             to = here('report', "figures", "bridgeBiology_smrybio.png"))
+# file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+#             to = here('report', "figures", "bridgeBiology_bio.png"))
+# file.rename(from = here('report', "figures", "compare3_Bratio.png"),
+#             to = here('report', "figures", "bridgeBiology_relbio.png"))
+
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = paste0("bridgeBiology_comparison.png"),
+                               legendlabels = c('2021: SS3v3.30.23.1',
+                                                'Update Natural mortality',
+                                                'Update Growth',
+                                                'Update Length weight',
+                                                'Update Maturity',
+                                                'Update Fecundity',
+                                                'Update All biology'), 
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               endyrvec = 2021)
+
 
 
 ####------------------------------------------------#
@@ -2629,34 +2645,51 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "0_2_5_update_Indices_noGrowth",
                                                  #"0_2_6_updateAllData_nogrowth",
                                                  "0_2_0_updateAllData")))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
-                                     'Update All biology',
-                                     'Update Catch',
-                                     'Update Length comps of existing fleets',
-                                     'Update Length/age comps of existing fleets',
-                                     '+ estimate growth',
-                                     'Add Indices (indices and comps for index fleets)',
-                                     #'Update All data but do not estimate growth',
-                                     'Update All data and estimate growth'),
-                    subplots = c(1), print = TRUE, legendloc = "bottomleft", 
-                    plotdir = here('report', "figures"))
-file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
-            to = here('report', "figures", "bridgeData_bio.png"))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
-                                     'Update All biology',
-                                     'Update Catch',
-                                     'Update Length comps of existing fleets',
-                                     'Update Length/age comps of existing fleets',
-                                     '+ estimate growth',
-                                     'Add Indices (indices and comps for index fleets)',
-                                     #'Update All data but do not estimate growth',
-                                     'Update All data and estimate growth'),
-                    subplots = c(3), print = TRUE, legendloc = c(0, 0.85), 
-                    plotdir = here('report', "figures"))
-file.rename(from = here('report', "figures", "compare3_Bratio.png"),
-            to = here('report', "figures", "bridgeData_relbio.png"))
+# For individual figures for spawning output and relative spawning output
+# SSsummarize(xx) |>
+#   SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+#                                      'Update All biology',
+#                                      'Update Catch',
+#                                      'Update Length comps of existing fleets',
+#                                      'Update Length/age comps of existing fleets',
+#                                      '+ estimate growth',
+#                                      'Add Indices (indices and comps for index fleets)',
+#                                      #'Update All data but do not estimate growth',
+#                                      'Update All data and estimate growth'),
+#                     subplots = c(1), print = TRUE, legendloc = "bottomleft",
+#                     plotdir = here('report', "figures"))
+# file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+#             to = here('report', "figures", "bridgeData_bio.png"))
+# SSsummarize(xx) |>
+#   SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+#                                      'Update All biology',
+#                                      'Update Catch',
+#                                      'Update Length comps of existing fleets',
+#                                      'Update Length/age comps of existing fleets',
+#                                      '+ estimate growth',
+#                                      'Add Indices (indices and comps for index fleets)',
+#                                      #'Update All data but do not estimate growth',
+#                                      'Update All data and estimate growth'),
+#                     subplots = c(3), print = TRUE, legendloc = c(0, 0.85),
+#                     plotdir = here('report', "figures"))
+# file.rename(from = here('report', "figures", "compare3_Bratio.png"),
+#             to = here('report', "figures", "bridgeData_relbio.png"))
+
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = paste0("bridgeData_comparison.png"),
+                               legendlabels = c('2021: SS3v3.30.23.1',
+                                                'Update All biology',
+                                                'Update Catch',
+                                                'Update Length comps of existing fleets',
+                                                'Update Length/age comps of existing fleets',
+                                                '+ estimate growth',
+                                                'Add Indices (indices and comps for index fleets)',
+                                                #'Update All data but do not estimate growth',
+                                                'Update All data and estimate growth'), 
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               endyrvec = c(rep(2021, 2), rep(2025, 6)))
 
 
 ####------------------------------------------------#
@@ -2671,16 +2704,33 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "_bridging_runs/0_3_6_finalBlocks",
                                                  "_bridging_runs/0_4_2_reweight",
                                                  "5_1_3_preStarBase")))
-SSsummarize(xx) |>
-  SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
-                                     'Update All biology',
-                                     'Update All data and estimate growth',
-                                     'Update blocks and selectivity type',
-                                     'Reweight',
-                                     'Base model'),
-                    subplots = c(1, 3), print = TRUE, legendloc = "topright",
-                    plotdir = here('report', "figures"))
-file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
-            to = here('report', "figures", "bridgeOther_bio.png"))
-file.rename(from = here('report', "figures", "compare3_Bratio.png"),
-            to = here('report', "figures", "bridgeOther_relbio.png"))
+
+# For individual figures for spawning output and relative spawning output
+# SSsummarize(xx) |>
+#   SSplotComparisons(legendlabels = c('2021: SS3v3.30.23.1',
+#                                      'Update All biology',
+#                                      'Update All data and estimate growth',
+#                                      'Update blocks and selectivity type',
+#                                      'Reweight',
+#                                      'Base model'),
+#                     subplots = c(1, 3), print = TRUE, legendloc = "topright",
+#                     plotdir = here('report', "figures"))
+# file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
+#             to = here('report', "figures", "bridgeOther_bio.png"))
+# file.rename(from = here('report', "figures", "compare3_Bratio.png"),
+#             to = here('report', "figures", "bridgeOther_relbio.png"))
+
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = paste0("bridgeOther_comparison.png"),
+                               legendlabels = c('2021: SS3v3.30.23.1',
+                                                'Update All biology',
+                                                'Update All data and estimate growth',
+                                                'Update blocks and selectivity type',
+                                                'Reweight',
+                                                'Base model'), 
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3,
+                               endyrvec = c(rep(2021, 2), rep(2025, 4)))
