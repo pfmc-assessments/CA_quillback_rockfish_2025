@@ -547,8 +547,26 @@ write.csv(caal_nonccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_noncc
                                                     "_", age_bins[1], "_", tail(age_bins,1),
                                                     ".csv")), row.names = FALSE)
 
+
 #Dont need FAA for the growth fleet so no faa marginal age comps
 
+
+######- 
+####  Growth fleet N table -----
+######-
+
+#Create table of sample sizes of growth fleet caal sources. Cant above because 
+#haven't pulled in the data
+dataN_caal <- age_ca %>% dplyr::filter(fleet1 == "Growth") %>%
+  dplyr::group_by(source, year) %>% 
+  dplyr::summarize(Nfish = length(age)) %>%
+  tidyr::pivot_wider(names_from = source,
+                     values_from = c(Nfish),
+                     names_glue = "{source}_{.value}") %>%
+  dplyr::arrange(year) %>%
+  data.frame()
+dataN_caal[is.na(dataN_caal)] <- 0
+#write.csv(dataN_caal, here("data", "SampleSize_ageGrowth.csv"), row.names = FALSE)
 
 
 ###########################-
