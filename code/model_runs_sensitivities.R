@@ -2432,7 +2432,7 @@ make_detailed_sensitivites <- function(biglist,
                                        outdir, 
                                        grp_name) {
   
-  shortlist <-   big_sensitivity_output[c('base', mods_to_include)] |>
+  shortlist <-   biglist[c('base', mods_to_include)] |>
     r4ss::SSsummarize() 
   
   # r4ss::SSplotComparisons(shortlist,
@@ -2443,7 +2443,7 @@ make_detailed_sensitivites <- function(biglist,
   #                         filenameprefix = paste0('sens_', grp_name, "_"),
   #                         legendlabels = c('Base', pretty_names))
   
-  r4ss::plot_twopanel_comparison(big_sensitivity_output[c('base', mods_to_include)],
+  r4ss::plot_twopanel_comparison(biglist[c('base', mods_to_include)],
                                  dir = file.path(outdir, 'figures'), 
                                  filename = paste0("sens_", grp_name, '_comparison.png'),
                                  legendlabels = c('Base', pretty_names), 
