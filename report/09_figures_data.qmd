@@ -115,6 +115,22 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
+
+```{r}
+#| label: fig-caal-growth
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Conditional age-at-length data for the growth fleet where bubbles correspond to the proportional sample size by age for each length bin."
+#| fig-alt: "Bubble plot of California age at length compositions for the growth fleet roughly following shape of growth curve."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALdat_bubflt3mkt0.png"
+)
+```
+
+{{< pagebreak >}}
+
 ### Biological data
 
 ```{r}

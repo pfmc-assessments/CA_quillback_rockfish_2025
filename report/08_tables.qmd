@@ -17,6 +17,8 @@ library(here)
 
 ## Data
 
+### Fishery-dependent data
+
 ```{r}
 #| label: tbl-catches
 #| echo: false
@@ -121,7 +123,47 @@ cols_label(
   as_latex()
 ```
 
-### Fishery-dependent data
+{{< pagebreak >}}
+
+::: {.landscape}
+
+```{r}
+#| label: tbl-caal_ages
+#| echo: false
+#| warning: false
+#| tbl-cap: "Summary of the number of age samples used for conditional age at length data for the growth fleet in the stock assessment. See text for description of data sources."
+
+growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
+  dplyr::mutate(misc = calcom_Nfish + comm85_Nfish)
+
+growthCAAL |>
+  gt() |>
+  tab_options(
+    table.font.size = 11,
+    latex.use_longtable = TRUE
+  ) |>
+cols_label(
+    year = "Year",
+    Abrams_Nfish = "Abrams",
+    trawl_Nfish = "WCGBTS",
+    CCFRPFarallons_Nfish = "CCFRP \n Farallons",
+    CCFRPNotFarallons_Nfish = "CCFRP Other",
+    Comm2019_Nfish = "Comm",
+    CRFS_Nfish = "CRFS",
+    Cooperative_Nfish = "SWFSC Coop",
+    SWFSCResearch_Nfish = "SWFSC Research",
+    RBG_Nfish = "Surrendered",
+    IPHC_Nfish = "IPHC",
+    misc = "Misc."
+  ) |>
+  as_latex()
+```
+
+:::
+
+{{< pagebreak >}}
+
+### Fishery-independent data
 
 {{< pagebreak >}}
 
