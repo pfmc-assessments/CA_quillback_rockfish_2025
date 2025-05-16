@@ -2435,18 +2435,25 @@ make_detailed_sensitivites <- function(biglist,
   shortlist <-   big_sensitivity_output[c('base', mods_to_include)] |>
     r4ss::SSsummarize() 
   
-  r4ss::SSplotComparisons(shortlist,
-                          subplots = c(2,4), 
-                          print = TRUE,  
-                          plot = FALSE,
-                          plotdir = file.path(outdir, 'figures'), 
-                          filenameprefix = paste0('sens_', grp_name, "_"),
-                          legendlabels = c('Base', pretty_names))
+  # r4ss::SSplotComparisons(shortlist,
+  #                         subplots = c(2,4), 
+  #                         print = FALSE,  
+  #                         plot = FALSE,
+  #                         plotdir = file.path(outdir, 'figures'), 
+  #                         filenameprefix = paste0('sens_', grp_name, "_"),
+  #                         legendlabels = c('Base', pretty_names))
+  
+  r4ss::plot_twopanel_comparison(big_sensitivity_output[c('base', mods_to_include)],
+                                 dir = file.path(outdir, 'figures'), 
+                                 filename = paste0("sens_", grp_name, '_comparison.png'),
+                                 legendlabels = c('Base', pretty_names), 
+                                 legendloc = 'bottomleft',
+                                 endyrvec = 2025)
   
   SStableComparisons(shortlist, 
                      modelnames = c('Base', pretty_names),
                      names =c("npars", "Recr_Virgin", "R0", "steep", "NatM", "L_at_Amax", "VonBert_K", "SSB_Virg",
-                              "Bratio_2025", "SPRratio_2024")) |>
+                              "SSB_2025", "Bratio_2025", "SPRratio_2024")) |>
     dplyr::mutate(dplyr::across(-Label, ~ sapply(., format, digits = 3, nsmall = 3, scientific = FALSE) |>
                                   stringr::str_replace('NA', ''))) |>
     `names<-`(c(' ', 'Base', pretty_names)) %>%
@@ -2551,8 +2558,8 @@ biology_models <- c('Maturity_2021est',
 
 biology_pretty <- c('Oregon maturity',
                     'Dick 2017 fecundity',
-                    'Max age 70',
-                    'Max age 84')
+                    'Max age 84',
+                    'Max age 70')
 
 
 # List all groups of models together
@@ -2626,5 +2633,74 @@ make_detailed_sensitivites(big_sensitivity_output,
                            pretty_names = biology_pretty)
 
 
+## Big plot
+current.year <- 2025
+CI <- 0.95
+
+sensitivity_output <- SSsummarize(big_sensitivity_output) 
+
+lapply(big_sensitivity_output, function(.)
+  .$warnings[grep('gradient', .$warnings)]) # check gradients
+
+dev.quants.SD <- c(
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == "SSB_Initial", 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == paste0("SSB_", current.year), 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == paste0("Bratio_", current.year), 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == "Dead_Catch_SPR", 1],
+  sensitivity_output$quantsSD[sensitivity_output$quantsSD$Label == "annF_SPR", 1]
+)
+
+dev.quants <- rbind(
+  sensitivity_output$quants[sensitivity_output$quants$Label == "SSB_Initial", 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == paste0("SSB_", current.year), 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == paste0("Bratio_", current.year), 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == "Dead_Catch_SPR", 
+                            1:(dim(sensitivity_output$quants)[2] - 2)],
+  sensitivity_output$quants[sensitivity_output$quants$Label == "annF_SPR", 
+                            1:(dim(sensitivity_output$quants)[2] - 2)]
+) |>
+  cbind(baseSD = dev.quants.SD) |>
+  dplyr::mutate(Metric = c("SB0", paste0("SSB_", current.year), paste0("Bratio_", current.year), "MSY_SPR", "F_SPR")) |>
+  tidyr::pivot_longer(-c(base, Metric, baseSD), names_to = 'Model', values_to = 'Est') |>
+  dplyr::mutate(relErr = (Est - base)/base,
+                logRelErr = log(Est/base),
+                mod_num = rep(1:length(models_all), 5))
+
+metric.labs <- c(
+  SB0 = expression(SB[0]),
+  SSB_2023 = as.expression(bquote("SB"[.(current.year)])),
+  Bratio_2023 = bquote(frac(SB[.(current.year)], SB[0])),
+  MSY_SPR = expression(Yield['SPR=0.50']),
+  F_SPR = expression(F['SPR=0.50'])
+)
+
+CI.quants <- dev.quants |>
+  dplyr::filter(Model == unique(dev.quants$Model)[1]) |>
+  dplyr::select(base, baseSD, Metric) |>
+  dplyr::mutate(CI = qnorm((1-CI)/2, 0, baseSD)/base)
+
+ggplot(dev.quants, aes(x = relErr, y = mod_num, col = Metric, pch = Metric)) +
+  geom_vline(xintercept = 0, linetype = 'dotted') +
+  geom_point() +
+  geom_segment(aes(x = CI, xend = abs(CI), col = Metric,
+                   y = length(models_all) + 1.5 + seq(-0.5, 0.5, length.out = length(metric.labs)),
+                   yend = length(models_all) + 1.5 + seq(-0.5, 0.5, length.out = length(metric.labs))), 
+               data = CI.quants, linewidth = 2, show.legend = FALSE, lineend = 'round') +
+  theme_bw() +
+  scale_shape_manual(
+    values = c(15:18, 12),
+    # name = "",
+    labels = metric.labs
+  ) +
+  # scale_color_discrete(labels = metric.labs) +
+  scale_y_continuous(breaks = 1:length(models_all), name = '', labels = pretty_all, 
+                     limits = c(1, length(models_all) + 2), minor_breaks = NULL) +
+  xlab("Relative change") +
+  viridis::scale_color_viridis(discrete = TRUE, labels = metric.labs)
+ggsave(file.path(outdir, 'figures', 'sens_summary.png'),  dpi = 300,  
+       width = 6, height = 7, units = "in")
 
 
