@@ -12,4 +12,11 @@
 
 ## Evaluation of Scientific Uncertainty
 
+### Risk Table
+
+The ‘Risk Table’ for California `r spp` is provided in @tbl-risk. Risk tables are divided into ecosystem and environmental conditions, assessment data inputs, and assessment models fits and structural uncertainty. These tables are intended to provide information across these factors in a transparent manner so as to better inform values for scientific uncertainty ($\sigma$).
+
+Environmental conditions to inform uncertainty for California `r spp` is lacking. As such, we are not able to determine a level for the ecosystem and environmental conditions. Assessment data inputs are described in more detail in data sections, and visible based on model outputs. Model fits and structural uncertainty will be discussed during the \gls{star} Panel and will be updated in the final report. 
+
+
 ## Regional management considerations
