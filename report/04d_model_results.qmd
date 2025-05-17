@@ -21,6 +21,7 @@ The fishery selectivities were all well estimated estimated and fixed to be asym
 
 The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-pars] in log-space.
 
+**FROG: Melissa, I think the time series of rec and recdev are better placed in the population trajectory section. I have the same figrues there, just commented out. Id suggested moving this first sentence to there.** 
 The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs].  The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern has been cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024 @fig-bh-curve. The early recruitment deviations were all negative
 
 ### Fits to the Data
