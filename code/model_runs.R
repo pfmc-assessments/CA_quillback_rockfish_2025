@@ -8126,6 +8126,10 @@ mod$ctl$Block_Design <- list(c(1916, 2002, 2014, 2021),#commercial fleet; mirror
 
 ### Time varying selectivity table
 
+#Not sure this is reproducible because selex_new isn't called here and pulls from a previous run
+#Keeping for the sake of not changing but likely will need to first call
+#selex_new <- mod$ctl$size_selex_parms
+
 selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
   dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
   tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
