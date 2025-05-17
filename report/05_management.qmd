@@ -2,15 +2,25 @@
 
 ## Reference Points
 
-<!-- 1. Unfished spawning stock biomass, summary age biomass, and recruitment, along with unfished spawning stock output.  -->
-<!-- 2. Reference points based on B40% for rockfish and round fish and on B25% for flatfish (spawning biomass and/or output, SPR, exploitation rate, equilibrium yield).  -->
-<!-- 3.   Reference points based on default SPR proxy (spawning biomass and/or output, SPR, exploitation rate, equilibrium yield).  -->
-<!-- 4. Reference points based on MSY (if estimated) (spawning biomass and/or output, SPR, exploitation rate, equilibrium yield).  -->
-<!-- 5. Equilibrium yield curve showing various BMSY proxies.   -->
+Reference points were calculated using the estimated selectivities and catch distribution among fleets in the final year of the model, `r mod_out$endyr`. Derived quantities along with references points at the three management targets for the population at 40 percent of unfished spawning output, at spawners-per-recruit (SPR) of 50 percent, and at the internal model estimated \gls{msy} are shown in @tbl-ref-points-es. The equilibrium yield curve in shown in @fig-yield.   
+
+The 2025 `r spp` spawning output relative to unfished spawning output is above the target at `r round(100*mod_out$current_depletion, 1)` percent (@fig-depl). **FROG: Do we want another figure here that copies the one from the executive summary? The reference point table above is not reproduced but instead references the ES table?** The fishing intensity (1 − SPR) first reached the target around 1980 and has varied since. Fishing mortality was most recently above the target of 0.5 during 2017--2021 but has recently decreased to below 0.5 (@fig-spr).
 
 ## Harvest Projections and Decision Tables
 
+**FROG: Do projections and add values to projection table**
+
+A ten-year projection of the base model with total removals equal to the estimated \gls{acl} based on the category 1 time-varying $\sigma$ (0.5) and $P^*$ = 0.45 (i.e., termed the "buffer") for years 2027--2036 is shown in @tbl-projections. Catches were apportioned to each fleet based on the relative fishing morality among fleets in the last year of the model. The removals in 2025 and 2026 were set equal to the recommended fleet-specific values as provided by the \gls{gmt} (T. Banez, \gls{cdfw}, personal communication, 5/14/2025). 
+
+The decision table will be completed after the \gls{star} panel.
+
+
 ## Evaluation of Scientific Uncertainty
+
+The model estimated uncertainty around the `r mod_out$endyr+1` spawning output for `r spp` is $\sigma$ = `r round(mod_out$Pstar_sigma,2)` and the uncertainty around the OFL in `r mod_out$endyr+1` is $\sigma$ = `r round(mod_out$OFL_sigma, 2)`. Both of these are very likely to underestimate overall uncertainty due to the necessity to fix several population dynamics parameters (e.g., steepness, recruitment variance, natural mortality) and because there is no explicit incorporation of model structural uncertainty (although see the decision table for alternative states of nature). Both are less than the default \gls{ssc} value of 0.5 for a category 1 assessment, so harvest projections assume an initial $\sigma$ of 0.5, with an increase over time at a rate of 0.075 per year.
+
+Based on the considerations, explorations, and diagnostics described previously, we conclude that different treatments and assumptions regarding data preparation, data weightings, and decisions around selectivity blocks and type have limited relative impact on estimates of population scale and status for `r spp`, particularly in recent years, compared to choices around stock productivity. Estimates of stock status are sensitive to assumptions regarding the biological parameters that govern productivity and the yield curve, especially the natural mortality rate and the choice to estimate growth in the model. We therefore recommend that biological data, particularly ages, be continued to be collected, ideally as part of established fishery sampling programs, and future research prioritize better understanding estimates of natural mortality for `r spp` across the eastern Pacific Ocean.
+
 
 ### Risk Table
 
@@ -20,3 +30,5 @@ Environmental conditions to inform uncertainty for California `r spp` is lacking
 
 
 ## Regional management considerations
+
+**FROG: Still need to do**

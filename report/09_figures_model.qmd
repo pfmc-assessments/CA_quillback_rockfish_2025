@@ -86,7 +86,7 @@ knitr::include_graphics("figures/selectivityPlot.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Estimated time series of age-0 recruits with uncertainty for the base model."
-#| fig-alt: "ZEBRA"
+#| fig-alt: "Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
 
 knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png")
 ```
@@ -96,8 +96,8 @@ knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptot
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: Estimated time series of recruitment deviations for the base model."
-#| fig-alt: "ZEBRA"
+#| fig-cap: "Estimated time series of recruitment deviations for the base model."
+#| fig-alt: "Plot of recruitment deviations uncertainty intervals over time showing higher deviations in the 1980s, a peak in 1994, and then low deviations since with peaks in three years around 2010 and in 2016 and 2017."
 
 knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 ```
@@ -272,6 +272,44 @@ knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 ```
 
+<!-- ```{r}  -->
+<!-- #| label: fig-recruits -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- #| eval: true -->
+<!-- #| fig-cap: "Estimated time series of age-0 recruits for the base model." -->
+<!-- #| fig-alt: "Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017." -->
+
+<!-- knitr::include_graphics( -->
+<!--     "r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png" -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{r}  -->
+<!-- #| label: fig-recdevs -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- #| eval: true -->
+<!-- #| fig-cap: "Estimated time series of recruitment deviations for the base model." -->
+<!-- #| fig-alt: "Plot of recruitment deviations uncertainty intervals over time showing higher deviations in the 1980s, a peak in 1994, and then low deviations since with peaks in three years around 2010 and in 2016 and 2017." -->
+
+<!-- knitr::include_graphics( -->
+<!--     "r4ss_plots/recdevs2_withbars.png" -->
+<!-- ) -->
+<!-- ``` -->
+
+```{r} 
+#| label: fig-spr
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of fishing intensity for the base model."
+#| fig-alt: "Time series plot with uncertainty intervals showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
+
+knitr::include_graphics(
+    "r4ss_plots/SPR3_ratiointerval.png"
+)
+```
 
 
 
@@ -406,3 +444,17 @@ knitr::include_graphics("figures/profile_m_h_contour.png")
 
 knitr::include_graphics("figures/profile_Mhgrid_nll.png")
 ```
+
+## Management
+
+```{r} 
+#| label: fig-yield
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "Estimated yield curve with reference points for the base model."
+#| fig-alt: "Yield curve shows equilibrium yield as a domed function of fraction of unfished spawning output, with a peak slightly above 0.2, a maximum sustainable yield around 0.25, a biomass target at 0.4, and a current estimate just above 0.45."
+
+knitr::include_graphics(
+  "r4ss_plots/yield2_yield_curve_with_refpoints.png"
+)
