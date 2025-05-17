@@ -336,19 +336,19 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
-```{r}
-#| label: fig-sens-biology
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for biology related sensitivities."
-#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to fecundity result in the greatest change, which is a decrease in spawning output."
+<!-- ```{r} -->
+<!-- #| label: fig-sens-biology -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- #| eval: true -->
+<!-- #| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for biology related sensitivities." -->
+<!-- #| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to fecundity result in the greatest change, which is a decrease in spawning output." -->
 
-knitr::include_graphics(
-  "figures/sens_biology_comparison.png")
-```
+<!-- knitr::include_graphics( -->
+<!--   "figures/sens_biology_comparison.png") -->
+<!-- ``` -->
 
-{{< pagebreak >}}
+<!-- {{< pagebreak >}} -->
 
 ```{r}
 #| label: fig-sens-productivity

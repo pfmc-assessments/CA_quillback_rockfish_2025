@@ -273,32 +273,32 @@ kableExtra::kable(
 
 \pagebreak
 
-```{r}
-#| label: tbl-sens-biology
-#| warning: false
-#| echo: false
-#| eval: !expr eval_tables 
-#| tbl-cap: "Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to biology. See main text for details on each sensitivity analysis."
-#| tbl-pos: H
-# table_sens(here::here("report/tables/sens_biology_table.csv"))
-sens <- read.csv(here::here("report/tables/sens_biology_table.csv"), check.names = FALSE)
-sens |>
-  gt() |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
-  ) |>
-  as_latex()
-``` 
+<!-- ```{r} -->
+<!-- #| label: tbl-sens-biology -->
+<!-- #| warning: false -->
+<!-- #| echo: false -->
+<!-- #| eval: !expr eval_tables  -->
+<!-- #| tbl-cap: "Biology sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to biology. See main text for details on each sensitivity analysis." -->
+<!-- #| tbl-pos: H -->
+<!-- # table_sens(here::here("report/tables/sens_biology_table.csv")) -->
+<!-- sens <- read.csv(here::here("report/tables/sens_biology_table.csv"), check.names = FALSE) -->
+<!-- sens |> -->
+<!--   gt() |> -->
+<!--   tab_options( -->
+<!--     table.font.size = 12, -->
+<!--     latex.use_longtable = TRUE -->
+<!--   ) |> -->
+<!--   as_latex() -->
+<!-- ```  -->
 
-\pagebreak
+<!-- \pagebreak -->
 
 ```{r}
 #| label: tbl-sens-productivity
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to productivity. See main text for details on each sensitivity analysis."
+#| tbl-cap: "Productivity sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to productivity. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_productivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_productivity_table.csv"), check.names = FALSE)
@@ -318,7 +318,7 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to leaving out data sources. See main text for details on each sensitivity analysis."
+#| tbl-cap: "Data contributions sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to leaving out data sources. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_leaveOut_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_leaveOut_table.csv"), check.names = FALSE)
@@ -338,7 +338,7 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis."
+#| tbl-cap: "Data choice sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_data_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_table.csv"), check.names = FALSE)
@@ -358,10 +358,10 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to data weighting. See main text for details on each sensitivity analysis."
+#| tbl-cap: "Data weighting sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to data weighting. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
-#table_sens(here::here("report/tables/sens_leaveOut_table.csv"))
-sens <- read.csv(here::here("report/tables/sens_leaveOut_table.csv"), check.names = FALSE)
+#table_sens(here::here("report/tables/sens_weighting_table.csv"))
+sens <- read.csv(here::here("report/tables/sens_weighting_table.csv"), check.names = FALSE)
 sens |>
   gt() |>
   tab_options(
@@ -378,7 +378,7 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
+#| tbl-cap: "Selectivity sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_selectivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE)
