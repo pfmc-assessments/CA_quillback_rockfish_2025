@@ -336,20 +336,6 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
-<!-- ```{r} -->
-<!-- #| label: fig-sens-biology -->
-<!-- #| echo: false -->
-<!-- #| warning: false -->
-<!-- #| eval: true -->
-<!-- #| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for biology related sensitivities." -->
-<!-- #| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to fecundity result in the greatest change, which is a decrease in spawning output." -->
-
-<!-- knitr::include_graphics( -->
-<!--   "figures/sens_biology_comparison.png") -->
-<!-- ``` -->
-
-<!-- {{< pagebreak >}} -->
-
 ```{r}
 #| label: fig-sens-productivity
 #| echo: false
@@ -365,12 +351,12 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
-#| label: fig-sens-leaveOut
+#| label: fig-sens-contributions
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for sensitivities related to leaving out data sources."
-#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for sensitivities related to data weighting and contributions."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes with the exception of excluding age data."
 
 knitr::include_graphics(
   "figures/sens_leaveOut_comparison.png")
@@ -388,20 +374,6 @@ knitr::include_graphics(
 
 knitr::include_graphics(
   "figures/sens_data_comparison.png")
-```
-
-{{< pagebreak >}}
-
-```{r}
-#| label: fig-sens-weighting
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for data weighting related sensitivities."
-#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
-
-knitr::include_graphics(
-  "figures/sens_weighting_comparison.png")
 ```
 
 {{< pagebreak >}}

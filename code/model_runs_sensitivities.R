@@ -2617,7 +2617,7 @@ selec_pretty <- c('All fleets domed',
                   'Full rec block with domed',
                   'Full rec and com block with domed')
 
-
+# # For the report scenarios in these two categories were combined as 'data_contribution_models'
 # #Weighting models
 # 
 # weighting_models <- c('dw_dirichlet',
@@ -2670,19 +2670,19 @@ data_models <- c('catchIncreaseSE',
                  'catchOutliers',
                  #'comLenSampleSize', #minor
                  'FAA_resetCom_reblock_reweight', 
-                 'marginalComAge',
-                 'noAgeErr',
-                 'noNegYear',
-                 'NoRecLen2024')
+                 #'marginalComAge', #minor
+                 'noAgeErr')#,
+                 #'noNegYear', #minor
+                 #'NoRecLen2024') #minor
 
 data_pretty <- c('Increase catch se',
                  'Reduce large catches',
                  #'Remove com length comps with N < 10',
                  'Fleets as areas',
-                 'Use marginal com age comps',
-                 'Remove ageing error',
-                 'Add all low sample size comps',
-                 'Remove rec length comp in 2024')
+                 #'Use marginal com age comps',
+                 'Remove ageing error')#,
+                 #'Add all low sample size comps',
+                 #'Remove rec length comp in 2024')
 
 
 
@@ -2701,7 +2701,7 @@ productivity_pretty <- c('Estimate h',
                          'Turn off recdevs')
 
 
-# #Biology models
+# #Biology models - not ultimately used in the report
 # 
 # biology_models <- c('Maturity_2021est',
 #                     'fecundity_EJest',
@@ -2753,7 +2753,7 @@ make_detailed_sensitivites(big_sensitivity_output,
                            grp_name = 'selectivity',
                            pretty_names = selec_pretty)
 
-
+# For the report scenarios in these categories were combined, see 'data_contribution_models'
 # make_detailed_sensitivites(big_sensitivity_output, 
 #                            mods_to_include = weighting_models,
 #                            outdir = outdir,
@@ -2784,6 +2784,7 @@ make_detailed_sensitivites(big_sensitivity_output,
                            grp_name = 'productivity',
                            pretty_names = productivity_pretty)
 
+#Not ultimately used in the report. 
 # make_detailed_sensitivites(big_sensitivity_output, 
 #                            mods_to_include = biology_models,
 #                            outdir = outdir,
