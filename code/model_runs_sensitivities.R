@@ -114,6 +114,51 @@ SSsummarize(xx) |>
                                      'Remove com lengths'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+######-
+### leaveOut_fleet_lengths ---------------------------------
+
+# Remove recreational and commercial lengths using lambdas
+
+new_name <- 'leaveOut_fleet_lengths'
+
+mod <- base_mod
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(4, 4), #length comps
+                      "fleet" = c(1, 2),
+                      "phase" = c(1, 1),
+                      "value" = c(0, 0),
+                      "sizefreq_method" = c(1, 1))
+rownames(lambdas) <- c("lenComp_CA_Recreational", "lenComp_CA_Commercial")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove com and rec lengths'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
 
 # ============================================================================ #
 ## Drop age data by fleet ----
@@ -191,6 +236,50 @@ SSsummarize(xx) |>
                                      'Remove growth ages'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+
+######-
+### leaveOut_all_ages ---------------------------------
+
+# Remove commercial and CAAL ages using lambdas
+
+new_name <- 'leaveOut_all_ages'
+
+mod <- base_mod
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(5, 5), #length comps
+                      "fleet" = c(1, 3),
+                      "phase" = c(1, 1),
+                      "value" = c(0, 0),
+                      "sizefreq_method" = c(1, 1))
+rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove com and growth caal'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
 # ============================================================================ #
@@ -289,7 +378,7 @@ SSsummarize(xx) |>
 
 
 ######-
-### Drop PR index (example for dropping by using lambda)
+### Drop PR index (example for dropping by using lambda) ---------------------------------
 
 new_name <- 'leaveOut_prIndex'
 
@@ -328,6 +417,52 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'Remove PR Index'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+######-
+### Drop all indices ---------------------------------
+
+# Remove recreationals, ROV, and CCFRP indices using lambdas
+
+new_name <- 'leaveOut_all_indices'
+
+mod <- base_mod
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(1, 1, 1), #length comps
+                      "fleet" = c(2, 4, 5),
+                      "phase" = c(1, 1, 1),
+                      "value" = c(0, 0, 0),
+                      "sizefreq_method" = c(1, 1, 1))
+rownames(lambdas) <- c("Survey_CA_Recreational", "Survey_CCFRP", "Survey_ROV")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove all indices'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
 
 
 ####------------------------------------------------#
@@ -2483,15 +2618,50 @@ selec_pretty <- c('All fleets domed',
                   'Full rec and com block with domed')
 
 
-#Weighting models
+# #Weighting models
+# 
+# weighting_models <- c('dw_dirichlet',
+#                       'dw_MI',
+#                       'IndexExtraSE')
+# 
+# weighting_pretty <- c('Dirichlet',
+#                       'McAllister-Ianelli',
+#                       'Index Extra SD')
+# 
+# #Leave out explorations
+# 
+# leaveOut_models <- c('leaveOut_com_ages',
+#                      'leaveOut_com_lengths',
+#                      'leaveOut_rec_lengths',
+#                      'leaveOut_growth_ages', 
+#                      'leaveOut_prIndex',
+#                      'leaveOut_rov',
+#                      'leaveOut_ccfrp')
+# 
+# leaveOut_pretty <- c('Remove com ages',
+#                      'Remove com lengths',
+#                      'Remove rec lengths',
+#                      'Remove growth ages',
+#                      'Remove PR index',
+#                      'Remove ROV index',
+#                      'Remove CCFRP index')
 
-weighting_models <- c('dw_dirichlet',
-                      'dw_MI',
-                      'IndexExtraSE')
 
-weighting_pretty <- c('Dirichlet',
-                      'McAllister-Ianelli',
-                      'Index Extra SD')
+#Combined weighting and data contributions
+
+data_contribution_models <- c('dw_dirichlet',
+                              'dw_MI',
+                              'IndexExtraSE',
+                              'leaveOut_fleet_lengths',
+                              'leaveOut_all_ages',
+                              'leaveOut_all_indices')
+
+data_contribution_pretty <- c('Dirichlet',
+                              'McAllister-Ianelli',
+                              'Index Extra SD',
+                              'Remove fleet lengths',
+                              'Remove ages',
+                              'Remove indices')
 
 
 #Data related models
@@ -2515,24 +2685,6 @@ data_pretty <- c('Increase catch se',
                  'Remove rec length comp in 2024')
 
 
-#Leave out explorations
-
-leaveOut_models <- c('leaveOut_com_ages',
-                     'leaveOut_com_lengths',
-                     'leaveOut_rec_lengths',
-                     'leaveOut_growth_ages', 
-                     'leaveOut_prIndex',
-                     'leaveOut_rov',
-                     'leaveOut_ccfrp')
-
-leaveOut_pretty <- c('Remove com ages',
-                     'Remove com lengths',
-                     'Remove rec lengths',
-                     'Remove growth ages',
-                     'Remove PR index',
-                     'Remove ROV index',
-                     'Remove CCFRP index')
-
 
 #Productivity models
 
@@ -2549,34 +2701,36 @@ productivity_pretty <- c('Estimate h',
                          'Turn off recdevs')
 
 
-#Biology models
-
-biology_models <- c('Maturity_2021est',
-                    'fecundity_EJest',
-                    'maxAge84',
-                    'maxAge70')
-
-biology_pretty <- c('Oregon maturity',
-                    'Dick 2017 fecundity',
-                    'Max age 84',
-                    'Max age 70')
+# #Biology models
+# 
+# biology_models <- c('Maturity_2021est',
+#                     'fecundity_EJest',
+#                     'maxAge84',
+#                     'maxAge70')
+# 
+# biology_pretty <- c('Oregon maturity',
+#                     'Dick 2017 fecundity',
+#                     'Max age 84',
+#                     'Max age 70')
 
 
 # List all groups of models together
 
 models_all <- c(selec_models,
                 data_models,
-                weighting_models,
-                leaveOut_models,
-                productivity_models, 
-                biology_models)
+                #weighting_models,
+                #leaveOut_models,
+                data_contribution_models,
+                productivity_models)#, 
+                #biology_models)
 
 pretty_all <- c(selec_pretty,
                 data_pretty,
-                weighting_pretty,
-                leaveOut_pretty,
-                productivity_pretty,
-                biology_pretty)
+                #weighting_pretty,
+                #leaveOut_pretty,
+                data_contribution_pretty,
+                productivity_pretty)#,
+                #biology_pretty)
 
 big_sensitivity_output <- SSgetoutput(dirvec = c(
   here('models', base_mod_name),
@@ -2590,8 +2744,6 @@ big_sensitivity_output <- SSgetoutput(dirvec = c(
 which(sapply(big_sensitivity_output, length) < 180) # if integer(0) then good
 
 # Directory that contains the figures and tables folders
-# FROG: Right now the tables are being output to the figures folder. Im aware. 
-#It just easier to test. Ultimately will move. 
 
 outdir <- here('report')
 
@@ -2602,11 +2754,23 @@ make_detailed_sensitivites(big_sensitivity_output,
                            pretty_names = selec_pretty)
 
 
+# make_detailed_sensitivites(big_sensitivity_output, 
+#                            mods_to_include = weighting_models,
+#                            outdir = outdir,
+#                            grp_name = 'weighting',
+#                            pretty_names = weighting_pretty)
+
+# make_detailed_sensitivites(big_sensitivity_output, 
+#                            mods_to_include = leaveOut_models,
+#                            outdir = outdir,
+#                            grp_name = 'leaveOut',
+#                            pretty_names = leaveOut_pretty)
+
 make_detailed_sensitivites(big_sensitivity_output, 
-                           mods_to_include = weighting_models,
+                           mods_to_include = data_contribution_models,
                            outdir = outdir,
-                           grp_name = 'weighting',
-                           pretty_names = weighting_pretty)
+                           grp_name = 'data_contribution',
+                           pretty_names = data_contribution_pretty)
 
 make_detailed_sensitivites(big_sensitivity_output, 
                            mods_to_include = data_models,
@@ -2620,17 +2784,11 @@ make_detailed_sensitivites(big_sensitivity_output,
                            grp_name = 'productivity',
                            pretty_names = productivity_pretty)
 
-make_detailed_sensitivites(big_sensitivity_output, 
-                           mods_to_include = leaveOut_models,
-                           outdir = outdir,
-                           grp_name = 'leaveOut',
-                           pretty_names = leaveOut_pretty)
-
-make_detailed_sensitivites(big_sensitivity_output, 
-                           mods_to_include = biology_models,
-                           outdir = outdir,
-                           grp_name = 'biology',
-                           pretty_names = biology_pretty)
+# make_detailed_sensitivites(big_sensitivity_output, 
+#                            mods_to_include = biology_models,
+#                            outdir = outdir,
+#                            grp_name = 'biology',
+#                            pretty_names = biology_pretty)
 
 
 ## Big plot
