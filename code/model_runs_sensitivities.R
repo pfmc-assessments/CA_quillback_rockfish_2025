@@ -1827,6 +1827,34 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 ######-
+## Alternative Commercial Blocks in 2018 instead of 2014 --------------------------------------------------------
+
+#This is based on looking back at discussions with thompson and budrick suggesting
+#2017/2018 is a better block than 2014. Likelihood is not as good however. 
+
+new_name <- 'sel_AltComBlocks_2018'
+
+mod <- base_mod
+
+mod$ctl$Block_Design <- list(c(1916, 2002, 2018, 2021), #commercial fleet
+                             c(2017, 2024)) #recreational fleet
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
 ## No Blocks --------------------------------------------------------
 
 new_name <- 'sel_NoBlocks'
@@ -2316,6 +2344,55 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
+
+######-
+## Use full block structure for catch fleets and allow domed but comm block 2018 -----
+
+#This is based on looking back at discussions with thompson and budrick suggesting
+#2017/2018 is a better block than 2014. Likelihood is not as good however. 
+
+new_name <- 'sel_fullBlocks_DomedRecCom_2018com'
+
+mod <- base_mod
+
+mod$ctl$blocks_per_pattern <- c(3, 3)
+mod$ctl$Block_Design <- list(c(2003, 2017, 2018, 2021, 2022, 2024), #commercial fleet
+                             c(2001, 2016, 2017, 2022, 2023, 2024)) #recreational fleet
+
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Commercial(1)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.48064, 5)
+mod$ctl$size_selex_parms["SizeSel_P_4_CA_Recreational(2)", 
+                         c("LO", "HI", "INIT", "PHASE")] <- c(0, 9, 5.54518, 5)
+
+### Time varying selectivity table
+selex_new <- mod$ctl$size_selex_parms
+
+selex_tv_pars <- dplyr::filter(selex_new, Block > 0) |>
+  dplyr::select(LO, HI, INIT, PRIOR, PR_SD, PR_type, PHASE, Block) |>
+  tidyr::uncount(mod$ctl$blocks_per_pattern[Block], .id = 'id', .remove = FALSE)
+
+rownames(selex_tv_pars) <- rownames(selex_tv_pars) |>
+  stringr::str_remove('\\.\\.\\.[:digit:]+') |>
+  stringr::str_c('_BLK', selex_tv_pars$Block, 'repl_', mapply("[",mod$ctl$Block_Design[selex_tv_pars$Block], selex_tv_pars$id * 2 - 1))
+
+mod$ctl$size_selex_parms_tv <- selex_tv_pars |>
+  dplyr::select(-Block, -id)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
 
 
 #========================================================================================#
