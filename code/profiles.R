@@ -11,13 +11,13 @@
 # has scripts to run each profile individually
 
 #pak::pkg_install("pfmc-assessments/nwfscDiag")
-devtools::load_all("U:/Other github repos/nwfscDiag")
+#devtools::load_all("U:/Other github repos/nwfscDiag")
 library(nwfscDiag)
 library(r4ss)
 library(here)
 library(tictoc)
 
-base_model <- "4_2_1_propBase"
+base_model <- '5_1_3_preStarBase'
 
 directory <-  here::here("models")
 exe_loc <- here::here(directory, 'ss3_win.exe')
@@ -35,10 +35,10 @@ file.copy(from = file.path(here('models'), "ss3_win.exe"),
 
 profile.settings <- nwfscDiag::get_settings_profile(
   parameters =  c("NatM_uniform_Fem_GP_1", "SR_BH_steep", "SR_LN(R0)", "SR_sigmaR"),
-  low =  c(-0.02, 0.50, -0.5, 0.4),
-  high = c(0.02, 0.95,  0.5, 1),
+  low =  c(0.02, 0.40, -0.5, 0.4),
+  high = c(0.1, 0.95,  0.5, 1),
   step_size = c(0.005, 0.05, 0.1, 0.1),
-  param_space = c('relative', 'real', 'relative', 'real'))
+  param_space = c('real', 'real', 'relative', 'real'))
 
 #FROM CANARY RUNS: "Should do usepar because stabilizes. Testing this showed instability with some runs when not using it
 #No effect with globalpar so using it for consistency"
@@ -78,11 +78,10 @@ future::plan(future::sequential)
 #Note that names of parmaeters need to be from ss_new files
 profile.settings <- nwfscDiag::get_settings_profile(
   parameters = 'NatM_uniform_Fem_GP_1', 
-  low = -0.02, 
-  high = 0.02,
+  low = .02, 
+  high = 0.1,
   step_size = 0.005,
-  param_space = 'relative',
-  use_prior_like = 1) 
+  param_space = 'real') 
 
 settings <- nwfscDiag::get_settings(
   mydir = directory,
@@ -200,7 +199,7 @@ tictoc::toc()
 
 # back to sequential processing
 future::plan(future::sequential)
-
+ 
 
 
 
@@ -270,7 +269,7 @@ future::plan(future::sequential)
 # MCMC --------------------------------------------------------------------
 #need to change do_recdev to option 2 for use with MCMC
 base_model_recdev2 <- "4_2_1a_propBase"
-
+#need to do? 
 
 run_mcmc_diagnostics(
     dir_wd = here('models',base_model_recdev2),
