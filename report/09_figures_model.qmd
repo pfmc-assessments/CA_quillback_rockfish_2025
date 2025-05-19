@@ -359,7 +359,7 @@ knitr::include_graphics(
 #| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes with the exception of excluding age data."
 
 knitr::include_graphics(
-  "figures/sens_leaveOut_comparison.png")
+  "figures/sens_data_contribution_comparison.png")
 ```
 
 {{< pagebreak >}}
