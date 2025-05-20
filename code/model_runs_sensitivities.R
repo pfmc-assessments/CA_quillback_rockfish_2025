@@ -2477,21 +2477,23 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
 
 # This gives 766230 fish in 2015 - pretty close to the ROV estimate.  
 
-######-
-## Find values of M, h, and growth that produce survey estimate without adjusting base catch ----------------------
-# Quick way by just replacing ROV index values
 
-new_name <- 'ROV_Abs_2'
+######-
+## Include as an absolute abundance index ----
+
+# Set q to 0.2 to approximate the amount of area set aside as MPA
+# Doesn't matter if we multiple est by 5 or q by 0.2
+
+new_name <- 'ROV_Abs_2_q0.2'
 
 mod <- base_mod
 
-mod[["dat"]][["CPUE"]][["obs"]][27:28] <- c(155225, 298559)
-mod[["dat"]][["CPUE"]][["se_log"]][27:28] <- c(0.118, 0.0666)
+#Need to enter as thousands of fish
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(155225, 298559)/1000
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "se_log"] <- c(0.118, 0.0666)
 
-mod[["ctl"]][["MG_parms"]][1,7] <- 2  # Allow M to be estimated
-
-mod[["ctl"]][["Q_parms"]][3,3] <- 1 # Set ROV index q=1 and fix
-mod[["ctl"]][["Q_parms"]][3,7] <- -2
+#Q params are ln(q) so fix to 0 in log space
+mod$ctl$Q_parms["LnQ_base_CA_ROV(5)", c("INIT", "PHASE")] <- c(log(0.2), -2)
 
 # Run and see what this does to M and growth params
 
@@ -2507,8 +2509,59 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 
-# M is estimated at 0.112
+
+######-
+## Include as an absolute abundance index with extra SE----
+
+# Set q to 0.2 to approximate the amount of area set aside as MPA
+# Estimate extra SD for q
+
+new_name <- 'ROV_Abs_3_extraSE'
+
+mod <- base_mod
+
+#Need to enter as thousands of fish
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(155225, 298559)/1000
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "se_log"] <- c(0.118, 0.0666)
+
+#Q params are ln(q) so fix in log space
+mod$ctl$Q_parms["LnQ_base_CA_ROV(5)", c("INIT", "PHASE")] <- c(log(0.2), -2)
+
+mod$ctl$Q_options["CA_ROV", "extra_se"] <- 1
+mod$ctl$Q_parms <- 
+  dplyr::add_row(mod$ctl$Q_parms,
+                 LO=0,
+                 HI = 5,
+                 INIT = 0,
+                 PRIOR = 0,
+                 PR_SD = 1,
+                 PR_type = 0,
+                 PHASE = 2,
+                 `env_var&link` = 0,
+                 dev_link = 0,
+                 dev_minyr = 0,
+                 dev_maxyr = 0,
+                 dev_PH = 0,
+                 Block = 0,
+                 Block_Fxn = 0)
+rownames(mod$ctl$Q_parms)[4] <- "ExtraSD_CA_ROV(5)"
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
 
 
 #========================================================================================#

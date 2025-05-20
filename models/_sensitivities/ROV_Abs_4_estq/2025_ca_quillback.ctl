@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-05-09  14:50:40
+#C file write time: 2025-05-20  14:45:15
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -49,7 +49,7 @@
 #
 #_growth_parms
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env_var&link	dev_link	dev_minyr	dev_maxyr	dev_PH	Block	Block_Fxn
- 0.01	0.15	      0.068	       -2.7	 0.31	3	 2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
+ 0.01	0.15	      0.068	       -2.7	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
     0	  20	          8	      3.986	    0	0	 3	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
    35	  50	    41.1812	    41.1812	    0	0	 3	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
  0.03	 0.3	     0.1782	     0.1782	    0	0	 3	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
@@ -121,9 +121,9 @@
 -9999	0	0	0	0	0	#_terminator     
 #_Q_parms(if_any);Qunits_are_ln(q)
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn  #  parm_name
--25	25	0	0	1	0	 2	0	0	0	0	0	0	0	#_LnQ_base_CA_Recreational(2)
--25	25	0	0	1	0	 2	0	0	0	0	0	0	0	#_LnQ_base_CA_CCFRP(4)       
--25	25	1	0	1	0	-2	0	0	0	0	0	0	0	#_LnQ_base_CA_ROV(5)         
+-25	25	       0	0	1	0	2	0	0	0	0	0	0	0	#_LnQ_base_CA_Recreational(2)
+-25	25	       0	0	1	0	2	0	0	0	0	0	0	0	#_LnQ_base_CA_CCFRP(4)       
+-25	25	-1.60944	0	1	0	2	0	0	0	0	0	0	0	#_LnQ_base_CA_ROV(5)         
 #_no timevary Q parameters
 #
 #_size_selex_patterns
