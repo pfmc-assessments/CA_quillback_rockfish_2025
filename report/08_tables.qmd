@@ -280,7 +280,7 @@ kableExtra::kable(
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_productivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_productivity_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-1) #remove Npar
+  dplyr::slice(-c(1,7)) #remove Npar, forecast recruitment
 sens |>
   gt() |>
   tab_options(
@@ -301,7 +301,7 @@ sens |>
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_weighting_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_contribution_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-1) #remove Npar
+  dplyr::slice(-c(1,7,8)) #remove Npar, forecast recruitment, and prior like
 sens |>
   gt() |>
   tab_options(
@@ -318,11 +318,11 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Data choice sensitivities. Values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis. Because of differences in data for these sensitivities, likelihoods are generally not comparable."
+#| tbl-cap: "Data choice sensitivities. Values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis. Because of differences in data structure and variability, likelihoods are generally not comparable for these scenarios except for the one where catches are reduced."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_data_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-1) #remove Npar
+  dplyr::slice(-c(1,7,8)) #remove Npar, forecast recruitment, and prior like
 sens |>
   gt() |>
   tab_options(
@@ -342,7 +342,8 @@ sens |>
 #| tbl-cap: "Selectivity sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_selectivity_table.csv"))
-sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE)
+sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) |>
+  dplyr::slice(-c(7,8)) #forecast recruitment, and prior like
 sens |>
   gt() |>
   tab_options(

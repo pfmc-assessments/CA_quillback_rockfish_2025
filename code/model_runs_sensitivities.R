@@ -2664,7 +2664,8 @@ make_detailed_sensitivites <- function(biglist,
   
   SStableComparisons(shortlist, 
                      modelnames = c('Base', pretty_names),
-                     names =c("npars", "Recr_Virgin", "R0", "steep", "NatM", "L_at_Amax", "VonBert_K", "SSB_Virg",
+                     likenames = c("TOTAL", "Survey", "Length_comp", "Age_comp", "Recruitment", "priors"),
+                     names =c("Recr_Virgin", "R0", "steep", "NatM", "L_at_Amax", "VonBert_K", "SSB_Virg",
                               "SSB_2025", "Bratio_2025", "SPRratio_2024")) |>
     dplyr::mutate(dplyr::across(-Label, ~ sapply(., format, digits = 3, nsmall = 3, scientific = FALSE) |>
                                   stringr::str_replace('NA', ''))) |>
