@@ -2563,6 +2563,51 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+######-
+## Include as an absolute abundance index with estiamted q----
+
+# Set q to 0.2 to approximate the amount of area set aside as MPA
+
+new_name <- 'ROV_Abs_4_estq'
+
+mod <- base_mod
+
+#Need to enter as thousands of fish
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(155225, 298559)/1000
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "se_log"] <- c(0.118, 0.0666)
+
+#Q params are ln(q) so fix in log space
+mod$ctl$Q_parms["LnQ_base_CA_ROV(5)", c("INIT", "PHASE")] <- c(log(0.2), 2)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'ROV_Abs_1'),
+                                                   file.path('_sensitivities', 'ROV_Abs_2_q0.2'),
+                                                   file.path('_sensitivities', 'ROV_Abs_3_extraSE'),
+                                                   file.path('_sensitivities', 'ROV_Abs_4_estq')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Increase catch to approximate scale',
+                                     'Include as absolute abundance index with fixed Q',
+                                     'Include as absolute abundance index with extraSE',
+                                     'Include as absolute abundance index with est Q'),
+                    subplots = c(1,3,18), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
 
 #========================================================================================#
 # RecDev sensitivities -----
