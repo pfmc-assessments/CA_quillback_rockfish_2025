@@ -502,6 +502,39 @@ SSsummarize(xx) |>
 
 
 ######-
+## Increase Catch SE --------------------------------------------------------
+
+new_name <- 'catchIncreaseSE_0.5pre1980'
+
+mod <- base_mod
+
+mod$dat$catch[mod$dat$catch$year < 1980, "catch_se"] <- 0.5
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Increase Catch SE 0.5 pre 1980'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+
+######-
 ## Adjusting High Catch Outliers --------------------------------------------------------
 
 new_name <- 'catchOutliers'
