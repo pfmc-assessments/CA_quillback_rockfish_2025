@@ -1,3 +1,5 @@
 ## Unresolved Problems and Major Uncertainties
 
 <!-- Describe any special issues (e.g., unbalanced or questionable data, missing survey data) that complicate scientific assessment, questions about the best model scenario. -->
+
+Catches of `r spp` were particularly high in a few years for both the recreational and commercial fleets. Although not affecting estimates of depletion, averaging out these high years of catches affected model scale and therefore estimates of sustainable yield. Changes to catches affecting model scale is true of all models that assume catch is well known, however for `r spp` in `r state` the magnitude of the reduction in catch for these years was approximately 20 percent of the total removals. 
