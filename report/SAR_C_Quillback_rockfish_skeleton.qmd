@@ -478,10 +478,12 @@ cat(a, sep = '\n')
  {{< pagebreak >}} 
 
 ```{r, results='asis'}
-#| label: 'appendix-c'
+#| label: 'appendix-d'
 #| eval: true
 #| echo: false
 #| warning: false
 a <- knitr::knit_child('11d_appendix_D.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
+
+ {{< pagebreak >}} 
