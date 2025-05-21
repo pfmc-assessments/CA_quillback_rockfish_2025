@@ -2443,8 +2443,8 @@ mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
 mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
 
 # The estimated proportion of quillback habitat in MPAs is 0.20.
-# Tanya estimated 155225 fish in MPAs in 2015.
-# Expanding that to all habitat results in 776125 fish.
+# Tanya estimated 155225 fish in MPAs (actually 151,934 in final report) in 2015.
+# Expanding that to all habitat results in 759670 fish.
 
 pp <- SS_output(here('models', base_mod_name))
 pp <- SS_output(here('models', '5_1_3_preStarBase'))
@@ -2458,7 +2458,7 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
 # Using the code above from Melissa to look at numbers of fish in the middle of the year,
 # we get 348697 fish in 2015.  
 
-# The ROV estimate is 2.226 times the model estimate.  
+# The ROV estimate is 2.18 times the model estimate.  
 
 # Try increasing catch x 3
 mod <- base_mod
@@ -2508,7 +2508,7 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
   dplyr::select(c("Time", "numberOfFish"))
 
-# This gives 766230 fish in 2015 - pretty close to the ROV estimate.  
+# This gives 766260 fish in 2015 - pretty close to the ROV estimate.  
 
 
 ######-
@@ -2522,7 +2522,7 @@ new_name <- 'ROV_Abs_2_q0.2'
 mod <- base_mod
 
 #Need to enter as thousands of fish
-mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(155225, 298559)/1000
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(151934, 317274)/1000
 mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "se_log"] <- c(0.118, 0.0666)
 
 #Q params are ln(q) so fix to 0 in log space
@@ -2556,7 +2556,7 @@ new_name <- 'ROV_Abs_3_extraSE'
 mod <- base_mod
 
 #Need to enter as thousands of fish
-mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(155225, 298559)/1000
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(151934, 317274)/1000
 mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "se_log"] <- c(0.118, 0.0666)
 
 #Q params are ln(q) so fix in log space
@@ -2606,7 +2606,7 @@ new_name <- 'ROV_Abs_4_estq'
 mod <- base_mod
 
 #Need to enter as thousands of fish
-mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(155225, 298559)/1000
+mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "obs"] <- c(151934, 317274)/1000
 mod$dat$CPUE[which(mod$dat$CPUE$index == 5), "se_log"] <- c(0.118, 0.0666)
 
 #Q params are ln(q) so fix in log space

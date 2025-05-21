@@ -5,11 +5,11 @@
 #_User_info_available_at:https://vlab.noaa.gov/group/stock-synthesis
 #_Source_code_at:_https://github.com/nmfs-ost/ss3-source-code
 
-#_Start_time: Tue May 20 14:44:57 2025
+#_Start_time: Wed May 21 14:11:18 2025
 #_echo_input_data
 #California Quillback Rockfish 2025 assessment Brian Langseth, Melissa Monk, Julia Coates
 #C file created using an r4ss function
-#C file write time: 2025-05-20  14:44:18
+#C file write time: 2025-05-21  14:10:46
 #V3.30.23.1;_safe;_compile_date:_Dec  5 2024;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_13.2
 1916 #_StartYr
 2024 #_EndYr
@@ -305,8 +305,8 @@
 2022 7 4 0.00198973 0.221995 #_ CA_CCFRP
 2023 7 4 0.00264933 0.185434 #_ CA_CCFRP
 2024 7 4 0.00287014 0.180391 #_ CA_CCFRP
-2015 7 5 155.225 0.118 #_ CA_ROV
-2020 7 5 298.559 0.0666 #_ CA_ROV
+2015 7 5 151.934 0.118 #_ CA_ROV
+2020 7 5 317.274 0.0666 #_ CA_ROV
 -9999 1 1 1 1 # terminator for survey observations 
 #
 0 #_N_fleets_with_discard

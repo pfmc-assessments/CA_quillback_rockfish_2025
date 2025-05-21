@@ -10390,4 +10390,17 @@ plot_sel_all(pp)
 #                     plotdir = here('models', new_name))
 # dev.off()
 
+#Compare to Tanya's MPA abs abundance estimate
+numbers_at_age <- pp$natage
+natageOnePlus_numbers <- numbers_at_age %>%
+  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
+  mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
+  dplyr::select(c("Time", "numberOfFish"))
+
+#Tanya predicts 151,934  in 2015 and 317,274 in 2020 based on final report
+#Model predicted 2015.5 - believe these are in 1,000s
+natageOnePlus_numbers %>% filter(Time == 2015.5)
+#Model predicted 2020.5
+natageOnePlus_numbers %>% filter(Time == 2020.5)
+
 
