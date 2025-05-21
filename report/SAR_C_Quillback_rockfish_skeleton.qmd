@@ -474,3 +474,14 @@ cat(a, sep = '\n')
 a <- knitr::knit_child('11c_appendix_C.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'appendix-c'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('11d_appendix_D.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
