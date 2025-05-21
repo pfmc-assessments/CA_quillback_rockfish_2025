@@ -1,4 +1,4 @@
-# Appendix B: Remotely Operated Vehicle (ROV) Index of Abundance
+# Appendix B: Remotely Operated Vehicle (ROV) Index of Abundance {#sec-appendix-b}
 
 Remotely operated vehicle (ROV) surveys have been used to monitor California’s mid-depth habitats (30-100 m) since 2004.  The surveys are a collaboration between CDFW and Marine Applied Research and Exploration (MARE) which was initially developed to assess the Marine Protected Area (MPA) network.  A full description of survey methods is available in Lauermann et al. (2017).  Briefly, sampling has been conducted at MPAs along the entire California coast (@fig-ROV-rel-fig1) with 500-meter transects conducted within rocky reef habitat inside and outside each MPA (@fig-ROV-rel-fig2).  Data includes counts of fish by species, fish sizes, and a variety of characteristics of the transect location (@tbl-ROV-rel-tbl1).   
 
@@ -14,7 +14,7 @@ Indices of abundance providing density (fish/hectare) for each super year, both 
 ●	The intercept + the estimate for super year 2020 + the estimate for protection represents the mean density for MPAs in 2020
 This assumes that all other covariates were held constant at their mean.  The resulting indices inside and outside of MPAs were weighted in each super year by the proportion of rocky reef habitat inside and outside MPAs, with 80% outside MPAs and 20%  inside based seafloor mapping within the 100 m depth contour (@tbl-ROV-rel-tbl5 and @tbl-ROV-rel-tbl6).  The results show an increase in quillback rockfish density both inside and outside MPAs with a greater increase inside (@fig-ROV-rel-fig4).    
 
-Fork lengths collected by stereo camera and software for image analysis allow for estimation of the survey selectivity.  Because the ROV is a visual survey, small fish are more apparent in the data than for other survey or fishery data sources derived from hook and line catches.  ROV transects are conducted between 20-100 m depth.  In comparison, the CCFRP surveys depths shallower than 20 m but goes no deeper than 60 m.  
+Fork lengths collected by stereo camera and software for image analysis allow for estimation of the survey selectivity.  Because the ROV is a visual survey, small fish are more apparent in the data than for other survey or fishery data sources derived from hook and line catches.  ROV transects are conducted between 20-100 m depth **FROG: Above we say 30--100m. Which is it**.  In comparison, the CCFRP surveys depths shallower than 20 m but goes no deeper than 60 m.  
 
 
 
