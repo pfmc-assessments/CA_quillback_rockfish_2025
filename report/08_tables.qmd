@@ -15,9 +15,7 @@ library(here)
 ``` 
 
 
-## Data
-
-### Fishery-dependent data
+## Data: fishery-dependent
 
 ```{r}
 #| label: tbl-catches
@@ -26,18 +24,24 @@ library(here)
 #| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Com) and recreational (Rec) fleets as used in the assessment model. See text for description of sources."
 
 catches <- read.csv(here::here("data", "CAquillback_total_removals.csv"), check.names = FALSE) |>
-  dplyr::select(c(Year, com_tot, rec_tot))
+  dplyr::select(c(Year, com_tot, rec_tot)) 
 catches[is.na(catches)] <- 0
-catches |>
-  gt() |>
-  cols_label(
-    Year = "Year",
-    com_tot = "Commercial",
-    rec_tot = "Recreational") |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE) |>
-  as_latex()
+
+
+kableExtra::kable(
+  catches,
+  format = "latex", 
+  col.names = c("Year", "Commercial", "Recreational"), 
+  longtable = TRUE,
+  booktabs = TRUE,
+  linesep = "",
+  padding = 0) |>
+  kableExtra::kable_styling(
+    latex_options = "repeat_header",
+    font_size = 11,
+    full_width = FALSE)
+
+
 ```
 
 {{< pagebreak >}}
@@ -123,7 +127,7 @@ cols_label(
   as_latex()
 ```
 
-{{< pagebreak >}}
+
 
 ::: {.landscape}
 
@@ -134,42 +138,33 @@ cols_label(
 #| tbl-cap: "Summary of the number of age samples used for conditional age at length data for the growth fleet in the stock assessment. See text for description of data sources."
 
 growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
-  dplyr::mutate(misc = calcom_Nfish + comm85_Nfish)
+  dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
+                CCFRP = CCFRPFarallons_Nfish + CCFRPNotFarallons_Nfish) |>
+                dplyr::select(-c('calcom_Nfish', 'comm85_Nfish' , 'CCFRPFarallons_Nfish', 'CCFRPNotFarallons_Nfish'))
 
 growthCAAL |>
-  gt() |>
-  tab_options(
-    table.font.size = 11,
-    latex.use_longtable = TRUE
-  ) |>
-cols_label(
-    year = "Year",
-    Abrams_Nfish = "Abrams",
-    trawl_Nfish = "WCGBTS",
-    CCFRPFarallons_Nfish = "CCFRP \n Farallons",
-    CCFRPNotFarallons_Nfish = "CCFRP Other",
-    Comm2019_Nfish = "Comm",
-    CRFS_Nfish = "CRFS",
-    Cooperative_Nfish = "SWFSC Coop",
-    SWFSCResearch_Nfish = "SWFSC Research",
-    RBG_Nfish = "Surrendered",
-    IPHC_Nfish = "IPHC",
-    misc = "Misc."
-  ) |>
-  as_latex()
+kableExtra::kable(
+  format = "latex", 
+  col.names = c("Year", "Abrams", "WCGBTS", "Comm", "CDFW Gfish", "SWFSC Coop", "SWFSC Res.","Surrendered", "IPHC", "Misc.", "CCFRP"), 
+  longtable = TRUE,
+  booktabs = TRUE,
+  linesep = "",
+  padding = 0) |>
+  kableExtra::kable_styling(
+    latex_options = "repeat_header",
+    font_size = 11,
+    full_width = FALSE)# |>
+  #kableExtra::column_spec(
+  #  column = 1:3,
+  #  width = "1in")
+
 ```
 
 :::
 
-{{< pagebreak >}}
-
-### Fishery-independent data
-
-{{< pagebreak >}}
 
 
-
-
+## Data: fishery dependent
 
 ## Model results
 
@@ -270,7 +265,6 @@ kableExtra::kable(
 ### Sensitivity analyses
 
 ::: {.landscape}
-
 ```{r}
 #| label: tbl-sens-productivity
 #| warning: false
@@ -280,7 +274,8 @@ kableExtra::kable(
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_productivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_productivity_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-c(1,7)) #remove Npar, forecast recruitment
+  dplyr::slice(-1) %>% #remove Npar %>%
+  mutate_at(2:7, round, 3)
 sens |>
   gt() |>
   tab_options(
@@ -301,7 +296,8 @@ sens |>
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_weighting_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_contribution_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-c(1,7,8)) #remove Npar, forecast recruitment, and prior like
+  dplyr::slice(-1) %>% #remove Npar
+  mutate_at(vars(-1), round, 3)
 sens |>
   gt() |>
   tab_options(
@@ -318,21 +314,19 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Data choice sensitivities. Values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis. Because of differences in data structure and variability, likelihoods are generally not comparable for these scenarios except for the one where catches are reduced."
+#| tbl-cap: "Data choice sensitivities. Values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis. Because of differences in data for these sensitivities, likelihoods are generally not comparable."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_data_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-c(1,7,8)) #remove Npar, forecast recruitment, and prior like
+  dplyr::slice(-1) %>% #remove Npar
+    mutate_at(vars(-1), round, 3)
 sens |>
   gt() |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
-  ) |>
-  as_latex()
+  cols_width(1 ~ "90pt",
+   everything() ~ "50pt") |>
+    as_latex()
 ``` 
-
-\pagebreak
+:::
 
 ```{r}
 #| label: tbl-sens-selectivity
@@ -342,17 +336,21 @@ sens |>
 #| tbl-cap: "Selectivity sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_selectivity_table.csv"))
-sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-c(7,8)) #forecast recruitment, and prior like
-sens |>
-  gt() |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
-  ) |>
-  as_latex()
+sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) %>%
+  mutate_at(vars(-1), round, 3)
+
+sens1 <- sens[ ,1:5]
+sens2 <- sens[ ,c(1,6:10)]
+kableExtra::kable(
+  list(sens1,sens2),
+  format = "latex", 
+  longtable = TRUE,
+  booktabs = TRUE,
+  linesep = "") |>
+  kableExtra::kable_styling(font_size = 8,
+    latex_options=c("scale_down", "hold_position"))
 ``` 
-:::
+
 
 ## Management
 
