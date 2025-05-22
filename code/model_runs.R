@@ -10404,3 +10404,52 @@ natageOnePlus_numbers %>% filter(Time == 2015.5)
 natageOnePlus_numbers %>% filter(Time == 2020.5)
 
 
+
+
+####------------------------------------------------#
+## 5_1_3_preStarBase_forecast ----
+####------------------------------------------------#
+
+#Run 513 with forecast
+
+new_name <- "5_1_3_preStarBase_forecast"
+old_name <- "5_1_3_preStarBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes and run models
+##
+#add forecast catches
+#adding research to recreational catch
+ mod$fore$ForeCatch$catch_or_F <- c(0.086, 1.114+0.1, 0.086, 1.314+0.1)
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+

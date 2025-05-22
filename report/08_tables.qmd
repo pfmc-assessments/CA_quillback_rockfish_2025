@@ -12,6 +12,8 @@
 library(tidyr)
 library(gt)
 library(here)
+library(knitr)
+library(kableExtra)
 ``` 
 
 
@@ -321,12 +323,14 @@ sens <- read.csv(here::here("report/tables/sens_data_table.csv"), check.names = 
   dplyr::slice(-1) %>% #remove Npar
     mutate_at(vars(-1), round, 3)
 sens |>
-  gt() |>
-  cols_width(1 ~ "90pt",
-   everything() ~ "50pt") |>
-    as_latex()
+kableExtra::kable(
+  format = "latex", 
+  longtable = TRUE,
+  booktabs = TRUE,
+  linesep = "") |>
+  kableExtra::kable_styling(font_size = 8,
+    latex_options=c("scale_down", "hold_position"))
 ``` 
-:::
 
 ```{r}
 #| label: tbl-sens-selectivity
@@ -339,16 +343,16 @@ sens |>
 sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) %>%
   mutate_at(vars(-1), round, 3)
 
-sens1 <- sens[ ,1:5]
-sens2 <- sens[ ,c(1,6:10)]
 kableExtra::kable(
-  list(sens1,sens2),
+  sens,
   format = "latex", 
-  longtable = TRUE,
   booktabs = TRUE,
   linesep = "") |>
-  kableExtra::kable_styling(font_size = 8,
-    latex_options=c("scale_down", "hold_position"))
+  kableExtra::kable_styling(font_size = 8, latex_options = "HOLD_position") |>
+  kableExtra::column_spec(1, width = "3.5cm") |>
+  kableExtra::column_spec(2:10, width = "1.5cm") 
+
+
 ``` 
 
 
@@ -356,7 +360,7 @@ kableExtra::kable(
 
 \pagebreak
 
-::: {.landscape}
+
 
 ```{r, results = "asis"}
 #| label: tbl-projections
