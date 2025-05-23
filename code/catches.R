@@ -340,6 +340,22 @@ pc_avg = 2.460985
 ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan")] <- pc_avg + 
   ca_catch[ca_catch$Year %in% c(1993:1995), c("rec_tot", "rec_lan")]
 
+# #For running catch sensitivity, use these values
+#   # Adjust the 1983 value to be an average of the 3 years before and after
+#   years <- c(1980:1982, 1984:1986)
+#   catch_sens_1983 <- mean(ca_catch$rec_lan[ca_catch$Year %in% years])
+# 
+#   # Adjust the 1993 value to be an average of the 3 years after
+#   years <- c(1994, 1995, 1996)
+#   catch_sens_1993 <- mean(ca_catch$rec_tot[ca_catch$Year %in% years])
+# 
+#   #Fill in missing 1990-1992 years based on new estimate for 1993
+#   average_vals <- c(mean(ca_catch$rec_tot[ca_catch$Year %in% c(1987:1989)], na.rm = T), #3 yr average before
+#                     mean(c(ca_catch$rec_tot[ca_catch$Year %in% c(1987:1989, 1994:1995)], catch_sens_1993), na.rm = T), #3 yr average before and after
+#                     mean(c(ca_catch$rec_tot[ca_catch$Year %in% c(1994:1995)], catch_sens_1993), na.rm = T)) #3 yr average after
+#   catch_sens_1990_1992 <- average_vals
+#   catch_sens <- c(catch_sens_1983, catch_sens_1990_1992, catch_sens_1993)
+
 #Fill in missing 1990-1992 years
 #If based on averages of nearby points
 plot(y = ca_catch[ca_catch$Year %in% c(1980:2004),]$rec_tot, x = 1980:2004, type="b", ylab = "CA mrfss catch mt for model")
