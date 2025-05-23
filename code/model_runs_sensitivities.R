@@ -502,7 +502,7 @@ SSsummarize(xx) |>
 
 
 ######-
-## Increase Catch SE --------------------------------------------------------
+## Increase Catch SE More and Just < 1980 --------------------------------------------------------
 
 new_name <- 'catchIncreaseSE_0.5pre1980'
 
@@ -552,11 +552,10 @@ catch$catch[catch$fleet==1 & catch$year==1991] <- mean(catch$catch[catch$fleet==
 # Replace the recreational value in 1993 with the average of the 3 years after
 # We can't calculate a 1993 value including the 3 years before because there was no sampling in 1990-1992
 # Use new values for these 1990-1992 blanks based on the new values for 1983 and 1993
-# These calculations are done in the catches_sensitivity.R script
+# These calculations are done (in commented out lines) in the catches.R script
 
 years <- c(1983, 1990, 1991, 1992, 1993)
-catch$catch[catch$fleet==2 & catch$year %in% years] <- c(10.053, 5.688, 5.843, 5.998, 6.003)
-
+catch$catch[catch$fleet==2 & catch$year %in% years] <- c(10.053, 5.688, 5.706, 5.724, 5.182)
 mod[["dat"]][["catch"]] <- catch
 
 # Write model and run
