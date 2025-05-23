@@ -10,7 +10,7 @@ The 2025 `r spp` spawning output relative to unfished spawning output is above t
 
 **FROG: Do projections and add values to projection table**
 
-A ten-year projection of the base model with total removals equal to the estimated \gls{acl} based on the category 1 time-varying $\sigma$ (0.5) and $P^*$ = 0.45 (i.e., termed the "buffer") for years 2027--2036 is shown in @tbl-projections. Catches were apportioned to each fleet based on the relative fishing morality among fleets in the last year of the model. The removals in 2025 and 2026 were set equal to the recommended fleet-specific values as provided by the \gls{gmt} (T. Banez, \gls{cdfw}, personal communication, 5/14/2025). 
+A ten-year projection of the base model with total removals equal to the estimated \gls{acl} based on the category 1 time-varying $\sigma$ (0.5) and $P^*$ = 0.45 (i.e., termed the "buffer") for years 2027--2036 is shown in @tbl-projections. Selectivity of each fleet for the projections was assumed to equal the estimated selectivity in the final year of the model. Total removals were apportioned to each fleet based on the relative fishing morality among fleets in the last three years of the model. The removals in 2025 and 2026 were set equal to the recommended fleet-specific values as provided by the \gls{gmt} (T. Banez, \gls{cdfw}, personal communication, 5/14/2025). 
 
 The decision table will be completed after the \gls{star} panel.
 
