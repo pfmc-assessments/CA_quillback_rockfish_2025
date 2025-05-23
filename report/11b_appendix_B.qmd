@@ -1,4 +1,4 @@
-# Appendix B: Remotely Operated Vehicle (ROV) Index of Abundance {#sec-appendix-b}
+## CDFW ROV {#sec-appendix-b}
 
 Remotely operated vehicle (ROV) surveys have been used to monitor California’s mid-depth habitats (30-100 m) since 2004.  The surveys are a collaboration between CDFW and Marine Applied Research and Exploration (MARE) which was initially developed to assess the Marine Protected Area (MPA) network.  A full description of survey methods is available in Lauermann et al. (2017).  Briefly, sampling has been conducted at MPAs along the entire California coast (@fig-ROV-rel-fig1) with 500-meter transects conducted within rocky reef habitat inside and outside each MPA (@fig-ROV-rel-fig2).  Data includes counts of fish by species, fish sizes, and a variety of characteristics of the transect location (@tbl-ROV-rel-tbl1).   
 
@@ -67,6 +67,7 @@ knitr::include_graphics("figures/ROV_rel_fig4.png")
 
 ```
 
+\pagebreak
 
 ```{r}
 #| label: tbl-ROV-rel-tbl1
@@ -82,6 +83,7 @@ pr_filter |>
     gt() |>
      tab_options(
     table.font.size = 12) |>
+    cols_width(starts_with("Desc") ~ px(400)) |>
     as_latex()
 
 ```
@@ -95,8 +97,8 @@ pr_filter |>
 pr_filter <- read.csv("tables/ROV_rel_tbl2.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
-     tab_options(
-    table.font.size = 12) |>
+    cols_width(starts_with("Desc") ~ px(200),
+                everything() ~ px(100)) |>
     as_latex()
 
 ```
@@ -126,8 +128,7 @@ pr_filter |>
 pr_filter <- read.csv("tables/ROV_rel_tbl4.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
-     tab_options(
-    table.font.size = 12) |>
+    cols_width(everything() ~ px(40)) |>
     as_latex()
 
 ```

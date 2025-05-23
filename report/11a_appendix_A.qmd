@@ -1,4 +1,6 @@
-# Appendix A: CRFS PR Dockside Index of Abundance
+# Appendix A: Indices of Abundances
+
+## CRFS PR Dockside
 
 Catch and effort data from the CRFS dockside sampling of private boats between 2004 and 2023 were provided by CDFW. The “i” sample files were used to re-create interview or trip-level data from 2004 to 2014. The CRFS program began producing estimates in a different, annual format in later years and data in this format was used from 2015 to 2023. The data included catch by species, number of anglers contributing to the catch, angler-reported area of fishing, gear, county, port, interview site, year, month, and CRFS district. The catch included the number of fish observed by the CRFS sampler, the number of unobserved retained and released fish reported by the angler.
 
@@ -86,6 +88,7 @@ pr_filter |>
     gt() |>
      tab_options(
     table.font.size = 12) |>
+    cols_width(starts_with("Description") ~ px(250) ) |>
     as_latex()
 
 ```
