@@ -1,6 +1,6 @@
 #V3.30.23.1;_safe;_compile_date:_Dec  5 2024;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_13.2
 #C file created using an r4ss function
-#C file write time: 2025-05-08  11:43:29
+#C file write time: 2025-05-23  14:54:40
 # for all year entries except rebuilder; enter either: actual year, -999 for styr, 0 for endyr, neg number for rel. endyr
 1 # Benchmarks: 0=skip; 1=calc F_spr,F_btgt,F_msy; 2=calc F_spr,F0.1,F_msy; 3=add F_Blimit; 
 2 # Do_MSY: 1= set to F(SPR); 2=calc F(MSY); 3=set to F(Btgt) or F0.1; 4=set to F(endyr); 5=calc F(MEY) with MSY_unit options
@@ -86,10 +86,10 @@
 2 # basis for input Fcast catch: -1=read basis with each obs; 2=dead catch; 3=retained catch; 99=input apical_F; NOTE: bio vs num based on fleet's catchunits
 #enter list of Fcast catches or Fa; terminate with line having year=-9999
 #_year seas fleet catch(or_F)
- 2025 1 1 0
- 2025 1 2 0
- 2026 1 1 0
- 2026 1 2 0
+ 2025 1 1 0.086
+ 2025 1 2 1.214
+ 2026 1 1 0.086
+ 2026 1 2 1.414
 -9999 1 1 0 
 #
 999 # verify end of input 

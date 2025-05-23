@@ -10347,7 +10347,11 @@ mod <- SS_read(here('models',new_name))
 #Make Changes and run models
 ##
 
-#No changes, just run
+#add forecast catches
+#adding research to recreational catch
+ mod$fore$ForeCatch$catch_or_F <- c(0.086, 1.114+0.1, 0.086, 1.314+0.1)
+
+
 
 
 ##

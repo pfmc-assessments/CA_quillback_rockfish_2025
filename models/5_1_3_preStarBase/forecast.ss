@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-05-08  11:43:29
+#C file write time: 2025-05-23  14:54:40
 #
 1 #_benchmarks
 2 #_MSY
@@ -63,10 +63,10 @@
 -9999 -1
 2 #_InputBasis
  #_year seas fleet catch_or_F
-   2025    1     1          0
-   2025    1     2          0
-   2026    1     1          0
-   2026    1     2          0
+   2025    1     1      0.086
+   2025    1     2      1.214
+   2026    1     1      0.086
+   2026    1     2      1.414
 -9999 0 0 0
 #
 999 # verify end of input 
