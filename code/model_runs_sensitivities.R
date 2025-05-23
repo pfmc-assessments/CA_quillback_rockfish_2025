@@ -581,6 +581,65 @@ SSsummarize(xx) |>
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+######-
+## Catch smoother --------------------------------------------------------
+
+new_name <- 'catchSmooth'
+
+mod <- base_mod
+
+catch <- mod$dat$catch
+
+#Moving average function. Does not set values at bounds
+ma <- function(x, n = 5) { 
+  stats::filter(x, rep(1 / n, n), sides = 2)
+}
+
+#Test smooth
+plot(catch[which(catch$fleet == 1), "catch"])
+lines(ma(catch[which(catch$fleet == 1), "catch"], n =5), col = 2)
+
+com_smooth <- ma(catch[which(catch$fleet == 1), "catch"], n =5)
+rec_smooth <- ma(catch[which(catch$fleet == 2), "catch"], n =5)
+
+#Use values from original time series for first two and last two years
+smooth_catch <-c(catch[which(catch$fleet == 1), "catch"][1:2],
+                 com_smooth[c(3:107)],
+                 catch[which(catch$fleet == 1), "catch"][108:109],
+                 catch[which(catch$fleet == 2), "catch"][1:2],
+                 rec_smooth[c(3:107)],
+                 catch[which(catch$fleet == 2), "catch"][108:109])
+
+#Test to see if working
+plot(catch$catch, type = "o")
+lines(smooth_catch, col = 2)
+
+mod$dat$catch$catch <- round(smooth_catch, 3)
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Five year moving average for catch'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
 ####------------------------------------------------#
 # Data weighting sensitivities ----
 ####------------------------------------------------#
@@ -2874,8 +2933,9 @@ data_contribution_pretty <- c('Dirichlet',
 
 #Data related models
 
-data_models <- c('catchIncreaseSE',
+data_models <- c(#'catchIncreaseSE',
                  'catchOutliers',
+                 'catchSmooth',
                  #'comLenSampleSize', #minor
                  'FAA_resetCom_reblock_reweight', 
                  #'marginalComAge', #minor
@@ -2883,8 +2943,9 @@ data_models <- c('catchIncreaseSE',
                  #'noNegYear', #minor
                  #'NoRecLen2024') #minor
 
-data_pretty <- c('Increase catch se',
+data_pretty <- c(#'Increase catch se',
                  'Reduce large catches',
+                 'Catch as five year moving average',
                  #'Remove com length comps with N < 10',
                  'Fleets as areas',
                  #'Use marginal com age comps',
