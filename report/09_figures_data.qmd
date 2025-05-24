@@ -8,6 +8,18 @@
  #  rda_dir <- here::here("rda_files")
 ``` 
 
+```{r, results = "asis"}
+#| label: fig-map
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Map of management and the 2025 assessment area along with approximate population range for quillback rockfish off California."
+#| fig-alt: "Map of California showing indicating statewide management and assessment, but population range primarily north of central California."
+
+knitr::include_graphics("figures/assessment_map.png")
+```
+
+
 ## Data
 
 ```{r}
