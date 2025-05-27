@@ -365,14 +365,40 @@ file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'co
 file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'compare4_Bratio_uncertainty.png'),
           to = here('report', 'figures','retro_compare_Bratio_uncertainty.png'), 
           overwrite = TRUE, recursive = FALSE)
+
+
+
+
+
 # MCMC --------------------------------------------------------------------
 #need to change do_recdev to option 2 for use with MCMC
-base_model_recdev2 <- "4_2_1a_propBase"
-#need to do? 
+
+new_name <- "5_1_3_preStarBase_recdev2_mcmc"
+old_name <- "5_1_3_preStarBase"
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+##
+#Make Changes and run models
+##
+
+mod$ctl$do_recdev <- 2
+
+# Write model and run
+SS_write(mod, here('models', new_name),
+         overwrite = TRUE)
 
 run_mcmc_diagnostics(
-    dir_wd = here('models',base_model_recdev2),
-    model = "ss3_win",
+    dir_wd = here('models', new_name),
+    model = 'ss3_win', 
     extension = ".exe",
     iter = 200,
     chains = 2,
@@ -380,108 +406,112 @@ run_mcmc_diagnostics(
     verbose = FALSE
   )
 
-# ============================================================================ #
-# Profile over M while estimating h
-#DID NOT DO FOR FINAL pre-STAR BASE - replaced with other bivariate code
-#need to modify the base model to estimate h
-#making a copy of the base model and changing the phase 
-bivar_directory <- here('models', '_bivariate_profiles')
-new.dir <- here('models', '_bivariate_profiles',glue::glue(base_model,'_est_h'))
-copy_SS_inputs(dir.old = here('models', base_model), 
-               dir.new = new.dir,
-               overwrite = TRUE)
-
-mod <- SS_read(new.dir)
-#estimate h
-mod$ctl$SR_parms['SR_BH_steep', c('PHASE')] <- 4
-
-SS_write(mod,
-         dir = new.dir,
-         overwrite = TRUE)
-
-r4ss::run(dir = new.dir, 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
-
-#Note that names of parmaeters need to be from ss_new files
-profile.settings <- nwfscDiag::get_settings_profile(
-  parameters = 'NatM_uniform_Fem_GP_1', 
-  low = -0.02, 
-  high = 0.03,
-  step_size = 0.005,
-  param_space = 'relative') 
-
-settings <- nwfscDiag::get_settings(
-  mydir = bivar_directory,
-  settings = list(
-    base_name = glue::glue(base_model, 'est_h'),
-    run = "profile",
-    profile_details = profile.settings,
-    exe = exe_loc,
-    extras = '-nohess',
-    usepar = FALSE,
-    init_values_src = 0))
-
-# set up parallel stuff - runs about 4x faster
-future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
-
-tictoc::tic()
-run_diagnostics(mydir = here('models','_bivariate_profiles'), model_settings = settings)
-tictoc::toc()
-
-# back to sequential processing
-future::plan(future::sequential)
 
 
-# ============================================================================ #
-# Profile over h while estimating M
-#DID NOT DO FOR FINAL pre-STAR BASE - replaced with other bivariate code
-#use the same base model just change the parameters
-copy_SS_inputs(dir.old = here('models', base_model), 
-               dir.new = here('models', '_bivariate_profiles', base_model),
-               overwrite = TRUE)
-mod <- SS_read(here('models', '_bivariate_profiles', base_model))
-#estimate M
-mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('PHASE')] <- 4
 
-SS_write(mod,
-         dir = here('models', '_bivariate_profiles', base_model),
-         overwrite = TRUE)
 
-r4ss::run(dir = here('models', '_bivariate_profiles', base_model), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
+# # ============================================================================ #
+# # Profile over M while estimating h
+# #DID NOT DO FOR FINAL pre-STAR BASE - replaced with other bivariate code
+# #need to modify the base model to estimate h
+# #making a copy of the base model and changing the phase 
+# bivar_directory <- here('models', '_bivariate_profiles')
+# new.dir <- here('models', '_bivariate_profiles',glue::glue(base_model,'_est_h'))
+# copy_SS_inputs(dir.old = here('models', base_model), 
+#                dir.new = new.dir,
+#                overwrite = TRUE)
 
-#set up the profiles for steepness
-profile.settings <- nwfscDiag::get_settings_profile(
-  parameters = 'SR_BH_steep', 
-  low = 0.5, 
-  high = 0.95,
-  step_size = 0.05,
-  param_space = 'real') 
+# mod <- SS_read(new.dir)
+# #estimate h
+# mod$ctl$SR_parms['SR_BH_steep', c('PHASE')] <- 4
 
-settings <- nwfscDiag::get_settings(
-  mydir = bivar_directory,
-  settings = list(
-    base_name = base_model,
-    run = "profile",
-    profile_details = profile.settings,
-    exe = exe_loc,
-    extras = '-nohess',
-    usepar = FALSE,
-    init_values_src = 0))
+# SS_write(mod,
+#          dir = new.dir,
+#          overwrite = TRUE)
 
-# set up parallel stuff
-future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+# r4ss::run(dir = new.dir, 
+#           exe = here('models/ss3_win.exe'), 
+#           extras = '-nohess', 
+#           show_in_console = TRUE, 
+#           skipfinished = FALSE)
 
-tictoc::tic()
-run_diagnostics(mydir = here('models','_bivariate_profiles'), model_settings = settings)
-tictoc::toc()
+# #Note that names of parmaeters need to be from ss_new files
+# profile.settings <- nwfscDiag::get_settings_profile(
+#   parameters = 'NatM_uniform_Fem_GP_1', 
+#   low = -0.02, 
+#   high = 0.03,
+#   step_size = 0.005,
+#   param_space = 'relative') 
 
-# back to sequential processing
-future::plan(future::sequential)
+# settings <- nwfscDiag::get_settings(
+#   mydir = bivar_directory,
+#   settings = list(
+#     base_name = glue::glue(base_model, 'est_h'),
+#     run = "profile",
+#     profile_details = profile.settings,
+#     exe = exe_loc,
+#     extras = '-nohess',
+#     usepar = FALSE,
+#     init_values_src = 0))
+
+# # set up parallel stuff - runs about 4x faster
+# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+# tictoc::tic()
+# run_diagnostics(mydir = here('models','_bivariate_profiles'), model_settings = settings)
+# tictoc::toc()
+
+# # back to sequential processing
+# future::plan(future::sequential)
+
+
+# # ============================================================================ #
+# # Profile over h while estimating M
+# #DID NOT DO FOR FINAL pre-STAR BASE - replaced with other bivariate code
+# #use the same base model just change the parameters
+# copy_SS_inputs(dir.old = here('models', base_model), 
+#                dir.new = here('models', '_bivariate_profiles', base_model),
+#                overwrite = TRUE)
+# mod <- SS_read(here('models', '_bivariate_profiles', base_model))
+# #estimate M
+# mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('PHASE')] <- 4
+
+# SS_write(mod,
+#          dir = here('models', '_bivariate_profiles', base_model),
+#          overwrite = TRUE)
+
+# r4ss::run(dir = here('models', '_bivariate_profiles', base_model), 
+#           exe = here('models/ss3_win.exe'), 
+#           extras = '-nohess', 
+#           show_in_console = TRUE, 
+#           skipfinished = FALSE)
+
+# #set up the profiles for steepness
+# profile.settings <- nwfscDiag::get_settings_profile(
+#   parameters = 'SR_BH_steep', 
+#   low = 0.5, 
+#   high = 0.95,
+#   step_size = 0.05,
+#   param_space = 'real') 
+
+# settings <- nwfscDiag::get_settings(
+#   mydir = bivar_directory,
+#   settings = list(
+#     base_name = base_model,
+#     run = "profile",
+#     profile_details = profile.settings,
+#     exe = exe_loc,
+#     extras = '-nohess',
+#     usepar = FALSE,
+#     init_values_src = 0))
+
+# # set up parallel stuff
+# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+# tictoc::tic()
+# run_diagnostics(mydir = here('models','_bivariate_profiles'), model_settings = settings)
+# tictoc::toc()
+
+# # back to sequential processing
+# future::plan(future::sequential)
 
