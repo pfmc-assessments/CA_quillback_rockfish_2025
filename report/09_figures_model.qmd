@@ -392,7 +392,7 @@ knitr::include_graphics(
 
 
 
-### Retrospectives and Likelihood Profiles
+### Retrospectives
 
 ```{r}
 #| label: fig-retro-ssb
@@ -426,6 +426,77 @@ knitr::include_graphics("figures/retro_compare_Bratio_uncertainty.png")
 
 knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 ```
+
+
+### Likelihood Profiles
+
+
+```{r}
+#| label: fig-r0-profile
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "."
+
+knitr::include_graphics("figures/R0_profile_bio_comparison.png")
+```
+
+```{r}
+#| label: fig-r0-piner
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "."
+
+knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
+```
+
+```{r}
+#| label: fig-h-profile
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "."
+
+knitr::include_graphics("figures/h_profile_bio_comparison.png")
+```
+
+```{r}
+#| label: fig-h-piner
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "."
+
+knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
+```
+
+```{r}
+#| label: fig-m-profile
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "."
+
+knitr::include_graphics("figures/m_profile_bio_comparison.png")
+```
+
+```{r}
+#| label: fig-m-piner
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "."
+#| fig-alt: "."
+
+knitr::include_graphics("figures/piner_panel_NatM_uniform_Fem_GP_1.png")
+```
+
 
 ```{r}
 #| label: fig-Mh-contour

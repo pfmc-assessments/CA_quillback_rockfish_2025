@@ -487,3 +487,14 @@ cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'appendix-e'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('11e_appendix_E.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 

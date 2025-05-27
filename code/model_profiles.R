@@ -224,7 +224,7 @@ R0_names <- paste0("log(R0) =", vals)
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 
                                filename = "R0_profile_bio_comparison.png",
-                               legendlabels = c('Base model', mod_labels), 
+                               legendlabels = c('Base model', R0_names), 
                                legendloc = 'bottomleft',
                                hessian = FALSE,
                                subplot1 = 1,
@@ -355,9 +355,9 @@ xx <- SSgetoutput(dirvec = list.dirs(retro_dir))
 #                                subplot2 = 3)
 
 #retro fig - copy to report folder
-#file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'retro_percent_difference_4_panel.png'),
-#          to = here('report', 'figures','retro_percent_difference_4_panel.png'), 
-#          overwrite = TRUE, recursive = FALSE)
+file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'retro_percent_difference_4_panel.png'),
+          to = here('report', 'figures','retro_percent_difference_4_panel.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
 file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'compare2_spawnbio_uncertainty.png'),
           to = here('report', 'figures','retro_compare_spawnbio_uncertainty.png'), 
