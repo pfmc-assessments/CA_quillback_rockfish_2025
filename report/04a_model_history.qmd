@@ -1,6 +1,6 @@
-# Assessment model
+# Assessment Model
 
-## History of modeling approaches
+## History of Modeling Approaches
 
 `r Spp` was first assessed in 2010 using Depletion-Based Stock Reduction Analysis (DB-SRA) which is a data-limited approach that incorporates catch data with priors on select parameters including natural mortality, the ratio of fishing mortality at maximum sustainable yield to natural mortality, current depletion, and the depletion at maximum sustainable yield to estimate overfishing status, but not overfished status [@DickandMacCall_dbsra_2010]. `r Spp` was assessed as a single coastwide stock to generate an overall OFL that was then apportioned to each management area based on the proportion of historical catches North and South of 40$^\circ$ 10' Lat. N. Assuming that current depletion was at the management target on average (e.g. 40%), the 2010 assessment found that `r spp` had a 52% chance of experiencing overfishing coastwide. 
 
@@ -13,7 +13,7 @@ During the process for selecting stocks for the 2023 assessment cycle, public co
 After the November 2023 Council meeting, PFMC Executive Director Burden posed a series of questions to the NWFSC regarding the 2021 stock assessment of California `quillback rockfish `r spp`.  The \gls{nwfsc} provided details responses in an Informational Report [Informational Report 2, March 2024](https://tinyurl.com/PFMC2024c) in March 2024 addressing those questions. 
 
 
-## Response to most recent STAR panel and SSC recommendations  {#star-recs}
+## Response to Most Recent STAR Panel and SSC Recommendations  {#star-recs}
 
 A STAR panel was not convened for the review of the 2021 California `quillback rockfish `r spp` assessment. The following responses are a compilation from across the reviews spanning 2021--2024 that include the recommended research and data needs from 2021.
 

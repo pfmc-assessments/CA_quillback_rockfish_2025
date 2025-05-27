@@ -17,7 +17,7 @@ Limited studies have evaluated genetic variation in `r spp` across the U.S. West
 [@cope_approach_2011] found `r spp` to have a vulnerability score of V = 2.222, making it a species of major concern in the productivity susceptibility analysis. This analysis calculated species specific vulnerability scores based on two dimensions: productivity characterized by the life history, and susceptibility characterized by how the stock is likely affected by fisheries. 
 
 
-## Ecosystem considerations
+## Ecosystem Considerations
 
 This stock assessment does not explicitly incorporate trophic interactions, habitat factors nor environmental factors into the assessment model, but a brief description of likely or potential ecosystem considerations is provided below.
 
@@ -62,7 +62,7 @@ Since 2023 **CONFIRM THIS. It might have been since 2021** `r spp` in California
 Summary of management history (e.g., changes in mesh sizes, trip limits, or other management actions that may have significantly altered selection, catch rates, or discards). 
 --->
 
-## Management performance
+## Management Performance
 
 The species-specific OFL and ACL contribution for `r spp` that is allocated to California waters, Nearshore Rockfish South and 25 percent of the Nearshore Rockfish North, is shown in Table \ref{tab:ca-management} as well as the total catch, south and north of Point Conception in California combined, for the last ten years.  Over the last ten years the catches of `r spp` have been below the species-specific ACLs.
 **FROG: Brian will update this**

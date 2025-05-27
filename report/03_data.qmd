@@ -4,7 +4,7 @@ Data comprise the foundational components of stock assessment models. They drive
 
 Data from a wide range of programs were available for possible inclusion in the current assessment model. Descriptions of each data source included in the model and sources that were explored but not included in the base model are provided below. In some cases, the inclusion of excluded data sources, as well as alternative treatments of included data, were explored through sensitivity analyses (see @sec-assmt-sens).
 
-## Data sources used in this assessment
+## Data Sources Used in This Assessment
 
 This assessment updates the data used in the 2021 benchmark assessment, as well as utilizes additional data, both those collected since the last assessment and those from sources not used in the 2021 assessment. All data sources are specific to California unless otherwise specified. The following types and sources of data used in this assessment are summarized here, and then discussed in more detail below:
 

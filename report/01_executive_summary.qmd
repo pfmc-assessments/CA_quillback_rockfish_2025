@@ -191,7 +191,7 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 -->
 
 <!-- \clearpage -->
-## Exploitation status{-}
+## Exploitation Status{-}
 
  (@tbl-es-spr, @fig-es-kobe).
 
@@ -240,11 +240,11 @@ knitr::include_graphics("r4ss_plots/SPR4_phase.png")
 
 <!-- \clearpage -->
 
-## Ecosystem considerations{-}
+## Ecosystem Considerations{-}
 
 
 
-## Reference points{-}
+## Reference Points{-}
 
 @tbl-ref-points-es
 
@@ -298,7 +298,7 @@ reference_points_table |>
 
 ```
 
-## Management performance{-}
+## Management Performance{-}
 
  (@tbl-es-management)
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
@@ -325,13 +325,13 @@ recent_management_table |>
 
 ```
 
-## Unresolved problems and major uncertainties{-}
+## Unresolved Problems and Major Uncertainties{-}
 
 
 
 <!-- Any special issues that complicate scientific assessment, questions about the best model scenario, etc. -->
 
-## Decision table and harvest projections{-}
+## Decision Table and Harvest Projections{-}
 
  @tbl-es-projections
 
@@ -377,11 +377,11 @@ projections_table |>
 
 :::
 
-## Scientific uncertainty{-}
+## Scientific Uncertainty{-}
 
 The model estimate of the log-scale standard deviation of the overfishing limit (OFL) in 2025 is `r round(mod_out$OFL_sigma, 3)`. 
 
-## Research and data needs{-}
+## Research and Data Needs{-}
 
 
 {{< pagebreak >}}
