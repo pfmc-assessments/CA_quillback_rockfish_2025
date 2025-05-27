@@ -1,8 +1,8 @@
-## Base Model Results
+## Base Model Results {#sec-base-results}
 
 ### Parameter Estimates
 
-A total of 121 parameters were estimated for the base model @tbl-n-param. The parameters, fixed and estimates along with approximate asymptotic standard errors are shown in @tbl-pars and the likelihood components are shown in @tbl-likelihood. Estimates of stock size and status over time are shown  @tbl-timeseries. 
+A total of 121 parameters were estimated for the base model (@tbl-n-param). The parameters, fixed and estimates along with approximate asymptotic standard errors are shown in @tbl-pars and the likelihood components are shown in @tbl-likelihood. Estimates of stock size and status over time are shown  @tbl-timeseries. 
 
 The log($R_0$) was estimated at `r round(mod_out$parameters['SR_LN(R0)', 'Value'], 3)`. The model estimated reasonable growth parameters and variability for 
 $L_{age=2}$ = `r round(mod_out$parameters['L_at_Amin_Fem_GP_1', 'Value'], 3)` 
