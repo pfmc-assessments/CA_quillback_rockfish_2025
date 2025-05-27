@@ -104,6 +104,29 @@ tictoc::toc()
 # back to sequential processing
 future::plan(future::sequential)
 
+#steepness two panel plots - with uncertainty
+m_dir <- here('models', glue::glue(base_model,'_profile_NatM_uniform_Fem_GP_1'))
+
+#get the report files 
+xx <- SSgetoutput(dirvec = m_dir, keyvec = c("",seq(1:17)))
+
+vals <- seq(0.02, 0.1, by = 0.005)
+m_names <- paste0("M =", vals)
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = "m_profile_bio_comparison.png",
+                               legendlabels = c('Base model', m_names), 
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3)
+
+#R0 figs - copy to report folder
+file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'piner_panel_NatM_uniform_Fem_GP_1.png'),
+          to = here('report', 'figures','piner_panel_NatM_uniform_Fem_GP_1.png'), 
+          overwrite = TRUE, recursive = FALSE)
+
+
 
 # Individual Steepness profile -------------------------------------------------------
 
@@ -136,6 +159,27 @@ tictoc::toc()
 # back to sequential processing
 future::plan(future::sequential)
 
+#steepness two panel plots - with uncertainty
+h_dir <- here('models', glue::glue(base_model,'_profile_SR_BH_steep'))
+
+#get the report files 
+xx <- SSgetoutput(dirvec = h_dir, keyvec = c("",seq(1:10)))
+
+vals <- seq(0.5, 0.95, by = 0.05)
+h_names <- paste0("h =", vals)
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = "h_profile_bio_comparison.png",
+                               legendlabels = c('Base model', h_names), 
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3)
+
+#h figs - copy to report folder
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'piner_panel_SR_BH_steep.png'),
+          to = here('report', 'figures','piner_panel_SR_BH_steep.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
 # Individual R0 profile --------------------------------------------------------------
 
@@ -168,6 +212,28 @@ tictoc::toc()
 # back to sequential processing
 future::plan(future::sequential)
 
+
+#R0 two panel plots - with uncertainty
+R0_dir <- here('models', glue::glue(base_model,'_profile_SR_LN(R0)'))
+
+#get the report files 
+xx <- SSgetoutput(dirvec = R0_dir, keyvec = c("",seq(1:10)))
+
+vals <- seq(3.4, 4.3, by = .1)
+R0_names <- paste0("log(R0) =", vals)
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = "R0_profile_bio_comparison.png",
+                               legendlabels = c('Base model', mod_labels), 
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3)
+
+#R0 figs - copy to report folder
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'piner_panel_SR_LN(R0).png'),
+          to = here('report', 'figures','piner_panel_SR_LN(R0).png'), 
+          overwrite = TRUE, recursive = FALSE)
 
 # Individual sigmaR profile -------------------------------------------------------
 
@@ -266,6 +332,39 @@ tictoc::toc()
 # back to sequential processing
 future::plan(future::sequential)
 
+
+
+#modify the comparison plots and save them to report/figures 
+#retro plots don't plot correctly wiht two panel so revertying for now
+#had to add a copy of the base model to the folder to get it to work without adding two directories
+retro_dir <- here('models', glue::glue(base_model,'_retro_15_yr_peel/retro'))#,'retro')
+xx <- SSgetoutput(dirvec = list.dirs(retro_dir))
+
+#create the label names
+#peels <- seq(1:15)
+#mod_labels <- paste0("Data -",peels," years")
+
+#two panel plots
+# r4ss::plot_twopanel_comparison(xx, 
+#                                dir = here('report', 'figures'), 
+#                                filename = "retro_bio_comparison.png",
+#                                legendlabels = c('Base model', mod_labels), 
+#                                legendloc = 'bottomleft',
+#                                hessian = FALSE,
+#                                subplot1 = 1,
+#                                subplot2 = 3)
+
+#retro fig - copy to report folder
+#file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'retro_percent_difference_4_panel.png'),
+#          to = here('report', 'figures','retro_percent_difference_4_panel.png'), 
+#          overwrite = TRUE, recursive = FALSE)
+
+file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'compare2_spawnbio_uncertainty.png'),
+          to = here('report', 'figures','retro_compare_spawnbio_uncertainty.png'), 
+          overwrite = TRUE, recursive = FALSE)
+file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'compare4_Bratio_uncertainty.png'),
+          to = here('report', 'figures','retro_compare_Bratio_uncertainty.png'), 
+          overwrite = TRUE, recursive = FALSE)
 # MCMC --------------------------------------------------------------------
 #need to change do_recdev to option 2 for use with MCMC
 base_model_recdev2 <- "4_2_1a_propBase"
@@ -281,10 +380,9 @@ run_mcmc_diagnostics(
     verbose = FALSE
   )
 
-
-
 # ============================================================================ #
 # Profile over M while estimating h
+#DID NOT DO FOR FINAL pre-STAR BASE - replaced with other bivariate code
 #need to modify the base model to estimate h
 #making a copy of the base model and changing the phase 
 bivar_directory <- here('models', '_bivariate_profiles')
@@ -339,6 +437,7 @@ future::plan(future::sequential)
 
 # ============================================================================ #
 # Profile over h while estimating M
+#DID NOT DO FOR FINAL pre-STAR BASE - replaced with other bivariate code
 #use the same base model just change the parameters
 copy_SS_inputs(dir.old = here('models', base_model), 
                dir.new = here('models', '_bivariate_profiles', base_model),

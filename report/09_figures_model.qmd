@@ -316,11 +316,11 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 
-## Model diagnostics
+## Model Diagnostics
 
 
 
-### Sensitivity analyses
+### Sensitivity Analyses
 
 ```{r}
 #| label: fig-sens-overall
@@ -392,8 +392,40 @@ knitr::include_graphics(
 
 
 
-### Retrospectives and likelihood profiles
+### Retrospectives and Likelihood Profiles
 
+```{r}
+#| label: fig-retro-ssb
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Retrospective results: change in the estimate of spawning output when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model."
+#| fig-alt: "The population scale decreases as more years of data are removed."
+
+knitr::include_graphics("figures/retro_compare_spawnbio_uncertainty.png")
+```
+
+```{r}
+#| label: fig-retro-depl
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Retrospective results: change in the estimate of the fraction of unfished relative to the start year when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model."
+#| fig-alt: "The stock is more depleted in the ending year of each retrospective as more years of data are removed."
+
+knitr::include_graphics("figures/retro_compare_Bratio_uncertainty.png")
+```
+
+```{r}
+#| label: fig-retro-panel
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Squid plots of retrospective results relative to the base model for fishing mortality, fraction unfished, recruits, and spawning output."
+#| fig-alt: "A four panel plot showing that all four metrics indicate a more depleted stock of smaller size as years of data are removed."
+
+knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
+```
 
 ```{r}
 #| label: fig-Mh-contour
