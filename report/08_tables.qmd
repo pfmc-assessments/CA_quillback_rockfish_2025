@@ -377,28 +377,18 @@ projections_table |>
     decimals = 0
   ) |>
   gt::fmt_number(
-    columns = c(4, 6, 10),
+    columns = c(6, 10),
     decimals = 3,
+    drop_trailing_zeros = FALSE,
   ) |>
   gt::fmt_number(
-    columns = c(5, 7, 8),
+    columns = c(4, 5, 7, 8),
     decimals = 2,
+    drop_trailing_zeros = FALSE,
   ) |>
   gt::tab_options(
     table.font.size = 12,
     latex.use_longtable = TRUE 
-  ) |>
-  gt::sub_values(
-    columns = 4,
-    rows = 1,
-    values = 0,
-    replacement = c(0.086 + 1.114 + 0.1)
-  ) |> 
-  gt::sub_values(
-    columns = 4,
-    rows = 2,
-    values = 0,
-    replacement = c(0.086 + 1.314 + 0.1)
   ) |>
   gt::sub_missing(
     columns = tidyselect::everything(),
