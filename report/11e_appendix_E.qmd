@@ -1,0 +1,33 @@
+# Appendix C: Regulations
+
+The following figures represent the regulations history for California's saltwater recreational fishery and nearshore commercial fishery.
+
+The recreational regions are defined base on the following latitudes: Northern ($42^\circ 00^\prime$ N lat. to $40^\circ 10^\prime$ N lat.), Mendocino ($40^\circ 10^\prime$ N lat. to $38^\circ 57^\prime$ N lat.), San Francisco ($38^\circ 57^\prime$ N lat. to $37^\circ 11^\prime$ N lat.), Central ($37^\circ 11^\prime$ N lat. to $34^\circ 27^\prime$ N lat.), Southern ($34^\circ 27^\prime$ N lat. to US/Mexico border). Not all management areas have been consistently defined over time. The northern and southern management areas have remained the same. From 2001-2003 the Central management area was defined as $40^\circ 10^\prime$ N lat. to $34^\circ 27^\prime$ N lat. In 2004 and again in 2024, the Central area was split into a North-Central and South-Central areas at $36^\circ 00^\prime$ N lat. In 2005, the regions from  $40^\circ 10^\prime$ N lat. to $34^\circ 27^\prime$ N lat. were redefined. The North-Central encompasses $40^\circ 10^\prime$ N lat. to $37^\circ 11^\prime$ N lat., Monterey South-Central from $37^\circ 11^\prime$ N lat. to $36^\circ 00^\prime$ N lat., and Morro Bay South-Central from $36^\circ 00^\prime$ N lat. to $34^\circ 27^\prime$ N lat.
+
+
+```{r} 
+#| label: fig-regs-rec
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "The CDFW recreational season length and depth restriction for nearshore rockfish by month from 2000 to 2003. A triangle indicates a regulation change mid-month."
+#| fig-alt: "Representation of the seasonal depth restrictions for rockfish."
+
+knitr::include_graphics("figures/ca_rec_fishing_regs.png")
+
+```
+
+
+
+
+```{r} 
+#| label: fig-regs-com
+#| echo: false 
+#| warning: false 
+#| eval: true 
+#| fig-cap: "CDFW commercial nearshore fishing regulations."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/com_regs_vis_250408.png")
+
+```

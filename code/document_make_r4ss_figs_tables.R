@@ -33,7 +33,7 @@ r4ss::table_all(replist = pp, dir = here::here("report"))
 r4ss::SSplotBiology(
   pp,
   subplots = 3,
-  plotdir = here("documents", "report","r4ss_plots"),
+  plotdir = here("report","r4ss_plots"),
   plot = FALSE,
   print = TRUE,
   pheight = 5.5,
