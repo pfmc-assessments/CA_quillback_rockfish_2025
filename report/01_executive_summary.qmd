@@ -24,7 +24,7 @@ catches_es_table |>
   gt::gt() |>
   gt::fmt_number(
     columns = 2:4, # depends on number of fleets with catch
-    decimals = 0
+    decimals = 2
   ) |>
   gt::tab_options(
     table.font.size = 12,
@@ -300,7 +300,7 @@ reference_points_table |>
 
 ## Management Performance{-}
 
- (@tbl-es-management)
+ (@tbl-es-management, @tbl-management)
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
 
 ```{r, tbl-es-management, results = "asis"}
@@ -325,8 +325,63 @@ recent_management_table |>
 
 ```
 
-## Unresolved Problems and Major Uncertainties{-}
 
+```{r, tbl-management, results = "asis"}
+#| label: tbl-management
+#| warning: false
+#| echo: false
+#| tbl-cap: "Recent trend in the overfishing limits (OFL), the acceptable biological catches (ABCs), the annual catch limits (ACLs), and the total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, OFLs and ACLs are the contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes, and so these are provided for both complexes. The ACL contribution allocated to California across both complexes is also provided, based on approximate allocations as described in the text. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL, and then divided into the north and south management units, however value here are provided as California only values."
+#| tbl-pos: H
+
+management <- read.csv(here("report", "tables", "management.csv")) |>
+  dplyr::mutate("ACLca" = ACLnorth * 0.287 + ACLsouth) #only correct prior to 2023
+recent <- management[management$Year %in% c(2023, 2024), ]
+management[management$Year %in% c(2023, 2024), -1] <- NA
+management[management$Year %in% c(2023, 2024), c("OFLca", "ABCca", "ACLca")] <-
+  cbind(c(recent$OFLsouth + recent$OFLnorth),
+        c(recent$ABCsouth + recent$ABCnorth),
+        c(recent$ACLsouth + recent$ACLnorth))
+management$catch <- recent_management_table$`Catch (mt)`
+management |>
+  gt::gt() |>
+  gt::cols_hide(
+    columns = c(ABCsouth,
+                ABCnorth)
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+  gt::cols_label(
+    OFLsouth = "OFL North",
+    ACLsouth = "ACL South",
+    OFLnorth = "OFL North",
+    ACLnorth = "ACL North",
+    OFLca = "OFL CA",
+    ABCca = "ABC CA",
+    ACLca = "ACL CA",
+    catch = "Total removals"
+  ) |>
+  gt::cols_width(
+    everything() ~ px(50)
+  ) |>
+  gt::fmt_number(
+    decimals = 2
+  ) |>
+  gt::fmt_number(
+    columns = 1,
+    decimals = 0,
+    use_seps = FALSE
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    missing_text = "---"
+  ) |>
+  gt::as_latex()
+```
+
+
+## Unresolved Problems and Major Uncertainties{-}
 
 
 <!-- Any special issues that complicate scientific assessment, questions about the best model scenario, etc. -->
