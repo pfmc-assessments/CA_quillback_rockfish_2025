@@ -300,34 +300,11 @@ reference_points_table |>
 
 ## Management Performance{-}
 
- (@tbl-es-management, @tbl-management)
+ (@tbl-es-management)
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
 
 ```{r, tbl-es-management, results = "asis"}
 #| label: tbl-es-management
-#| warning: false
-#| echo: false
-#| eval: !expr eval_tables 
-#| tbl-cap: "Recent trend in the overfishing limits (OFL), the acceptable biological catches (ABCs), the annual catch limits (ACLs), and the total dead catch (landings + discards) all in metric tons (mt)."
-#| tbl-pos: H
-
-recent_management_table |>
-  rename(`Total dead catch (mt)` = `Catch (mt)`) |>
-  gt::gt() |>
-  gt::tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE 
-  ) |>
-#   gt::cols_align(
-#     align = "center"
-#   ) |>
-  gt::as_latex()
-
-```
-
-
-```{r, tbl-management, results = "asis"}
-#| label: tbl-management
 #| warning: false
 #| echo: false
 #| tbl-cap: "Recent trend in the overfishing limits (OFL), the acceptable biological catches (ABCs), the annual catch limits (ACLs), and the total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, OFLs and ACLs are the contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes, and so these are provided for both complexes. The ACL contribution allocated to California across both complexes is also provided, based on approximate allocations as described in the text. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL, and then divided into the north and south management units, however value here are provided as California only values."
@@ -405,12 +382,18 @@ management |>
 projections_table |>
   gt::gt() |>
   gt::fmt_number(
-    columns = c(2:5, 7:8),
+    columns = c(2:5, 7:9),
     decimals = 0
   ) |>
   gt::fmt_number(
-    columns = c(6, 9:10),
-    decimals = 3
+    columns = c(6, 10),
+    decimals = 3,
+    drop_trailing_zeros = FALSE,
+  ) |>
+  gt::fmt_number(
+    columns = c(4, 5, 7, 8),
+    decimals = 2,
+    drop_trailing_zeros = FALSE,
   ) |>
   gt::tab_options(
     table.font.size = 12,
