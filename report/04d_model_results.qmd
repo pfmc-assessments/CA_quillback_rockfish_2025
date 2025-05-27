@@ -44,7 +44,7 @@ There are large Pearson residuals for the growth fleet conditional ages that may
 
 The first year of the recreational index was not fit, and this may be in part due to it being the first year of the survey (@fig-log-crfs-fit). The model fit the overall trend in the recreational index reasonably well, and the change in time varying selectivity in 2017 is evident.
 
-The relative indices from the \gls{s-ccfrp} and the \gls{gls} surveys both indicated increases in the later years which model fits underestimated (@fig-log-ccfrp-fit and @fig-log-rov-fit). However, both indices were fit well without the need to add extra variation to capture changes.  The decreased value in 2019 for \gls{s-ccfrp} was not captured by the model and may be a result of factors not considered in index development, i.e., higher than average catches of a midwater species.
+The relative indices from the \gls{s-ccfrp} and the \gls{rov} surveys both indicated increases in the later years which model fits underestimated (@fig-log-ccfrp-fit and @fig-log-rov-fit). However, both indices were fit well without the need to add extra variation to capture changes.  The decreased value in 2019 for \gls{s-ccfrp} was not captured by the model and may be a result of factors not considered in index development, i.e., higher than average catches of a midwater species.
 
 ### Population Trajectory
 
