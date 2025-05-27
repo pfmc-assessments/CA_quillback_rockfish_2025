@@ -75,7 +75,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Length-based selectivity showing the time-varying selectivity for the recreational and commercial fleets."
-#| fig-alt: "ZEBRA"
+#| fig-alt: "Asymptotic selectivity is estimated for the recreational fleet in all time periods, the ROV survey and the CCFRP survey.  The commercial fleet has estimate dome shaped selectivity from 1916--2002 and asymptotic selecitivity for the remaining time blocks, 2003--2013, 2014--2021 and 2022-2024."
 
 knitr::include_graphics("figures/selectivityPlot.png")
 ```
@@ -150,7 +150,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Mean length (cm) for commercial fleet with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
-#| fig-alt: "FROG"
+#| fig-alt: "Mean length begins around 34 cm in 1990, and increases with the time block in 2003. Mean length continues to incrfease through 2013 and is fit to remain stable until the two most recent years where it decreaases to around 37 cm."
 
 knitr::include_graphics(
     "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_Commercial.png"
@@ -163,7 +163,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Mean age from conditional data (aggregated across length bins) for the commercial fleet with 95% confidence intervals based on current samples sizes."
-#| fig-alt: "FROG"
+#| fig-alt: "Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximatel 26 for 2020 and ranges from 15-19 for hte other years"
 
 knitr::include_graphics(
     "r4ss_plots/comp_condAALfit_data_weighting_TA1-8_condAgeCA_Commercial.png"
@@ -177,7 +177,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Pearson residuals for the commercial conditional age at length composition."
-#| fig-alt: "FROG"
+#| fig-alt: "There are no clear patters in the residuals in the observed fits."
 
 knitr::include_graphics(
     "r4ss_plots/comp_condAALfit_residsflt1mkt0.png"
@@ -190,7 +190,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Mean length (cm) for recreational fleet with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
-#| fig-alt: "FROG"
+#| fig-alt: "The model predicted mean length generally fit the observed data well. Mean length ranges from 32 to 42 cm with lower mean length in more recent years."
 
 knitr::include_graphics(
     "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_Recreational.png"
@@ -203,7 +203,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Pearson residuals for the commercial fleet conditional age at length composition."
-#| fig-alt: "FROG"
+#| fig-alt: "There are no clear patters in the residuals in the observed fits."
 
 knitr::include_graphics(
     "r4ss_plots/comp_condAALfit_residsflt3mkt0.png"
@@ -216,7 +216,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Mean length (cm) for CCFRP with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
-#| fig-alt: "FROG"
+#| fig-alt: "Mean length is well fit except for in 2019, a year in which the data has a higher mean length than other years."
 
 knitr::include_graphics(
     "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_CCFRP.png"
@@ -231,7 +231,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
-#| fig-alt: "FROG"
+#| fig-alt: "Mean length was well estimated by the model for all years."
 
 knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
 ```
@@ -245,7 +245,7 @@ knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png"
 #| warning: false
 #| eval: true
 #| fig-cap: "Estimated time series of spawning output in millions of eggs."
-#| fig-alt: "FROG"
+#| fig-alt: "Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increases and then stabilizes towrads the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 ```
@@ -256,7 +256,7 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Estimated time series of total biomass."
-#| fig-alt: "FROG"
+#| fig-alt: "Total biomass in metric tons is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 ```
@@ -267,7 +267,7 @@ knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Estimated time series of fraction of unfished spawning output."
-#| fig-alt: "FROG"
+#| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 ```
@@ -436,8 +436,8 @@ knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "."
-#| fig-alt: "."
+#| fig-cap: "Change in the estimate of spawning output and fraction unfished across a range of log(R~0~) values."
+#| fig-alt: "FROG"
 
 knitr::include_graphics("figures/R0_profile_bio_comparison.png")
 ```
@@ -447,7 +447,7 @@ knitr::include_graphics("figures/R0_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "."
+#| fig-cap: "Change in the negative log-likelihood across a range of log(R~0~) values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
@@ -458,7 +458,7 @@ knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "."
+#| fig-cap: "Change in the estimate of spawning output and fraction unfished across a range of steepness values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/h_profile_bio_comparison.png")
@@ -469,7 +469,7 @@ knitr::include_graphics("figures/h_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "."
+#| fig-cap: "Change in the negative log-likelihood across a range of steepness values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
@@ -480,7 +480,7 @@ knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "."
+#| fig-cap: "Change in the estimate of spawning output and fraction unfished across a range of natural mortality values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/m_profile_bio_comparison.png")
@@ -491,7 +491,7 @@ knitr::include_graphics("figures/m_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "."
+#| fig-cap: "Change in the negative log-likelihood across a range of natural mortality values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/piner_panel_NatM_uniform_Fem_GP_1.png")
