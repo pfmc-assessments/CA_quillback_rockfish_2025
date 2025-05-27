@@ -237,6 +237,40 @@ knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png"
 ```
 
 
+```{r}
+#| label: fig-log-crfs-fit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Fit to log index data on log scale for the CRFS dockside PR index of abundance.  Lines indicate input uncertainty."
+#| fig-alt: "Model fit to the CRFS dockside PR index of abundance."
+
+knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_Recreational.png")
+```
+
+```{r}
+#| label: fig-log-ccfrp-fit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Fit to log index data on log scale for the CCFRP index of abundance.  Lines indicate input uncertainty."
+#| fig-alt: "Model fit to the CCFRP index of abundance."
+
+knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_CCFRP.png")
+```
+
+```{r}
+#| label: fig-log-rov-fit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Fit to log index data on log scale for the ROV index of abundance.  Lines indicate input uncertainty."
+#| fig-alt: "Model fit to the ROV index of abundance."
+
+knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
+```
+
+
 ### Time-series
 
 ```{r}
