@@ -1,4 +1,4 @@
-## Biological Parameters
+## Biological Parameters {#sec-biology}
 
 ### Natural Mortality
 
