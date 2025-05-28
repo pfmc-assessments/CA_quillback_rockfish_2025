@@ -1,5 +1,5 @@
 ---
-title: 'Status of the Quillback rockfish stock in U.S. waters off the coast of California in 2025'
+title: 'Status of the Quillback Rockfish Stock in U.S. Waters off the Coast of California in 2025'
 author:
   - name: 'Brian J. Langseth'
     affiliations:
