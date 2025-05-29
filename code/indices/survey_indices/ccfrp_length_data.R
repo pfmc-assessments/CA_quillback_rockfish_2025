@@ -164,6 +164,35 @@ out <- cbind(lfs_ref[,1:5], "InputN" = n, lfs)
 
 
 
+## Create table of sample sizes and trips lengths
+dataN <- len_final %>%
+  dplyr::group_by(Year) %>% 
+  dplyr::summarize(Nfish = length(length_cm),
+                   Ntrip = length(unique(tripID))) %>%
+  tidyr::pivot_wider(names_from = source,
+                     values_from = c(Nfish, Ntrip),
+                     names_glue = "{source}_{.value}") %>%
+  dplyr::arrange(Year) %>%
+  data.frame()
+dataN[is.na(dataN)] <- 0
+write.csv(dataN, here("data", "SampleSize_length_CCFRP.csv"), row.names = FALSE)
+
+
+## Create table of sample sizes and trips ages for non-growth fleet sources
+dataN_age <- data %>% dplyr::filter(!is.na(age)) %>%
+  dplyr::group_by(source, Year) %>% 
+  dplyr::summarize(Nfish = length(age),
+                   Ntrip = length(unique(tripID))) %>%
+  tidyr::pivot_wider(names_from = source,
+                     values_from = c(Nfish, Ntrip),
+                     names_glue = "{source}_{.value}") %>%
+  dplyr::arrange(Year) %>%
+  data.frame()
+dataN_age[is.na(dataN_age)] <- 0
+#write.csv(dataN_age, here("data", "SampleSize_age.csv"), row.names = FALSE)
+
+
+
 
 write.csv(out, file = file.path(here("data","forSS3", "Lcomps_ccfrp_withFN_weighted_length_comps_unsexed.csv")), row.names = FALSE)
 
