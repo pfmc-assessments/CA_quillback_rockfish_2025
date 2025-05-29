@@ -166,11 +166,12 @@ out <- cbind(lfs_ref[,1:5], "InputN" = n, lfs)
 
 ## Create table of sample sizes and trips lengths
 dataN <- len_final %>%
-  dplyr::group_by(Year) %>% 
-  dplyr::summarize(Nfish = length(length_cm),
-                   Ntrip = length(unique(tripID))) %>%
+  dplyr::mutate(source = "CCFRP") %>%
+  dplyr::group_by(source, Year) %>% 
+  dplyr::summarize(Nfish = length(Length_cm),
+                   Ndrift = length(unique(driftID))) %>%
   tidyr::pivot_wider(names_from = source,
-                     values_from = c(Nfish, Ntrip),
+                     values_from = c(Nfish, Ndrift),
                      names_glue = "{source}_{.value}") %>%
   dplyr::arrange(Year) %>%
   data.frame()
