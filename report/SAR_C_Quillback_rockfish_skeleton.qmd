@@ -62,6 +62,12 @@ bibliography:
 csl: 'canadian-journal-of-fisheries-and-aquatic-sciences.csl'
 ---
 
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\renewcommand{\thetable}{\roman{table}}
+\renewcommand{\thefigure}{\roman{figure}}
+
 
 ```{r}
 #| label: 'read_base_model'
@@ -224,6 +230,15 @@ cat(a, sep = '\n')
 
  {{< pagebreak >}}
 
+
+
+\setlength{\parskip}{5mm plus1mm minus1mm}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\setcounter{section}{0}
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+
 ```{r, results='asis'}
 #| label: 'introduction'
 #| eval: true
@@ -300,24 +315,24 @@ cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
-
-```{r, results='asis'}
-#| label: 'model-structure'
-#| eval: true
-#| echo: false
-#| warning: false
-#a <- knitr::knit_child('04b_model_structure.qmd', quiet = TRUE)
-#cat(a, sep = '\n')
-```
-
- {{< pagebreak >}} 
  
 ```{r, results='asis'}
 #| label: 'model-bridging'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('04c_model_bridging.qmd', quiet = TRUE)
+a <- knitr::knit_child('04b_model_bridging.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'model-structure'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('04c_model_structure.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
