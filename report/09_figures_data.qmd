@@ -156,6 +156,65 @@ knitr::include_graphics(
 )
 ```
 
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-len-ccfrp-bubbles
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length composition data for the CCFRP survey where bubbles correspond to the proportional sample size by bin within each year."
+#| fig-alt: "Bubble plot of CCFRP length compositions. See text for description"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_bubflt4mkt0.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-lenMean-ccfrp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length for the the CCFRP survey with 95 percent confidence intervals based on current samples sizes."
+#| fig-alt: "Line plot showing mean length along with uncertainty in each year with a slight decline in mean length since 2020."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_data_weighting_TA1-8_CA_CCFRP.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-len-rov-bubbles
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Length composition data for the ROV survey where bubbles correspond to the proportional sample size by bin within each year."
+#| fig-alt: "Bubble plot of CCFRP length compositions. See text for description"
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_bubflt5mkt0.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-lenMean-rov
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length for the the ROV survey with 95 percent confidence intervals based on current samples sizes."
+#| fig-alt: "Line plot showing mean length along with uncertainty in each year with a generally unchange pattern, though lengths are larger in 2014 and 2015, and show and increasing trend from 2019 to 2021."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lendat_data_weighting_TA1-8_CA_ROV.png"
+)
+```
 
 ### Biological data
 
