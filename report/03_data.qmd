@@ -25,17 +25,17 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
 
 4.  Fishery-independent data, which include length composition data and relative abundance trends were obtained from two different surveys:
 
-    a.  \Gls{s-ccfrp} provides an index of abundance and corresponding length composition data and was included for years 2004-2022. Age samples were also collected from \gls{s-ccfrp} and used to inform biological relationships.
-    b.  \Gls{rov} sampling done by the \gls{cdfw} provides an index of abundance and corresponding length composition data and was included for two super-periods, 2014--2016 and 2019--2021, which are combined within each super-period for the index but used as individual years for length compositions. **FROG: Same question. Do we want to add all the possible rec data index source, or just the one we ultimately used?? We could add all the many in [discussion #2](https://github.com/pfmc-assessments/CA_quillback_rockfish_2025/discussions/2)**
+    a.  \Gls{s-ccfrp} provides an index of abundance and corresponding length composition data and was included for years 2004-2022. Age samples were also obtained from \gls{s-ccfrp} and used to inform biological relationships.
+    b.  \Gls{rov} sampling done by the \gls{cdfw} provides an index of abundance and corresponding length composition data, which were included for two super-periods, 2014--2016 and 2019--2021. Data were combined within each super-period for the index but used as individual years for length compositions.
     
 5.  Estimates of life history parameters were generated from various sources, and include:
 
     a.  Updated maturity schedule from fish sampled in California by the \gls{gcdc} based on analysis assuming functional age-at-maturity.
     b.  Updated fecundity relationship from fish sampled in California by the \gls{gcdc} assuming fecundity is a power function of length.
-    c.  Updated prior for natural mortality based on an update value for maximum age.
-    d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{recfin}, as well as from the \gls{s-wcgbt}.
+    c.  Updated value for natural mortality based on an updated value for maximum age.
+    d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{crfs}, as well as from the \gls{s-wcgbt}. These sources were the only ones with measured weights. 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
-    f.  Age and length samples from the same fish were collected from various sources and included as a growth fleet in the model.  
+    f.  Age and length samples from the same fish were collected from various sources and included as a growth fleet in the model for internally estimating growth.  
 
 The timing of these data sources as used in the base model are illustrated in Figure \ref{@fig-data-plot}.
 
