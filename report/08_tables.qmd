@@ -166,7 +166,40 @@ kableExtra::kable(
 
 
 
-## Data: fishery dependent
+## Data: fishery independent
+
+```{r}
+#| label: tbl-survey_lengths
+#| echo: false
+#| warning: false
+#| tbl-cap: "Summary of the number of fishery independent length samples and number of trips available for use in the stock assessment."
+
+ccfrplengths <- read.csv(here::here('data', "SampleSize_length_CCFRP.csv"), check.names = FALSE) 
+lengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
+  dplyr::select(Year, trawl_Nfish, trawl_Ntrip)
+rovlengths <-  read.csv(here::here('data', "SampleSize_length_ROV.csv"), check.names = FALSE) 
+
+temp <- merge(ccfrplengths, rovlengths, by = "Year", all = TRUE)
+fi_lengths <- merge(lengths[lengths$Year >= 2007,], temp, by = "Year", all = TRUE)
+
+fi_lengths |>
+  gt() |>
+  tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+cols_label(
+    Year = "Year",
+    CCFRP_Nfish = "N Lengths CCFRP",
+    CCFRP_Ndrift = "N Drifts CCFRP",
+    rov_Nfish = "N Lengths ROV",
+    rov_Ntrip = "N Transect ROV",
+    trawl_Nfish = "N Lengths WCGBTS",
+    trawl_Ntrip = "N Haul WCGBTS"
+  ) |>
+  as_latex()
+```
+
 
 ## Model results
 
