@@ -866,14 +866,6 @@ len_final <- len_final %>% mutate(site = case_when(Designation == "MPA" ~ "MPA",
                                         .default = "REF"))
 len_final$trawl_id <- len_final$tripID #trawl_id needed to calculate input_n for tows (trips) option.  
 
-#Output sample size for use in report (SampleSize_length compbined across super years)
-rovN <- len_final %>%
-  dplyr::group_by(Year) %>%
-  dplyr::summarise(
-    drifts = length(unique(tripID))) %>%
-  data.frame()
-#write.csv(rovN, here("data", "SampleSize_length_ROV.csv"), row.names = FALSE)
-
 #Sample size check
 n <- len_final %>%
   dplyr::group_by(Year, site) %>%
@@ -926,6 +918,15 @@ len_final <- len_final %>%
   dplyr::mutate(site = dplyr::case_when(Designation == "MPA" ~ "MPA", .default = "REF")) %>%
   dplyr::mutate(Year = Actual_Year) 
 len_final$trawl_id <- len_final$tripID #trawl_id needed to calculate input_n for tows (trips) option.  
+
+#Output sample size for use in report (SampleSize_length compbined across super years)
+rovN <- len_final %>%
+  dplyr::group_by(Year) %>%
+  dplyr::summarise(
+    rov_Ntrip = length(unique(tripID)),
+    rov_Nfish = length(Year)) %>%
+  data.frame()
+#write.csv(rovN, here("data", "SampleSize_length_ROV.csv"), row.names = FALSE)
 
 #Sample size check
 n <- len_final %>%
