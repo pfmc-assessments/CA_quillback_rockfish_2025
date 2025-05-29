@@ -47,8 +47,6 @@ knitr::include_graphics(
 )
 ```
 
-### Indices
-
 ### Composition data
 
 ```{r}
@@ -142,6 +140,22 @@ knitr::include_graphics(
 ```
 
 {{< pagebreak >}}
+
+### Indices
+
+```{r}
+#| label: fig-indices
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Standardized indices (each scaled to have a mean of 1) used in the base model for the recreational fleet, and the CCFRP and ROV surveys. For estimates of uncertainty around the indices see the individual figures showing model fit to the indices."
+#| fig-alt: "Line plot of relative abundance indices used in the base model showing limited overlap in time between the indices, and variable overlap."
+
+knitr::include_graphics(
+    "r4ss_plots/index9_standcpueall.png"
+)
+```
+
 
 ### Biological data
 
