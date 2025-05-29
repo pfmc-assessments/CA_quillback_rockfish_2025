@@ -17,7 +17,7 @@ where $A_{\text{max}}$ is the maximum age. The prior is defined as a log-normal 
 
 ### Weight-at-Length
 
-The length-weight relationship for `r spp` was estimated outside the model using available California biological data collected from fishery-independent and fishery-dependent data sources (@fig-weightlength). **FROG Sources included the WCGBTS, and recreational and commercial samples**. Only measured weight and length values were used; any values with more than two decimal places were assumed to be calculated from another measurement and were excluded. The estimated length-weight relationship for California `r spp` was:
+The length-weight relationship for `r spp` was estimated outside the model using available California biological data collected from fishery-independent (\gls{s-wcgbt}) and fishery-dependent (\gls{mrfss} and \gls{crfs}) data sources (@fig-weightlength). Only measured weight and length values were used; any values from the \gls{mrfss} dataset with more than two decimal places were assumed to be calculated from another measurement and were excluded. The estimated length-weight relationship for California `r spp` was:
 \begin{centering}
 
 $$
