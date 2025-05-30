@@ -36,7 +36,7 @@ Two time periods were estimated for the recreational fleet.  These were 1916--20
 
 The selectivity parameters estimated for the later time blocks of commercial and recreational selectivity are also applied to future years during forecasts. Given that very recent restrictions in 2003 restricting data collection since that time, it is difficult to estimate selectivity parameters representative of that restricted period. It is also difficult to know what selectivity dynamics will look like in the coming years, i.e. whether they will be more similar to this recent restricted period or an earlier period.  
 
-Asymptotic selectivity parameterizations were used for both survey fleets. The peak corresponds to selection of smaller fish for \gls{cpfv} relative to \gls{rov}. This is consistent with differences in survey depths with \gls{s-ccfrp} operating to only 60 m depth and \gls{rov} extending as deep as 100 m.  
+Asymptotic selectivity parameterizations were used for both survey fleets. The peak corresponds to selection of smaller fish for party/charter fleet relative to \gls{rov}. This is consistent with differences in survey depths with \gls{s-ccfrp} operating to only 60 m depth and \gls{rov} extending as deep as 100 m.  
 
 Sensitivities to a variety of alternative selectivity curves and time blocks are presented in section @sec-assmt-sens.  
 

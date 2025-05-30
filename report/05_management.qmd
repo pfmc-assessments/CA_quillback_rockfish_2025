@@ -2,9 +2,9 @@
 
 ## Reference Points
 
-Reference points were calculated using the estimated selectivities and catch distribution among fleets in the final year of the model, `r mod_out$endyr`. Derived quantities along with reference points at the three management targets for the population at 40 percent of unfished spawning output, at spawners-per-recruit (SPR) of 50 percent, and at the internal model estimated \gls{msy} are shown in @tbl-ref-points-es. The equilibrium yield curve in shown in @fig-yield.   
+Reference points were calculated using the estimated selectivities and catch distribution among fleets in the final year of the model, `r mod_out$endyr`. Derived quantities along with reference points at the three management targets for the population at 40% of unfished spawning output, at spawners-per-recruit (SPR) of 50%, and at the internal model estimated \gls{msy} are shown in @tbl-ref-points-es. The equilibrium yield curve in shown in @fig-yield.   
 
-The 2025 `r spp` spawning output relative to unfished spawning output is above the target at `r round(100*mod_out$current_depletion, 1)` percent (@fig-depl). **FROG: Do we want another figure here that copies the one from the executive summary? The reference point table above is not reproduced but instead references the ES table?** The fishing intensity (1 − SPR) first reached the target around 1980 and has varied since. Fishing mortality was most recently above the target of 0.5 during 2017--2021 but has recently decreased to below 0.5 (@fig-spr).
+The 2025 `r spp` spawning output relative to unfished spawning output is above the target at `r round(100*mod_out$current_depletion, 1)`% (@fig-depl). **FROG: Do we want another figure here that copies the one from the executive summary? The reference point table above is not reproduced but instead references the ES table?** The fishing intensity (1 − SPR) first reached the target around 1980 and has varied since. Fishing mortality was most recently above the target of 0.5 during 2017--2021 but has recently decreased to below 0.5 (@fig-spr).
 
 ## Harvest Projections and Decision Tables
 
