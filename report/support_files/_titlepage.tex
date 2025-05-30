@@ -16,6 +16,7 @@ $endif$
 
 % \includegraphics[width=2cm]{NOAA_Transparent_Logo.png}
 
+
 % background image
 $if(title-bg-image)$
 \This$if(title-bg-location)$$title-bg-location$$else$UL$endif$CornerWallPaper{$if(title-bg-size)$$title-bg-size$$else$0.5$endif$}{$title-bg-image$}
@@ -23,23 +24,27 @@ $endif$
 
 
 % Title and subtitle
-{\huge\bfseries\nohyphens{$title$}}\\[1\baselineskip]
+{\huge\bfseries\nohyphens{$title$}\par}%\\[1\baselineskip]
 % Ross would change the end of the above line to the following because \par must come before the group closes and line-depth reverts.
 % }\par}%\\[1\baselineskip]
 
-$if(subtitle)${\large{$subtitle$}}\\[4\baselineskip]$endif$
+
+$if(subtitle)${\large{$subtitle$}}\\[2\baselineskip]$endif$
 
 \vspace{1\baselineskip}
 % Ross would change this to 2\baselineskip
 
+
 %%%%%% Cover image
 $if(cover)$
-\pdftooltip{\includegraphics[width=6in]{$cover$}}{A photo of a quillback rockfish.}
+\pdftooltip{\centering\includegraphics[width=4in]{$cover$}}{A photo of a quillback rockfish.}
 % cover page customization need to be inserted here
 %\pdftooltip{\includegraphics{$cover$}}{Alt text}
 $endif$
 
-\vspace{1\baselineskip}
+\raggedright 
+
+\vspace{5\baselineskip}
 
 % Authors
 % This hairy bit of code is just to get "and" between the last 2
