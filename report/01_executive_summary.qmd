@@ -308,7 +308,7 @@ reference_points_table |>
 
 ## Management Performance{-}
 
-During the recent period when `r spp` was managed within a stock, the total removed were above the species' OFL contribution from 2018--2022. Since 2023, `r spp` has had its own reference points and attainment has remained below the OFL(@tbl-es-management). 
+During the recent period when `r spp` was managed within a stock, the total removed were above the species' OFL contribution from 2018--2022. Since 2023, `r spp` has had its own reference points and attainment has remained below the OFL (@tbl-es-management). 
 
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
 
