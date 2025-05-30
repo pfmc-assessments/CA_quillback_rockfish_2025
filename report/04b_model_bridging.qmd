@@ -1,3 +1,7 @@
+## Base Model Structure (TOR Section E5)
+
+The assessment was conducted using Stock Synthesis version 3.30.23.1, compiled December 5, 2024 (available [online](https://github.com/nmfs-ost/ss3-source-code/releases/tag/v3.30.23.1)).
+
 ### Model Changes from the Last Assessment (TOR Section E4)
 
 A number of changes have been made in the base model compared to that used in the 2021 assessment [@Langseth_status_2021]. These involve changes in data, data sources used, and model assumptions. The change with the largest effect includes the addition of age data, both the use of commercial conditional-age-at-length distributions but also the inclusion of the growth fleet to support estimating growth internally in the model as well as other population dynamics. Most of these data was the result of extensive sampling efforts across multiple agencies since the 2021 assessment. The effect of the addition of this data on model results is shown in bridging (see @sec-bridging below) and the effect of omitting this data on model results was explored through sensitivity analyses (see @sec-assmt-sens).

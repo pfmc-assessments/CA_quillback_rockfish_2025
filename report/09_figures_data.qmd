@@ -1,5 +1,5 @@
 # Figures
- 
+## Data 
 ```{r} 
 #| label: 'set-rda-dir-figs'
 #| echo: false 
@@ -20,7 +20,7 @@ knitr::include_graphics("figures/assessment_map.png")
 ```
 
 
-## Fishery-Dependent Data
+### Fishery-Dependent Data
 
 ```{r}
 #| label: fig-data
@@ -157,7 +157,7 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
-## Fishery-Independent Data
+### Fishery-Independent Data
 
 ```{r}
 #| label: fig-len-ccfrp-bubbles
@@ -217,7 +217,7 @@ knitr::include_graphics(
 )
 ```
 
-## Biological Parameters
+### Biological Parameters
 
 ```{r}
 #| label: fig-weightlength
