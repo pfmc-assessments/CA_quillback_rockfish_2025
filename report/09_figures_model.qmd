@@ -1,7 +1,4 @@
-## Model
-
-
-### Bridging
+## Assessment Model
 
 ```{r}
 #| label: fig-bridgeSS3_bio
@@ -63,11 +60,6 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
-### Biology
-
-### Results
-
-### Parameter Estimates
 
 ```{r}
 #| label: fig-selex
@@ -271,7 +263,7 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
 ```
 
 
-### Time-series
+### Population Trajectory
 
 ```{r}
 #| label: fig-ssb
@@ -345,14 +337,10 @@ knitr::include_graphics(
 )
 ```
 
-
-
 {{< pagebreak >}}
 
 
 ## Model Diagnostics
-
-
 
 ### Sensitivity Analyses
 
@@ -426,7 +414,7 @@ knitr::include_graphics(
 
 
 
-### Retrospectives
+### Retrospective Analyses
 
 ```{r}
 #| label: fig-retro-ssb

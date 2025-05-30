@@ -17,7 +17,7 @@ library(kableExtra)
 ``` 
 
 
-## Data: fishery-dependent
+## Data
 
 ```{r}
 #| label: tbl-catches
@@ -47,6 +47,7 @@ kableExtra::kable(
 ```
 
 {{< pagebreak >}}
+
 
 ```{r}
 #| label: tbl-comm_lengths
@@ -103,6 +104,7 @@ commages|>
 
 {{< pagebreak >}}
 
+
 ```{r}
 #| label: tbl-rec_lengths
 #| echo: false
@@ -128,8 +130,6 @@ cols_label(
   ) |>
   as_latex()
 ```
-
-
 
 ::: {.landscape}
 
@@ -164,9 +164,6 @@ kableExtra::kable(
 
 :::
 
-
-
-## Data: fishery independent
 
 ```{r}
 #| label: tbl-survey_lengths
@@ -209,7 +206,7 @@ fi_lengths |>
 ```
 
 
-## Model results
+## Assessment Model
 
 ```{r}
 #| label: tbl-model-config
@@ -303,9 +300,6 @@ kableExtra::kable(
   )
 ```
 
-## Model diagnostics
-
-### Sensitivity analyses
 
 ::: {.landscape}
 ```{r}
@@ -396,12 +390,9 @@ kableExtra::kable(
 
 ``` 
 
-
 ## Management
 
 \pagebreak
-
-
 
 ```{r, results = "asis"}
 #| label: tbl-projections
@@ -449,7 +440,6 @@ projections_table |>
 
 {{< pagebreak >}}
 
-### Risk Table
 
 ```{r, results = "asis"}
 #| label: tbl-risk

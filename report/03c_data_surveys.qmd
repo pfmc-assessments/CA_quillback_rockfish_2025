@@ -1,20 +1,18 @@
-## Fishery-independent Data
+## Fishery-Independent Data
 
 <!-- Fishery-independent data: Description of surveys used in the assessment, description of methods to estimate abundance indices, sample size information for length- and age- composition data by survey and year, including both the number of tows (or drops or sites for hook and line data) and fish sampled. Include complete tables and figures and date of data extraction.   -->
 
 The base model includes relative abundance indices and length composition data from two primary sources of fishery-independent data: the \gls{s-ccfrp} hook-and-line survey and the \gls{cdfw} \gls{rov} survey. While not used for relative abundance indices or length composition data, biological samples from the \gls{s-wcgbt} were used in estimating biological relationships. 
 
-### Sources
-
-#### \acrlong{s-ccfrp}
+### \acrlong{s-ccfrp}
 
 The \gls{s-ccfrp}, is a fishery-independent hook-and-line survey designed to monitor nearshore fish populations at a series of sampling locations both inside and adjacent to \glspl{mpa} [@Wendt2009; @Starr2015]. The \gls{s-ccfrp} survey began in 2007 along the central coast of California and was designed in collaboration with academics, \gls{nmfs} scientists and fishermen. In 2017, the survey expanded beyond the four \glspl{mpa} in central California (A&ntilde;o Nuevo, Point Lobos, Point Buchon, and Piedras Blancas) to include the entire California coast. Fish are collected by volunteer anglers aboard \glspl{cpfv} guided by one of the following academic institutions based on proximity to fishing location: Humboldt State University; Bodega Marine Laboratories; Moss Landing Marine Laboratories; Cal Poly San Luis Obispo; University of California, Santa Barbara; and Scripps Institution of Oceanography. `r Spp` were rarely observed south of the Farallon Islands and so this index represents the \glspl{mpa} and reference sites from the Farallon Islands and north. Surveys consist of fishing with hook-and-line gear for 30-45 minutes within randomly chosen 500 by 500 m grid cells within and outside \glspl{mpa}. Prior to 2017, all fish were measured for length and release or descended to depth; since then, some were sampled for otoliths and fin clips. 
 
-#### ROV Survey
+### ROV Survey
 
 \gls{rov} surveys have been used to monitor California’s mid-depth habitats (30--100 m) since 2004. While surveys have been conducted since 2004, it has only been possible to conduct surveys at a few locations each year.  Efforts to systematically select survey locations representative of the full California coastline began in 2014 and a full complement of these locations has taken three years to complete. Therefore, locations monitored in 2014--2016 and 2019--2021 are considered to represent complete surveys and were analyzed by \gls{cdfw} as two super years centered on the mid-point of each period (2015 and 2020). The survey is a collaboration between \gls{cdfw} and \gls{mare}. The survey was initially developed to assess the \gls{mpa} network. Sampling has been conducted at \glspl{mpa} along the entire California coast with 500-meter transects conducted within rocky reef habitat inside and outside each \gls{mpa}. A full description of survey methods is available in [@lauermann_rov_2017]. Data includes counts of fish by species, fish sizes, and a variety of characteristics of the transect location. 
 
-#### Surveys operated by \acrlong{nmfs}
+### \acrlong{nmfs}
 
 The \gls{s-wcgbt}, the Hook and Line survey, and the \gls{s-tri} survey collect data off the California coast on rockfish biology and abundance and are commonly incorporated in West Coast groundfish assessments. The \gls{s-tri} operated 1977--2004 and \gls{s-wcgbt} has operated since 2003. None of these fishery-independent surveys had adequate sample sizes of `r spp` off California to include as abundance indices for this assessment. There were no more than ten positive tows of `r spp` in any one year coastwide in the \gls{s-wcgbt}, and only seven positive tows in California. Similarly there were no more than five positive tows of `r spp` in any one year coastwide for the \gls{s-tri}, and only one positve tow in California. No quillback rockfish were captured in the Hook and Line survey. Given that indices of abundance were not calculated due to small sample sizes, length composition data from the \gls{s-wcgbt} (n = 39) and Triennial Survey (n = 1) off California were not included in the base model. Biological data from the \gls{s-wcgbt} were however used in external calculations of biological parameters, as well as internal calculations of growth, as previously described for the growth fleet. No ages or weights for `r spp` were available from the \gls{s-tri}, and so its single length sample was not incorporated.
 

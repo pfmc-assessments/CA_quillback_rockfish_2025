@@ -20,7 +20,7 @@ knitr::include_graphics("figures/assessment_map.png")
 ```
 
 
-## Data
+## Fishery-Dependent Data
 
 ```{r}
 #| label: fig-data
@@ -32,6 +32,7 @@ knitr::include_graphics("figures/assessment_map.png")
 
 knitr::include_graphics("r4ss_plots/data_plot2.png")
 ```
+
 
 
 ```{r}
@@ -47,7 +48,6 @@ knitr::include_graphics(
 )
 ```
 
-### Composition data
 
 ```{r}
 #| label: fig-len-comm-bubbles
@@ -141,7 +141,6 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
-### Indices
 
 ```{r}
 #| label: fig-indices
@@ -157,6 +156,8 @@ knitr::include_graphics(
 ```
 
 {{< pagebreak >}}
+
+## Fishery-Independent Data
 
 ```{r}
 #| label: fig-len-ccfrp-bubbles
@@ -216,7 +217,7 @@ knitr::include_graphics(
 )
 ```
 
-### Biological data
+## Biological Parameters
 
 ```{r}
 #| label: fig-weightlength

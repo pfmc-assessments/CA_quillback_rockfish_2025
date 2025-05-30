@@ -1,4 +1,4 @@
-### Sensitivity Analyses {#sec-assmt-sens}
+### Sensitivity Analyses () {#sec-assmt-sens}
 
 The base model contains substantial uncertainty in both how data were processed, and structural assumptions made. We tested sensitivity to many of these assumptions. Sensitivities were conducted as a single exploration from the base model assumptions and/or data, and were not performed in a cumulative fashion unless specifically noted. In general, structural assumptions regarding population productivity led to the largest changes in model outputs (@fig-sens-overall). All sensitivities with the exception of those related to omitting age or length data led to relatively similar estimates of growth parameters, indicating growth is consistently estimated in the model and we do not discuss it beyond sensitivities related to age and length data (Tables [-@tbl-sens-productivity]--[-@tbl-sens-selectivity]). We divide the sensitivities into four sections: population productivity, data weighting and relative contributions of data sources, choice related to how data are prepared, and selectivity. We also describe sensitivities done but not included in the document. 
 
