@@ -1,7 +1,8 @@
 ---
-title: 'Status of the Quillback Rockfish Stock in U.S. Waters off the Coast of California in 2025'
+title: 'Status of the California Quillback Rockfish Stock in U.S. Waters in 2025'
 author:
   - name: 'Brian J. Langseth'
+    equal-contributor: true
     affiliations:
       - name: 'NOAA Fisheries Northwest Fisheries Science Center'
         address: '2725 Montlake Boulevard East'
@@ -9,6 +10,7 @@ author:
         state: 'WA'
         postal-code: '98112'
   - name: 'Melissa H. Monk'
+    equal-contributor: true
     affiliations:
       - name: 'NOAA Fisheries Southwest Fisheries Science Center'
         address: '110 McAllister Way'
@@ -22,6 +24,8 @@ author:
         city: 'Santa Barbara, CA'
         state: 'CA'
         postal-code: '93109'
+author-notes:
+  equal-contributor: These authors contributed equally to this work.
 date: today
 lang: en 
 keep-tex: true 
@@ -30,7 +34,10 @@ pdf-engine: lualatex
 format: 
   pdf: 
     documentclass: scrartcl
+    margin-bottom: 1in
+    margin-top: 1in
     number-sections: true
+    linestretch: 1.25
     template-partials:
       - 'support_files/before-body.tex'
       - 'support_files/_titlepage.tex'
@@ -43,7 +50,7 @@ format:
     sansfont: 'Cambria'
     fontsize: 12pt
     titlepage-geometry: 
-      - top=2in
+      - top=1in
       - bottom=1in
       - right=1in
       - left=1in
@@ -513,3 +520,5 @@ cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
+
+ 

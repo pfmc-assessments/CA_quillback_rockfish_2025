@@ -16,10 +16,11 @@
 #      If you've already run the template during your session, the base_model
 #       already exists
 
-
+# render document
 library(here)
-# render the document
+
 quarto::quarto_render(here("report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
+
 
 
 

@@ -16,7 +16,7 @@ During the process of updating the 2021 rebuilding analysis for the 2023 assessm
 
 ## Response to Most Recent STAR Panel and SSC Recommendations (TOR Section E2) {#sec-star-recs}
 
-A STAR panel was not convened for the review of the 2021 California `r spp` assessment. The following responses are a compilation from across the reviews spanning 2021--2024, and include recommended research and data needs from the 2021 assessment, and recommendations on future work by the \gls{gfsc} during the January 2024 review. Requests made during the original 2021 reviews in June, August, and September were incorporated within the final 2021 stock assessment report [@langseth_status_2021]. 
+A STAR panel was not convened for the review of the 2021 California `r spp` assessment. The following responses are a compilation from across the reviews spanning 2021--2024, and include recommended research and data needs from the 2021 assessment, and recommendations on future work by the \gls{gfsc} during the January 2024 review. Requests made during the original 2021 reviews in June, August, and September were incorporated within the final 2021 stock assessment report [@Langseth_status_2021]. 
 
 ### Recommended Research and Data Needs from 2021 Assessment
 
