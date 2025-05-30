@@ -316,7 +316,7 @@ During the recent period when `r spp` was managed within a stock, the total remo
 #| label: tbl-es-management
 #| warning: false
 #| echo: false
-#| tbl-cap: "Recent trend in overfishing limits (OFL), acceptable biological catches (ABC), the annual catch limits (ACL; set to equal ABC) for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an $\\ast$. The ACL contribution allocated to California across both complexes is also provided and marked with an $\\ast$, and is calcualted as described in the text. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL and are provided here as California only values."
+#| tbl-cap: "Recent trend in overfishing limits (OFL), acceptable biological catches (ABC), the annual catch limits (ACL; set to equal ABC) for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk ($\\ast$). The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calcualted as described in the text. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL and are provided here as California only values."
 #| tbl-pos: H
 
 management <- read.csv(here("report", "tables", "management.csv")) |>
@@ -376,7 +376,7 @@ management |>
 
 ## Decision Table and Harvest Projections{-}
 
-Projections of the overfishing limit, acceptable biological catch, and annual catch limit, all based on a P* of 0.45 and a log-space standard deviation of the overfishing limit of 0.5 are included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the Groundfish Management Team, and catches from 2027 onward assume full attainment of the acceptable biological catch.  The 2025 and 2026 research catches were included in the catches from the recreational fleet due to similarities in gear selectivity.
+Projections of the overfishing limit (OFL), acceptable biological catch (ABC), and annual catch limit (ACL), all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 are included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the Groundfish Management Team, and catches from 2027 onward assume full attainment of the acceptable biological catch **FROG: Is this ABC or ACL**.
 
 
 <!-- Projected yields (OFL, ABC and ACL), spawning biomass / output, and stock depletion levels for each year. OFL calculations should be based on the assumption that future catches equal ABCs and not OFLs. -->
@@ -403,7 +403,7 @@ projections_table |>
     drop_trailing_zeros = FALSE,
   ) |>
   gt::fmt_number(
-    columns = c(4, 5, 7, 8),
+    columns = c(2, 3, 4, 5, 7, 8),
     decimals = 2,
     drop_trailing_zeros = FALSE,
   ) |>
