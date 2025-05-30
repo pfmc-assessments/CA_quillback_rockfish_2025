@@ -55,4 +55,3 @@ The population declined slowly with the onset of fishing, with three more signif
 
 The estimated spawning output relative to unfished reached a minimum of 0.328 in 1998 and then increased over the recent time period, with an ending year estimate of 0.428 in 2024 [@fig-depl].
 
-<!-- Time-series of total biomass, summary biomass, and spawning biomass (and/or spawning output), depletion relative to B0, recruitment and fishing mortality (1-SPR) (or exploitation rate estimates if fishing mortality not available) (table and figures).  -->

@@ -1,18 +1,16 @@
-## Model Diagnostics
+## Model Diagnostics (TOR Section F2)
 
-### Convergence
+### Convergence (TOR Section F4)
 
 Proper convergence was determined by starting the minimization process from dispersed values of the maximum likelihood estimates to determine if the model found a better minimum. Starting parameters were jittered using the jitter function built into Stock Synthesis, using jitter input of 0.5.  This was repeated 100 times with 98 out of 100 runs returning to the base model likelihood. A better, lower negative log-likelihood, model fit was not found. Through the jittering and likelihood profiles, we are confident that the base model, as presented, represents the best fit to the data given the assumptions made. There were no difficulties in inverting the Hessian to obtain estimates of variability throughout initial model attempts and all explorations resulted in a positive-definite Hessian. 
 
 
-### Retrospective Analysis
+### Retrospective Analysis (TOR Section H4)
 
 A fifteen-year retrospective analysis was conducted by successively removing years of data ranging from 2008--2023, i.e., “Data -1 Years” corresponds to data through 2023. The estimated spawning output for all retrospectives was lower at the start of the time series for all runs and lower in the final model years except for Data -1 and Data -2 years (@fig-retro-ssb). The estimates of depletion were within the asymptotic uncertainty of the base model in the first five peels, removing data through 2018 (@fig-retro-depl). A substantial amount of data were collected over the past five years for quillback rockfish. Removing more than 5 years of data results in a stock that is estimated closer to the \gls{msst} in the end year of a peeled model run. Removing 13 to 15 years of data results in changes in the recruitment patterns more dramatically than removing fewer years.  When 15 years of data are removed the high recruitment pulse in 1994 is no longer estimated and recruitment is on average higher than other model runs across the entire timeseries (@fig-retro-panel).  
 
- 
-<!-- Historical analysis (plot of actual estimates from current and previous assessments).  -->
 
-### Likelihood Profiles
+### Likelihood Profiles (TOR Section F2)
 
 Likelihood profiles were conducted for $ln{R_0}$, steepness  ($h$), and natural mortality values ($M$) separately, as well as bivariate profiles for steepness and natural mortality, and profiles over steepness while estimating natural mortality and for natural mortality while estimating steepness. The priors for all parameters, including the parameter being profiled, were included in every likelihood model. For example, including the prior on natural mortality across the profiled values of natural mortality provides information on the likelihood contribution of that prior as if it were estimated in the model.  
 
@@ -23,3 +21,9 @@ Across the negative log-likelihood profile for values of steepness all data type
 The profile over natural mortality suggested the negative log-likelihood was minimized at around $M = 0.08 yr^{-1}$, suggesting a lower maximum age than assumed in the base model with fixed natural mortality at `r round(mod_out$parameters["NatM_p_1_Fem_GP_1","Value"], 3)` $yr^{-1}$ (@fig-m-profile). The change in negative log-likelihood between these two models was less than 3 points. None of the data indicate a strong minimum across the values profiled from 0.20 to 1.0.  From values of $M$  from 0.065 to 1.0, the negative log-likelihood changed by less than two points. The estimated relative final stock status was above the management target for values of natural mortality of 0.065 and higher (@fig-m-profile).
 
 A bivariate profile of 192 models over all combinations of natural mortality from 0.04--0.15 and steepness from 0.25--1.0 indicates that the base model is within two negative log-likelihood points of the model with the minimum negative log-likelihood (@fig-Mh-NLL).  There are a range of models with a combination of values of $M$ and $h$ that are within the range of acceptable models according to the likelihood, likely due to data limitations and moderate uncertainty in the base model (@fig-Mh-contour). 
+
+
+### Historical Analysis (TOR Section H5)
+<!-- Time-series of total biomass, summary biomass, and spawning biomass (and/or spawning output), depletion relative to B0, recruitment and fishing mortality (1-SPR) (or exploitation rate estimates if fishing mortality not available) (table and figures).  -->
+
+The estimated spawning output from the 2021 assessments for California `r spp`  compared to the base model are shown in the bridging section Figures [@fig-bridgeSS3_bio]--[@fig-bridgeOther_comp].  The estimated scale of the population and relative fraction of spawning output both increased in the 2025 base model compared to the 2021 assessment. The compilation of life history parameters and updated biology specific to California `r spp` drove the changes in assessment biomass. 
