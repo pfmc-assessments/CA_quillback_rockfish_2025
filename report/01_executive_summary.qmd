@@ -316,14 +316,14 @@ During the recent period when `r spp` was managed within a stock, the total remo
 #| label: tbl-es-management
 #| warning: false
 #| echo: false
-#| tbl-cap: "Recent trend in the overfishing limits (OFL), the acceptable biological catches (ABCs), the annual catch limits (ACLs), and the total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, OFLs and ACLs are the contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes, and so these are provided for both complexes. The ACL contribution allocated to California across both complexes is also provided, based on approximate allocations as described in the text. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL, and then divided into the north and south management units, however value here are provided as California only values."
+#| tbl-cap: "Recent trend in overfishing limits (OFL), acceptable biological catches (ABC), the annual catch limits (ACL; set to equal ABC) for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk. The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk, and is calcualted as described in the text. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL and are provided here as California only values."
 #| tbl-pos: H
 
 management <- read.csv(here("report", "tables", "management.csv")) |>
   dplyr::mutate("ACLca" = ACLnorth * 0.287 + ACLsouth) #only correct prior to 2023
 recent <- management[management$Year %in% c(2023, 2024), ]
 management[management$Year %in% c(2023, 2024), -1] <- NA
-management[management$Year %in% c(2023, 2024), c("OFLca", "ABCca", "ACLca")] <-
+management[management$Year %in% c(2023, 2024), c("OFLca", "ABCca", "caACL")] <-
   cbind(c(recent$OFLsouth + recent$OFLnorth),
         c(recent$ABCsouth + recent$ABCnorth),
         c(recent$ACLsouth + recent$ACLnorth))
@@ -339,13 +339,14 @@ management |>
     latex.use_longtable = TRUE
   ) |>
   gt::cols_label(
-    OFLsouth = "OFL North",
-    ACLsouth = "ACL South",
-    OFLnorth = "OFL North",
-    ACLnorth = "ACL North",
+    OFLsouth = "OFL* South",
+    ACLsouth = "ACL* South",
+    OFLnorth = "OFL* North",
+    ACLnorth = "ACL* North",
+    ACLca = "ACL* CA",
     OFLca = "OFL CA",
     ABCca = "ABC CA",
-    ACLca = "ACL CA",
+    caACL = "ACL CA",
     catch = "Total removals"
   ) |>
   gt::cols_width(

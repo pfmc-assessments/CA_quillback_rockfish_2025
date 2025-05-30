@@ -288,7 +288,7 @@ a <- knitr::knit_child('03c_data_surveys.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
+ {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'data-bio'
@@ -299,7 +299,7 @@ a <- knitr::knit_child('03d_data_bio.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
+ {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'data-notused'
@@ -312,115 +312,115 @@ cat(a, sep = '\n')
 
  {{< pagebreak >}}
 
-```{r, results='asis'}
-#| label: 'model-history'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04a_model_history.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'model-history' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('04a_model_history.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
-#| label: 'model-bridging'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04b_model_bridging.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!--  {{< pagebreak >}} -->
 
- {{< pagebreak >}} 
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'model-bridging' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('04b_model_bridging.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
-```{r, results='asis'}
-#| label: 'model-structure'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04c_model_structure.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!--  {{< pagebreak >}} -->
 
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
-#| label: 'model-results'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04d_model_results.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'model-structure' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('04c_model_structure.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
- {{< pagebreak >}} 
- 
-```{r, results='asis'}
-#| label: 'model-diagnostics'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04e_model_diagnostics.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!--  {{< pagebreak >}} -->
 
- {{< pagebreak >}} 
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'model-results' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('04d_model_results.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
-```{r, results='asis'}
-#| label: 'model-sensitivity'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04f_model_sensitivity.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!--  {{< pagebreak >}} -->
 
- {{< pagebreak >}}
- 
-```{r, results='asis'}
-#| label: 'uncertainties'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('04g_uncertainties.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'model-diagnostics' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('04e_model_diagnostics.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
- {{< pagebreak >}}
+<!--  {{< pagebreak >}} -->
 
-```{r, results='asis'}
-#| label: 'management'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('05_management.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'model-sensitivity' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('04f_model_sensitivity.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
- {{< pagebreak >}} 
+<!--  {{< pagebreak >}} -->
 
-```{r, results='asis'}
-#| label: 'research-needs'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('05b_research_needs.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'uncertainties' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('04g_uncertainties.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
- {{< pagebreak >}} 
+<!--  {{< pagebreak >}} -->
 
-```{r, results='asis'}
-#| label: 'acknowledgments'
-#| eval: true
-#| echo: false
-#| warning: false
-a <- knitr::knit_child('06_acknowledgments.qmd', quiet = TRUE)
-cat(a, sep = '\n')
-```
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'management' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('05_management.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 
- {{< pagebreak >}} 
+<!--  {{< pagebreak >}} -->
+
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'research-needs' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('05b_research_needs.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
+
+<!--  {{< pagebreak >}} -->
+
+<!-- ```{r, results='asis'} -->
+<!-- #| label: 'acknowledgments' -->
+<!-- #| eval: true -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- a <- knitr::knit_child('06_acknowledgments.qmd', quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
+
+<!--  {{< pagebreak >}} -->
 
 ```{r, results='asis'}
 #| label: 'references'
