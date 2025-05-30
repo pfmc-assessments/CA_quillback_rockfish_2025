@@ -333,3 +333,31 @@ wc + geom_density(data = out %>% dplyr::filter(Year == 2022), aes(x = length_cm,
 wc + geom_density(data = out %>% dplyr::filter(Year < 2022), aes(x = length_cm, color = "black")) +
   scale_colour_manual(labels = c("PacFIN < 2022", "Market", "Regulation"), 
                       values = c("#000000", "#F8766D", "#00BFC4"))
+
+
+
+# ####
+# #For report here is the summary for oregon and washignton quillback
+# ####
+# gemm_n <- gemm %>% dplyr::filter(species == "Quillback Rockfish (Washington/Oregon)") %>%
+#   dplyr::filter(sector != "Research")
+# 
+# gemm_n$grouped_sector = NA
+# gemm_n$grouped_sector[gemm_n$sector == "Washington Recreational"] = "wa_rec"
+# gemm_n$grouped_sector[gemm_n$sector == "Oregon Recreational"] = "or_rec"
+# gemm_n$grouped_sector[is.na(gemm_n$grouped_sector)] = "n_comm"
+# table(gemm_n$sector, gemm_n$grouped_sector)
+# 
+# temp <- gemm_n %>% 
+#           dplyr::group_by(year) %>% 
+#           dplyr::summarize(sum_tot_mort = round(sum(total_discard_with_mort_rates_applied_and_landings_mt),3),
+#                            sum_dis = round(sum(total_discard_mt),3),
+#                            sum_dis_mort = round(sum(total_discard_with_mort_rates_applied_mt),3),
+#                            sum_lan = round(sum(total_landings_mt),3)) %>%
+#           dplyr::mutate(., "dis_mort_prop" = round(sum_dis_mort/sum_tot_mort,3)) %>% 
+#           data.frame()
+# 
+# mean(tail(temp$sum_tot_mort,5)) #last five years 2019-2023
+# mean(tail(temp$sum_tot_mort,10)) #last ten years 2014-2023
+
+
