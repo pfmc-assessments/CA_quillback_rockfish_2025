@@ -2,7 +2,8 @@
 
 ### Modeling Platform and Structure (TOR Section E5)
 
-The assessment was conducted using Stock Synthesis version 3.30.23.1, compiled December 5, 2024 (available [online](https://github.com/nmfs-ost/ss3-source-code/releases/tag/v3.30.23.1)). The base model is a single-sex (combined across sexes) and single-area model for the coast of California. The model includes two fishery fleets (commercial and recreational), two survey fleets (the \gls{s-ccfrp} hook and line survey, and \glspl{cdfw} \gls{rov} survey), and one growth fleet used to inform estimates of growth internal to the model as well as other population dynamics.
+The assessment was conducted using Stock Synthesis version 3.30.23.1, compiled December 5, 2024 (available [online](https://github.com/nmfs-ost/ss3-source-code/releases/tag/v3.30.23.1)). The R package `r4ss`, version 1.52.0 [@r4ss_2021], along with R version 4.4.1
+[@r_2024] were used to investigate and plot model fits. The base model is a single-sex (combined across sexes) and single-area model for the coast of California, though `r spp` are rarely caught south of Point Conception. The model includes two fishery fleets (commercial and recreational), two survey fleets (the \gls{s-ccfrp} hook and line survey, and \glspl{cdfw} \gls{rov} survey), and one growth fleet used to inform estimates of growth internal to the model as well as other population dynamics. The model begins in 1916, which is the earliest year of the commercial catch reconstruction. The population was assumed to be unfished and at an equilibrium age structure at this point.
 
 ### Model Changes from the Last Assessment (TOR Section E4)
 
