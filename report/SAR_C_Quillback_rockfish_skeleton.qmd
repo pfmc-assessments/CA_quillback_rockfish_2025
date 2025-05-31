@@ -210,10 +210,8 @@ Langseth, B.J., M.H. Monk, J.H. Coates, 2025. Status of the Quillback rockfish s
 a <- knitr::knit_child('01a_disclaimer.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
-
+ 
  {{< pagebreak >}} 
-
-
 
 ```{r, results='asis'}
 #| label: 'load_tables'
@@ -321,8 +319,6 @@ a <- knitr::knit_child('04a_model_history.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
-
 ```{r, results='asis'}
 #| label: 'model-bridging'
 #| eval: true
@@ -332,8 +328,6 @@ a <- knitr::knit_child('04b_model_bridging.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
-
 ```{r, results='asis'}
 #| label: 'model-structure'
 #| eval: true
@@ -342,8 +336,6 @@ cat(a, sep = '\n')
 a <- knitr::knit_child('04c_model_structure.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
-
- {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'model-results'
