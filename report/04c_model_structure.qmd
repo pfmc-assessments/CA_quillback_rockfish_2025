@@ -1,12 +1,7 @@
-## Base Model Structure (TOR Section E5)
-
-The assessment was conducted using Stock Synthesis version 3.30.23.1, compiled December 5, 2024 (available [online](https://github.com/nmfs-ost/ss3-source-code/releases/tag/v3.30.23.1)).
-
-## Base Model Selection (TOR Section F1)
-
-The base assessment model for `r spp` was developed to balance parsimony and realism, with the goal of estimating a spawning output trajectory for the population of `r spp` off `r state`. The base model represents a balance among the number of model parameters, the model fits to dat and minimizing the negative log-likelihood, as well as accurately representating the fisheries' behaviors and species' biology. The model contains many assumptions to achieve parsimony, i.e., reduction in time blocks for selectivity parameters, and balances that with new biological data representing the California stock of `r spp`.
 
 ### Key Assumptions and Structural Choices
+
+The base assessment model for `r spp` was developed to balance parsimony and realism, with the goal of estimating a spawning output trajectory for the population of `r spp` off `r state`. The base model represents a balance among the number of model parameters, the model fits to dat and minimizing the negative log-likelihood, as well as accurately representating the fisheries' behaviors and species' biology. The model contains many assumptions to achieve parsimony, i.e., reduction in time blocks for selectivity parameters, and balances that with new biological data representing the California stock of `r spp`.
 
 Model specifications were informed by discussions with the Pacific Fishery Management Council’s Groundfish Management Team and Groundfish Advisory Panel advisors and through comments and discussion during the [pre-assessment workshop](https://tinyurl.com/janpfmc2025). This included a discussion of fleet structure, the potential ability to estimate growth within the model, and acknowledgement of years with high estimated catch, potential time blocks for selectivity paramaters, and the choice of maximum age that is used to estimate natural mortality.
 
