@@ -13,7 +13,7 @@ A ten-year projection of the base model with total removals equal to the estimat
 The decision table will be completed after the \gls{star} panel.
 
 
-## Evaluation of Scientific Uncertainty
+## Evaluation of Scientific Uncertainty (TOR section L)
 
 The model estimated uncertainty around the `r mod_out$endyr+1` spawning output for `r spp` is $\sigma$ = `r round(mod_out$Pstar_sigma,2)` and the uncertainty around the OFL in `r mod_out$endyr+1` is $\sigma$ = `r round(mod_out$OFL_sigma, 2)`. Both of these are very likely to underestimate overall uncertainty due to the necessity to fix several population dynamics parameters (e.g., steepness, recruitment variance, natural mortality) and because there is no explicit incorporation of model structural uncertainty (although see the decision table for alternative states of nature). Both are less than the default \gls{ssc} value of 0.5 for a category 1 assessment, so harvest projections assume an initial $\sigma$ of 0.5, with an increase over time at a rate of 0.075 per year.
 
@@ -27,7 +27,7 @@ A risk table for California `r spp` is provided in @tbl-risk. Risk tables are di
 Information on the influence of environmental conditions on California `r spp` is lacking. As such, we are not able to determine a level to inform uncertainty for the ecosystem and environmental conditions. Assessment data inputs are described in the data sections of this report, and are visible from model outputs. Model fits and structural uncertainty will be discussed during the \gls{star} Panel and will be updated in the final report. 
 
 
-## Regional management considerations
+## Regional management considerations (TOR section M)
 
 Regional management differences exist across the U.S. West Coast based on various state-specific management measures. Spatial closures, bag limits, and depth restrictions can influence the effect of fishing on populations of a species that can vary by region. Spatial closures are expected to increase the spatial heterogeneity in abundance and size or age structure of fished stocks. This greater spatial variability can complicate the assumptions made in stock assessment models, particularly the assumption that the densities and demographic structure of assessed populations are relatively homogeneous. Although a wide range of factors above and beyond spatial management measures can also lead to violations of those assumptions, the challenge can be particularly important for longer lived populations with lower movement rates, such as `r spp`. While spatially explicit assessment models provide a means of more explicitly addressing these challenges, such models are computationally intensive, require robust data from the specific areas being modeled, and may also require detailed information regarding movement and dispersal rates [@mcgilliard_accounting_2015; @berger_space_2017; @cadrin_defining_2020].
 

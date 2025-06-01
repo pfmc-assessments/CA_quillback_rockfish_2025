@@ -1,4 +1,4 @@
-## Biological Parameters {#sec-biology}
+## Biological Parameters (TOR section D3) {#sec-biology}
 
 ### Natural Mortality
 
@@ -61,7 +61,7 @@ Age composition data used in the model were from break-and-burn otolith reads, a
 
 An ageing error estimate was made based on these double reads using an ADMB computational tool specifically developed for estimating ageing error [@punt_quantifying_2008] and using release 1.3.1 of the R package \href{https://github.com/pfmc-assessments/nwfscAgeingError}{nwfscAgeingError} [@thorson_nwfscageingerror_2012] for input and output diagnostics. A series of 24 ageing error models were run to look across the suite of bias and ageing precision. The model selected by AIC (and used in the assessment) assumes the first reader was unbiased and a constanct coefficient of variation, i.e., sigma is a linear function of true age.
 
-## Environmental and Ecosystem Data
+## Environmental and Ecosystem Data (TOR section D4) 
 
 This model does not explicitly include environmental or ecosystem data. `r Spp` are a rocky habitat associated species and the area of available habitat was considered when developing indices of abundance for the fishery-independent surveys. 
 

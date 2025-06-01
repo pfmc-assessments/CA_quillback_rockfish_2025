@@ -1,8 +1,8 @@
-## Base Model Results {#sec-base-results}
+## Base Model Results (TOR section F and G) {#sec-base-results}
 
 **FROG: Melissa, I think the time series of rec and recdev are better placed in the population trajectory section. I have the same figrues there, just commented out. Id suggested moving this first sentence to there. The largest contributor to the total likelihood is age composition data, followed by length compositions, then the survey and recruitment likelihoods.**
 
-### Parameter Estimates
+### Parameter Estimates (TOR section F2 and G1, G4, G5, H3)
 
 A total of 121 parameters were estimated for the base model (@tbl-n-param). The parameters, fixed and estimates along with approximate asymptotic standard errors are shown in @tbl-pars and the likelihood components are shown in @tbl-likelihood. Estimates of stock size and status over time are shown  @tbl-timeseries. 
 
@@ -23,10 +23,9 @@ The fishery selectivities were all well estimated and fixed to be asymptotic exc
 
 The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-pars] in log-space.
 
- 
 The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs].  The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern has been cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024 (@fig-bh-curve). The early recruitment deviations were all negative.
 
-### Fits to the Data
+### Fits to the Data (TOR section F3)
 
 #### Fits to length and age composition
 
@@ -48,7 +47,7 @@ The first year of the recreational index was not fit, and this may be in part du
 
 The relative indices from the \gls{s-ccfrp} and the \gls{rov} surveys both indicated increases in the later years which model fits underestimated (@fig-log-ccfrp-fit and @fig-log-rov-fit). However, both indices were fit well without the need to add extra variation to capture changes.  The decreased value in 2019 for \gls{s-ccfrp} was not captured by the model and may be a result of factors not considered in index development, i.e., higher than average catches of a midwater species.
 
-### Population Trajectory
+### Population Trajectory (TOR section G3) 
 
 The population declined slowly with the onset of fishing, with three more significant annual declines in years of high catch (@tbl-timeseries,  @fig-ssb). The population remained at lower levels from 1994--1999 before increasing from 2000--2007. Catches increased again in 2015 and resulted in a slightly declining population through 2023.  
 

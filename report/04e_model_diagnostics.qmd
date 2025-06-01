@@ -1,4 +1,4 @@
-## Model Diagnostics (TOR Section F2)
+## Model Diagnostics (TOR Section F2, F4, H4)
 
 ### Convergence (TOR Section F4)
 
