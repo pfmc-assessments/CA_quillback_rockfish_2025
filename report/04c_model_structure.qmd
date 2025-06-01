@@ -1,5 +1,5 @@
 
-### Key Assumptions and Structural Choices (TOR section F1 and E6)
+### Key Assumptions and Structural Choices (TOR section F1 and E6) {#sec-structure}
 
 The base assessment model for `r spp` was developed to balance parsimony and realism, with the goal of estimating a spawning output trajectory for the population of `r spp` off California. The base model represents a balance among the number of model parameters, the model fits to data, and minimizing the negative log-likelihood, as well as accurately representing fishery dynamics and `r spp` biology. The model contains many assumptions to achieve parsimony and uses many different sources of data, including new sources, to estimate reality.
 
