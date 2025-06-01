@@ -67,7 +67,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Length-based selectivity showing the time-varying selectivity for the recreational and commercial fleets."
+#| fig-cap: "Length-based selectivity showing the time-varying selectivity for the recreational and commercial fleets as well as the survey fleets. Selectivity for the commercial fleet in 2003--2013 and 2022--2024 are mirrored"
 #| fig-alt: "Asymptotic selectivity is estimated for the recreational fleet in all time periods, the ROV survey and the CCFRP survey.  The commercial fleet has estimate dome shaped selectivity from 1916--2002 and asymptotic selecitivity for the remaining time blocks, 2003--2013, 2014--2021 and 2022-2024."
 
 knitr::include_graphics("figures/selectivityPlot.png")
@@ -156,7 +156,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Mean age from conditional data (aggregated across length bins) for the commercial fleet with 95% confidence intervals based on current samples sizes."
-#| fig-alt: "Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximatel 26 for 2020 and ranges from 15-19 for hte other years"
+#| fig-alt: "Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximately 26 for 2020 and ranges from 15-19 for the other years."
 
 knitr::include_graphics(
     "r4ss_plots/comp_condAALfit_data_weighting_TA1-8_condAgeCA_Commercial.png"
@@ -202,6 +202,20 @@ knitr::include_graphics(
     "r4ss_plots/comp_condAALfit_residsflt3mkt0.png"
 )
 ```
+
+```{r}
+#| label: fig-meanage-growth
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean age from conditional-age-at-length data (aggregated across length bins) for the growth fleet with 95% confidence intervals based on current samples sizes."
+#| fig-alt: "Mean age in the commercial fleet is available in eight years, 2010, 2011, 2017, 2018, and 2021 through 2024. Mean age varies around 16 until 2022 when it declines to nearer 12."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALfit_data_weighting_TA1-8_condAgeCA_Growth.png"
+)
+```
+
 
 ```{r}
 #| label: fig-meanlen-ccfrp

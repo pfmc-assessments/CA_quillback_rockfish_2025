@@ -6,7 +6,7 @@
 
 A total of 121 parameters were estimated for the base model (@tbl-n-param). The parameters, fixed and estimates along with approximate asymptotic standard errors are shown in @tbl-pars and the likelihood components are shown in @tbl-likelihood. Estimates of stock size and status over time are shown  @tbl-timeseries. 
 
-The log($R_0$) was estimated at `r round(mod_out$parameters['SR_LN(R0)', 'Value'], 3)`. The model estimated reasonable growth parameters and variability for 
+The ln($R_0$) was estimated at `r round(mod_out$parameters['SR_LN(R0)', 'Value'], 3)`. The model estimated reasonable growth parameters and variability for 
 $L_{age=2}$ = `r round(mod_out$parameters['L_at_Amin_Fem_GP_1', 'Value'], 3)` 
 (CV = `r round(mod_out$parameters['CV_young_Fem_GP_1', 'Value'], 3)`) and 
 $L_{\infty}$ = `r round(mod_out$parameters['L_at_Amax_Fem_GP_1', 'Value'], 3)` 
@@ -30,7 +30,7 @@ The estimated annual recruitment and recruitment deviations are shown in  Figure
 
 #### Fits to length and age composition
 
-The aggregated fits to the length composition are reasonable (@fig-lenfit-all) given the overall sparcity of data and variable sample sizes by year (@fig-len-pearson-all).
+The aggregated fits to the length composition are reasonable (@fig-lenfit-all) given the overall sparseness of data and variable sample sizes by year (@fig-len-pearson-all).
 
  **FROG: data weighting results: Length compositions were down weighted for both catch fleets and both survey fleets.  Age composition data were down-weighted for the commercial catch fleet and the growth fleets.**
 
@@ -38,10 +38,9 @@ The mean lengths observed by year from the commercial fleet were uncertain but t
 
 There were no ages available from the recreational fleet collected as part of the CDFW \gls{crfs} sampling program. The model fit the tails of the aggregated recreational length composition well, but expected a peak length larger than the data suggested (@fig-lenfit-all).  Recreational length data was fit well for years in which sample sizes were large. The Pearson residuals were variable by year and no patterns of general misfit were visible. The mean length in the recreational fishery was more uncertain prior to 1993 (@fig-meanlen-rec).  The mean length in 1983 was not fit with marked higher Pearson residuals for larger fish in the early 1980s.  There were no regulations nor major changes in the recreational fishery prior to 1999 that would suggest the need for an additional time block to aid in fitting these data. 
 
+The fits to the ROV and CCFRP surveys did not change significantly with changes in selectivity patterns. The ROV lengths represent different areas in each of the years sampled. The ROV survey lengths were fit to the individual years of data and indicate an increase in mean size form 2019 to 2021 that was not captured by the model (@fig-meanlen-rov). The CCFRP mean length was uncertain across years and the increased mean length in 2019 was not well fit (@fig-meanlen-ccfrp). The higher Pearson residuals for CCFRP in 2017, 2018 and 2024 around 30 cm are likely due to sampling at the Farallons where higher densities of `r spp` are observed than at other sites (@fig-len-pearson-all).
 
-The fits to the ROV and CCFRP surveys did not change significantly with changes in selectivity patterns. The ROV lengths represent different areas in each of the years sampled. The ROV survey lengths were fit to the individual years of data and indicate an increase in mean size form 2019 to 2021 that was not captured by the model (@fig-meanlen-rov). The CCFRP mean length was uncertain across years and the increased mean length in 2019 was not well fit (@fig-meanlen-ccfrp). The higher Pearson residuals for CCFRP in 2017, 2018 and 2024 around 30 cm are likely due to sampling at the Farallons where higher densities of `quillback rockfish`r spp` are observed than at other sites (@fig-len-pearson-all).
-
-There are large Pearson residuals for the growth fleet conditional ages that may be due to age reading errors or the biased sampling for the data aggregated into the growth fleet (@fig-age-pearson-grow). None of the data were excluded from the growth fleet.
+Fits to conditional age-at-length data for the growth fleet are harder to evaluate, but generally seem acceptable (@fig-age-pearson-grow). There are large Pearson residuals for the growth fleet conditional ages that may be due to age reading errors or the biased sampling for the data aggregated into the growth fleet. Fits to the mean age over time (@fig-meanage-growth) showed no concerning patterns nor did plots of fit to mean age along with uncertainty (see figure in r4ss output).
 
 #### Fits to Indices of Abundance
 
