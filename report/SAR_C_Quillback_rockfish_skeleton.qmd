@@ -235,8 +235,6 @@ cat(a, sep = '\n')
 
  {{< pagebreak >}}
 
-
-
 \setlength{\parskip}{5mm plus1mm minus1mm}
 \pagenumbering{arabic}
 \setcounter{page}{1}
@@ -253,8 +251,6 @@ a <- knitr::knit_child('02_introduction.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
-
 ```{r, results='asis'}
 #| label: 'data'
 #| eval: true
@@ -263,8 +259,6 @@ cat(a, sep = '\n')
 a <- knitr::knit_child('03_data.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
-
- {{< pagebreak >}} 
 
 ```{r, results='asis'}
 #| label: 'data-fish-depend'
@@ -275,8 +269,6 @@ a <- knitr::knit_child('03a_data_fishery_dependent.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
-
 ```{r, results='asis'}
 #| label: 'data-surveys'
 #| eval: true
@@ -285,8 +277,6 @@ cat(a, sep = '\n')
 a <- knitr::knit_child('03c_data_surveys.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
-
- {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'data-bio'
@@ -297,8 +287,6 @@ a <- knitr::knit_child('03d_data_bio.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
-
 ```{r, results='asis'}
 #| label: 'data-notused'
 #| eval: true
@@ -307,8 +295,6 @@ cat(a, sep = '\n')
 a <- knitr::knit_child('03e_data_notused.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
-
- {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'model-history'
@@ -346,8 +332,6 @@ a <- knitr::knit_child('04d_model_results.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
-
 ```{r, results='asis'}
 #| label: 'model-diagnostics'
 #| eval: true
@@ -357,7 +341,6 @@ a <- knitr::knit_child('04e_model_diagnostics.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'model-sensitivity'
@@ -368,7 +351,6 @@ a <- knitr::knit_child('04f_model_sensitivity.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'uncertainties'
@@ -379,8 +361,6 @@ a <- knitr::knit_child('04g_uncertainties.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
-
 ```{r, results='asis'}
 #| label: 'management'
 #| eval: true
@@ -390,7 +370,6 @@ a <- knitr::knit_child('05_management.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}}
 
 ```{r, results='asis'}
 #| label: 'research-needs'
