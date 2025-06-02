@@ -107,6 +107,19 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 knitr::include_graphics("r4ss_plots/SR_curve2.png")
 ```
 
+
+```{r}
+#| label: fig-recdev-var
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Recruitment bias adjustment applied in the base model. Points are transformed variances. Red line shows current settings for bias adjustment specified in control file. Blue line shows least squares estimate of alternative bias adjustment relationship for recruitment deviations."
+#| fig-alt:  "Time series plot showing a period of higher variance (low transformed variance) up to the early 1990s following by a informed recruitment deviations. The bias adjustment used in the model is as recommended."
+
+knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
+```
+
+
 ### Fits to Data
 
 ```{r}
@@ -138,7 +151,7 @@ knitr::include_graphics(
 ```
 
 ```{r}
-#| label: fig-meanlen-com
+#| label: fig-meanlen-comm
 #| echo: false
 #| warning: false
 #| eval: true
