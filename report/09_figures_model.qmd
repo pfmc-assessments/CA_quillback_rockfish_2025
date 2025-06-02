@@ -107,6 +107,19 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 knitr::include_graphics("r4ss_plots/SR_curve2.png")
 ```
 
+
+```{r}
+#| label: fig-recdev-var
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Recruitment bias adjustment applied in the base model. Points are transformed variances. Red line shows current settings for bias adjustment specified in control file. Blue line shows least squares estimate of alternative bias adjustment relationship for recruitment deviations."
+#| fig-alt:  "Time series plot showing a period of higher variance (low transformed variance) up to the early 1990s following by a informed recruitment deviations. The bias adjustment used in the model is as recommended."
+
+knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
+```
+
+
 ### Fits to Data
 
 ```{r}
@@ -138,7 +151,7 @@ knitr::include_graphics(
 ```
 
 ```{r}
-#| label: fig-meanlen-com
+#| label: fig-meanlen-comm
 #| echo: false
 #| warning: false
 #| eval: true
@@ -190,6 +203,32 @@ knitr::include_graphics(
 )
 ```
 
+
+```{r}
+#| label: fig-meanlen-rov
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "Mean length was well estimated by the model for all years."
+
+knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
+```
+
+```{r}
+#| label: fig-meanlen-ccfrp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for CCFRP with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "Mean length is well fit except for in 2019, a year in which the data has a higher mean length than other years."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_CCFRP.png"
+)
+```
+
+
 ```{r}
 #| label: fig-age-pearson-grow
 #| echo: false
@@ -216,32 +255,7 @@ knitr::include_graphics(
 )
 ```
 
-
-```{r}
-#| label: fig-meanlen-ccfrp
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Mean length (cm) for CCFRP with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
-#| fig-alt: "Mean length is well fit except for in 2019, a year in which the data has a higher mean length than other years."
-
-knitr::include_graphics(
-    "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_CCFRP.png"
-)
-```
-
 {{< pagebreak >}}
-
-```{r}
-#| label: fig-meanlen-rov
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
-#| fig-alt: "Mean length was well estimated by the model for all years."
-
-knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
-```
 
 
 ```{r}
@@ -292,6 +306,17 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 ```
 
 ```{r}
+#| label: fig-depl
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of fraction of unfished spawning output."
+#| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
+
+knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
+```
+
+```{r}
 #| label: fig-tot-bio
 #| echo: false
 #| warning: false
@@ -302,16 +327,6 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 ```
 
-```{r}
-#| label: fig-depl
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Estimated time series of fraction of unfished spawning output."
-#| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
-
-knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
-```
 
 <!-- ```{r}  -->
 <!-- #| label: fig-recruits -->
@@ -339,18 +354,6 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 <!-- ) -->
 <!-- ``` -->
 
-```{r} 
-#| label: fig-spr
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Estimated time series of fishing intensity for the base model."
-#| fig-alt: "Time series plot with uncertainty intervals showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
-
-knitr::include_graphics(
-    "r4ss_plots/SPR3_ratiointerval.png"
-)
-```
 
 {{< pagebreak >}}
 
@@ -464,17 +467,6 @@ knitr::include_graphics("figures/piner_panel_NatM_uniform_Fem_GP_1.png")
 
 
 ```{r}
-#| label: fig-Mh-contour
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Bivariate profile of natural mortality and steepness relative to the model with the lowest negative log-likelihood. THe model with the lowest NLL has an appoximate value of 0.08 for M and 0.9 for h."
-#| fig-alt: "The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
-
-knitr::include_graphics("figures/profile_m_h_contour.png")
-```
-
-```{r}
 #| label: fig-Mh-NLL
 #| echo: false
 #| warning: false
@@ -483,6 +475,18 @@ knitr::include_graphics("figures/profile_m_h_contour.png")
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/profile_Mhgrid_nll.png")
+```
+
+
+```{r}
+#| label: fig-Mh-contour
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bivariate profile of natural mortality and steepness relative to the model with the lowest negative log-likelihood. THe model with the lowest NLL has an appoximate value of 0.08 for M and 0.9 for h."
+#| fig-alt: "The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
+
+knitr::include_graphics("figures/profile_m_h_contour.png")
 ```
 
 
@@ -569,3 +573,18 @@ knitr::include_graphics(
 knitr::include_graphics(
   "r4ss_plots/yield2_yield_curve_with_refpoints.png"
 )
+
+```
+
+```{r} 
+#| label: fig-spr
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of fishing intensity for the base model."
+#| fig-alt: "Time series plot with uncertainty intervals showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
+
+knitr::include_graphics(
+    "r4ss_plots/SPR3_ratiointerval.png"
+)
+```
