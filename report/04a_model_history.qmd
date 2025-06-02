@@ -26,12 +26,12 @@ A STAR panel was not convened for the review of the 2021 California `r spp` asse
 
 **Recommendation**: Improved understanding of where recreational fishing is commonly occurring (areas and depths) and the range of sizes available by depth would better inform the selectivity form, which currently is near the shape for maturity.
 
-* **Response**: Recreational fishing location information at the level of survey districts is available from the \gls{crfs} and \gls{mrfss} data sets.We explored both the amount of catch and the size distribution of the catch by district in these time periods and compared these to the abundance and sizes of 'r spp` from the \gls{s-ccfrp} and \gls{rov} survey programs.  Recreational fishing depth is available from \gls{crfs} party/charter fleet but not from the private/rental fleet. Depth information is available from the fishery-independent surveys.  We examined all available information on abundance and size distribution with depth as well as how these varied among regions. These explorations were used to inform selectivity forms and time blocks.  
+* **Response**: Recreational fishing location information at the level of survey districts is available from the \gls{crfs} and \gls{mrfss} data sets.We explored both the amount of catch and the size distribution of the catch by district in these time periods and compared these to the abundance and sizes of `r spp` from the \gls{s-ccfrp} and \gls{rov} survey programs.  Recreational fishing depth is available from \gls{crfs} party/charter fleet but not from the private/rental fleet. Depth information is available from the fishery-independent surveys.  We examined all available information on abundance and size distribution with depth as well as how these varied among regions. These explorations were used to inform selectivity forms and time blocks.  
 
 **Recommendation**: Age data were predominantly from Oregon and Washington waters. Collecting length and otolith samples from recreational and commercial catches in California would result in samples from the entire U.S. West Coast informing growth. Otoliths from the \gls{s-wcgbt} survey would also help inform growth. California otoliths identified and aged during model reviews were insufficient to robustly estimate a separate California-specific length-age relationship given the limited sample size of young `r spp` from California. More data, particularly of young and old fish, are needed to be able to robustly estimate a California-specific growth curve and confirm whether growth of
 `r spp` differs between California and Washington and Oregon.
 
-* **Response**: Due to a large effort to collect and process `r spp` otoliths from California in the last 5 years, we were able to internally estimate a California-specific single-sex growth curve. See @sec-data for further details. 
+* **Response**: Due to a large effort to collect and process `r spp` otoliths from California in the last 5 years, we were able to internally estimate a California-specific single-sex growth curve. See @sec-dat for further details. 
 
 **Recommendation**: Recruitment patterns showed lower than average recruitment in the 2000s. Additional data to support such patterns in recruitment would provide additional support for model estimates.
 
@@ -47,11 +47,11 @@ Within the GFSC's report for the January 2024 review, [Table 1](https://tinyurl.
 
 **Recommendation**: It is not clear if the maximum age used represents the California component of the population.
 
-* **Response**: We assumed a maximum age of 80 for the 2025 base model. This decision was based on review of the literature and masters thesis work by Claire Stuart at California State Polytechnic University at Humboldt to develop a database of all documented ages from California, Oregon, Washington, British Columbia, and Alaska.  This decision is further discussed in section 4.4. **FROG: Update section reference. I dont think 4.4 is it**  
+* **Response**: We assumed a maximum age of 80 for the 2025 base model. This decision was based on review of the literature and masters thesis work by Claire Stuart at California State Polytechnic University at Humboldt to develop a database of all documented ages from California, Oregon, Washington, British Columbia, and Alaska.  This decision is further discussed in @sec-biology and the implications explored in @sec-profiles.
 
 **Recommendation**: The decline in abundance appears to be driven by the estimated decline in recruitment deviates from 1990-2010, some of which may be compensating for unmodelled changes in selectivity.
 
-* **Response**: Selectivity assumptions in the base model were carefully considered and informed by the regulatory history, comparisons of available catch and length data by region and depth, fits to the data, and likelihoods.  Selectivity functional forms and time blocks used in the 2025 base model differ from the 2021 model and are detailed in section 4.4 **FROG: Check section reference.**.  Sensitivities to alternatives are presented in section @sec-assmt-sens. 
+* **Response**: Selectivity assumptions in the base model were carefully considered and informed by the regulatory history, comparisons of available catch and length data by region and depth, fits to the data, and likelihoods. Selectivity functional forms and time blocks used in the 2025 base model differ from the 2021 model and are detailed in @sec-structure.  Sensitivities to alternatives are presented in section @sec-assmt-sens. 
 
 **Recommendation**: The current assessment suggests that the current exploitation rate is very high, and this seems inconsistent for a stock with a significant area of its habitat closed to fishing or unfished.
 
