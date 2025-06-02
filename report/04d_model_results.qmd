@@ -4,26 +4,22 @@
 
 ### Parameter Estimates (TOR section F2 and G1, G4, G5, H3)
 
-A total of 121 parameters were estimated for the base model (@tbl-n-param). The parameters, fixed and estimates along with approximate asymptotic standard errors are shown in @tbl-pars and the likelihood components are shown in @tbl-likelihood. Estimates of stock size and status over time are shown  @tbl-timeseries. 
+A total of 121 parameters were estimated for the base model (@tbl-n-param). The parameter values, both fixed and estimated, along with approximate asymptotic standard errors of estimated parameters are shown in @tbl-pars and the overall likelihood components by data type are shown in @tbl-likelihood. Estimates of population size and spawning output relative to unfished over time are shown in @tbl-timeseries. 
 
 The ln($R_0$) was estimated at `r round(mod_out$parameters['SR_LN(R0)', 'Value'], 3)`. The model estimated reasonable growth parameters and variability for 
-$L_{age=2}$ = `r round(mod_out$parameters['L_at_Amin_Fem_GP_1', 'Value'], 3)` 
+$L_{age=1}$ = `r round(mod_out$parameters['L_at_Amin_Fem_GP_1', 'Value'], 3)` 
 (CV = `r round(mod_out$parameters['CV_young_Fem_GP_1', 'Value'], 3)`) and 
 $L_{\infty}$ = `r round(mod_out$parameters['L_at_Amax_Fem_GP_1', 'Value'], 3)` 
-(CV = `r round(mod_out$parameters['CV_old_Fem_GP_1', 'Value'], 3)`).  The $k$ parameter was esimtated as 
-`r round(mod_out$parameters['VonBert_K_Fem_GP_1', 'Value'], 3)`. The estimated $L_{\infty}$ is 0.29 cm smaller than the value it was fixed at for the 2021 assessment and $k$ is estimated to be lower than the 2021 fixed value of 0.199.
+(CV = `r round(mod_out$parameters['CV_old_Fem_GP_1', 'Value'], 3)`) cm.  The $k$ parameter was estimated as 
+`r round(mod_out$parameters['VonBert_K_Fem_GP_1', 'Value'], 3)`. The estimated $L_{\infty}$ was 1.57 cm larger than the initial externally estimated fixed value, whereas the estimated $K$ value was smaller than the initial externally estimated fixed values. 
 
-Length-based selectivity curves were estimated for the fishery and survey fleets, and age-based selectivity of 1.0 starting at age 1 for the growth fleet (@fig-selex). Model explorations included parameterizing the fleets with double normal selectivity and explorations of time blocks. 
+Length-based selectivity curves were estimated for the fishery and survey fleets, and length-based selectivity was fixed at 1.0 starting at age 1 for the growth fleet (@fig-selex). Model explorations included parameterizing the fleets with double normal selectivity and explorations of time blocks (see @sec-assmt-sens). The survey fleets did not include time blocks and the double normal selectivity patterns were fixed to reflect asymptotic selectivity. The ROV survey observed a wider range of sizes than CCFRP, though the he peak size for the ROV survey was estimated higher, at
+`r round(mod_out$parameters['Size_DblN_peak_CA_ROV(5)', 'Value'], 3)` cm compared to 
+`r round(mod_out$parameters['Size_DblN_peak_CA_CCFRP(4)', 'Value'], 3)` cm for CCFRP. The fishery selectivities were all estimated as asymptotic except for the early time period of the commercial fleet that estimated the peak domed selectivity at `r round(mod_out$parameters['Size_DblN_peak_CA_Commercial(1)_BLK1repl_1916', 'Value'], 3)`, indicating preferential size selection of smaller sized individuals during that period.
 
-The survey fleets did not include time blocks and the double normal selectivity patterns were fixed to asymptotic size selectivity.  The ROV survey observed a wider range of sizes than CCFRP.  The peak size for the ROV survey was estimated at
-`r round(mod_out$parameters['Size_DblN_peak_CA_ROV(5)', 'Value'], 3)` cm and 
-`r round(mod_out$parameters['Size_DblN_peak_CA_CCFRP(4)', 'Value'], 3)` cm for CCFRP.
+The catchability for each of the surveys was estimated comparing observed to expected vulnerable biomass across all years. Estimates are reported in Table [-@tbl-pars] in log-space. Analytical solutions for catchability to maintain a mean difference in observed versus expected of zero (described in Stock Synthesis as 'float Q') gave similar results but our preference was to include catchability as an estimated parameter. 
 
-The fishery selectivities were all well estimated and fixed to be asymptotic except for the early time period of the commercial fleet that estimated the peak domed selectivity at `r round(mod_out$parameters['Size_DblN_peak_CA_Commercial(1)_BLK1repl_1916', 'Value'], 3)`, indicating preferential size selection during that period.
-
-The catchability for each of the surveys was analytically solved comparing observed to expected vulnerable biomass across all years. The analytical values for catchability were small given the survey methodologies and are reported in Table [-@tbl-pars] in log-space.
-
-The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs].  The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recuirtment pattern has been cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024 (@fig-bh-curve). The early recruitment deviations were all negative.
+The estimated annual recruitment and recruitment deviations are shown in  Figures [-@fig-recruits] and [-@fig-rec-devs].  The strongest recruitment event occurred in 1994 and was followed by a period of lower than average recruitment until 2010, after which the recruitment pattern has been cyclical. Recruitment is estimated based on the spawner-recruit curve in 2024 (@fig-bh-curve). The early recruitment deviations were all negative.
 
 ### Fits to the Data (TOR section F3)
 
