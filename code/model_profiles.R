@@ -344,18 +344,19 @@ retro_dir <- here('models', glue::glue(base_model,'_retro_15_yr_peel/retro'))#,'
 xx <- SSgetoutput(dirvec = list.dirs(retro_dir))
 
 #create the label names
-#peels <- seq(1:15)
-#mod_labels <- paste0("Data -",peels," years")
+peels <- seq(1:15)
+mod_labels <- paste0("Data -",peels," years")
 
 #two panel plots
-# r4ss::plot_twopanel_comparison(xx, 
-#                                dir = here('report', 'figures'), 
-#                                filename = "retro_bio_comparison.png",
-#                                legendlabels = c('Base model', mod_labels), 
-#                                legendloc = 'bottomleft',
-#                                hessian = FALSE,
-#                                subplot1 = 1,
-#                                subplot2 = 3)
+ r4ss::plot_twopanel_comparison(xx, 
+                                dir = here('report', 'figures'), 
+                                filename = "retro_bio_comparison.png",
+                                legendlabels = c('Base model', mod_labels), 
+                                legendloc = 'bottomleft',
+                                hessian = FALSE,
+                                subplot1 = 1,
+                                subplot2 = 3,
+                                endyrvec = seq(2025,2010, by -1)
 
 #retro fig - copy to report folder
 file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'retro_percent_difference_4_panel.png'),
