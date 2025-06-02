@@ -197,6 +197,10 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 -->
 
 <!-- \clearpage -->
+
+
+\pagebreak
+
 ## Exploitation Status{-}
 
 Exploitation rates were above the management target of a fishing intensity that leads to a spawning potential ratio of 0.5 during the 1990s(@tbl-es-spr, @fig-es-kobe). Exploitation rates decreased in the 2010s and have been low during the last few years of precautionary management subsequent declaration of overfished status in 2023.

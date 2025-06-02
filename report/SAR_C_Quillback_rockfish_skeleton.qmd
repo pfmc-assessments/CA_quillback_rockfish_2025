@@ -75,6 +75,7 @@ csl: 'canadian-journal-of-fisheries-and-aquatic-sciences.csl'
 \renewcommand{\thetable}{\roman{table}}
 \renewcommand{\thefigure}{\roman{figure}}
 
+\setlength\parskip{0.5em plus 0.1em minus 0.2em}
 
 ```{r}
 #| label: 'read_base_model'
@@ -437,6 +438,14 @@ cat(a, sep = '\n')
 
  {{< pagebreak >}} 
 
+\renewcommand*{\thepage}{A\arabic{page}}
+\setcounter{page}{1}
+
+\renewcommand{\thetable}{A-\arabic{table}}
+\renewcommand{\thefigure}{A-\arabic{figure}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
 ```{r, results='asis'}
 #| label: 'appendix-a'
 #| eval: true
@@ -470,6 +479,15 @@ cat(a, sep = '\n')
 
  {{< pagebreak >}} 
 
+\renewcommand*{\thepage}{B\arabic{page}}
+\setcounter{page}{1}
+
+\renewcommand{\thetable}{B-\arabic{table}}
+\renewcommand{\thefigure}{B-\arabic{figure}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+
 ```{r, results='asis'}
 #| label: 'appendix-d'
 #| eval: true
@@ -480,6 +498,15 @@ cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
+
+
+\renewcommand*{\thepage}{C\arabic{page}}
+\setcounter{page}{1}
+
+\renewcommand{\thetable}{C-\arabic{table}}
+\renewcommand{\thefigure}{C-\arabic{figure}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
 
 ```{r, results='asis'}
 #| label: 'appendix-e'

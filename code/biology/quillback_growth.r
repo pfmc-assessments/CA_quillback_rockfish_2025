@@ -203,7 +203,7 @@ vb_est_all<- est_vbgrowth(
   dat = age_df,
   col_length = "length_cm",
   col_age = "age",
-  init_params = data.frame(K = 0.17, Linf = 45, L0 = 5, CV0 = 0.10, CV1 = 0.10))
+  init_params = data.frame(K = 0.17, Linf = 39, L0 = 2, CV0 = 0.10, CV1 = 0.10))
 vb_est_all$all_growth
 
 #keep for reading into model runs files
@@ -229,50 +229,60 @@ vb_fn2 <- function(age, Linf, t0, k) {
    # vec <- Linf - (Linf - L0) * exp(-age * k)
     return(vec)
 }
+#2025 external estimate
 preds1 <- data.frame(ages,
                  fit = vb_fn(ages, Linf = vb_est_all[[3]][2], L0 = vb_est_all[[3]][3], k = vb_est_all[[3]][1]))
 
+#2021 estimate
 preds2 <- data.frame(ages,
-                 fit = vb_fn2(ages,  Linf = 43.02, t0 = -0.067, k = 0.199))
+                 fit = vb_fn2(ages,  Linf = 43.04, t0 = -0.067, k = 0.199))
 
-#from below
+#2025 Internal estimate
 preds3 <- data.frame(ages,
-                     fit = vb_fn2(ages,  Linf = 41.1604, t0 = -0.6202, k = 0.1766))
+                     fit = vb_fn(ages,  Linf = 42.7486, L0 = 4, k = 0.126145))
 
 
 #Plot data with fit 
 ggplot() +
-	geom_jitter(data = age_df, aes(y = length_cm, x = age), alpha = .8) + 
-  geom_line(data = preds1, aes(y = fit, x = ages, colour = "CA data schnute"), linewidth = 2) +
-  geom_line(data = preds2, aes(y = fit, x = ages, colour = "2021 est"), linewidth = 2) +
-   geom_line(data = preds3, aes(y = fit, x = ages, colour = "CA data vonB"), linewidth = 2) +
+	geom_point(data = age_df, aes(y = length_cm, x = age), colour = "darkgray",
+          alpha = .8, size = 4, pch = 21) + 
+  geom_line(data = preds1, aes(y = fit, x = ages, colour = "2025 external"), linewidth = 1.2) +
+  geom_line(data = preds2, aes(y = fit, x = ages, colour = "2021 model"), linewidth = 1.2) +
+  geom_line(data = preds3, aes(y = fit, x = ages, colour = "2025 model"), linewidth = 1.2) +
   theme_bw() + 
-  xlim(0, 60) + ylim(0, 50) +
+  labs(colour = "Growth estimate") +
+  guides(colour = guide_legend(position  = "inside")) +
+  scale_x_continuous(breaks = seq(0,60,10)) +
+  scale_y_continuous(breaks = seq(0,55,5)) +
   theme(panel.grid.major = element_blank(), 
         axis.text = element_text(size = 16),
         axis.title = element_text(size = 16),
         strip.text.y = element_text(size = 16),
-       legend.text = element_text(size = 20),
-        panel.grid.minor = element_blank()) + 
+        legend.text = element_text(size = 20),
+        legend.title = element_text(size = 20),
+        panel.grid.minor = element_blank(),
+        legend.position.inside = c(0.85, 0.95)) + 
 	xlab("Age") + ylab("Length (cm)") +
-  scale_color_viridis_d() 
+  scale_color_viridis_d(begin = 0, end = .9) 
+ggsave(filename = file.path(here(),"report", "figures", "bio_growth.png"),
+       width = 10, height = 8)
 
-# ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_bysex.png"),
-#       width = 10, height = 8)
+
+
 
 ###############################################################################
 ###############################################################################
 #Vonbert Models estimated with a different package - to see if its still
 #sensitive to start values - the answer is yes
 ###############################################################################
-Startval = vbStarts(Length~Age, data=age_df)
-Startval=list(Linf=49,K=.2,t0=-1)
+Startval = vbStarts(Length_cm~Age, data=age_df)
+Startval=list(Linf=42,K=.12,t0=-1)
 ####fit model to all data 
-vbTypical <- Length~Linf*(1-exp(-K*(Age-t0)))
+vbTypical <- Length_cm~Linf*(1-exp(-K*(Age-t0)))
 fitTyp = nls(vbTypical, data=age_df , start=Startval)
 
 #make changes to the dataframe to match
-age_df <- age_df# %>% filter(age!=0) #add or remove the age 0 fish and it matters
+age_df < - age_df# %>% filter(age!=0) #add or remove the age 0 fish and it matters
 age_df$Age = age_df$age
 age_df$Length = age_df$length_cm
 
