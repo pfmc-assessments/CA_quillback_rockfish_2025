@@ -119,7 +119,8 @@ r4ss::plot_twopanel_comparison(xx,
                                legendloc = 'bottomleft',
                                hessian = FALSE,
                                subplot1 = 1,
-                               subplot2 = 3)
+                               subplot2 = 3,
+                               endyrvec = 2025)
 
 #R0 figs - copy to report folder
 file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'piner_panel_NatM_uniform_Fem_GP_1.png'),
