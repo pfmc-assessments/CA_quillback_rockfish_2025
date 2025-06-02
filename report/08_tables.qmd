@@ -261,6 +261,23 @@ pars_table |>
 ```
 :::
 
+
+```{r}
+#| label: tbl-compweight
+#| warning: false
+#| echo: false
+#| tbl-cap: !expr if(eval_tables) compweight_cap
+
+compweight_table |>
+  gt() |>
+  tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+  as_latex()
+```
+
+
 ```{r}
 #| label: tbl-likelihood
 #| warning: false
@@ -279,21 +296,6 @@ like |>
   gt::fmt_number(
     columns = c(2),
     decimals = 2
-  ) |>
-  as_latex()
-```
-
-```{r}
-#| label: tbl-compweight
-#| warning: false
-#| echo: false
-#| tbl-cap: !expr if(eval_tables) compweight_cap
-
-compweight_table |>
-  gt() |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
   ) |>
   as_latex()
 ```
