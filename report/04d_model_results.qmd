@@ -25,11 +25,8 @@ The estimated annual recruitment and recruitment deviations are shown in Figures
 
 #### Fits to length and age composition
 
-The aggregated fits to the length composition are reasonable (@fig-lenfit-all) given the overall sparseness of data and variable sample sizes by year (@fig-len-pearson-all).
-
- **FROG: data weighting results: Length compositions were down weighted for both catch fleets and both survey fleets.  Age composition data were down-weighted for the commercial catch fleet and the growth fleets.**
+The aggregated fits to the length composition are reasonable (@fig-lenfit-all) given the overall sparseness of data and variable sample sizes by year (@fig-len-pearson-all). The data weighting down weighted the length composition for both catch fleets and both survey fleets.  The data weighting down-weighted the age composition for the commercial catch fleet and the growth fleet.
  
-**FROG: When delete the above FROG, move the following paragraph up with the previous sentence.**
 
 The mean lengths observed by year from the commercial fleet were uncertain but the time-varying selectivity captures the changes in mean length relatively well (i.e. fits extend through confidence intervals) for all but the year 2007 (@fig-meanlen-comm). The period of positive residuals during 2009--2017 shows that the model does not capture to the same extent the increase in size observed in the commercial length data. Commercial length samples during this time were sparse and are primarily from the two most northern ports. Sensitivities however showed the perceived lack of fit is not as pronounced when years with sparse samples sizes (< 10) were excluded (see @sec-assmt-sens). There were limited ages available for the commercial fleet from a limited number of years. There are a few remaining large Pearson residuals in individual years, but the mean age from the conditional data were generally well captured by the model (@fig-age-pearson-comm and @fig-meanage-comm).
 
