@@ -262,6 +262,28 @@ pars_table |>
 :::
 
 ```{r}
+#| label: tbl-likelihood
+#| warning: false
+#| echo: false
+#| tbl-cap: "Likelihood components by source."
+
+like <- mod_out$likelihoods_used 
+like |>
+  dplyr::mutate("source" = rownames(like)) |>
+  dplyr::select(source, values) |>
+  gt::gt() |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+  gt::fmt_number(
+    columns = c(2),
+    decimals = 2
+  ) |>
+  as_latex()
+```
+
+```{r}
 #| label: tbl-compweight
 #| warning: false
 #| echo: false

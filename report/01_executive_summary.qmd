@@ -370,7 +370,7 @@ management |>
 
 ## Unresolved Problems and Major Uncertainties{-}
 
-**FROG: copy over once complete**
+The primary area of uncertainty for this assessment is the parameters influencing population productivity and ultimately scale. Model bridging analyses showed that updating biological parameters and data had a large effect on results and had a much greater impact than other changes such as selectivity.  Despite improved data on California-specific growth, there is still uncertainty in population scale as it relates to estimates of natural mortality, as is shown by model profiles across this parameter both individually and in combination with steepness.  Additional sources of uncertainty include unusually high recreational and commercial catches in some years and unexplained differences in `r spp` size distributions in space.  
 
 <!-- Any special issues that complicate scientific assessment, questions about the best model scenario, etc. -->
 
