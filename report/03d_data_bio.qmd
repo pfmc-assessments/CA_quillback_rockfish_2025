@@ -37,27 +37,36 @@ where $L$ is fork length in cm and $W$ is weight in kg.
 
 ### Maturity
 
-From 2019 to 2025 a total of 88 histological samples were collected from female `r spp` caught off the coast of California (16 by CCFRP and 72 by the \gls{swfsc}). The samples were read by Melissa Head at the \gls{nwfsc} to for identification of microscopic functional maturity stage. Functional maturity accounts for abortive maturation and the proportion of oocytes in atresia (cellular breakdown and reabsorption), which could indicate skipped spawning (M. Head, pers. comm.). Seven samples were excluded due to uncertainty in whether the female was spent/resting or experienced abortive maturation, due in part to the timeing of the collections during the non-spawning months.  
+From 2019 to 2025 a total of 88 histological samples were collected from female `r spp` caught off the coast of California (16 by CCFRP and 72 by the \gls{swfsc}). The samples were read by Melissa Head at the \gls{nwfsc} to for identification of microscopic functional maturity stage. Functional maturity accounts for abortive maturation and the proportion of oocytes in atresia (cellular breakdown and reabsorption), which could indicate skipped spawning (M. Head, pers. comm.). Seven samples were excluded due to uncertainty in whether the female was spent/resting or experienced abortive maturation, due in part to the timing of the collections during the non-spawning months.  
 
-The remaining 81 samples ranged in size from 21--45 cm. The six females collected from north of Pt. Arena (Crescent City and Eureka) were all mature.  The SWFSC collected 22 females in January 2025 that contributed to our estimate of maturity-at-length, but are not included in the growth fleet. The estimated maturity ogive for California `r spp` was 
- $L_{50\%}$ = `r mod_in$ctl$MG_parms['Mat50%_Fem_GP_1', 'INIT']` cm with a slope of `r mod_in$ctl$MG_parms['Mat_slope_Fem_GP_1', 'INIT']` (@fig-maturity).  
-
+The remaining 81 samples ranged in size from 21--45 cm. The six females collected from north of Pt. Arena (Crescent City and Eureka) were all mature.  The SWFSC collected 22 females in January 2025 that contributed to our estimate of maturity-at-length, but are not included in the growth fleet (@fig-maturity). The estimated maturity ogive for California `r spp` was 
+\begin{centering}
+ $L_{50\%}$ = `r mod_in$ctl$MG_parms['Mat50%_Fem_GP_1', 'INIT']` cm with a slope of `r mod_in$ctl$MG_parms['Mat_slope_Fem_GP_1', 'INIT']`.  
+\end{centering}
 
 ### Fecundity
 
 The fecundity-at-length was based on ovary samples collected by the SWFSC Santa Cruz lab in 2023 and 2024. Two subsamples were collected from each female. Of the females collected during the spawning months, 24 fish were at stage 2, with pre-fertilized vitellogenic eggs.  The fecundity relationship for `r spp` was estimated to be equal to:
-
-$$
-F = `r mod_in$ctl$MG_parms['Eggs_alpha_Fem_GP_1', 'INIT']`L^{`r mod_in$ctl$MG_parms['Eggs_beta_Fem_GP_1', 'INIT']`} 
-$$
-
+\begin{centering}
+$F = `r mod_in$ctl$MG_parms['Eggs_alpha_Fem_GP_1', 'INIT']`L^{`r mod_in$ctl$MG_parms['Eggs_beta_Fem_GP_1', 'INIT']`} $
+\end{centering}
 where $F$ fecundity in millions of eggs and $L$ is fork length in cm (@fig-fecundity). 
 
 ### Growth (Length-at-Age)
 
-The majority of length-at-age data available for California `r spp` were collected in the last five years. The \gls{ccgs} is the only fishery-dependent survey **FROG: Melissa, this is the commercial sampling right, not CCFRP? I suggest we say "only sampling program"** that collects otoliths as part of the survey design and the majority of age data are combined into a growth fleet.  External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (Claire Stuart, Cal Poly Humboldt, pers. comm.). A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. Lengths from age-zero fish (N = 192) were available from a dissertation study [@baetscher_2019_larval] and were only used to inform initial parameters for growth that were estimated external to the base model. @baetscher_2019_larval trapped juvenile rockfish within Monterrey Bay using \gls{smurf} and divers with nets. All of the `r spp` were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 
+The majority of length-at-age data available for California `r spp` were collected in the last five years. The \gls{ccgs} is the only fishery-dependent sampling program that that collects otoliths as part of the survey design and the majority of age data are combined into a growth fleet.  External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (Claire Stuart, Cal Poly Humboldt, pers. comm.). A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. Lengths from age-zero fish (N = 192) were available from a dissertation study [@baetscher_2019_larval] and were only used to inform initial parameters for growth that were estimated external to the base model. Baetscher -@baetscher_2019_larval trapped juvenile rockfish within Monterey Bay using \gls{smurf}s and divers with nets. All of the `r spp` captured were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 
 
-**FROG: Add equation of growth, and include fixed parameters. We can compare these to the 2021 assessment in the bridging analysis. 
+The fixed growth parameters from the 2021 stock assessment differ from those estimated externally from the available data in 2025 (@fig-growthdata).
+The 2021 assessment used the following parameters for growth
+
+\begin{centering}
+$L_{\infty}$ = 43.04 cm; $k$ = 0.199; $t_0$ = -0.067 cm  
+\end{centering}
+and the 2025 external fit to growth is 
+\begin{centering}
+$L_{\infty}$ = 41.18 cm; $k$ = 0.177; $t_0$ = -0.620 cm 
+\end{centering}
+where $L_{\infty}$ is the asympotitic average length,  $k$ is the growth coefficient with units $year^{-1}$, and $t_0$ represents the time when the average lenth was zero. Note that Stock Synthesis typically uses the Schnute parameterization of vonBertalanffy growth. 
 
 **FROG: I think this is best in Key Assumptions and Structural Choices under 04c**
 Within-lab ageing error was based on one primary age reader and a second reader producing double reads from 418 otoliths collected from California (@fig-age_error). An ageing error estimate was made based on these double reads using an ADMB computational tool specifically developed for estimating ageing error [@punt_quantifying_2008] and using release 1.3.1 of the R package \href{https://github.com/pfmc-assessments/nwfscAgeingError}{nwfscAgeingError} [@thorson_nwfscageingerror_2012] for input and output diagnostics. A series of 24 ageing error models were run to look across the suite of bias and ageing precision. The model selected by AIC (and used in the assessment) assumes the first reader was unbiased and a constanct coefficient of variation, i.e., sigma is a linear function of true age.

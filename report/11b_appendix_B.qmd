@@ -63,7 +63,7 @@ knitr::include_graphics("figures/ROV_rel_fig3.png")
 #| fig-cap: "Index and confidence limit estimates for the ROV abundance index model inside and outside MPAs."
 #| fig-alt: "FROG"
 
-knitr::include_graphics("figures/ROV_rel_fig4.png")
+#knitr::include_graphics("figures/ROV_rel_fig4.png")
 
 ```
 
