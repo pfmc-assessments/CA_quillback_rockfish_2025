@@ -80,6 +80,7 @@ knitr::include_graphics("figures/pr_index_qq.png")
 #| echo: false
 #| warning: false
 #| tbl-cap: "Data filtering steps for the CRFS dockside PR survey."
+#| tbl-pos: H
 library(tidyr)
 library(gt)
 
@@ -99,6 +100,7 @@ pr_filter |>
 #| echo: false
 #| warning: false
 #| tbl-cap: "Model selection for the CRFS dockside PR survey.  The selected final model is highlighted in yellow."
+#| tbl-pos: H
 
 pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
 pr_filter |>
@@ -117,6 +119,7 @@ pr_filter |>
 #| echo: false
 #| warning: false
 #| tbl-cap: "Estimated relative index of abundance for the CRFS dockside PR survey."
+#| tbl-pos: H
 
 pr_filter <- read.csv("tables/pr_index_values.csv", check.names = FALSE)
 pr_filter |>

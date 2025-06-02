@@ -38,6 +38,7 @@ format:
     margin-top: .72in
     number-sections: true
     linestretch: 1.05
+    whitespade: none
     template-partials:
       - 'support_files/before-body.tex'
       - 'support_files/_titlepage.tex'
@@ -203,6 +204,7 @@ Langseth, B.J., M.H. Monk, J.H. Coates, 2025. Status of the Quillback rockfish s
 
  {{< pagebreak >}} 
  
+<!--- 
 ```{r, results='asis'}
 #| label: 'disclaimer'
 #| eval: true
@@ -211,6 +213,7 @@ Langseth, B.J., M.H. Monk, J.H. Coates, 2025. Status of the Quillback rockfish s
 a <- knitr::knit_child('01a_disclaimer.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
+--->
  
  {{< pagebreak >}} 
 
@@ -446,6 +449,8 @@ cat(a, sep = '\n')
 \setcounter{figure}{0}
 \setcounter{table}{0}
 
+\clearpage
+
 ```{r, results='asis'}
 #| label: 'appendix-a'
 #| eval: true
@@ -457,6 +462,8 @@ cat(a, sep = '\n')
 
  {{< pagebreak >}} 
 
+\clearpage
+
 ```{r, results='asis'}
 #| label: 'appendix-b'
 #| eval: true
@@ -466,7 +473,8 @@ a <- knitr::knit_child('11b_appendix_B.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
- {{< pagebreak >}} 
+\clearpage
+
 
 ```{r, results='asis'}
 #| label: 'appendix-c'

@@ -1,6 +1,6 @@
 ## CDFW ROV
 
-Remotely operated vehicle (ROV) surveys have been used to monitor California’s mid-depth habitats (30-100 m) since 2004.  The surveys are a collaboration between CDFW and Marine Applied Research and Exploration (MARE) which was initially developed to assess the Marine Protected Area (MPA) network.  A full description of survey methods is available in [@lauermann_rov_2017].  Briefly, sampling has been conducted at MPAs along the entire California coast (@fig-ROV-rel-fig1) with 500-meter transects conducted within rocky reef habitat inside and outside each MPA (@fig-ROV-rel-fig2).  Data includes counts of fish by species, fish sizes, and a variety of characteristics of the transect location (@tbl-ROV-rel-tbl1).   
+Remotely operated vehicle (ROV) surveys have been used to monitor California’s mid-depth habitats since 2004.  The surveys are a collaboration between CDFW and Marine Applied Research and Exploration (MARE) which was initially developed to assess the Marine Protected Area (MPA) network.  A full description of survey methods is available in [@lauermann_rov_2017].  Briefly, sampling has been conducted at MPAs along the entire California coast (@fig-ROV-rel-fig1) with 500-meter transects conducted within rocky reef habitat inside and outside each MPA (@fig-ROV-rel-fig2).  Data includes counts of fish by species, fish sizes, and a variety of characteristics of the transect location (@tbl-ROV-rel-tbl1).   
 
 The full dataset was filtered for data quality and representativeness of quillback habitat (@tbl-ROV-rel-tbl2).  The filtered dataset consists of 967 transects conducted across 34 locations (@tbl-ROV-rel-tbl3).  While surveys have been conducted since 2004, it has only been possible to conduct surveys at a few locations each year.  Efforts to systematically select survey locations representative of the full California coastline began in 2014 and a full complement of these locations has taken three years to complete.  Therefore, locations monitored in 2014-2016 and 2019-2021 are considered to represent complete surveys and were analyzed as two super years centered on the mid-point of each period (2015 and 2020).   
 Counts of quillback rockfish on each transect were modeled using a negative binomial generalized linear mixed model with the R package glmerMod.  While each transect is 500 m in length, the total area visible in the collected video is variable.  Therefore, an effort offset representing the log of this area, termed Usable-Area-Fish, was used.  Potential covariates for inclusion in the model were evaluated based on their significance in the full model including all variables as well as their correlations among each other.  Based on these criteria, temperature, proportion hard bottom, years since protection in an MPA, distance to port, and backsides (a variable relating to video quality) were not included.  Continuous variables were scaled by centering on the mean and dividing by their standard deviations.  AIC values, dispersion, and Q-Q plot fits were examined for a variety alternative error distributions using a simplified model with no random effects and the negative binomial was selected.   AIC values and maximum likelihood fits of candidate negative binomial models are shown in Table 4.  
@@ -12,9 +12,9 @@ Indices of abundance providing density (fish/hectare) for each super year, both 
 ●	The intercept + the estimate for super year 2020 represents the mean density for reference areas in 2020
 ●	The intercept + the estimate for protection represents the mean density for MPAs in 2015
 ●	The intercept + the estimate for super year 2020 + the estimate for protection represents the mean density for MPAs in 2020
-This assumes that all other covariates were held constant at their mean.  The resulting indices inside and outside of MPAs were weighted in each super year by the proportion of rocky reef habitat inside and outside MPAs, with 80% outside MPAs and 20%  inside based seafloor mapping within the 100 m depth contour (@tbl-ROV-rel-tbl5 and @tbl-ROV-rel-tbl6).  The results show an increase in quillback rockfish density both inside and outside MPAs with a greater increase inside (@fig-ROV-rel-fig4).    
+This assumes that all other covariates were held constant at their mean.  The resulting indices inside and outside of MPAs were weighted in each super year by the proportion of rocky reef habitat inside and outside MPAs, with 80% outside MPAs and 20%  inside based seafloor mapping within the 100 m depth contour (@tbl-ROV-rel-tbl5 and @tbl-ROV-rel-tbl6).  The results show an increase in quillback rockfish density both inside and outside MPAs with a greater increase inside.    
 
-Fork lengths collected by stereo camera and software for image analysis allow for estimation of the survey selectivity.  Because the ROV is a visual survey, small fish are more apparent in the data than for other survey or fishery data sources derived from hook and line catches.  ROV transects are conducted between 20-100 m depth **FROG: Above we say 30--100m. Which is it**.  In comparison, the CCFRP surveys depths shallower than 20 m but goes no deeper than 60 m.  
+Fork lengths collected by stereo camera and software for image analysis allow for estimation of the survey selectivity.  ROV transects are conducted between 20-120 m depth. In comparison, the CCFRP surveys depths shallower than 20 m but goes no deeper than 60 m to reduce barotrauma.  
 
 
 
@@ -74,6 +74,8 @@ knitr::include_graphics("figures/ROV_rel_fig3.png")
 #| echo: false
 #| warning: false
 #| tbl-cap: "Description of variables available for use in the ROV GLMM index analysis."
+#| tbl-pos: H
+
 
 library(tidyr)
 library(gt)
@@ -93,6 +95,8 @@ pr_filter |>
 #| echo: false
 #| warning: false
 #| tbl-cap: "ROV data filtering steps."
+#| tbl-pos: H
+
 
 pr_filter <- read.csv("tables/ROV_rel_tbl2.csv", check.names = FALSE)
 pr_filter |>
@@ -109,6 +113,8 @@ pr_filter |>
 #| echo: false
 #| warning: false
 #| tbl-cap: "Sampled locations and number of transects per survey year after filtering."
+#| tbl-pos: H
+
 
 pr_filter <- read.csv("tables/ROV_rel_tbl3.csv", check.names = FALSE)
 pr_filter |>
@@ -119,27 +125,35 @@ pr_filter |>
 
 ```
 
+::: {.landscape}
+
 ```{r}
 #| label: tbl-ROV-rel-tbl4
 #| echo: false
 #| warning: false
 #| tbl-cap: "Model selection for the ROV survey."
+#| tbl-pos: H
+
 
 pr_filter <- read.csv("tables/ROV_rel_tbl4.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
+     tab_options(
+    table.font.size = 12) |>
     cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
-    cols_width(everything() ~ px(40))# |>
-    #as_latex()
+    cols_width(everything() ~ px(50)) |>
+    as_latex()
 
 ```
 
+::: 
 
 ```{r}
 #| label: tbl-ROV-rel-tbl5
 #| echo: false
 #| warning: false
 #| tbl-cap: "Index (fish/hectare) values and confidence limits for inside and outside MPAs in each super year."
+#| tbl-pos: H
 
 pr_filter <- read.csv("tables/ROV_rel_tbl5.csv", check.names = FALSE)
 pr_filter |>
@@ -155,6 +169,7 @@ pr_filter |>
 #| echo: false
 #| warning: false
 #| tbl-cap: "Weighted index values based on percent of nearshore rocky reef inside (20%) and outside MPAs (80%), as well as confidence limits, log standard error (SE) and percent change in relative abundance between the 2015 and 2020 super years."
+#| tbl-pos: H
 
 pr_filter <- read.csv("tables/ROV_rel_tbl6.csv", check.names = FALSE)
 pr_filter |>
