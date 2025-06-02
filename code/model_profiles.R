@@ -356,7 +356,7 @@ mod_labels <- paste0("Data -",peels," years")
                                 hessian = FALSE,
                                 subplot1 = 1,
                                 subplot2 = 3,
-                                endyrvec = seq(2025,2010, by -1)
+                                endyrvec = seq(2025,2010, by = -1))
 
 #retro fig - copy to report folder
 file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'retro_percent_difference_4_panel.png'),
