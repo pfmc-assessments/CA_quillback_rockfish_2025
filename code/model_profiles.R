@@ -174,7 +174,8 @@ r4ss::plot_twopanel_comparison(xx,
                                legendloc = 'bottomleft',
                                hessian = FALSE,
                                subplot1 = 1,
-                               subplot2 = 3)
+                               subplot2 = 3,
+                               endyrvec = 2025)
 
 #h figs - copy to report folder
 file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'piner_panel_SR_BH_steep.png'),
@@ -228,7 +229,8 @@ r4ss::plot_twopanel_comparison(xx,
                                legendloc = 'bottomleft',
                                hessian = FALSE,
                                subplot1 = 1,
-                               subplot2 = 3)
+                               subplot2 = 3,
+                               endyrvec = 2025)
 
 #R0 figs - copy to report folder
 file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'piner_panel_SR_LN(R0).png'),
