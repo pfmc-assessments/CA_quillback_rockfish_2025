@@ -264,20 +264,6 @@ knitr::include_graphics(
 
 
 ```{r}
-#| label: fig-age_error
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "."
-#| fig-alt: "FROG"
-
-knitr::include_graphics(
-    "figures/bio_age_error.png"
-)
-```
-
-
-```{r}
 #| label: fig-growthdata
 #| echo: false
 #| warning: false

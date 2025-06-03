@@ -244,6 +244,22 @@ parcount_table |>
 ::: {.landscape}
 
 ```{r}
+#| label: tbl-compweight
+#| warning: false
+#| echo: false
+#| tbl-cap: !expr if(eval_tables) compweight_cap
+
+compweight_table |>
+  gt() |>
+  tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+  as_latex()
+```
+
+
+```{r}
 #| label: tbl-pars
 #| warning: false
 #| echo: false
@@ -260,23 +276,6 @@ pars_table |>
   as_latex()
 ```
 :::
-
-
-```{r}
-#| label: tbl-compweight
-#| warning: false
-#| echo: false
-#| tbl-cap: !expr if(eval_tables) compweight_cap
-
-compweight_table |>
-  gt() |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
-  ) |>
-  as_latex()
-```
-
 
 ```{r}
 #| label: tbl-likelihood
