@@ -268,7 +268,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Available length-at-age data for the 2025 stock assessment and growth curves from the 2021 assessment data, external estimate using the 2025 data and the model fitted growth for this assessment."
+#| fig-cap: "Available length-at-age data for the 2025 stock assessment. Growth curves are provided based on the external estimate of the data, from the internally estimated values within the base model. The fixed values from the 2021 assessment are also provided for comparison."
 #| fig-alt: "There are lengths for age zero fish, but the majority of data are for fish from approximately 24 to 44 cm. The 2021 assessment used a high value for L infinity with fish reaching that age at a smaller length.  The 2025 external estimate has a slightly lower estimate for k, and a lower L infinity.  The 2025 model estimate has a smaller value of k and reaches a similar L infinity as the 2021 model, around 42 cm."
 
 knitr::include_graphics(
