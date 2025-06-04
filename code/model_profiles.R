@@ -238,6 +238,7 @@ file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'p
           to = here('report', 'figures','piner_panel_SR_LN(R0).png'), 
           overwrite = TRUE, recursive = FALSE)
 
+
 # Individual sigmaR profile -------------------------------------------------------
 
 profile.settings <- nwfscDiag::get_settings_profile(
@@ -268,6 +269,108 @@ tictoc::toc()
 
 # back to sequential processing
 future::plan(future::sequential)
+
+
+# Individual von Bert k profile -------------------------------------------------------
+
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'VonBert_K_Fem_GP_1', 
+  low = 0.07, 
+  high = 0.2,
+  step_size = 0.01,
+  param_space = 'real',
+  use_prior_like = 1) 
+
+settings <- nwfscDiag::get_settings(
+  mydir = directory,
+  settings = list(
+    base_name = base_model,
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
+
+# set up parallel stuff
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+tictoc::tic()
+run_diagnostics(mydir = here('models'), model_settings = settings)
+tictoc::toc()
+
+# back to sequential processing
+future::plan(future::sequential)
+
+# #steepness two panel plots - with uncertainty
+# k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
+# 
+# #get the report files 
+# xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",seq(1:13)))
+# 
+# vals <- seq(0.07, 0.2, by = 0.01)
+# k_names <- paste0("K =", vals)
+# r4ss::plot_twopanel_comparison(xx, 
+#                                dir = here('report', 'figures'), 
+#                                filename = "k_profile_bio_comparison.png",
+#                                legendlabels = c('Base model', k_names), 
+#                                legendloc = 'bottomleft',
+#                                hessian = FALSE,
+#                                subplot1 = 1,
+#                                subplot2 = 3,
+#                                endyrvec = 2025)
+
+
+# Individual Linf profile -------------------------------------------------------
+
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'L_at_Amax_Fem_GP_1', 
+  low = 40, 
+  high = 46,
+  step_size = 1,
+  param_space = 'real',
+  use_prior_like = 1) 
+
+settings <- nwfscDiag::get_settings(
+  mydir = directory,
+  settings = list(
+    base_name = base_model,
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
+
+# set up parallel stuff
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+tictoc::tic()
+run_diagnostics(mydir = here('models'), model_settings = settings)
+tictoc::toc()
+
+# back to sequential processing
+future::plan(future::sequential)
+
+# #steepness two panel plots - with uncertainty
+# linf_dir <- here('models', glue::glue(base_model,'_profile_L_at_Amax_Fem_GP_1'))
+# 
+# #get the report files 
+# xx <- SSgetoutput(dirvec = linf_dir, keyvec = c("",seq(1:7)))
+# 
+# vals <- seq(40, 46, by = 1)
+# linf_names <- paste0("Linf =", vals)
+# r4ss::plot_twopanel_comparison(xx,
+#                                dir = here('report', 'figures'),
+#                                filename = "linf_profile_bio_comparison.png",
+#                                legendlabels = c('Base model', linf_names),
+#                                legendloc = 'bottomleft',
+#                                hessian = FALSE,
+#                                subplot1 = 1,
+#                                subplot2 = 3,
+#                                endyrvec = 2025)
+
+
  
 
 
