@@ -1697,6 +1697,46 @@ SSsummarize(xx) |>
 dev.off()
 
 
+## Growth to 2021 estimates without ages ----
+
+new_name <- 'Growth_2021est_noAges'
+
+mod <- base_mod
+
+mod$ctl$MG_parms['L_at_Amin_Fem_GP_1', c('INIT', 'PRIOR', 'PHASE')] <- c(8.23, 8.23, -3)
+mod$ctl$MG_parms['L_at_Amax_Fem_GP_1', c('INIT', 'PRIOR', 'PHASE')] <- c(43.04, 43.04, -3)
+mod$ctl$MG_parms['VonBert_K_Fem_GP_1', c('INIT', 'PRIOR', 'PHASE')] <- c(0.199, 0.199, -3)
+mod$ctl$MG_parms['CV_young_Fem_GP_1', c('INIT', 'PRIOR', 'PHASE')] <- c(0.1, 0.1, -3)
+mod$ctl$MG_parms['CV_old_Fem_GP_1', c('INIT', 'PRIOR', 'PHASE')] <- c(0.1, 0.1, -3)
+
+mod$dat$agecomp$year <- -abs(mod$dat$agecomp$year)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'Growth_2021est'),
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Growth fixed to 2021 est.',
+                                     'Growth fixed to 2021 est. and no ages'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
 ######-
 ## Fix L1 to 8 ----
 
@@ -1726,9 +1766,9 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
                                                    file.path('_sensitivities', new_name)))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
-                                     'Maturity set to 2021 est.'),
+                                     'L1 fixed at 8'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
-
+dev.off()
 
 # ============================================================================ #
 # Natural mortality and steepness ----
@@ -3031,13 +3071,17 @@ productivity_models <- c('estimate_h',
                          'estimate_M',
                          'estimate_M_and_h',
                          'recdev_1990',
-                         'recdev_Off')
+                         'recdev_Off',
+                         'Growth_2021est',
+                         'Growth_2021est_noAges')
 
 productivity_pretty <- c('Estimate h',
                          'Estimate M',
                          'Estimate M and h',
                          'Start recdevs in 1990',
-                         'Turn off recdevs')
+                         'Turn off recdevs',
+                         'Fix growth at 2021 values',
+                         'Fix growth at 2021 values without ages')
 
 
 # #Biology models - not ultimately used in the report
