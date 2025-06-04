@@ -182,11 +182,6 @@ ggplot(aes(x = factor(age), y = length_cm, fill = faa_area)) +
 geom_boxplot()
 
 
-
-
-
-
-
 ###########################################################################################################
 #############################################
 #estimate growth
@@ -214,6 +209,44 @@ vb_est_all$all_growth
 #         K        Linf          L0         CV0         CV1 #
 # 0.17820030 41.18119888  3.98945906  0.20322534  0.06373563
 write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_withAge0.csv"))
+
+#############################################################################################
+#Estimate growth to explore why the initial parameters matter
+age_df <- qlbk %>% filter(age !=0) %>% filter(project != "Cooperative")
+age_df$Age <- age_df$age
+age_df$Length_cm <- age_df$length_cm
+age_df <- age_df
+
+options(scipen=999)
+vb_est_all<- est_vbgrowth(
+  dir = NULL, 
+  dat = age_df,
+  col_length = "length_cm",
+  col_age = "age",
+  init_params = data.frame(K = 0.11, Linf = 42, L0 = 1, CV0 = 0.10, CV1 = 0.10))  #change k from .17 to .11 and Linf from 39 to 42
+vb_est_all$all_growth
+
+#no age 0 fish and removing north .17 and 39
+#           K         Linf           L0          CV0          CV1
+# 0.23884808 36.28061633  2.58123426  0.29903738  0.03112365
+# .11 and 42
+# 0.25080628 36.05249185  0.95627644  0.34434123  0.03802425
+
+#no age 0 fish and removing south .17 and 39
+#  0.17024331 41.72027852  7.05904427  0.17441680  0.06113371
+# .11 and 42
+#  0.15183062 42.13785308 10.39984989  0.17391668  0.04310851
+
+#no age 0 fish and no pacfin .17 and 39
+#          K        Linf          L0         CV0         CV1
+#  0.12958463 41.99008304 13.11715487  0.16082135  0.04801135
+# .11 and 42
+#  0.10805548 43.25176211 15.68451378  0.16116508  0.01641002
+
+#no age 0 fish and no cooperative .17 and 39
+# 0.14355298 41.90940832 11.82784979  0.15554780  0.04877026
+# .11 and 42
+# 0.12157404 42.67588636 14.38494331  0.16133371  0.02750198
 
 
 ##################################################
