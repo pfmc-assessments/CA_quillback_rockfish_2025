@@ -212,7 +212,7 @@ write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_wi
 
 #############################################################################################
 #Estimate growth to explore why the initial parameters matter
-age_df <- qlbk %>% filter(age !=0) %>% filter(project != "Cooperative")
+age_df <- qlbk %>% filter(age !=0) %>% filter(project != "CCFRP")
 age_df$Age <- age_df$age
 age_df$Length_cm <- age_df$length_cm
 age_df <- age_df
@@ -223,7 +223,7 @@ vb_est_all<- est_vbgrowth(
   dat = age_df,
   col_length = "length_cm",
   col_age = "age",
-  init_params = data.frame(K = 0.11, Linf = 42, L0 = 1, CV0 = 0.10, CV1 = 0.10))  #change k from .17 to .11 and Linf from 39 to 42
+  init_params = data.frame(K = 0.2, Linf = 42, L0 = 1, CV0 = 0.10, CV1 = 0.10))  #change k from .17 to .11 and Linf from 39 to 42
 vb_est_all$all_growth
 
 #no age 0 fish and removing north .17 and 39
@@ -248,6 +248,10 @@ vb_est_all$all_growth
 # .11 and 42
 # 0.12157404 42.67588636 14.38494331  0.16133371  0.02750198
 
+#no age 0 fish and no ccfrp .17 and 39
+# 0.12201192 42.51757120 13.75858328  0.16741423  0.02352261
+# .11 and 42
+# 0.1887471 41.0842952  1.1903998  0.2640057  0.0688376
 
 ##################################################
 #Get the predictions
@@ -294,7 +298,7 @@ ggplot() +
         legend.text = element_text(size = 20),
         legend.title = element_text(size = 20),
         panel.grid.minor = element_blank(),
-        legend.position.inside = c(0.85, 0.95)) + 
+        legend.position.inside = c(0.8, 0.25)) + 
 	xlab("Age") + ylab("Length (cm)") +
   scale_color_viridis_d(begin = 0, end = .9) 
 ggsave(filename = file.path(here(),"report", "figures", "bio_growth.png"),
