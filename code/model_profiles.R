@@ -320,6 +320,132 @@ future::plan(future::sequential)
 #                                subplot2 = 3,
 #                                endyrvec = 2025)
 
+#The reason why the profiles are less extreme than in 2021 is that
+#now with parameters estimated, changes in one can be offset by changes in others
+#This may be the reason why the profile for K has changed direction.
+#I will try profiling when Linf is fixed. 
+k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
+xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",seq(1:13)))
+for(i in c(6:1, 7:13)){
+  print(xx[[i]]$parameters[xx[[i]]$parameters$Label == "L_at_Amax_Fem_GP_1", "Value"])
+}
+
+
+# Individual von Bert k profile with other growth params fixed -------------------------------------------------------
+
+#Create model with fixed non-K growth parameters
+new_name <- "5_1_3_preStarBase_fixGrowthNonK"
+old_name <- "5_1_3_preStarBase"
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+mod$ctl$MG_parms[c("L_at_Amin_Fem_GP_1", "L_at_Amax_Fem_GP_1", "CV_young_Fem_GP_1", "CV_old_Fem_GP_1"), 
+                 c("INIT", "PRIOR", "PHASE")] <- c(9.80221, 42.7486, 0.18366, 0.0854974,
+                                                   9.80221, 42.7486, 0.18366, 0.0854974,
+                                                   -3, -3, -3, -3)
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+#Now profile over K
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'VonBert_K_Fem_GP_1', 
+  low = 0.07, 
+  high = 0.2,
+  step_size = 0.01,
+  param_space = 'real',
+  use_prior_like = 1) 
+
+settings <- nwfscDiag::get_settings(
+  mydir = directory,
+  settings = list(
+    base_name = "5_1_3_preStarBase_fixGrowthNonK",
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
+
+# set up parallel stuff
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+tictoc::tic()
+run_diagnostics(mydir = here('models'), model_settings = settings)
+tictoc::toc()
+
+# back to sequential processing
+future::plan(future::sequential)
+
+
+# Individual von Bert k profile with all growth params fixed and without ages -------------------------------------------------------
+
+#Create model with fixed non-K growth parameters
+new_name <- "5_1_3_preStarBase_fixGrowth_noAges"
+old_name <- "5_1_3_preStarBase"
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models',new_name))
+mod$ctl$MG_parms[c("L_at_Amin_Fem_GP_1", "L_at_Amax_Fem_GP_1", "VonBert_K_Fem_GP_1", "CV_young_Fem_GP_1", "CV_old_Fem_GP_1"), 
+                 c("INIT", "PRIOR", "PHASE")] <- c(9.80221, 42.7486, 0.1261450, 0.18366, 0.0854974,
+                                                   9.80221, 42.7486, 0.1261450, 0.18366, 0.0854974,
+                                                   -3, -3, -3, -3, -3)
+mod$dat$agecomp$year <- -abs(mod$dat$agecomp$year)
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+#Now profile over K
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'VonBert_K_Fem_GP_1', 
+  low = 0.07, 
+  high = 0.2,
+  step_size = 0.01,
+  param_space = 'real',
+  use_prior_like = 1) 
+
+settings <- nwfscDiag::get_settings(
+  mydir = directory,
+  settings = list(
+    base_name = "5_1_3_preStarBase_fixGrowth_noAges",
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
+
+# set up parallel stuff
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+tictoc::tic()
+run_diagnostics(mydir = here('models'), model_settings = settings)
+tictoc::toc()
+
+# back to sequential processing
+future::plan(future::sequential)
+
+
 
 # Individual Linf profile -------------------------------------------------------
 
