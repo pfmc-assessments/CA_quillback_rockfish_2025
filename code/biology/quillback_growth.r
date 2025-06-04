@@ -212,7 +212,7 @@ write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_wi
 
 #############################################################################################
 #Estimate growth to explore why the initial parameters matter
-age_df <- qlbk %>% filter(age !=0) %>% filter(project != "CCFRP")
+age_df <- qlbk #%>% filter(age !=0) %>% filter(project != "CCFRP")
 age_df$Age <- age_df$age
 age_df$Length_cm <- age_df$length_cm
 age_df <- age_df
@@ -223,7 +223,7 @@ vb_est_all<- est_vbgrowth(
   dat = age_df,
   col_length = "length_cm",
   col_age = "age",
-  init_params = data.frame(K = 0.2, Linf = 42, L0 = 1, CV0 = 0.10, CV1 = 0.10))  #change k from .17 to .11 and Linf from 39 to 42
+  init_params = data.frame(K = 0.11, Linf = 42, L0 = 1, CV0 = 0.10, CV1 = 0.10))  #change k from .17 to .11 and Linf from 39 to 42
 vb_est_all$all_growth
 
 #no age 0 fish and removing north .17 and 39
