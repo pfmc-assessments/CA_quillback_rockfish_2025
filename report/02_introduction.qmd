@@ -1,6 +1,6 @@
 # Introduction (TOR section C1 and C2)
 
-This assessment reports the status of `r spp` (*Sebastes maliger*) off the coast of California through 2024. The \gls{pfmc} defined the California stock of `r spp` as part of the process to define stocks for management. Although the management definition for the California stock of `r spp` is statewide, the range of `r spp` in California is primarily north of central California (@fig-map).
+This assessment reports the status of `r spp` (*Sebastes maliger*) off the coast of California through 2024. The \gls{pfmc} defined the population of `r spp` off California as a unit stock. Although the definition for the California stock of `r spp` is statewide, the range of `r spp` in California is primarily north of central California (@fig-map).
 
 <!-- Scientific name, distribution, the basis for the choice of stock structure, including regional differences in life history or other biological characteristics that should form the basis of management units. A map showing the scope of the assessment and depicting boundaries for fisheries or data collection strata.  -->
 
