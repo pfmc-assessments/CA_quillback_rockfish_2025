@@ -5,7 +5,7 @@
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison of estimated spawning output of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
+#| fig-cap: "Bridge comparison of estimated spawning output (millions of eggs) of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
 #| fig-alt: "Figure showing that the trajectory from the 2021 assessment is similar when using the newest version of stock synthesis."
 
 knitr::include_graphics(
@@ -82,7 +82,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Length-based selectivity showing the time-varying selectivity for the recreational and commercial fleets as well as the survey fleets. Selectivity for the commercial fleet in 2003--2013 and 2022--2024 are mirrored"
+#| fig-cap: "Length-based selectivity showing the time-varying selectivity blocks (in colored lines) for the recreational and commercial fleets as well as the CCFRP, ROV, and growth fleets. Selectivity for the commercial fleet in the 2003--2013 and 2022--2024 blocks are mirrored."
 #| fig-alt: "Asymptotic selectivity is estimated for the recreational fleet in all time periods, the ROV survey and the CCFRP survey.  The commercial fleet has estimate dome shaped selectivity from 1916--2002 and asymptotic selecitivity for the remaining time blocks, 2003--2013, 2014--2021 and 2022-2024."
 
 knitr::include_graphics("figures/selectivityPlot.png")
@@ -419,7 +419,7 @@ knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output and fraction unfished across a range of log(R~0~) values."
+#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of ln(R~0~) values."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/R0_profile_bio_comparison.png")
@@ -430,7 +430,7 @@ knitr::include_graphics("figures/R0_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the negative log-likelihood across a range of log(R~0~) values."
+#| fig-cap: "Change in the negative log-likelihood across a range of ln(R~0~) values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
@@ -441,7 +441,7 @@ knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output and fraction unfished across a range of steepness values."
+#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of steepness values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/h_profile_bio_comparison.png")
@@ -463,7 +463,7 @@ knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output and fraction unfished across a range of natural mortality values."
+#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of natural mortality values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/m_profile_bio_comparison.png")

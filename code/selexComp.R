@@ -110,7 +110,7 @@ plot_sel_all <- function(mod, sex = 1, fleetnames = "default") {
   }
   filepath <- file.path(mod$inputs$dir, filename)
   png(filepath, width = 6.5, height = 6.5, units = "in", res = 300, pointsize = 10)
-  par(mfrow = c(3,2), oma = c(2,2,0,0), las = 1)
+  par(mfrow = c(3,2), oma = c(2,3,0,0), las = 1)
   
   #For each fleet
   plot_sel_ret(mod, Factor = "Lsel", fleet = 1, sex = sex, fleetnames = fleetnames)
@@ -121,6 +121,7 @@ plot_sel_all <- function(mod, sex = 1, fleetnames = "default") {
   plot_sel_ret(mod, Factor = "Lsel", fleet = 4, sex = sex, fleetnames = fleetnames)
   mtext("Length (cm)", side = 1, line = 2.5)
   plot_sel_ret(mod, Factor = "Lsel", fleet = 5, sex = sex, fleetnames = fleetnames)
+  mtext("Selectivity", side = 2, line = 3, las = 0)
   mtext("Length (cm)", side = 1, line = 2.5)
 
   
