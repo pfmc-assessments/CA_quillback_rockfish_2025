@@ -78,8 +78,10 @@ x <- seq(28,46, by = 1)
 ca_est <- function(x) {alpha.ca.mod*x^beta.ca.mod}
 ggplot(dat, aes(x = length_cm, y = fec_mil, colour = PORT,  xmin = 0, xmax = 42)) + 
 geom_point(size = 5) + #geom_line(stat = 'function', fun = ej_Est, color = "blue") +
-geom_line(stat = 'function', fun = ca_est, color = "red")
-ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "fecundity_data_fits.png"),
+geom_line(stat = 'function', fun = ca_est, color = "red") +
+xlab("Length (cm)") +
+ylab("Fecundity (millions of eggs)") +
+ggsave(filename = file.path(here(), "report", "figures", "bio_fecundity_fit.png"),
        width = 10, height = 8)
 
 
