@@ -109,7 +109,7 @@ ssb_es_table |>
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Estimated time series of spawning output (trillions of eggs) for the base model."
+#| fig-cap: "Estimated time series of spawning output (millions of eggs) for the base model with 95% confidence intervals."
 #| fig-alt: "See table 26 for values."
 #| fig-pos: H
 
@@ -122,7 +122,7 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Estimated time series of fraction of unfished spawning output for the base model."
+#| fig-cap: "Estimated time series of spawning output relative to unfished spawning output for the base model with 95% confidence intervals."
 #| fig-alt: ""
 #| fig-pos: H
 
@@ -173,7 +173,7 @@ recr_es_table |>
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Estimated time series of age-0 recruits for the base model."
+#| fig-cap: "Estimated time series of age-0 recruits (in thousands) for the base model with 95% confidence intervals."
 #| fig-alt: ""
 #| fig-pos: H
 
