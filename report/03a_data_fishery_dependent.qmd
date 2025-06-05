@@ -6,7 +6,7 @@ Removals (1916--2024) for `r spp` were compiled from multiple data sources. This
 
 #### Commercial Landings and Discards
 
-Commercial landings for `r spp` were combined into a single fleet by aggregating across gear types and fish landed live versus dead. This choice was based on similarities in the length distributions among gear types and between fish landed live versus dead within \gls{pacfin} samples in areas and years of overlap.
+Commercial landings for `r spp` were combined into a single fleet by aggregating across gear types (nearly all hook and line, either as longline or pole gears) and fish landed live versus dead. This choice was based on similarities in the length distributions among gear types and between fish landed live versus dead within \gls{pacfin} samples in areas and years of overlap.
 
 Commercial landings data were available from 1916--2024. Historical landings (1916--1968) were obtained from the California Catch Reconstruction Project [@ralston_documentation_2010]. The reconstruction covered all of California, but only the northern port groups of Crescent City, Eureka, and Fort Bragg had landings for `r spp`. Additional landings caught off the coast of Oregon or Washington but landed in California for 1948--1968 were added to the reconstruction to represent total landings at California ports. These additional landings were small in magnitude; no more than 0.08 mt was landed in any one year and approximately 0.3 mt was landed across all years. Landings for 1969--1980 came from \gls{calcom}, and were negligible for `r spp`.
 
@@ -18,7 +18,7 @@ Total removals prior to 2002, for which no \gls{wcgop} data are available, were 
 
 #### Recreational Landings and Discards
 
-Recreational removals for `r spp` were combined across private/rental and party/charter modes. This choice was based on similarities in the length distributions between these fishing modes within \gls{recfin} samples in areas where both occurred.
+Recreational removals for `r spp` were combined across private/rental and party/charter modes, which both use hook and line gear. This choice was based on similarities in the length distributions between these fishing modes within \gls{recfin} samples in areas where both occurred.
 
 Recreational landings data were available from 1928--2024. Historical landings (1928--1980) were obtained from the California Catch Reconstruction Project [@ralston_documentation_2010]. Since 1980, recreational data sources provide estimates of total removals, which combine landings and dead discards together. Data during these years were obtained from the \gls{mrfss} (1980--2004; extracted 10/17/2024) and \gls{crfs} (2005--2024; extracted 1/24/2025) datasets via the \gls{recfin} website. While the \gls{mrfss} dataset includes data from 2004, samples in this year was collected by the \gls{crfs} sampling program. Although the \gls{mrfss} sampling program also includes removals for 1980, because @ralston_documentation_2010 considered their 1980 estimate to be more reliable than that of \gls{mrfss}, and due to survey quality problems related to 1980 being the first year of \gls{mrfss} [@Karpov1995; @cope_status_2009], landings from the historical reconstruction were preferred for 1980. 
 

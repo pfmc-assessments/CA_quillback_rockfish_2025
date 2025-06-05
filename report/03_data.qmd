@@ -8,7 +8,7 @@ Data from a wide range of programs were available for possible inclusion in the 
 
 This assessment updates the data used in the 2021 benchmark assessment, as well as utilizes additional data, both those collected since the last assessment and those from sources not used in the 2021 assessment. All data sources are specific to California unless otherwise specified. The following types and sources of data used in this assessment are summarized here, and then discussed in more detail later in this report:
 
-1.  Data regarding total removals of `r spp` encompassing years 1916--2024 were obtained from several sources:
+1.  Data regarding total removals (in units of metrics tons) of `r spp` encompassing years 1916--2024 were obtained from several sources:
     a.  Commercial landings (1916--2024) come from historical reconstructions [@ralston_documentation_2010], \gls{calcom}, and \gls{pacfin}.
     b.  Recreational landings (1928--2024) come from historical reconstructions [@ralston_documentation_2010], \gls{mrfss}, and \gls{recfin}. Both \gls{mrfss} and \gls{recfin} also include estimates of recreational dead discards.
     c.  Commercial dead discards for recent years (2002--2023) come from the \gls{gemm} product which aggregates data from a variety of sources including the \gls{wcgop} [@somers_gemm_2023].
@@ -32,7 +32,6 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
     f.  Paired age and length samples were collected from various sources and included as a growth fleet in the model for internally estimating growth.  
 
-The timing of these data sources as used in the base model are illustrated in @fig-data.
-
+The timing of these data sources as used in the base model are illustrated in @fig-data. Length data are reported as fork length. Any measurements in fork length were converted to fork length following the conversions in @echeverria_conversions_1984.
 
 
