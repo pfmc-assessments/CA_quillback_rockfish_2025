@@ -198,9 +198,6 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 
 <!-- \clearpage -->
 
-
-\pagebreak
-
 ## Exploitation Status{-}
 
 Exploitation rates were above the management target of a fishing intensity that leads to a spawning potential ratio of 0.5 during the 1990s (@tbl-es-spr, @fig-es-kobe). Exploitation rates decreased in the 2010s and have been low during the last few years of precautionary management subsequent declaration of overfished status in 2023.
@@ -261,8 +258,6 @@ As with most other rockfish and groundfish in the California Current, recruitmen
 Reference points were calculated using the estimated selectivities and catch distribution among fleets in the final year of the model. A list of estimates of the current state of the population, as well as reference points based on 1) a target unfished spawning output of 40%, 2) a spawning potential ratio of 0.5, and 3) the model estimate of maximum sustainable yield, are all listed in @tbl-ref-points-es. SPR, or the spawning potential ratio, is the fraction of expected lifetime reproductive output under a given fishing intensity divided by unfished expected lifetime reproductive output. `r Spp` off the California coast are managed as a single stock by the Pacific Fishery Management Council. 
 
 <!-- Management targets and definitions of overfishing, including the harvest rate that brings the stock to equilibrium at B24% for flatfishes and B40% for all other groundfish stocks (BMSY proxies) and the equilibrium stock size that results from fishing at the default harvest rate (the FMSY proxy). Include a summary table that compares estimated reference points for SSB, SPR, Exploitation Rate and Yield based on SSB proxy for MSY, SPR proxy for MSY, and estimated MSY values. -->
-
-\clearpage
 
 ```{r, tbl-ref-points-es, results = "asis"}
 #| label: tbl-ref-points-es
