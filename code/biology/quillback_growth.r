@@ -304,7 +304,7 @@ ggplot() +
         legend.title = element_text(size = 20),
         panel.grid.minor = element_blank(),
         legend.position.inside = c(0.8, 0.25)) + 
-	xlab("Age") + ylab("Length (cm)") +
+	xlab("Age (years)") + ylab("Length (cm)") +
   scale_color_viridis_d(begin = 0, end = .9) 
 ggsave(filename = file.path(here(),"report", "figures", "bio_growth.png"),
        width = 10, height = 8)

@@ -15,7 +15,7 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
 
 2.  Fishery-dependent length and age composition data were obtained from the following sources:
     a.  Commercial length and age composition data from state sampling programs were obtained from \gls{pacfin}.
-    b.  Recreational length composition data from state sampling programs or historical sampling efforts were obatined from \gls{cdfw}, online reports, and \gls{recfin}.
+    b.  Recreational length composition data from state sampling programs or historical sampling efforts were obtained from \gls{cdfw}, online reports, and \gls{recfin}.
 
 3.  Fishery-dependent relative abundance trends were obtained from the following sources:
     a.  Recreational catch and effort data from the private/rental fleet were obtained from \gls{crfs} via \gls{recfin} for years 2004--2022.
@@ -25,8 +25,8 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
     b.  \Gls{rov} sampling done by the \gls{cdfw} provides an index of abundance and corresponding length composition data, which were included for two super-periods, 2014--2016 and 2019--2021. Data were combined within each super-period for the index but used as individual years for length compositions.
     
 5.  Estimates of life history parameters were generated from various sources, and include:
-    a.  Updated maturity schedule from fish sampled in California by the \gls{gcdc} based on analysis assuming functional age-at-maturity.
-    b.  Updated fecundity relationship from fish sampled in California by the \gls{gcdc} assuming fecundity is a power function of length.
+    a.  Updated maturity schedule from fish sampled in California by the SWFSC's Santa Cruz lab based on analysis assuming functional age-at-maturity.
+    b.  Updated fecundity relationship from fish sampled in California by the SWFSC's Santa Cruz lab assuming fecundity is a power function of length.
     c.  Updated value for natural mortality based on an updated value for maximum age.
     d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{crfs}, as well as from the \gls{s-wcgbt}. These sources were the only ones with measured weights. 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.

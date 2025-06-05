@@ -1,21 +1,21 @@
 # Appendix A: Indices of Abundances {#sec-appendix-A} 
 
-## CRFS PR Dockside
+## CRFS Private/Rental Boat Dockside Survey
 
 Catch and effort data from the CRFS dockside sampling of private boats between 2004 and 2023 were provided by CDFW. The “i” sample files were used to re-create interview or trip-level data from 2004 to 2014. The CRFS program began producing estimates in a different, annual format in later years and data in this format was used from 2015 to 2023. The data included catch by species, number of anglers contributing to the catch, angler-reported area of fishing, gear, county, port, interview site, year, month, and CRFS district. The catch included the number of fish observed by the CRFS sampler, the number of unobserved retained and released fish reported by the angler.
 
-`r Spp` are a relatively rare rockfish species in California and therefore the large majority of recreational trips catch no `r spp`. The STAT used many techniques to filter the total PR dataset to focus on trips that did catch, or had potential to catch, quillback. Records were limited to the primary private and rental boats public-access sites, PR1 sites, which encompass over 90 percent of the total private boat effort. PR2 sites are more commonly associated with trips targeting highly migratory species and would be unlikely to include quillback. Given that quillback are relatively rare, they are lesser known to recreational anglers and may be misidentified. The STAT elected to use only catch data that was observed by a CRFS sampler. Unobserved retained catches and releases were not included.
+`r Spp` are a relatively rare rockfish species in California and therefore the large majority of recreational trips catch no `r spp`. The STAT used many techniques to filter the total private/rental boat dataset to focus on trips that did catch, or had potential to catch, `r spp`. Records were limited to the primary private and rental boats public-access sites, PR1 sites, which encompass over 90 percent of the total private boat effort. PR2 sites are more commonly associated with trips targeting highly migratory species and would be unlikely to include `r spp`. Given that `r spp` are relatively rare, they are lesser known to recreational anglers and may be misidentified. The STAT elected to use only catch data that was observed by a CRFS sampler. Unobserved retained catches and releases were not included.
 
-The remaining data filters are detailed in @tbl-pr-filter. First, CRFS districts 1 and 2 representing southern California were removed. Data from 2020 was removed due to changes in sampling protocol during the COVID-19 response. Samplers were prohibited from working for a period of the year and when sampling resumed, often could not approach anglers closely enough to identify the catch. Data from 2023 was removed given restrictions on quillback catch implemented in that year. Only trips occurring in ocean areas (not inland bays and estuaries) and trips using hook and line or troll gear as the primary gear type were retained. Trips during January through March were removed because those months are closed to the fishery in central and northern California. CRFS sample sites where five or fewer quillback were caught were excluded.
+The remaining data filters are detailed in @tbl-pr-filter. First, CRFS districts 1 and 2 representing southern California were removed. Data from 2020 was removed due to changes in sampling protocol during the COVID-19 response. Samplers were prohibited from working for a period of the year and when sampling resumed, often could not approach anglers closely enough to identify the catch. Data from 2023 was removed given restrictions on `r spp` catch implemented in that year. Only trips occurring in ocean areas (not inland bays and estuaries) and trips using hook and line or troll gear as the primary gear type were retained. Trips during January through March were removed because those months are closed to the fishery in central and northern California. CRFS sample sites where five or fewer `r spp` were caught were excluded.
 
-The final step in data filtering further limits the dataset to trips that either caught a quillback or were likely to catch a quillback, given associations between quillback and other species observed in the recreational catch. The method developed by Stephens and MacCall (2004) predicts the probability of catching a target species by constructing a logistic model predicting the target presence based on the presence and absence of other species in the catch. Species that are rarely encountered will provide little information about the likelihood of catching a quillback. Therefore, we removed species comprising less than 0.1% of the records as well as species that never co-occurred with quillback. Pacific bonito and Pacific sardine were the only species that never co-occurred with quillback and represented greater than 0.1% of the records. Catch of the remaining species in a given trip was coded as presence/absence (1/0) and treated as a categorical variable in the Stephens-MacCall logistic regression analysis.\
-The Stephens-MacCall logistic regression was fit to the remaining set of 52 indicator species (@fig-pr-sm). The top five species with high probability of co-occurrence with quillback were tiger rockfish, copper rockfish, canary rockfish, lingcod, and rock sole. The species with the lowest probability of co-occurrence were kelp rockfish, starry flounder, California halibut, ocean whitefish, and treefish. These species are not commonly caught during the same trip as quillback, presumably due to different habitat associations and fishing techniques. The Area Under the Characteristic curve (AUC) for this model is 0.88, a significant improvement over a random classifier (AUC = 0.5). AUC represents the probability that a randomly chosen positive trip would be assigned a higher ranked prediction by the GLM than a randomly chosen trip that did not catch a black rockfish. Stephens and MacCall (2004) proposed ignoring trips below a threshold probability, based on a criterion of balancing the number of false positives and false negatives. False positives (FP) are trips that are predicted to catch a quillback based on the species composition of the catch, but did not. False negatives (FN) are trips that were not predicted to catch a quillback, given the catch composition, but caught at least one. For the CRFS PR data set, the threshold probability (0.186) that balances FP and FN excluded 117,458 trips that did not catch a quillback, and 2,681 trips that caught a quillback. Given the low prevalence of quillback in the original data, we retained the false negative trips, assuming that catching a quillback indicates that a non-negligible fraction of the fishing effort occurred in appropriate habitat. Only “true negatives” based on the baseline threshold (the 117,458 trips that neither caught quillback, nor were predicted to catch them by the model) were excluded from the index standardization. This final filtering step resulted in a data set of 6,527 samples or trips with almost 60% catching one or more quillback (@tbl-pr-filter).
+The final step in data filtering further limits the dataset to trips that either caught a `r spp` or were likely to catch a `r spp`, given associations between `r spp` and other species observed in the recreational catch. The method developed by Stephens and MacCall (2004) predicts the probability of catching a target species by constructing a logistic model predicting the target presence based on the presence and absence of other species in the catch. Species that are rarely encountered will provide little information about the likelihood of catching a `r spp`. Therefore, we removed species comprising less than 0.1% of the records as well as species that never co-occurred with `r spp`. Pacific bonito and Pacific sardine were the only species that never co-occurred with `r spp` and represented greater than 0.1% of the records. Catch of the remaining species in a given trip was coded as presence/absence (1/0) and treated as a categorical variable in the Stephens-MacCall logistic regression analysis.\
+The Stephens-MacCall logistic regression was fit to the remaining set of 52 indicator species (@fig-pr-sm). The top five species with high probability of co-occurrence with `r spp` were tiger rockfish, copper rockfish, canary rockfish, lingcod, and rock sole. The species with the lowest probability of co-occurrence were kelp rockfish, starry flounder, California halibut, ocean whitefish, and treefish. These species are not commonly caught during the same trip as `r spp`, presumably due to different habitat associations and fishing techniques. The Area Under the Characteristic curve (AUC) for this model is 0.88, a significant improvement over a random classifier (AUC = 0.5). AUC represents the probability that a randomly chosen positive trip would be assigned a higher ranked prediction by the GLM than a randomly chosen trip that did not catch a black rockfish. Stephens and MacCall (2004) proposed ignoring trips below a threshold probability, based on a criterion of balancing the number of false positives and false negatives. False positives (FP) are trips that are predicted to catch a `r spp` based on the species composition of the catch, but did not. False negatives (FN) are trips that were not predicted to catch a `r spp`, given the catch composition, but caught at least one. For the CRFS private/rental boat data set, the threshold probability (0.186) that balances FP and FN excluded 117,458 trips that did not catch a `r spp`, and 2,681 trips that caught a `r spp`. Given the low prevalence of `r spp` in the original data, we retained the false negative trips, assuming that catching a `r spp` indicates that a non-negligible fraction of the fishing effort occurred in appropriate habitat. Only “true negatives” based on the baseline threshold (the 117,458 trips that neither caught `r spp`, nor were predicted to catch them by the model) were excluded from the index standardization. This final filtering step resulted in a data set of 6,527 samples or trips with almost 60% catching one or more `r spp` (@tbl-pr-filter).
 
-We modeled quillback catch with an effort offset of angler trips using the R package sdmTMB. Covariates considered included year, month, 3-month time period (wave), and district. Sparse quillback in the data set meant that many months had no positive quillback samples and required that we increase the commonly used 2-month wave to three months to improve the distribution of positive samples. There were also several years in which no quillback were observed in district 3. Several district 3 sites were already removed during the filtering process. Therefore, we included the remaining district 3 sites into district 4. Exploration of alternative negative binomial models showed the full model including all covariates and a year:district interaction had the lowest AIC and log-likelihood but was also equal in these scores to a model excluding wave (@tbl-pr-model-select).
+We modeled `r spp` catch with an effort offset of angler trips using the R package sdmTMB. Covariates considered included year, month, 3-month time period (wave), and district. Sparse `r spp` in the data set meant that many months had no positive `r spp` samples and required that we increase the commonly used 2-month wave to three months to improve the distribution of positive samples. There were also several years in which no `r spp` were observed in district 3. Several district 3 sites were already removed during the filtering process. Therefore, we included the remaining district 3 sites into district 4. Exploration of alternative negative binomial models showed the full model including all covariates and a year:district interaction had the lowest AIC and log-likelihood but was also equal in these scores to a model excluding wave (@tbl-pr-model-select).
 
 Further exploration of alternative model distributions in sdmTMB showed that a delta-lognormal distribution performed better than negative binomial. Delta-lognormal models using year-district interactions failed dianostics and given that patterns among the districts are similar (@fig-pr-avg-cpue-district), we excluded the interaction from the final model which included year, district, and wave.
 
-The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr-model-cpue) and this trend is also reflected in raw CPUE over time. The Q-Q plot indicates a reasonable fit (@fig-pr-index-qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no quillback of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in @tbl-pr-index-values.
+The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr-model-cpue) and this trend is also reflected in raw CPUE over time. The Q-Q plot indicates a reasonable fit (@fig-pr-index-qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no `r spp` of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in @tbl-pr-index-values.
 
 
 <!--Figures -->
@@ -25,7 +25,7 @@ The final model shows a peak index value in 2006 with a declining trend thereaft
 #| warning: false 
 #| eval: true 
 #| out.width: "75%"
-#| fig-cap: "Species coefficients (blue bars) from the binomial GLM for presence/absence of quillback in the PR data.  Horizontal black bars are 95% confidence intervals."
+#| fig-cap: "Species coefficients (blue bars) from the binomial GLM for presence/absence of quillback rockfish in the private/rental boat data.  Horizontal black bars are 95% confidence intervals."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/pr_index_SM.png")
@@ -54,7 +54,7 @@ knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 #| warning: false 
 #| eval: true 
 #| out.width: "75%"
-#| fig-cap: "Index for the CRFS dockside PR survey."
+#| fig-cap: "Index for the CRFS dockside private/rental boat survey."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/pr_index_model_cpue_by_year.png")
@@ -66,7 +66,7 @@ knitr::include_graphics("figures/pr_index_model_cpue_by_year.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Q-Q plot for the CRFS dockside PR survey."
+#| fig-cap: "Q-Q plot for the CRFS dockside private/rental boat survey."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/pr_index_qq.png")
@@ -79,7 +79,7 @@ knitr::include_graphics("figures/pr_index_qq.png")
 #| label: tbl-pr-filter
 #| echo: false
 #| warning: false
-#| tbl-cap: "Data filtering steps for the CRFS dockside PR survey."
+#| tbl-cap: "Data filtering steps for the CRFS dockside private/rental boat survey."
 #| tbl-pos: H
 library(tidyr)
 library(gt)
@@ -99,7 +99,7 @@ pr_filter |>
 #| label: tbl-pr-model-select
 #| echo: false
 #| warning: false
-#| tbl-cap: "Model selection for the CRFS dockside PR survey.  The selected final model is highlighted in yellow."
+#| tbl-cap: "Model selection for the CRFS dockside private/rental boat survey.  The selected final model is highlighted in yellow."
 #| tbl-pos: H
 
 pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
@@ -118,7 +118,7 @@ pr_filter |>
 #| label: tbl-pr-index-values
 #| echo: false
 #| warning: false
-#| tbl-cap: "Estimated relative index of abundance for the CRFS dockside PR survey."
+#| tbl-cap: "Estimated relative index of abundance for the CRFS dockside private/rental boat survey."
 #| tbl-pos: H
 
 pr_filter <- read.csv("tables/pr_index_values.csv", check.names = FALSE)

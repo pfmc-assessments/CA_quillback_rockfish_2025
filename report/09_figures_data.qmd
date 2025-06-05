@@ -42,7 +42,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Data avaialable by year for each fleet, where circle area is relative within a data type. Circles are proportional to total catch for catches; to precision for indices, discards, and mean body weight observations; and to total sample size for compositions and mean weight- or length-at-age observations. Observations excluded from the likelihood have equal size for all years."
+#| fig-cap: "Data available by year for each fleet, where circle area is relative within a data type. Circles are proportional to total catch for catches; to precision for indices, discards, and mean body weight observations; and to total sample size for compositions and mean weight- or length-at-age observations. Observations excluded from the likelihood have equal size for all years."
 #| fig-alt: "Tabular information for this figure can be found in the data file."
 
 knitr::include_graphics("r4ss_plots/data_plot2.png")
@@ -71,7 +71,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean length for the commercial fleet with 95 percent confidence intervals based on current samples sizes."
+#| fig-cap: "Mean length (cm) for the commercial fleet with 95 percent confidence intervals based on current samples sizes."
 #| fig-alt: "Line plot showing mean length along with uncertainty in each year with an increasing trend in mean length from 1995 to 2015."
 
 knitr::include_graphics(
@@ -117,7 +117,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean length for the recreational fleet with 95 percent confidence intervals based on current samples sizes."
+#| fig-cap: "Mean length (cm) for the recreational fleet with 95 percent confidence intervals based on current samples sizes."
 #| fig-alt: "Line plot showing mean length along with uncertainty in each year with an declining trend in mean length from 1980 to 1995 and slowing increasing trend to 2015."
 
 knitr::include_graphics(
@@ -181,7 +181,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean length for the the CCFRP survey with 95 percent confidence intervals based on current samples sizes."
+#| fig-cap: "Mean length (cm) for the CCFRP survey with 95% confidence intervals based on current samples sizes."
 #| fig-alt: "Line plot showing mean length along with uncertainty in each year with a slight decline in mean length since 2020."
 
 knitr::include_graphics(
@@ -211,8 +211,8 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean length for the the ROV survey with 95 percent confidence intervals based on current samples sizes."
-#| fig-alt: "Line plot showing mean length along with uncertainty in each year with a generally unchange pattern, though lengths are larger in 2014 and 2015, and show and increasing trend from 2019 to 2021."
+#| fig-cap: "Mean length (cm) for the ROV survey with 95 percent confidence intervals based on current samples sizes."
+#| fig-alt: "Line plot showing mean length along with uncertainty in each year with a generally unchanged pattern, though lengths are larger in 2014 and 2015, and show and increasing trend from 2019 to 2021."
 
 knitr::include_graphics(
     "r4ss_plots/comp_lendat_data_weighting_TA1-8_CA_ROV.png"

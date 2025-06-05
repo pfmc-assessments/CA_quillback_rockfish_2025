@@ -249,7 +249,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Pearson residuals for the commercial fleet conditional age at length composition."
+#| fig-cap: "Pearson residuals for the commercial fleet conditional age-at-length composition."
 #| fig-alt: "There are no clear patters in the residuals in the observed fits."
 
 knitr::include_graphics(
@@ -262,7 +262,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean age from conditional-age-at-length data (aggregated across length bins) for the growth fleet with 95% confidence intervals based on current samples sizes."
+#| fig-cap: "Mean age from conditional age-at-length data (aggregated across length bins) for the growth fleet with 95% confidence intervals based on current samples sizes."
 #| fig-alt: "Mean age in the commercial fleet is available in eight years, 2010, 2011, 2017, 2018, and 2021 through 2024. Mean age varies around 16 until 2022 when it declines to nearer 12."
 
 knitr::include_graphics(
@@ -486,7 +486,7 @@ knitr::include_graphics("figures/piner_panel_NatM_uniform_Fem_GP_1.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bivariate profile of natural mortality and steepness relative with the NLL value for each model run shown with a white dot indicating the pre-STAR base model values."
+#| fig-cap: "Bivariate profile of natural mortality (M) and steepness (h) relative with the negative log-likelihood (NLL) value for each model run shown with a white dot indicating the pre-STAR base model values."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/profile_Mhgrid_nll.png")
@@ -498,7 +498,7 @@ knitr::include_graphics("figures/profile_Mhgrid_nll.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bivariate profile of natural mortality and steepness relative to the model with the lowest negative log-likelihood. THe model with the lowest NLL has an appoximate value of 0.08 for M and 0.9 for h."
+#| fig-cap: "Bivariate profile of natural mortality (M) and steepness (h) relative to the model with the lowest negative log-likelihood (NLL). THe model with the lowest NLL has an approximate value of 0.08 for M and 0.9 for h."
 #| fig-alt: "The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
 
 knitr::include_graphics("figures/profile_m_h_contour.png")
