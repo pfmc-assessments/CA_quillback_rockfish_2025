@@ -27,7 +27,7 @@ The exploration of models began by bridging from the 2021 data moderate assessme
 2. Update data inputs to reflect best scientific information currently available. Data was updated by data type (catch, compositions including length and age, and indices), which inherently meant updating data for fleets present in 2021 (as well as currently) and then fleets added into the current base model that were in the 2021 assessment.
 3. Update selectivity blocks and shapes, and reapply data weighting practices.
 
-To arrive at the final base model, additional revisions were made after these three steps to determine the best fit to the data and following standard practices. These include removing fits to composition data with small sample sizes, adjusting the growth parameterization to use length at age 1 as a parameter instead of length at age 0, revisions to the recruitment bias-adjustment, and final revisions to data weightings.
+To arrive at the final base model, additional revisions were made after these three steps to determine the best fit to the data and following standard practices. These include, but were not limited to, removing fits to composition data with small sample sizes, revisions to the recruitment bias adjustment, and final revisions to data weightings.
 
 A thorough description of the current base model is presented separately below (@sec-base-results). This section is intended only to more clearly identify where substantive changes occurred during the bridging analysis. Sensitivities to some of the components within the steps above are included in @sec-assmt-sens.
 
