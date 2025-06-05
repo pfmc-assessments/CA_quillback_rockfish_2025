@@ -109,7 +109,7 @@ ssb_es_table |>
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Estimated time series of spawning output (trillions of eggs) for the base model."
+#| fig-cap: "Estimated time series of spawning output (millions of eggs) for the base model with 95% confidence intervals."
 #| fig-alt: "See table 26 for values."
 #| fig-pos: H
 
@@ -122,7 +122,7 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Estimated time series of fraction of unfished spawning output for the base model."
+#| fig-cap: "Estimated time series of spawning output relative to unfished spawning output for the base model with 95% confidence intervals."
 #| fig-alt: ""
 #| fig-pos: H
 
@@ -173,7 +173,7 @@ recr_es_table |>
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Estimated time series of age-0 recruits for the base model."
+#| fig-cap: "Estimated time series of age-0 recruits (in thousands) for the base model with 95% confidence intervals."
 #| fig-alt: ""
 #| fig-pos: H
 
@@ -203,7 +203,7 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 
 ## Exploitation Status{-}
 
-Exploitation rates were above the management target of a fishing intensity that leads to a spawning potential ratio of 0.5 during the 1990s(@tbl-es-spr, @fig-es-kobe). Exploitation rates decreased in the 2010s and have been low during the last few years of precautionary management subsequent declaration of overfished status in 2023.
+Exploitation rates were above the management target of a fishing intensity that leads to a spawning potential ratio of 0.5 during the 1990s (@tbl-es-spr, @fig-es-kobe). Exploitation rates decreased in the 2010s and have been low during the last few years of precautionary management subsequent declaration of overfished status in 2023.
 
 <!-- Exploitation rates (i.e., total catch divided by exploitable biomass, or the annual SPR harvest rate) - include a table with the last 10 years of data and a graph showing the trend in fishing mortality relative to the target (y-axis) plotted against the trend in biomass relative to the target (x-axis). -->
 
@@ -312,7 +312,7 @@ reference_points_table |>
 
 ## Management Performance{-}
 
-During the last 10 years, while `r spp` in California was managed within the minor Nearshore Stock complex, the total removals were above the species' \gls{ofl} contribution from 2015--2022. Since 2023, `r spp` has had its own reference points and attainment was below the OFL for 2024 (@tbl-es-management). 
+During the last 10 years, while `r spp` in California was managed within the minor Nearshore Stock complex, the total removals were above the species' \gls{ofl} contribution from 2015--2022. Since 2023, `r spp` in California has had its own reference points. Total removals were above the OFL in 2024 but below the \gls{ofl} for 2024 (@tbl-es-management). 
 
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
 
@@ -380,7 +380,7 @@ The primary area of uncertainty for this assessment is the parameters influencin
 
 ## Decision Table and Harvest Projections{-}
 
-Projections of the \gls(ofl), \gls{abc}, and \gls{acl}, all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 are included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the \gls{gmt}, and catches from 2027 onward assume full attainment of the \gls{abc}, assuming the \gls{acl} is equal to the \gls{abc}.
+Projections of the \gls{ofl}, \gls{abc}, and \gls{acl}, all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 are included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the \gls{gmt}, and catches from 2027 onward assume full attainment of the \gls{abc}, assuming the \gls{acl} is equal to the \gls{abc}.
 
 
 <!-- Projected yields (OFL, ABC and ACL), spawning biomass / output, and stock depletion levels for each year. OFL calculations should be based on the assumption that future catches equal ABCs and not OFLs. -->
