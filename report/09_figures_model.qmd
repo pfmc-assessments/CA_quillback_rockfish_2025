@@ -470,6 +470,18 @@ knitr::include_graphics("figures/m_profile_bio_comparison.png")
 ```
 
 ```{r}
+#| label: fig-m-profile_param-panel
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Change in the log-likelihood, fraction of unfished spawning output, initial spawning output, and final spawning output across a range of natural mortality values."
+#| fig-alt: "."
+
+knitr::include_graphics("figures/parameter_panel_NatM_uniform_Fem_GP_1.png")
+```
+
+
+```{r}
 #| label: fig-m-piner
 #| echo: false
 #| warning: false
