@@ -332,7 +332,7 @@ SchStarts
 
 vb3 <- FSA::vbFuns("Schnute",simple=FALSE)
 
-fit <- nls(Length~vb3(Age,L1, L3,K, t1=0,t3=40),
+fit <- nls(Length~vb3(Age,L0, L3,K, t1=1,t3=40),
                    data = age_df,start=SchStarts)
 fit
 
