@@ -147,7 +147,8 @@ growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.nam
 growthCAAL |>
 kableExtra::kable(
   format = "latex", 
-  col.names = c("Year", "Abrams", "WCGBTS", "Comm", "CDFW Gfish", "SWFSC Coop", "SWFSC Res.","Surrendered", "IPHC", "Misc.", "CCFRP"), 
+  #col.names = c("Year", "Abrams", "WCGBTS", "Comm", "CDFW Gfish", "SWFSC Coop", "SWFSC Res.","Surrendered", "IPHC", "Misc.", "CCFRP"), 
+   col.names = c("Year", "Abrams", "CDFW Gfish", "CDFW comm.", "SWFSC Coop", "IPHC", "Surrendered", "SWFSC Res.", "WCGBTS", "Misc.", "CCFRP"), 
   longtable = TRUE,
   booktabs = TRUE,
   linesep = "",
