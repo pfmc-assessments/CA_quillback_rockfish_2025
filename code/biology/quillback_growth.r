@@ -210,6 +210,11 @@ vb_est_all$all_growth
 # 0.17820030 41.18119888  3.98945906  0.20322534  0.06373563
 write.csv(data.frame("ests" = vb_est_all$all_growth), here("data", "vonb_ests_withAge0.csv"))
 
+#Value for t0 from this parameterization based on Schnute and Fournier 1980
+0 + 1/vb_est_all$all_growth[1] * 
+  log((vb_est_all$all_growth[2] - vb_est_all$all_growth[3])/
+        (vb_est_all$all_growth[2] - vb_est_all$all_growth[1] * exp(-vb_est_all$all_growth[1] * (80 - 0))))
+
 #############################################################################################
 #Estimate growth to explore why the initial parameters matter
 age_df <- qlbk #%>% filter(age !=0) %>% filter(project != "CCFRP")
