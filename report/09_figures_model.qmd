@@ -93,7 +93,7 @@ knitr::include_graphics("figures/selectivityPlot.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of age-0 recruits with uncertainty for the base model."
+#| fig-cap: "Estimated time series of age-0 recruits with ~95% asymptotic intervals for the base model."
 #| fig-alt: "Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
 
 knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png")
@@ -278,7 +278,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Fit to log index data on log scale for the CRFS dockside PR index of abundance.  Lines indicate input uncertainty."
+#| fig-cap: "Fit to log index data on log scale for the CRFS dockside PR index of abundance. Lines indicate 95% uncertainty interval around index values based on the model assumption of lognormal error."
 #| fig-alt: "Model fit to the CRFS dockside PR index of abundance."
 
 knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_Recreational.png")
@@ -289,7 +289,7 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_Recreational.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Fit to log index data on log scale for the CCFRP index of abundance.  Lines indicate input uncertainty."
+#| fig-cap: "Fit to log index data on log scale for the CCFRP index of abundance.   Lines indicate 95% uncertainty interval around index values based on the model assumption of lognormal error."
 #| fig-alt: "Model fit to the CCFRP index of abundance."
 
 knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_CCFRP.png")
@@ -300,7 +300,7 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_CCFRP.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Fit to log index data on log scale for the ROV index of abundance.  Lines indicate input uncertainty."
+#| fig-cap: "Fit to log index data on log scale for the ROV index of abundance.   Lines indicate 95% uncertainty interval around index values based on the model assumption of lognormal error."
 #| fig-alt: "Model fit to the ROV index of abundance."
 
 knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
@@ -314,7 +314,7 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of spawning output in millions of eggs."
+#| fig-cap: "Estimated time series of spawning output in millions of egg with ~95% asymptotic intervals."
 #| fig-alt: "Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increases and then stabilizes towrads the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
@@ -325,7 +325,7 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of fraction of unfished spawning output."
+#| fig-cap: "Estimated time series of fraction of unfished spawning output with ~95% asymptotic intervals."
 #| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
@@ -336,7 +336,7 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of total biomass."
+#| fig-cap: "Estimated time series of total biomass (mt) with ~95% asymptotic intervals."
 #| fig-alt: "Total biomass in metric tons is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
@@ -498,7 +498,7 @@ knitr::include_graphics("figures/profile_Mhgrid_nll.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bivariate profile of natural mortality (M) and steepness (h) relative to the model with the lowest negative log-likelihood (NLL). THe model with the lowest NLL has an approximate value of 0.08 for M and 0.9 for h."
+#| fig-cap: "Bivariate profile of natural mortality (M) and steepness (h) relative to the model with the lowest negative log-likelihood (NLL). The model with the lowest NLL has an approximate value of 0.08 for M and 0.9 for h."
 #| fig-alt: "The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
 
 knitr::include_graphics("figures/profile_m_h_contour.png")
@@ -581,8 +581,8 @@ knitr::include_graphics(
 #| label: fig-yield
 #| echo: false 
 #| warning: false 
-#| eval: true 
-#| fig-cap: "Estimated yield curve with reference points for the base model."
+#| eval: true nll
+#| fig-cap: "Estimated yield curve with reference points for the base model with yield in mt."
 #| fig-alt: "Yield curve shows equilibrium yield as a domed function of fraction of unfished spawning output, with a peak slightly above 0.2, a maximum sustainable yield around 0.25, a biomass target at 0.4, and a current estimate just above 0.45."
 
 knitr::include_graphics(
