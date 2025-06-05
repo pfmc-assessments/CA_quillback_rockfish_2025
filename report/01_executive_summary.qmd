@@ -312,7 +312,7 @@ reference_points_table |>
 
 ## Management Performance{-}
 
-During the recent period when `r spp` was managed within a stock, the total removed were above the species' OFL contribution from 2018--2022. Since 2023, `r spp` has had its own reference points and attainment has remained below the OFL (@tbl-es-management). 
+During the last 10 years, while `r spp` in California was managed within the minor Nearshore Stock complex, the total removals were above the species' \gls{ofl} contribution from 2015--2022. Since 2023, `r spp` has had its own reference points and attainment was below the OFL for 2024 (@tbl-es-management). 
 
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
 
@@ -380,7 +380,7 @@ The primary area of uncertainty for this assessment is the parameters influencin
 
 ## Decision Table and Harvest Projections{-}
 
-Projections of the overfishing limit (OFL), acceptable biological catch (ABC), and annual catch limit (ACL), all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 are included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the Groundfish Management Team, and catches from 2027 onward assume full attainment of the \gls{ABC}, assuming the \gls{ACL} is equal to the \gls{ABC}.
+Projections of the \gls(ofl), \gls{abc}, and \gls{acl}, all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 are included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the \gls{gmt}, and catches from 2027 onward assume full attainment of the \gls{abc}, assuming the \gls{acl} is equal to the \gls{abc}.
 
 
 <!-- Projected yields (OFL, ABC and ACL), spawning biomass / output, and stock depletion levels for each year. OFL calculations should be based on the assumption that future catches equal ABCs and not OFLs. -->
