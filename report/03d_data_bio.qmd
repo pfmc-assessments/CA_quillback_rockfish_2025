@@ -45,11 +45,11 @@ where $F$ fecundity in millions of eggs and $L$ is fork length in cm (@fig-fecun
 
 The majority of length-at-age data available for California `r spp` were collected in the last five years. The \gls{ccgs} is the only fishery-dependent sampling program that that collects otoliths as part of the survey design and the majority of age data are combined into a growth fleet.  External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (Claire Stuart, Cal Poly Humboldt, pers. comm.). A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. Lengths from age-zero fish (N = 192) were available from a dissertation study [@baetscher_2019_larval] and were only used to inform initial parameters for growth that were estimated external to the base model. Baetscher -@baetscher_2019_larval trapped juvenile rockfish within Monterey Bay using \gls{smurf}s and divers with nets. All of the `r spp` captured were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 
 
-The estimated growth curve from the available data, estimated externally to the base model, is 
+The estimated growth curve from the available data, estimated externally to the base model, was 
 $$
 L_{\infty} = 41.18 cm; k = 0.177; t_0 = -0.620 cm 
 $$
-where $L_{\infty}$ is the asymptotic average length,  $K$ is the growth coefficient with units $year^{-1}$, and $t_0$ represents the time when the average length was zero  (@fig-growthdata). Note that Stock Synthesis typically uses the Schnute parameterization of vonBertalanffy growth, and so $t_0$ was converted to a value of $L_{age=1}$ = 8.0 cm. This relationship was used to initialize the parameters in the model, and differs from the growth parameters ultimately estimated internal to the base model.
+where $L_{\infty}$ is the asymptotic average length,  $K$ is the growth coefficient with units $year^{-1}$, and $t_0$ represents the time when the average length was zero  (@fig-growthdata). Note that Stock Synthesis typically uses the Schnute parameterization of vonBertalanffy growth, and so $t_0$ was converted to a value of $L_{age=1}$ = 8.0 cm. This relationship was used to initialize the parameters in the model, and differs from the growth parameters ultimately estimated internal to the base model. The estimate of $L_{\infty}$ is comparable to literature values, while the estimate of $K$ is on the higher side of literature values which vary from 0.06 - 0.19 [@YamanakaandLacko_rockfish_2001; @Palssonetal_2009; @Westetal_2014]. 
 
 ## Environmental and Ecosystem Data (TOR section D4) 
 
