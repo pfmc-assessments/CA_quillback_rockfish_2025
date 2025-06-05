@@ -35,7 +35,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating data. Each step is done separately based off the 2021 assessment with updated biology (Update All Biology) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estiamte Growth), which combines across all data steps."
+#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating data. Each change is done tested independently without the previous based off the 2021 assessment with updated biology (Update All Biology(see @fig-bridgeBio_comp)) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all data steps."
 #| fig-alt: "Figure showing that the trajectory generally doesnt change except when age data are included and growth is not estimated."
 
 knitr::include_graphics(
