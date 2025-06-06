@@ -53,7 +53,7 @@ kableExtra::kable(
 #| label: tbl-comm_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment. Also included is the input sample size used in the assessment following the formula described in the text."
+#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment. Also included is the input sample size used in the assessment model following the formula described in the text. Lengths in years that had an input sample size of less than 5 were excluded from final model fits, as described in the text."
 
 commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
@@ -83,7 +83,7 @@ cols_label(
 #| label: tbl-comm_ages
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the stock assessment."
+#| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the stock assessment as conditional age at lengths. The number of samples was used as the input sample size in the assessment model. Ages in years that had fewer than 30 samples were excluded from final model fits, as described in the text."
 
 commages <- read.csv(here::here('data', "SampleSize_age.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
@@ -109,7 +109,7 @@ commages|>
 #| label: tbl-rec_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the stock assessment. Duplicate PC mode lengths from the MRFSS sampling program in 1997-1998 are not included."
+#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the stock assessment. The number of trips was used as the input sample size in the assessment model. Duplicate PC mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than 5 were excluded from final model fits, as described in the text."
 
 reclengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) 
 reclengths <- reclengths |> 
@@ -137,7 +137,7 @@ cols_label(
 #| label: tbl-caal_ages
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of age samples used for conditional age at length data for the growth fleet in the stock assessment. See text for description of data sources."
+#| tbl-cap: "Summary of the number of age samples used for conditional age at length data for the growth fleet in the stock assessment. See text for description of data sources. Ages in years that had fewer than 30 samples across all sources were excluded from final model fits, as described in the text."
 
 growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
   dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
@@ -170,7 +170,7 @@ kableExtra::kable(
 #| label: tbl-survey_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of fishery-independent length samples, along with the number of drifts or transects or tows, available for use in the stock assessment."
+#| tbl-cap: "Summary of the number of fishery-independent length samples, along with the number of drifts or transects or tows, available for use in the stock assessment. See text for description of data sources. The number of drifts or transects was used as the input sample size in the assessment model. Data from the WCGBTS were too sparse to use as length compositions in the assessment model. Lengths in years with input sample size fewer than 5 for each other source were excluded from final model fits, as described in the text. "
 
 ccfrplengths <- read.csv(here::here('data', "SampleSize_length_CCFRP.csv"), check.names = FALSE)
 lengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>

@@ -65,7 +65,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading to the final base model."
+#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading up to the final base model, which includes additional minor changes as described in the text."
 #| fig-alt: "Figure showing that the trajectory generally doesn't change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
 
 knitr::include_graphics(
