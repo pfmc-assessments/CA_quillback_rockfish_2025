@@ -2864,6 +2864,41 @@ plot_sel_all(pp)
 
 
 ######-
+## Start recdevs at 2000 --------------------------------------------------------
+
+new_name <- 'recdev_2000'
+
+mod <- base_mod
+
+mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+mod$ctl$MainRdevYrFirst <- 2000
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'recdev_1990'),
+                                                   file.path('_sensitivities', 'recdev_2000')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     "Recdevs start at 1990",
+                                     "Recdevs start at 2000"),
+                    subplots = c(1,3,9,18), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+######-
 ## Use recdev option 2 --------------------------------------------------------
 
 new_name <- 'recdev_opt2'
