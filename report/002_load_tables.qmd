@@ -51,6 +51,7 @@ if (file.exists(here::here("report/tables"))) {
   
   parcount_table <- table_parcounts$table
   parcount_cap <- table_parcounts$cap
+  parcount_cap <- gsub("Estimated", "Number of estimated", parcount_cap)
   rm(table_parcounts)
   
   pars_table <- table_pars$table

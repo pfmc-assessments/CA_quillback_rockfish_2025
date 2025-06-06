@@ -53,7 +53,7 @@ kableExtra::kable(
 #| label: tbl-comm_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment. Also included is the input sample size used in the assessment model following the formula described in the text. Lengths in years that had an input sample size of less than 5 were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the assessment model. Also included is the input sample size used in the assessment model following the formula described in the text. Lengths in years that had an input sample size of less than 5 were excluded from final model fits, as described in the text."
 
 commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
@@ -83,7 +83,7 @@ cols_label(
 #| label: tbl-comm_ages
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the stock assessment as conditional age at lengths. The number of samples was used as the input sample size in the assessment model. Ages in years that had fewer than 30 samples were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the assessment model as conditionals. The number of ages was used as the input sample size in the assessment model. Ages in years that had fewer than 30 samples were excluded from final model fits, as described in the text."
 
 commages <- read.csv(here::here('data', "SampleSize_age.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
@@ -109,7 +109,7 @@ commages|>
 #| label: tbl-rec_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the stock assessment. The number of trips was used as the input sample size in the assessment model. Duplicate PC mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than 5 were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the assessment model. The number of trips was used as the input sample size in the assessment model. Duplicate PC mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than 5 were excluded from final model fits, as described in the text."
 
 reclengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) 
 reclengths <- reclengths |> 
@@ -137,12 +137,14 @@ cols_label(
 #| label: tbl-caal_ages
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of age samples used for conditional age at length data for the growth fleet in the stock assessment. See text for description of data sources. Ages in years that had fewer than 30 samples across all sources were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of age samples used for conditional age at length data for the growth fleet in the assessment model. See text for description of data sources. Ages in years that had fewer than 30 samples across all sources were excluded from final model fits, as described in the text."
 
 growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
   dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
                 CCFRP = CCFRPFarallons_Nfish + CCFRPNotFarallons_Nfish) |>
                 dplyr::select(-c('calcom_Nfish', 'comm85_Nfish' , 'CCFRPFarallons_Nfish', 'CCFRPNotFarallons_Nfish'))
+growthCAAL <- rbind(growthCAAL, colSums(growthCAAL))
+growthCAAL[nrow(growthCAAL), 1] <- "Total"
 
 growthCAAL |>
 kableExtra::kable(
@@ -156,7 +158,8 @@ kableExtra::kable(
   kableExtra::kable_styling(
     latex_options = "repeat_header",
     font_size = 11,
-    full_width = FALSE)# |>
+    full_width = FALSE) |># |>
+  row_spec(15, bold=T)
   #kableExtra::column_spec(
   #  column = 1:3,
   #  width = "1in")
@@ -170,7 +173,7 @@ kableExtra::kable(
 #| label: tbl-survey_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of fishery-independent length samples, along with the number of drifts or transects or tows, available for use in the stock assessment. See text for description of data sources. The number of drifts or transects was used as the input sample size in the assessment model. Data from the WCGBTS were too sparse to use as length compositions in the assessment model. Lengths in years with input sample size fewer than 5 for each other source were excluded from final model fits, as described in the text. "
+#| tbl-cap: "Summary of the number of fishery-independent length samples, along with the number of drifts or transects or tows, available for use in the assessment model. See text for description of data sources. The number of drifts or transects was used as the input sample size in the assessment model. Data from the WCGBTS were too sparse to use as length compositions in the assessment model. Lengths in years with input sample size fewer than 5 for each other source were excluded from final model fits, as described in the text. "
 
 ccfrplengths <- read.csv(here::here('data', "SampleSize_length_CCFRP.csv"), check.names = FALSE)
 lengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
@@ -331,7 +334,7 @@ kableExtra::kable(
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Productivity sensitivities. Values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to productivity. See main text for details on each sensitivity analysis."
+#| tbl-cap: "Productivity sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to productivity. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_productivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_productivity_table.csv"), check.names = FALSE) |>
@@ -353,7 +356,7 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Data weighting and contribution sensitivities. Values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to data weighting. See main text for details on each sensitivity analysis. Because of differences in the relative contributions of data for these sensitivities, likelihoods are generally not comparable."
+#| tbl-cap: "Data weighting and contribution sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to data weighting. See main text for details on each sensitivity analysis. Because of differences in the relative contributions of data for these sensitivities, likelihoods are generally not comparable."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_weighting_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_contribution_table.csv"), check.names = FALSE) |>
@@ -375,7 +378,7 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Data choice sensitivities. Values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis. Because of differences in data for these sensitivities, likelihoods are generally not comparable."
+#| tbl-cap: "Data choice sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis. Because of differences in data for these sensitivities, likelihoods are generally not comparable."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_data_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_table.csv"), check.names = FALSE) |>
@@ -396,7 +399,7 @@ kableExtra::kable(
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Selectivity sensitivities. Number of parameters, values of log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
+#| tbl-cap: "Selectivity sensitivities. Number of parameters, values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_selectivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) %>%
