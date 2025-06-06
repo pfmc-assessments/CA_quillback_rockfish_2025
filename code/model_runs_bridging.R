@@ -2718,7 +2718,7 @@ r4ss::plot_twopanel_comparison(xx,
 
 
 ####------------------------------------------------#
-## Selectivity/Reweight figures
+## Selectivity/Reweight figures----
 ####------------------------------------------------#
 
 
@@ -2752,7 +2752,7 @@ r4ss::plot_twopanel_comparison(xx,
                                                 'Update All biology',
                                                 'Update All data and estimate growth',
                                                 'Update blocks and selectivity type',
-                                                'Reweight',
+                                                'Initial reweight',
                                                 'Base model'), 
                                legendloc = 'bottomleft',
                                hessian = FALSE,
