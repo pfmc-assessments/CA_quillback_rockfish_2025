@@ -58,7 +58,7 @@ knitr::include_graphics("r4ss_plots/catch2_landings_stacked.png")
 
 This is an assessment of the quillback rockfish stock off California. Previously, length-based data-moderate assessments were conducted in 2021 for `r spp` off the U.S. West Coast. The species was assessed regionally with three separate population models for Washington, Oregon, and California. This benchmark assessment, for the California stock only, uses Stock Synthesis 3 (version 3.30.21.1). The assessment is a single-area, single-sex model and operates on an annual time step covering the period 1916--2024, with a twelve year-projection, and assumes an unfished population prior to 1916. Population dynamics are modeled for ages 0 through 80, with age 80 being the accumulator age. The model is conditioned on catch from two sectors, commercial and recreational, and is informed by both fishery-dependent and fishery-independent data. The model is fit to the fishery-independent \gls{cdfw} \gls{rov} and \gls{ccfrp} hook-and-line survey with indices of relative abundance and lengths. The commercial fishery includes catches, length and ages modeled as conditional age-at-length.  The recreational fishery includes catches and lengths. Discards from the commercial and recreational fleets were estimated externally to the model and added to landings to represent total catch. The model incorporates an updated length-based maturity schedule, externally estimated length-weight relationship, and a fecundity-at-length function using data from quillback rockfish collected in waters off California.  Additional available ages conditioned on length that were not collected as part of of a survey or representative of the recreational fleet were included in a growth fleet. The assessment fixes values for natural mortality at the median of the prior (0.068 yr^-1^) and estimates growth parameters. Year-class strength is estimated as deviations from a Beverton-Holt stock-recruitment relationship beginning in 1978. Steepness of the Beverton-Holt stock-recruitment relationship is fixed at the mean of the prior, 0.72.
 
-All the data sources included in the model for `r spp` in California have been re-evaluated for this assessment, including improvements and updates in the data (and associated analyses) that were used in the 2021 assessment. Two fishery-independent data sources were added to this assessment, the \gls{s-ccfrp} hook-and-line survey and the \gls{cdfw} Remotely Operated Vehicle survey. Both of these surveys were developed to monitor fish inside the network of Marine Protected Areas as well as in adjacent areas open to fishing. The assessment also includes a fishery-dependent index of abundance from the private/rental fleet that was not included in the 2021 assessments. Finally, this is the first assessment to include age composition data to support estimates of growth and population dynamics within the base model.
+All the data sources included in the model for `r spp` in California have been re-evaluated for this assessment, including improvements and updates in the data (and associated analyses) that were used in the 2021 assessment. Two fishery-independent data sources were added to this assessment, the \gls{s-ccfrp} hook-and-line survey and the \gls{cdfw} Remotely Operated Vehicle survey. Both of these surveys were developed to monitor fish inside the network of Marine Protected Areas as well as in adjacent areas open to fishing. The assessment also includes a fishery-dependent index of abundance from the private/rental fleet that was not included in the 2021 assessment Finally, this is the first assessment to include age composition data to support estimates of growth and population dynamics within the base model.
 
 Within-model uncertainty is explicitly included in this assessment through parameter estimation uncertainty, while among-model uncertainty is explored through sensitivity analyses addressing alternative input assumptions such as data treatment and weight, and model specification sensitivity to the treatment of life history parameters, selectivity, and recruitment. A base model was selected that best fit the observed data while concomitantly balancing the desire to capture the central tendency across those sources of uncertainty, ensure model realism and tractability, and promote robustness to potential model mis-specification.
 
@@ -66,7 +66,7 @@ Within-model uncertainty is explicitly included in this assessment through param
 
 ## Stock Biomass and Dynamics{-}
 
-The model estimates that the population was below the management target, but the spawning output has been above the minimum stock size threshold throughout the late 1990s  and increased through the remainder of the time series (@fig-es-sb, @fig-es-depl). Spawning output has been above the  management target of 40% of unfished spawning output in recent years (@tbl-es-sb). The 95% interval for the fraction of unfished spawning output in 2025 ranges from 35%--57%.
+The model estimates the spawning output of the stock did drop below the management target, but remained above the minimum stock size threshold throughout the late 1990s and later increased through the mid-2010s, before dropping back to the target by 2023 (@fig-es-sb, @fig-es-depl). Spawning output has been near, but above the management target of 40% of unfished spawning output in recent years (@tbl-es-sb). The 95% interval for the fraction of unfished spawning output in 2025 ranges from 35%--58%.
 
 <!-- Trends and current levels relative to virgin or historic levels, description of uncertainty-include table for last 10 years and graph with long term estimates. -->
 
@@ -132,7 +132,7 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 
 ## Recruitment{-}
 
-Over the last ten years the largest recruitment events were in 2016 and 2017, but those were still lower than the large recruitment event in 1994 (@tbl-es-recr, @fig-es-recruits). Recruitment is estimated to be relatively low from 1995 through 2015. There is little information for `r spp` on the drivers of recruitment.
+Over the last ten years the largest recruitment events were in 2016 and 2017, but those were still lower than the large recruitment event in 1994 (@tbl-es-recr, @fig-es-recruits). Recruitment is estimated to be relatively low from 1995 through 2009. There is little information for `r spp` on the drivers of recruitment.
 
 <!-- Trends and current levels relative to virgin or historic levels-include table for last 10 years and graph with long term estimates. -->
 
@@ -237,7 +237,7 @@ spr_es_table |>
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Phase plot of fishing intensity versus fraction unfished."
+#| fig-cap: "Phase plot of fishing intensity versus fraction unfished. Each point represents the biomass ratio at the start of the year and the relative fishing intensity in that same year. Lines through the final point show 95% intervals based on the asymptotic uncertainty for each dimension. The shaded ellipse is a 95% region which accounts for the estimated correlation between the two quantities."
 #| fig-alt: "See table @tbl-ts for the values of the fraction unfished and fishing intensity which are related in this figure."
 #| fig-pos: H
 
@@ -255,7 +255,7 @@ As with most other rockfish and groundfish in the California Current, recruitmen
 
 ## Reference Points{-}
 
-Reference points were calculated using the estimated selectivities and catch distribution among fleets in the final year of the model. A list of estimates of the current state of the population, as well as reference points based on 1) a target unfished spawning output of 40%, 2) a spawning potential ratio of 0.5, and 3) the model estimate of maximum sustainable yield, are all listed in @tbl-ref-points-es. SPR, or the spawning potential ratio, is the fraction of expected lifetime reproductive output under a given fishing intensity divided by unfished expected lifetime reproductive output. `r Spp` off the California coast are managed as a single stock by the Pacific Fishery Management Council. 
+Reference points were calculated using the estimated selectivities and catch distribution among fleets in the final year of the model. A list of estimates of the current state of the population, as well as reference points based on 1) a target unfished spawning output of 40%, 2) a spawning potential ratio of 0.5, and 3) the model estimate of maximum sustainable yield, are all listed in @tbl-ref-points-es. SPR, or the spawning potential ratio, is the fraction of expected lifetime reproductive output under a given fishing intensity divided by unfished expected individual lifetime reproductive output. `r Spp` off the California coast are managed as a single stock by the Pacific Fishery Management Council. 
 
 <!-- Management targets and definitions of overfishing, including the harvest rate that brings the stock to equilibrium at B24% for flatfishes and B40% for all other groundfish stocks (BMSY proxies) and the equilibrium stock size that results from fishing at the default harvest rate (the FMSY proxy). Include a summary table that compares estimated reference points for SSB, SPR, Exploitation Rate and Yield based on SSB proxy for MSY, SPR proxy for MSY, and estimated MSY values. -->
 
@@ -272,12 +272,12 @@ reference_points_table |>
   gt::fmt_number(
     columns = 2:4,
     rows = c(2:4, 7, 10, 12, 15, 17, 20),
-    decimals = 0
+    decimals = 3
   ) |>
   gt::fmt_number(
     columns = 2:4,
     rows = 1,
-    decimals = 1
+    decimals = 3
   ) |>
   gt::fmt_number(
     columns = 2:4,
@@ -307,7 +307,7 @@ reference_points_table |>
 
 ## Management Performance{-}
 
-During the last 10 years, while `r spp` in California was managed within the minor Nearshore Stock complex, the total removals were above the species' \gls{ofl} contribution from 2015--2022. Since 2023, `r spp` in California has had its own reference points. Total removals were above the OFL in 2024 but below the \gls{ofl} for 2024 (@tbl-es-management). 
+During the last 10 years, while `r spp` in California was managed within the minor nearshore stock complex, the total removals were above the species' \gls{ofl} contribution from 2015--2022. Since 2023, `r spp` in California has had its own reference points. Total removals were above the OFL in 2024 but below the \gls{ofl} for 2024 (@tbl-es-management). 
 
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
 
@@ -315,7 +315,7 @@ During the last 10 years, while `r spp` in California was managed within the min
 #| label: tbl-es-management
 #| warning: false
 #| echo: false
-#| tbl-cap: "Recent trend in overfishing limits (OFL), acceptable biological catches (ABC), the annual catch limits (ACL; set to equal ABC) for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk ($\\ast$). The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calcualted as described in the text. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL and are provided here as California only values."
+#| tbl-cap: "Recent trend in overfishing limits (OFL), acceptable biological catches (ABC), the annual catch limits (ACL; set to equal ABC) for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk ($\\ast$). The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calculated as described in section 1.5. For 2023-2024, California quillback rockfish were assigned their own OFL, ABC, and ACL and are provided here as California only values."
 #| tbl-pos: H
 
 management <- read.csv(here("report", "tables", "management.csv")) |>
@@ -369,7 +369,7 @@ management |>
 
 ## Unresolved Problems and Major Uncertainties{-}
 
-The primary area of uncertainty for this assessment is the parameters influencing population productivity and ultimately scale. Model bridging analyses showed that updating biological parameters and data had a large effect on results and had a much greater impact than other changes such as selectivity.  Despite improved data on California-specific growth, there is still uncertainty in population scale as it relates to estimates of natural mortality, as is shown by model profiles across this parameter both individually and in combination with steepness.  Additional sources of uncertainty include unusually high recreational and commercial catches in some years and unexplained differences in `r spp` size distributions in space.  
+The primary areas of uncertainty for this assessment is the parameters influencing population productivity, e.g., natural mortality and the growth parameters $k$. Model bridging analyses showed that updating biological parameters and data had a large effect on results and had a much greater impact than other changes such as selectivity.  Despite improved data on California-specific data, there is still uncertainty in the growth parameter $k$ and the choice for natural mortality given the available ages, shown by model profiles across parameters.  Additional sources of uncertainty include unusually high estimated recreational and commercial catches in some years and differences in `r spp` size distributions across space.  
 
 <!-- Any special issues that complicate scientific assessment, questions about the best model scenario, etc. -->
 
@@ -428,7 +428,7 @@ projections_table |>
 
 ## Scientific Uncertainty{-}
 
-The model estimate of the log-scale standard deviation of the overfishing limit (OFL) in 2025 is `r round(mod_out$OFL_sigma, 3)`, lower than the default SSC value of 0.5 for a category 1 assessment, so harvest projections assume an initial sigma of 0.5.  The model estimate uncertainty around the 2025 spawning output is `r round(mod_out$Pstar_sigma, 3)`. Each of these are likely underestimates of overall uncertainty due to the necessity to fix several key population dynamics parameters (e.g., steepness, recruitment variance, natural mortality) and also because there is no explicit incorporation of model structural uncertainty (although see the decision table for alternative states of nature).
+The model estimate of the log-scale standard deviation of the overfishing limit (OFL) in 2025 is `r round(mod_out$OFL_sigma, 3)`, lower than the default SSC value of 0.5 for a category 1 assessment, so harvest projections assume an initial sigma of 0.5.  The model estimate uncertainty around the 2025 spawning output is `r round(mod_out$Pstar_sigma, 3)`. Each of these underestimates of overall uncertainty due to the necessity to fix several key population dynamics parameters (e.g., steepness, recruitment variance, natural mortality) and also because there is no explicit incorporation of model structural uncertainty (although see the decision table for alternative states of nature).
 
 ## Research and Data Needs{-}
 
