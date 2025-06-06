@@ -104,18 +104,18 @@ tictoc::toc()
 # back to sequential processing
 future::plan(future::sequential)
 
-#steepness two panel plots - with uncertainty
+#M two panel plots - with uncertainty
 m_dir <- here('models', glue::glue(base_model,'_profile_NatM_uniform_Fem_GP_1'))
 
-#get the report files 
-xx <- SSgetoutput(dirvec = m_dir, keyvec = c("",seq(1:17)))
+#get the report files - need to look in the results spreadsheet to get the order
+xx <- SSgetoutput(dirvec = m_dir, keyvec = c("",seq(10,1,by = -1), seq(11, 17,by = 1)))
 
-vals <- seq(0.02, 0.1, by = 0.005)
-m_names <- paste0("M =", vals)
+vals <- seq(.02, .1 , by = 0.005)
+m_names <- c("Base model", paste0("M =", vals))
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 
                                filename = "m_profile_bio_comparison.png",
-                               legendlabels = c('Base model', m_names), 
+                               legendlabels = m_names,#c('Base model', m_names), 
                                legendloc = 'bottomleft',
                                hessian = FALSE,
                                subplot1 = 1,
@@ -164,9 +164,9 @@ future::plan(future::sequential)
 h_dir <- here('models', glue::glue(base_model,'_profile_SR_BH_steep'))
 
 #get the report files 
-xx <- SSgetoutput(dirvec = h_dir, keyvec = c("",seq(1:10)))
+xx <- SSgetoutput(dirvec = h_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10))
 
-vals <- seq(0.5, 0.95, by = 0.05)
+vals <- seq(0.5, .95, by = 0.05)
 h_names <- paste0("h =", vals)
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 
@@ -219,9 +219,9 @@ future::plan(future::sequential)
 R0_dir <- here('models', glue::glue(base_model,'_profile_SR_LN(R0)'))
 
 #get the report files 
-xx <- SSgetoutput(dirvec = R0_dir, keyvec = c("",seq(1:10)))
+xx <- SSgetoutput(dirvec = R0_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10))
 
-vals <- seq(3.4, 4.3, by = .1)
+vals <- c(seq(3.4, 4.3, by = .1))
 R0_names <- paste0("log(R0) =", vals)
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 

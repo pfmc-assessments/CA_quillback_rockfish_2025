@@ -224,7 +224,7 @@ file.remove(here('models', new_name, c("2021_ca_quillback.dat",
 
 r4ss::run(dir = here('models', new_name), 
           exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
+        #  extras = '-nohess',
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
@@ -10406,3 +10406,23 @@ natageOnePlus_numbers <- numbers_at_age %>%
 natageOnePlus_numbers %>% filter(Time == 2015.5)
 #Model predicted 2020.5
 natageOnePlus_numbers %>% filter(Time == 2020.5)
+
+###Historical analysis figures
+new_name <- "0_0_2_2025setup"
+base_mod_name <- "5_1_3_preStarBase"
+
+#get the report files - need to look in the results spreadsheet to get the order
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,new_name))))
+
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = "historical_comparison.png",
+                               legendlabels = c('2025 pre-star base model', '2021 model'), 
+                               legendloc = 'bottomleft',
+                               hessian = c(TRUE, TRUE),
+                               subplot1 = 18,
+                               subplot2 = 3,
+                               endyrvec = c(2025, 2021))
+
+

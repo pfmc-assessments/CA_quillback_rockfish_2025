@@ -38,6 +38,14 @@ qlbk %>% filter(age !=0) %>% group_by(faa_area) %>% tally()
 # north      738
 # south      340
 
+#Assign a flag if not included in the base model
+qlbk <- qlbk %>%
+mutate(InModel = case_when(fleet == "Commercial" & year %in% c(2007, 2023, 2024) ~ "External fit only",
+                           fleet == "Growth" & year %in% c(1985, 2004, 2007, 2014, 2019, 2020) ~ "External fit only",
+                           age == 0 ~ "External fit only",
+                           TRUE ~ "Included in base model"))
+qlbk$InModel <- as.factor(qlbk$InModel)
+
 ##############################################################################################################
 #make a copy to keep the code the same
 ca <- qlbk
@@ -285,14 +293,18 @@ preds3 <- data.frame(ages,
 
 
 #Plot data with fit 
-ggplot() +
-	geom_point(data = age_df, aes(y = length_cm, x = age), colour = "darkgray",
-          alpha = .8, size = 4, pch = 21) + 
-  geom_line(data = preds1, aes(y = fit, x = ages, colour = "2025 external"), linewidth = 1.2) +
-  geom_line(data = preds2, aes(y = fit, x = ages, colour = "2021 model"), linewidth = 1.2) +
-  geom_line(data = preds3, aes(y = fit, x = ages, colour = "2025 model"), linewidth = 1.2) +
+ ggplot(age_df, aes(y = length_cm, x = age)) +
+  #geom_point(data = age_df %>% filter(InModel == "yes"), aes(y = length_cm, x = age), shape = 21, size = 4,  colour = "darkgray") + 
+  #geom_point(data = age_df %>% filter(InModel == "no"), aes(y = length_cm, x = age), shape = 4, size = 4, colour = "deeppink4") + 
+   geom_point(data = age_df, aes(y = length_cm, x = age, shape = factor(InModel), colour = factor(InModel), size = factor(InModel))) + 
+  scale_shape_manual(values=c(4, 1), guide = "none") +
+  scale_fill_manual(values=c('darkgray', 'deeppink4'), guide = "none") +
+  scale_size_manual(values = c(8, 4), guide = "none") +
+  geom_line(data = preds1, aes(y = fit, x = ages, colour = "2025 fitted external est."), linewidth = 1.2) +
+  geom_line(data = preds2, aes(y = fit, x = ages, colour = "2021 model values"), linewidth = 1.2) +
+  geom_line(data = preds3, aes(y = fit, x = ages, colour = "2025 model fitted est."), linewidth = 1.2) +
   theme_bw() + 
-  labs(colour = "Growth estimate") +
+  labs(colour = c("Legend")) +
   guides(colour = guide_legend(position  = "inside")) +
   scale_x_continuous(breaks = seq(0,60,10)) +
   scale_y_continuous(breaks = seq(0,55,5)) +
@@ -304,12 +316,10 @@ ggplot() +
         legend.title = element_text(size = 20),
         panel.grid.minor = element_blank(),
         legend.position.inside = c(0.8, 0.25)) + 
-	xlab("Age (years)") + ylab("Length (cm)") +
-  scale_color_viridis_d(begin = 0, end = .9) 
+  	xlab("Age (years)") + ylab("Length (cm)") #+
+   #scale_color_viridis_d(begin = 0, end = .9) 
 ggsave(filename = file.path(here(),"report", "figures", "bio_growth.png"),
        width = 10, height = 8)
-
-
 
 
 ###############################################################################

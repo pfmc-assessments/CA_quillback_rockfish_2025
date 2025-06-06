@@ -541,6 +541,17 @@ knitr::include_graphics("figures/profile_Mhgrid_nll.png")
 knitr::include_graphics("figures/profile_m_h_contour.png")
 ```
 
+```{r}
+#| label: fig-historical
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Time series comparisons of the 2021 model and the 2025 base model."
+#| fig-alt: "."
+
+knitr::include_graphics(
+  "figures/historical_comparison.png")
+```
 
 ### Sensitivity Analyses
 
