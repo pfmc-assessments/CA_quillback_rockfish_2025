@@ -425,6 +425,19 @@ knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 knitr::include_graphics("figures/R0_profile_bio_comparison.png")
 ```
 
+
+```{r}
+#| label: fig-r0-profile-param-panel
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Change in the log-likelihood, fraction of unfished spawning output, initial spawning output, and final spawning output across a range of ln(R~0~) values."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/parameter_panel_SR_LN(R0).png")
+```
+
+
 ```{r}
 #| label: fig-r0-piner
 #| echo: false
@@ -446,6 +459,18 @@ knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
 
 knitr::include_graphics("figures/h_profile_bio_comparison.png")
 ```
+
+```{r}
+#| label: fig-h-profile-param-panel
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Change in the log-likelihood, fraction of unfished spawning output, initial spawning output, and final spawning output across a range of steepness values."
+#| fig-alt: "FROG"
+
+knitr::include_graphics("figures/parameter_panel_SR_BH_steep.png")
+```
+
 
 ```{r}
 #| label: fig-h-piner
