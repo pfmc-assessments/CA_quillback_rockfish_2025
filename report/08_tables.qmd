@@ -53,7 +53,7 @@ kableExtra::kable(
 #| label: tbl-comm_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment. Also included in the input sample size used in the assessment following the formula described in the text."
+#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the stock assessment. Also included is the input sample size used in the assessment following the formula described in the text."
 
 commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
