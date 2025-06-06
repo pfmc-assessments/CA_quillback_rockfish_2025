@@ -391,6 +391,14 @@ r4ss::run(dir = here('models', "_bridging_runs", new_name),
           show_in_console = TRUE, #comment out if you dont want to watch model iterations
           skipfinished = FALSE)
 
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_0_1_2025rename",
+                                                 "0_1_5_updateFecundity")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021 model',
+                                     'Update Fecundity'),
+                    subplots = c(1,3,9,18), print = TRUE, plotdir = here('models', "_bridging_runs", new_name))
+
 
 ####------------------------------------------------#
 ## 0_1_0_updateAllBio  ----
@@ -2627,6 +2635,23 @@ r4ss::plot_twopanel_comparison(xx,
                                                 'Update All biology'), 
                                legendloc = 'bottomleft',
                                hessian = FALSE,
+                               endyrvec = 2021)
+
+#to make the comparison between summary biomass and spawning output
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = paste0("bridgeBiology_SmryBiomass_comparison.png"),
+                               legendlabels = c('2021: SS3v3.30.23.1',
+                                                'Update Natural mortality',
+                                                'Update Growth',
+                                                'Update Length weight',
+                                                'Update Maturity',
+                                                'Update Fecundity',
+                                                'Update All biology'), 
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 18,
                                endyrvec = 2021)
 
 

@@ -31,11 +31,26 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
+#| label: fig-bridgeSmryBio_comp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output (millions of eggs, top) and summary biomass (in metric tons, bottom). Each step is done separately based off the 2021 assessment except the final one (Update All Biology), which combines across all steps."
+#| fig-alt: "Figure showing that the trajectory of spawning output and spawning output relative to unfished from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
+
+knitr::include_graphics(
+    "figures/bridgeBiology_SmryBiomass_comparison.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
 #| label: fig-bridgeData_comp
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating data. Each change is done tested independently without the previous based off the 2021 assessment with updated biology (Update All Biology(see @fig-bridgeBio_comp)) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all data steps."
+#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating data. Each change is done tested independently without the previous based off the 2021 assessment with updated biology (Update All Biology (see @fig-bridgeBio_comp)) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all data steps."
 #| fig-alt: "Figure showing that the trajectory generally doesn't change except when age data are included and growth is not estimated."
 
 knitr::include_graphics(
