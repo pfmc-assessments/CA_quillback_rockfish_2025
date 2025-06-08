@@ -446,9 +446,8 @@ The model estimate of the log-scale standard deviation of the overfishing limit 
 
 ## Research and Data Needs{-}
 
-As with most nearshore rockfish stocks additional research and data are needed to understand biological processes, movement, age and growth, and processes driving recruitment. 
+As with most nearshore rockfish stocks additional research and data are needed to understand biological and population processes. The most pressing research and data need is increased collection of age samples as part of regular sampling program efforts. Age data provide information on the productivity of the population and and the lack of such information has large effects on estimating population dynamics. Collecting samples of ages (as well as lengths) across the fleets and the full stock area should be prioritized. Understanding population trends across the stock area is also a research and data need. `r Spp` are not regularly captured in coastwide trawl surveys, and so fishery-independent surveys that utilize hook and line gear should be continued to be prioritized to increase the length of the time series. These surveys should continue to sample in areas not regularly sampled by the fishing fleet, such as areas closed to fishing, to better understand population dynamics across the full range of the stock. 
 
-**FROG**
 
 ## Risk Table{-}
 
