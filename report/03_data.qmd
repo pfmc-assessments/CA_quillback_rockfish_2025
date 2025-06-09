@@ -1,16 +1,16 @@
 # Data (TOR section D) {#sec-dat}
 
-Data comprise the foundational components of stock assessment models. They drive estimated dynamics and inform modeling decisions. The decision to include or exclude particular data sources in an assessment model depends on many factors. These factors often include, but are not limited to, the way in which data were collected, the spatial and temporal coverage of the data, the quantity of data available per desired sampling unit, the representativeness of the data to inform modeled processes, and the presence of an avenue for the inclusion of the data in the assessment model. Attributes associated with a data source can change through time, as can the applicability of the data source when different modeling approaches are explored (e.g., stock structure or time-varying processes). Therefore, the specific data sources included or excluded from this assessment should not necessarily constrain the selection of data sources applicable to future stock assessments for `r spp`. Even if a data source is not directly used in the stock assessment, it can provide valuable insights into biology, fishery behavior, or local dynamics.
+<!-- Data comprise the foundational components of stock assessment models. They drive estimated dynamics and inform modeling decisions. The decision to include or exclude particular data sources in an assessment model depends on many factors. These factors often include, but are not limited to, the way in which data were collected, the spatial and temporal coverage of the data, the quantity of data available per desired sampling unit, the representativeness of the data to inform modeled processes, and the presence of an avenue for the inclusion of the data in the assessment model. Attributes associated with a data source can change through time, as can the applicability of the data source when different modeling approaches are explored (e.g., stock structure or time-varying processes). Therefore, the specific data sources included or excluded from this assessment should not necessarily constrain the selection of data sources applicable to future stock assessments for `r spp`. Even if a data source is not directly used in the stock assessment, it can provide valuable insights into biology, fishery behavior, or local dynamics. -->
 
-Data from a wide range of programs were available for possible inclusion in the current assessment model. Descriptions of each data source included in the based model and sources that were explored but not included in the base model are provided in this section. In some cases, alternative treatments of included data were explored through sensitivity analyses (see @sec-assmt-sens).
+Data from a wide range of programs were available for possible inclusion in the current assessment model. Descriptions of each data source included in the base model and sources that were explored but not included in the base model are provided in this section. In some cases, alternative treatments of included data were explored through sensitivity analyses (see @sec-assmt-sens).
 
 ## Data Sources Used
 
-This assessment updates the data used in the 2021 benchmark assessment, as well as utilizes additional data, both those collected since the last assessment and those from sources not used in the 2021 assessment. All data sources are specific to California unless otherwise specified. The following types and sources of data used in this assessment are summarized here, and then discussed in more detail later in this report:
+This assessment updates the data used in the 2021 stock assessment, as well as utilizes additional data, both those collected since the last assessment and those from sources not used in the 2021 assessment. All data sources are specific to California unless otherwise specified. The following types and sources of data used in this assessment are first summarized here, and then discussed in more detail.
 
 1.  Data regarding total removals (in metrics tons) of `r spp` encompassing years 1916--2024 were obtained from several sources:
     a.  Commercial landings (1916--2024) come from historical reconstructions [@ralston_documentation_2010], \gls{calcom}, and \gls{pacfin}.
-    b.  Recreational landings (1928--2024) come from historical reconstructions [@ralston_documentation_2010], \gls{mrfss}, and \gls{recfin}. Both \gls{mrfss} and \gls{recfin} also include estimates of recreational dead discards.
+    b.  Recreational landings (1928--2024) come from historical reconstructions [@ralston_documentation_2010], and data from \gls{mrfss} and \gls{crfs} via \gls{recfin}. Both \gls{mrfss} and \gls{crfs} data also include estimates of recreational dead discards.
     c.  Commercial dead discards for recent years (2002--2023) come from the \gls{gemm} product which aggregates data from a variety of sources including the \gls{wcgop} [@somers_gemm_2023].
 
 2.  Fishery-dependent length and age composition data were obtained from the following sources:
@@ -25,13 +25,13 @@ This assessment updates the data used in the 2021 benchmark assessment, as well 
     b.  \Gls{rov} sampling done by the \gls{cdfw} provides an index of abundance and corresponding length composition data, which were included for two super-periods, 2014--2016 and 2019--2021. Data were combined within each super-period for the index but used as individual years for length compositions.
     
 5.  Estimates of life history parameters were generated from various sources, and include:
-    a.  Updated maturity schedule from fish sampled in California by the SWFSC's Santa Cruz lab based on analysis assuming functional age-at-maturity.
-    b.  Updated fecundity relationship from fish sampled in California by the SWFSC's Santa Cruz lab and fitting fecundity as a power function of length.
+    a.  Updated maturity schedule from fish sampled in California by the \gls{swfsc}'s Santa Cruz lab based on analysis assuming functional age-at-maturity.
+    b.  Updated fecundity relationship from fish sampled in California by the \gls{swfsc}'s Santa Cruz lab and fitting fecundity as a power function of length.
     c.  Updated value for natural mortality based on an updated value for maximum age.
     d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{crfs}, as well as from the \gls{s-wcgbt}. These sources were the only ones with measured weights. 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
     f.  Paired age and length samples were collected from various sources and included as a growth fleet in the model for internally estimating growth.  
 
-The timing of these data sources as used in the base model are illustrated in @fig-data. Length data are reported as fork length. Any measurements in total length were converted to fork length following the conversions in @echeverria_conversions_1984.
+The timing of these data sources as used in the base model are illustrated in @fig-data. Length data are reported as fork length. Any measurements in total length were converted to fork length following the conversion in @echeverria_conversions_1984.
 
 
