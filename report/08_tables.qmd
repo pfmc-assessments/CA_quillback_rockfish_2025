@@ -23,7 +23,7 @@ library(kableExtra)
 #| label: tbl-catches
 #| echo: false
 #| warning: false
-#| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Com) and recreational (Rec) fleets as used in the assessment model. See text for description of sources."
+#| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial and recreational fleets as used in the assessment model. See text for description of sources."
 
 catches <- read.csv(here::here("data", "CAquillback_total_removals.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, com_tot, rec_tot)) 
@@ -109,7 +109,7 @@ commages|>
 #| label: tbl-rec_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the assessment model. The number of trips was used as the input sample size in the assessment model. Duplicate PC mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than 5 were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the assessment model. The number of trips was used as the input sample size in the assessment model. Duplicate private/charter mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than 5 were excluded from final model fits, as described in the text."
 
 reclengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) 
 reclengths <- reclengths |> 
@@ -339,7 +339,7 @@ kableExtra::kable(
 #table_sens(here::here("report/tables/sens_productivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_productivity_table.csv"), check.names = FALSE) |>
   dplyr::slice(-1) %>% #remove Npar %>%
-  mutate_at(2:7, round, 3)
+  mutate_at(2:9, round, 3)
 sens |>
   gt() |>
   tab_options(
