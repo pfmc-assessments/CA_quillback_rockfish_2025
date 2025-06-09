@@ -194,20 +194,6 @@ knitr::include_graphics(
 ```
 
 ```{r}
-#| label: fig-meanage-comm
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Mean age from conditional data (aggregated across length bins) for the commercial fleet with 95% confidence intervals based on current samples sizes."
-#| fig-alt: "Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximately 26 for 2020 and ranges from 15-19 for the other years."
-
-knitr::include_graphics(
-    "r4ss_plots/comp_condAALfit_data_weighting_TA1-8_condAgeCA_Commercial.png"
-)
-```
-
-
-```{r}
 #| label: fig-age-pearson-comm
 #| echo: false
 #| warning: false
@@ -217,6 +203,19 @@ knitr::include_graphics(
 
 knitr::include_graphics(
     "r4ss_plots/comp_condAALfit_residsflt1mkt0.png"
+)
+```
+
+```{r}
+#| label: fig-meanage-comm
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean age from conditional data (aggregated across length bins) for the commercial fleet with 95% confidence intervals based on current samples sizes."
+#| fig-alt: "Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximately 26 for 2020 and ranges from 15-19 for the other years."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALfit_data_weighting_TA1-8_condAgeCA_Commercial.png"
 )
 ```
 
