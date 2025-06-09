@@ -398,7 +398,7 @@ knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Retrospective results: change in the estimate of spawning output (in million of eggs) when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model."
+#| fig-cap: "Retrospective results: change in the estimate of spawning output (in billions of eggs) when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model."
 #| fig-alt: "The population scale decreases as more years of data are removed."
 
 knitr::include_graphics("figures/retro_compare_spawnbio_uncertainty.png")
@@ -420,7 +420,7 @@ knitr::include_graphics("figures/retro_compare_Bratio_uncertainty.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Squid plots of retrospective results relative to the base model for fishing mortality, fraction unfished, recruits, and spawning output (in million of eggs)."
+#| fig-cap: "Squid plots of retrospective results relative to the base model for fishing mortality, fraction unfished, recruits, and spawning output (in billions of eggs)."
 #| fig-alt: "A four panel plot showing that all four metrics indicate a more depleted stock of smaller size as years of data are removed."
 
 knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
@@ -447,7 +447,7 @@ knitr::include_graphics("figures/R0_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in million of eggs), and final spawning output (in million of eggs) across a range of ln(R~0~) values."
+#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in billions of eggs), and final spawning output (in billions of eggs) across a range of ln(R~0~) values."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/parameter_panel_SR_LN(R0).png")
@@ -481,7 +481,7 @@ knitr::include_graphics("figures/h_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in million of eggs), and final spawning output (in million of eggs) across a range of steepness values."
+#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in billions of eggs), and final spawning output (in billions of eggs) across a range of steepness values."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/parameter_panel_SR_BH_steep.png")
@@ -515,7 +515,7 @@ knitr::include_graphics("figures/m_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in million of eggs), and final spawning output (in million of eggs) across a range of natural mortality values."
+#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in billions of eggs), and final spawning output (in billions of eggs) across a range of natural mortality values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/parameter_panel_NatM_uniform_Fem_GP_1.png")
@@ -574,7 +574,7 @@ knitr::include_graphics("figures/linf_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in million of eggs), and final spawning output (in million of eggs) across a range of values for asymptotic average length."
+#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in billions of eggs), and final spawning output (in billions of eggs) across a range of values for asymptotic average length."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/parameter_panel_L_at_Amax_Fem_GP_1.png")
@@ -608,7 +608,7 @@ knitr::include_graphics("figures/k_profile_bio_comparison.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in million of eggs), and final spawning output (in million of eggs) across a range of  values for growth coefficient K."
+#| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in billions of eggs), and final spawning output (in billions of eggs) across a range of  values for growth coefficient K."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/parameter_panel_VonBert_K_Fem_GP_1.png")
