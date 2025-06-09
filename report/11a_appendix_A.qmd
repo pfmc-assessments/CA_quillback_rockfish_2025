@@ -1,6 +1,6 @@
 # Appendix A: Indices of Abundances {#sec-appendix-A} 
 
-## CRFS Private/Rental Boat Dockside Survey
+## CDFW CRFS Private/Rental Boat Dockside Survey
 
 Catch and effort data from the CRFS dockside sampling of private boats between 2004 and 2023 were provided by CDFW. The “i” sample files were used to re-create interview or trip-level data from 2004 to 2014. The CRFS program began producing estimates in a different, annual format in later years and data in this format was used from 2015 to 2023. The data included catch by species, number of anglers contributing to the catch, angler-reported area of fishing, gear, county, port, interview site, year, month, and CRFS district. The catch included the number of fish observed by the CRFS sampler, the number of unobserved retained and released fish reported by the angler.
 
@@ -13,9 +13,9 @@ The Stephens-MacCall logistic regression was fit to the remaining set of 52 indi
 
 We modeled `r spp` catch with an effort offset of angler trips using the R package sdmTMB. Covariates considered included year, month, 3-month time period (wave), and district. Sparse `r spp` in the data set meant that many months had no positive `r spp` samples and required that we increase the commonly used 2-month wave to three months to improve the distribution of positive samples. There were also several years in which no `r spp` were observed in district 3. Several district 3 sites were already removed during the filtering process. Therefore, we included the remaining district 3 sites into district 4. Exploration of alternative negative binomial models showed the full model including all covariates and a year:district interaction had the lowest AIC and log-likelihood but was also equal in these scores to a model excluding wave (@tbl-pr-model-select).
 
-Further exploration of alternative model distributions in sdmTMB showed that a delta-lognormal distribution performed better than negative binomial. Delta-lognormal models using year-district interactions failed dianostics and given that patterns among the districts are similar (@fig-pr-avg-cpue-district), we excluded the interaction from the final model which included year, district, and wave.
+Further exploration of alternative model distributions in sdmTMB showed that a delta-lognormal distribution performed better than negative binomial. Delta-lognormal models using year-district interactions failed diagnostics and given that patterns among the districts are similar (@fig-pr-avg-cpue-district), we excluded the interaction from the final model which included year, district, and wave.
 
-The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr-model-cpue) and this trend is also reflected in raw CPUE over time. The Q-Q plot indicates a reasonable fit (@fig-pr-index-qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no `r spp` of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in @tbl-pr-index-values.
+The final model shows a peak index value in 2006 with a declining trend thereafter but little contrast in the time series overall (@fig-pr-model-cpue) and this trend is also reflected in average CPUE over time. The Q-Q plot indicates a reasonable fit (@fig-pr-index-qq). Additionally, data simulated by the model produces a proportion of zeroes or samples with no `r spp` of 0.413 while the actual proportion of zeroes in the filtered data is 0.411. Final index values are provided in @tbl-pr-index-values.
 
 
 <!--Figures -->

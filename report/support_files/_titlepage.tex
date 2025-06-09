@@ -42,7 +42,7 @@ $if(cover)$
 %\pdftooltip{\includegraphics{$cover$}}{Alt text}
 $endif$
 
-\raggedright 
+\raggedright
 
 \vspace{5\baselineskip}
 
@@ -51,7 +51,7 @@ $endif$
 % authors. See below if you don't need that
 $if(by-author/allbutlast)$
 $for(by-author/allbutlast)$
- {\large{$by-author.name.literal$}}$for(by-author.affiliations)${\textsuperscript{$it.number$}}$sep$\textsuperscript{,}$endfor$%
+{\large{$by-author.name.literal$}}$for(by-author.affiliations)${\textsuperscript{$it.number$}}$sep$\textsuperscript{,}$endfor$%
 $if(by-author.email)$%
 $if(by-author.affiliations)$\textsuperscript{,}$endif$%
 {\textsuperscript{*}}%
@@ -64,6 +64,7 @@ $for(by-author.affiliations)${\textsuperscript{$it.number$}}$sep$\textsuperscrip
 $endfor$%
 $if(by-author.email)$%
 $if(by-author.affiliations)$\textsuperscript{,}$endif$%
+$if(it.attributes.equal-contributor)$\Yinyang$endif$
 {\textsuperscript{*}}%
 $endif$%
 $endfor$
@@ -86,6 +87,8 @@ $if(false)$
 $endfor$
 $endif$
 
+%$it.name.literal$\textsuperscript{$for(it.affiliations)$$it.number$$sep$,$endfor$$if(it.attributes.equal-contributor)$\Yinyang$endif$}
+
 %%%%%% Affiliations
 \vspace{2\baselineskip}
 
@@ -106,6 +109,7 @@ $if(by-affiliation.name)$, $else$$if(by-affiliation.department)$, $endif$$endif$
 $endif$%
 $sep$\par\hangindent=1em\hangafter=1%
 $endfor$
+
 
 %%%%%% Correspondence
 \vspace{1\baselineskip}
@@ -134,6 +138,9 @@ U.S. Department of Commerce\newline
 National Oceanic and Atmospheric Administration\newline
 National Marine Fisheries Service\newline
 Northwest Fisheries Science Center\newline
+
+
+\def\thefootnote{*}\footnotetext{*These authors contributed equally to this work}
 
 \end{minipage}
 $if(titlepage-geometry)$

@@ -1,7 +1,7 @@
 ---
 title: 'Status of the Quillback Rockfish in U.S. Waters off California in 2025'
 author:
-  - name: 'Brian J. Langseth'
+  - name: 'Brian J. Langseth$^*$'
     equal-contributor: true
     affiliations:
       - name: 'NOAA Fisheries Northwest Fisheries Science Center'
@@ -9,7 +9,7 @@ author:
         city: 'Seattle, WA'
         state: 'WA'
         postal-code: '98112'
-  - name: 'Melissa H. Monk'
+  - name: 'Melissa H. Monk$^*$'
     equal-contributor: true
     affiliations:
       - name: 'NOAA Fisheries Southwest Fisheries Science Center'
