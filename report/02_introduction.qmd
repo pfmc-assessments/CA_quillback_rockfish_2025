@@ -1,10 +1,10 @@
-# Introduction (TOR section C1 and C2)
+# Introduction <!--(TOR section C1 and C2) -->
 
 This benchmark assessment reports the status of `r spp` (*Sebastes maliger*) off the coast of California through 2024. The \gls{pfmc} defined the population of `r spp` off California as a unit stock in 2023. Although the definition for the California stock of `r spp` is statewide, the range of `r spp` in California is primarily north of central California (@fig-map).
 
 <!-- Scientific name, distribution, the basis for the choice of stock structure, including regional differences in life history or other biological characteristics that should form the basis of management units. A map showing the scope of the assessment and depicting boundaries for fisheries or data collection strata.  -->
 
-## Life History (TOR section C3)
+## Life History <!--(TOR section C3)-->
 
 `r Spp` are a demersal, relatively nearshore species within the subgenus *Pteropodus*.  The core range of `r spp` is relatively broad, from central California to the Gulf of Alaska, with `r spp` also found in Puget Sound. `r Spp` range from the sub-tidal (as juveniles) to depths of around 275 m [@love_rockfishes_2002]. They are commonly found in waters less than 100 m  inhabiting both low and high relief complex rocky habitat [@love_milton_probably_1996] and may exhibit less determinant ontogenetic migration than some other rockfish. @murie_comparative_1991 found `r spp` of all sizes in shallower waters, and a lack of small `r spp` in deeper depths.
 
@@ -17,11 +17,11 @@ Limited studies have evaluated genetic variation in `r spp` across the U.S. West
 @cope_approach_2011 found `r spp` to have a vulnerability score of V = 2.222, making it a species of major concern in the productivity susceptibility analysis. This analysis calculated species specific vulnerability scores based on two dimensions: productivity characterized by the life history, and susceptibility characterized by how the stock is likely affected by fisheries. 
 
 
-## Ecosystem Considerations (TOR section C4)
+## Ecosystem Considerations <!--(TOR section C4)-->
 
 This stock assessment does not explicitly incorporate trophic interactions, habitat factors nor environmental factors into the assessment model, primarily due to the lack of information on the effects of these factors on `r spp`. As with most other rockfish and groundfish in the California Current, recruitment or cohort (year-class) strength appears to be highly variable for `r spp`, with only a modest apparent relationship to estimated levels of spawning output. The \gls{swfsc}'s \gls{rreas} surveys juvenile rockfish off the coast of California, but does not encounter `r spp` and neither does the \gls{calcofi} survey. There is much less understanding on the recruitment drivers for nearshore species than there are for shelf and slope rockfish. Studies in British Columbia of the CBQ complex (*S. caurinus*, *S. auriculatus*, *S. maliger*) found that both habitat and ocean conditions, i.e., prolonged downwelling and warm ocean temperatures affected CBQ recruitment and settlement [@markel_recruitment_2020; @markel_variability_2017].  
 
-## Current and Historical Fishery Information (TOR section C5)
+## Current and Historical Fishery Information <!--(TOR section C5)-->
 
 `r Spp` is encountered in both commercial and recreational fisheries throughout its range. While `r spp` is generally not highly desirable by recreational fishermen in waters off the coast of California, recreational removals are the largest source of fishing mortality and represent approximately 75% of the total removals of `r spp` across all years (@tbl-catches and @fig-catches). The majority of the commercial landings for `r spp` occurred between 1990 and 2008, when its value in the commercial fishery rose with the development of the live-fish fishery in the 1990s. The proportion of landings from the commercial sector was low relative to the recreational sector between 2009 and 2016, then began modest increases in 2022 prior to the California stock being defined and subsequently declared overfished. 
 
@@ -32,7 +32,7 @@ Prior to the development of the live-fish market in the 1990s, commercial catche
 With the development and expansion of the nearshore live-fish fishery during the 1990s, new entrants in this open access fishery were drawn by a premium ex-vessel price per pound for live fish, resulting in over-capitalization of the fishery. Since 2002, the \gls{cdfw} has managed 19 nearshore species in accordance with the Nearshore Fisheries Management Plan [@wilson-vandenberg_implementing_2014]. In 2003, \gls{cdfw} implemented a Nearshore Restricted Access Permit system, including the requirement of a Deeper Nearshore Fishery Species Permit to retain `r spp`. Permits were issued based on prior landings history and the overall goal of reducing the number of participants to a more sustainable level. The result was a reduction in permits issued from 1,127 in 1999 to 505 in 2003. In addition, reduced trip limits, season closures in March and April, and depth restrictions were implemented to address bycatch of overfished species and associated constraints from their low catch limits. The open access fishery is allowed to retain shelf rockfish species co-occurring with nearshore rockfish species. There is growing concern regarding increased encounters and discard mortality from the open access fleet, given that they are fishing in deeper depths. However, fishing in waters up to 60 fm may result in decreased effort for `r spp` as overall effort shifts away from waters where `r spp` are most prevalent. 
 
 
-## Management History (TOR section C6)
+## Management History <!--(TOR section C6)
 
 Prior to the adoption of the Pacific Coast Groundfish \gls{fmp} in 1982, `r spp` were managed through a regulatory process that included the \gls{cdfw}, the California State Legislature, and the Fish and Game Commission (FGC). With implementation of the Pacific Coast Groundfish \gls{fmp}, `r spp` came under the management authority of the \gls{pfmc} and were managed as part of the *Sebastes* complex [@pfmc_fmp_2024]. 
 
@@ -56,12 +56,12 @@ The state of California has adopted regulatory measures to manage the nearshore 
 Summary of management history (e.g., changes in mesh sizes, trip limits, or other management actions that may have significantly altered selection, catch rates, or discards). 
 --->
 
-## Management Performance (TOR section C7)
+## Management Performance <!--(TOR section C7)-->
 
 The management of `r spp` in California changed after the 2021 assessment. When managed within the Minor Nearshore Rockfish North and South complexes, no species-specific \gls{ofl} or \gls{acl} existed. Rather species-specific \gls{ofl} contributions as well as implied \gls{acl} contributions were used to monitor `r spp` removals. Because the 40$^\circ$ 10' N. latitude management line occurs within California waters, allocations for state specific sharing agreements provide a California specific \gls{acl} contribution by summing all of the South management contribution to 28.7% of the North management contribution (\gls{gmt}, pers. comm.). Starting in 2023, `r spp` rockfish in California were assigned a species-specific \gls{ofl}, \gls{abc}, and \gls{acl} based on the results of the 2021 rebuilding analysis [@langseth_rebuild_2022]. Past \gls{ofl} and \gls{acl} contributions during years when California `r spp` were managed within a complex, along with the California-specific \gls{acl} contribution are provided in @tbl-es-management. Also included in @tbl-es-management are California-specific \gls{ofl}, \gls{abc}, and \gls{acl} for years when `r spp` were managed as a species. These values are compared to total removals and with the exception of 2024, total removals of `r spp` have been above \gls{acl} contributions and \glspl{acl}.
 
 <!-- Management performance, including a table or tables comparing Overfishing Limit (OFL), Acceptable Biological Catch (ABC), Annual Catch Limit (ACL), landings, and catch (i.e., landings plus discard) for each area and year. Groundfish assessments that estimate dead discarded catch must include a disclaimer noting that total mortality estimates from the WCGOP and from the stock assessment may differ due to the use of different methods. Investigation into how these methods differ is beyond the scope of a benchmark assessment. The rationale for modeling discard mortality can also be provided. This should be included in all update assessments.  -->
 
-## Foreign Fisheries (TOR section C8)
+## Foreign Fisheries <!--(TOR section C8)-->
 
 `r Spp` does not extend south to Mexico and given that the stock is defined as California only we did not consider the fisheries in Alaska or Canada. Assessments in 2021 were also done for Oregon [@langseth_ORstock_2021] and Washington [@langseth_WAstock_2021]. The Oregon assessment estimated spawning stock relative to unfished of 0.47 and was used to inform harvest levels, whereas the Washington assessment was considered too uncertain to provide status determination criteria but was used to inform harvest levels. `r Spp` in both states are managed within the Minor Nearshore Rockfish North complex. Estimated total removals for Washington and Oregon `r spp` from the \gls{gemm} were highest during the last 10 years between 2017--2020, and averaged 8.9 mt during 2014--2023 and 10.2 mt during 2019--2023 [@somers_gemm_2023].  
