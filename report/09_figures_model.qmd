@@ -52,7 +52,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating data. The first change (Update Catch) was based off the 2021 assessment with updated biology (Update All Biology; see @fig-bridgeBio_comp). Subsequent changes were tested independently based off the 2021 assessment with updated biology and catch (Update Catch) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all previous changes."
+#| fig-cap: "Bridge comparison showing estimated spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) when updating data. The first change (Update Catch) was based off the 2021 assessment with updated biology (Update All Biology; see @fig-bridgeBio_comp). Subsequent changes were tested independently based off the 2021 assessment with updated biology and catch (Update Catch) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all previous changes."
 #| fig-alt: "Figure showing that the trajectory generally doesn't change except when age data are included and growth is not estimated."
 
 knitr::include_graphics(
@@ -702,7 +702,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Time series comparisons of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
+#| fig-cap: "Time series comparisons of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
 #| fig-alt: "."
 
 knitr::include_graphics(

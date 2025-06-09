@@ -1,5 +1,5 @@
 
-### Key Assumptions and Structural Choices (TOR section F1 and E6) {#sec-structure}
+### Key Assumptions and Structural Choices <!--(TOR section F1 and E6)--> {#sec-structure}
 
 The base model for `r spp` was developed to balance parsimony and realism, with the goal of estimating a spawning output trajectory for the population of `r spp` off California. The base model represents a balance among the number of model parameters, the model fits to data, and minimizing the negative log-likelihood, as well as accurately representing fishery dynamics and `r spp` biology. The model contains many assumptions to achieve parsimony and uses many different sources of data, including new sources, to estimate population dynamics.
 
@@ -13,7 +13,7 @@ Within-lab ageing error was based on one primary age reader and a second reader 
 
 <!-- Evidence of search for balance between model realism and parsimony. Key model assumptions and structural choices (e.g., asymptotic vs. domed selectivities, constant vs. time-varying selectivities). Summary of alternate model configurations that were examined but rejected. This is not required for an update assessment.### Bridging analysis -->
 
-### Model Parameters (TOR Section E6 and F1)
+### Model Parameters <!--(TOR Section E6 and F1)-->
 
 There are `r dplyr::filter(mod_out$parameters, Phase > 0) |> nrow()` estimated parameters in the base model. Estimated parameters include one parameter for ln($R_0$), 5 parameters for growth, 97 recruitment parameters, 3 survey catchability parameters, and 15 selectivity parameters (@tbl-n-param). Early recruitment deviations are estimated starting in 1940, while main period recruitment deviations begin in 1978, shortly before the majority of length composition data become available, and end in 2021. Late recruitment deviations are estimated 2022--2024, and although forecast recruitment deviation parameters are included in @tbl-n-param, they were set to follow the stock-recruit curve. 
 

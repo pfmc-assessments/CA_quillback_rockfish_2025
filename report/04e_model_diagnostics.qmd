@@ -1,16 +1,16 @@
-## Model Diagnostics (TOR Section F2, F4, H4)
+## Model Diagnostics <!--(TOR Section F2, F4, H4)-->
 
-### Convergence (TOR Section F4)
+### Convergence <!--(TOR Section F4)-->
 
 The maximum parameter gradient was `r signif(mod_out$maximum_gradient_component, 2)`. Proper convergence was determined by starting the minimization process from dispersed values of the maximum likelihood estimates to determine if the model found a better minimum. Starting parameters were jittered using the jitter functionality built into Stock Synthesis, using a jitter fraction of 0.5. This was repeated 100 times with 98 out of 100 runs returning to the base model likelihood. A better, lower negative log-likelihood, model fit was not found. Through the jittering and likelihood profiles, we are confident that the base model, as presented, represents the best fit to the data given the assumptions made. There were no difficulties in inverting the Hessian to obtain estimates of variability throughout initial model attempts and all explorations resulted in a positive-definite Hessian. 
 
 
-### Retrospective Analysis (TOR Section H4)
+### Retrospective Analysis <!--(TOR Section H4)-->
 
 A fifteen-year retrospective analysis was conducted by successively removing years of data ranging from 2008--2023 (i.e., “Data -1 Years” corresponds to data through 2023). The estimated spawning output for all retrospectives was lower at the start of the time series for all runs and lower in the final model years except for Data -1 and Data -2 years (@fig-retro-ssb). The estimates of spawning output relative to unfished were within the asymptotic uncertainty of the base model in the first five peels, removing data through 2018 (@fig-retro-depl). A substantial amount of data were collected over the past five years for `r spp`. Removing more than 5 years of data results in a stock that is estimated within the management precautionary zone in the end year of a peeled model run. Removing 13 to 15 years of data results in changes in the recruitment patterns more dramatically than removing fewer years. When 15 years of data are removed the high recruitment pulse in 1994 is no longer estimated and recruitment is on average higher than other model runs across the entire time series (@fig-retro-panel).  
 
 
-### Likelihood Profiles (TOR Section F2) {#sec-profiles}
+### Likelihood Profiles <!--(TOR Section F2)--> {#sec-profiles}
 
 Likelihood profiles were conducted for ln($R_0$), steepness ($h$) and natural mortality values ($M$) separately, as well as bivariate profiles for steepness and natural mortality, and for growth parameters $L_{\infty}$ and $K$ separately. The priors for all parameters, including the parameter being profiled, were included in every likelihood model. For example, including the prior on natural mortality across the profiled values of natural mortality provides information on the likelihood contribution of that prior as if it were estimated in the model.  
 

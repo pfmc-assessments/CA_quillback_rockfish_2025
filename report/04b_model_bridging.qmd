@@ -1,11 +1,11 @@
-## Model Structure and Assumptions (TOR Section E)
+## Model Structure and Assumptions <!--(TOR Section E)-->
 
-### Modeling Platform and Structure (TOR Section E5)
+### Modeling Platform and Structure <!--(TOR Section E5)-->
 
 This assessment was conducted using Stock Synthesis version 3.30.23.1, compiled December 5, 2024 (available [online](https://github.com/nmfs-ost/ss3-source-code/releases/tag/v3.30.23.1)). The R package `r4ss`, version 1.52.0 [@r4ss_2021], along with R version 4.4.1
 [@r_2024] were used to investigate and plot model fits. The base model is a single-sex (combined across sexes) and single-area model for the coast of California, though `r spp` are rarely caught south of Point Conception. The model includes two fishery fleets (commercial and recreational), two survey fleets (the \gls{s-ccfrp} hook and line survey, and \glspl{cdfw} \gls{rov} survey), and one growth fleet used to inform estimates of growth internal to the model as well as other population dynamics. The model begins in 1916, which is the earliest year of the commercial catch reconstruction. The population was assumed to be unfished and at an equilibrium age structure at this point.
 
-### Model Changes from the Last Assessment (TOR Section E4)
+### Model Changes from the Last Assessment <!--(TOR Section E4)-->
 
 A number of changes have been made in the base model compared to that used in the 2021 assessment [@Langseth_status_2021]. These involve changes in data, data sources used, and model assumptions. The change with the largest effect includes the addition of age data, both the use of commercial conditional-age-at-length distributions but also the inclusion of the growth fleet to support estimating growth internally in the model as well as other population dynamics. Most of these data were collected during extensive sampling efforts across multiple agencies since the 2021 assessment. The effect of the addition of this data on model results is shown in bridging (see @sec-bridging below) and through profiles (see @sec-profiles below), and the effect of omitting this data on model results was explored through sensitivity analyses (see @sec-assmt-sens below).
 
@@ -19,7 +19,7 @@ Lastly, a number of alternative model assumptions were explored and ultimately u
 
 <!-- Description of new modeling approaches and changes made from the last assessment, with rationale. This should include bridging analyses that highlight the data and model changes that were most influential with respect to changes between the assessment being reviewed and the most recent adopted assessment.  -->
 
-### Bridging Analysis from the 2021 Data Moderate Assessment (TOR Section E4) {#sec-bridging}
+### Bridging Analysis from the 2021 Data Moderate Assessment <!--(TOR Section E4)--> {#sec-bridging}
 
 The exploration of models began by bridging from the 2021 data moderate assessment model to the newest version of Stock Synthesis, version 3.30.23.1. Using the newest Stock Synthesis version resulted in no difference in spawning output from that estimated in 2021 (@fig-bridgeSS3_bio). From there, bridging from the 2021 assessment model to the current base model followed three primary steps:
 

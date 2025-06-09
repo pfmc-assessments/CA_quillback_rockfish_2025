@@ -1,6 +1,6 @@
 # Assessment Model
 
-## History of Modeling Approaches (TOR Section E1)
+## History of Modeling Approaches <!--(TOR Section E1)-->
 
 ### 2010 Data Limited Assessment
 
@@ -14,7 +14,7 @@ The 2021 assessment was initially reviewed at the \gls{ssc} \gls{gfsc} Workshop 
 
 During the process of updating the 2021 rebuilding analysis for the 2023 assessment cycle, public comments were made at the November 2023 Council meeting related to the new rebuilding analysis and the 2021 assessment on which it was based. The Council requested that these comments be reviewed by the \gls{ssc} \gls{gfsc}, and the review occurred in January 2024. The \gls{gfsc}, in [their report](https://tinyurl.com/PFMC2024b), "concluded that the issues raised were considered as part of the 2021 stock assessment or not appropriate given the data limitations and \gls{tor} for data-moderate assessments at the time.... The SSC continues to recommend use of the 2021 stock assessment and the adoption of the 2023 rebuilding analysis for California `r spp`".
 
-## Response to Most Recent STAR Panel and SSC Recommendations (TOR Section E2) {#sec-star-recs}
+## Response to Most Recent STAR Panel and SSC Recommendations <!--(TOR Section E2)--> {#sec-star-recs}
 
 A STAR panel was not convened for the review of the 2021 California `r spp` assessment. Rather, the assessment was reviewed over a series of \gls{gfsc} meetings, as described above. The following responses are a compilation from across the reviews and \gls{ssc} statements spanning 2021--2024, and include recommended research and data needs from the 2021 assessment, and recommendations on future work by the \gls{gfsc} during the January 2024 review. Requests made during the original 2021 reviews in June, August, and September were incorporated within the final 2021 stock assessment report [@Langseth_status_2021]. 
 

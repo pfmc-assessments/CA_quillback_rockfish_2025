@@ -14,7 +14,7 @@ if (!exists("base_model")) {
 # read model output using r4ss
 pp <- r4ss::SS_output(
   dir = here('models', base_model),
-  SpawnOutputLabel = "Spawning output (Millions of eggs)",
+  SpawnOutputLabel = "Spawning output (Billions of eggs)",
   printstats = FALSE,
   verbose = FALSE
 )

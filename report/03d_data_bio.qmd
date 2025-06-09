@@ -1,4 +1,4 @@
-## Biological Parameters (TOR section D3) {#sec-biology}
+## Biological Parameters <!--(TOR section D3)--> {#sec-biology}
 
 ### Natural Mortality
 
@@ -47,7 +47,7 @@ L_{\infty} = 41.18 cm; k = 0.178; t_0 = -0.57 cm
 $$
 where $L_{\infty}$ is the asymptotic average length, $K$ is the growth coefficient with units $year^{-1}$, and $t_0$ represents the time when the average length was zero  (@fig-growthdata). The external estimate of $L_{\infty}$ is comparable to literature values, while the estimate of $K$ is on the higher side of literature values which vary from 0.06--0.19 [@YamanakaandLacko_rockfish_2001; @Palssonetal_2009; @Westetal_2014]. Note that Stock Synthesis typically uses the Schnute parameterization of vonBertalanffy growth, and so $t_0$ was converted to a value of $L_{age=1}$ = 10 cm. The external estimates were used to initialize the growth curve, and differ from the growth parameters ultimately estimated internal to the base model.  
 
-## Environmental and Ecosystem Data (TOR section D4) 
+## Environmental and Ecosystem Data <!--(TOR section D4)--> 
 
 This model does not explicitly include environmental or ecosystem data. `r Spp` are a rocky habitat associated species and the area of available habitat was considered when developing indices of abundance for the fishery-independent surveys. 
 

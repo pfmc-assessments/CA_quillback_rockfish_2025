@@ -1,19 +1,19 @@
 # Management 
 
-## Reference Points (TOR section I1-I5)
+## Reference Points <!--(TOR section I1-I5)-->
 
 Reference points were calculated using the estimated selectivities and catch distribution among fleets from the final year of the model, `r mod_out$endyr`. Derived quantities along with reference points at the three management targets for the population at 40% of unfished spawning output, at spawners-per-recruit (SPR) of 50%, and at the internal model estimated \gls{msy} are shown in @tbl-ref-points-es. The equilibrium yield curve in shown in @fig-yield.   
 
 The 2025 `r spp` spawning output relative to unfished spawning output is above the target at `r round(100*mod_out$current_depletion, 1)`% though the 95% confidence interval based on the asymptotic variance estimate ranges into the management precautionary zone (@fig-depl). The fishing intensity (1 − SPR) first reached the target around 1980 and has varied since. Fishing mortality most recently exceeded the target of 0.5 during 2017--2021 but has recently decreased to below 0.5 (@fig-spr).
 
-## Harvest Projections and Decision Tables (TOR section K1-K3)
+## Harvest Projections and Decision Tables <!--(TOR section K1-K3)-->
 
 A ten-year projection of the base model with total removals equal to the estimated \gls{acl} based on the category 1 time-varying $\sigma$ (0.5) and $P^*$ = 0.45 (i.e., termed the "buffer") for years 2027--2036 is shown in @tbl-es-projections. Average recruitment was assumed during the projection period and selectivity of each fleet was assumed to equal the estimated selectivity in the final year of the model. Total removals were apportioned to each fleet based on the relative fishing morality among fleets in the last four years of the model (i.e. 2021--2024). The removals in 2025 and 2026 were set equal to the recommended fleet-specific values as provided by the \gls{gmt} (T. Banez, \gls{cdfw}, pers. comm., 5/14/2025). 
 
 The decision table will be completed after the \gls{star} panel.
 
 
-## Evaluation of Scientific Uncertainty (TOR section L)
+## Evaluation of Scientific Uncertainty <!--(TOR section L)-->
 
 The model estimated uncertainty around the `r mod_out$endyr+1` spawning output for `r spp` is $\sigma$ = `r round(mod_out$Pstar_sigma,2)` and the uncertainty around the OFL in `r mod_out$endyr+1` is $\sigma$ = `r round(mod_out$OFL_sigma, 2)`. Both of these underestimate overall uncertainty due to the necessity to fix several population dynamics parameters (e.g., steepness, recruitment deviation variance, natural mortality) and because there is no explicit incorporation of model structural uncertainty (although see the decision table for alternative states of nature). Estimated uncertainty values are less than the default \gls{ssc} value of 0.5 for a category 1 assessment (although this determination has not yet been made for this assessment), so harvest projections assume an initial $\sigma$ of 0.5, with an increase over time at a rate of 0.075 times the baseline sigma (0.0375 per year).
 
@@ -27,7 +27,7 @@ A risk table for California `r spp` is provided in @tbl-es-risk. Risk tables are
 Information on the influence of environmental conditions on California `r spp` is lacking. As such, no determination on a level to inform uncertainty for the ecosystem and environmental conditions was made. Assessment data inputs are described in the data sections of this report, and are visible from model outputs. Some uncertainties exist in values from the historical catch reconstructions and there are some gaps in catch estimates for years or for portions of the fleet since 1980. Age data are an important data input in the base model yet there was limited samples suitable for use in compositions. Instead, the majority of age samples were included in the base model as a growth fleet. While length compositions covered a broader range of years, there was some patchiness in regions where samples were available. Indices were available for some fishery-independent surveys, but the duration over which these covered was short. In contrast to uncertainty in available data for the fleets and survey, which is not uncommon for nearshore rockfish species, biological samples were collected in California in recent years and used to derive estimates of fecundity and maturity. Overall, we consider uncertainties in assessment data warrant a neutral to unfavorable determination. This determination will be discussed during the \gls{star} Panel, as will a determination for model fits and structural uncertainty, which will be updated in the final report. 
 
 
-## Regional management considerations (TOR section M)
+## Regional management considerations <!--(TOR section M)-->
 
 Regional management differences exist across the U.S. West Coast based on various state-specific management measures. Spatial closures, bag limits, and depth restrictions can influence the effect of fishing on populations of a species that can vary by region. Spatial closures are expected to increase the spatial heterogeneity in abundance and size or age structure of fished stocks. This greater spatial variability can complicate the assumptions made in stock assessment models, particularly the assumption that the densities and demographic structure of assessed populations are relatively homogeneous. Although a wide range of factors above and beyond spatial management measures can also lead to violations of those assumptions, the challenge can be particularly important for longer lived populations with lower movement rates, such as `r spp`. While spatially explicit assessment models provide a means of more explicitly addressing these challenges, such models are computationally intensive, require robust data from the specific areas being modeled, and may also require detailed information regarding movement and dispersal rates [@mcgilliard_accounting_2015; @berger_space_2017; @cadrin_defining_2020].
 
