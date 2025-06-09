@@ -268,16 +268,40 @@ compweight_table |>
 #| warning: false
 #| echo: false
 #| tbl-cap: !expr if(eval_tables) pars_cap
+#| 
+pars_table1 <- pars_table |>
+  mutate(SD = ifelse(Status == 'fixed', NA, SD)) |> tibble::remove_rownames()
 
-pars_table |>
-  mutate(SD = ifelse(Status == 'fixed', NA, SD)) |>
-  gt() |>
-  sub_missing(missing_text = '') |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
+  kableExtra::kable(
+  pars_table1,
+  row.names = FALSE,
+  format = "latex", 
+  longtable = TRUE,
+  booktabs = TRUE,
+  caption = pars_cap) |>
+  kableExtra::kable_styling(
+    latex_options = c("repeat_header", "hold_position"),
+    font_size = 8) |>
+  kableExtra::column_spec(
+   column = 1,
+   width = "3in"
   ) |>
-  as_latex()
+  kableExtra::column_spec(
+   column = 2:6,
+   width = "0.6in"
+  ) |>
+  kableExtra::column_spec(
+   column = 7,
+   width = "1.2in"
+  )
+  #gt() |>
+  #sub_missing(missing_text = '') |>
+  #tab_options(
+  #  table.font.size = 12,
+  #  latex.use_longtable = TRUE
+  #) |>
+  #as_latex()
+
 ```
 :::
 
@@ -335,18 +359,27 @@ kableExtra::kable(
 #| echo: false
 #| eval: !expr eval_tables 
 #| tbl-cap: "Productivity sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to productivity. See main text for details on each sensitivity analysis."
-#| tbl-pos: H
+
 #table_sens(here::here("report/tables/sens_productivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_productivity_table.csv"), check.names = FALSE) |>
-  dplyr::slice(-1) %>% #remove Npar %>%
+  dplyr::slice(-1) |> #remove Npar %>%
   mutate_at(2:9, round, 3)
+
 sens |>
-  gt() |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
-  ) |>
-  as_latex()
+kableExtra::kable(
+  format = "latex", 
+  longtable = TRUE,
+  booktabs = TRUE,
+  linesep = "") |>
+  column_spec(2:9, width = "0.7in") |>
+  kableExtra::kable_styling(font_size = 8,
+    latex_options=c("scale_down", "hold_position"))
+
+#sens |>
+#  gt() |>
+#  tab_options(table.font.size = 12)
+#   |>
+#  as_latex()
 ``` 
 
 \pagebreak
@@ -379,7 +412,7 @@ sens |>
 #| echo: false
 #| eval: !expr eval_tables 
 #| tbl-cap: "Data choice sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to alternative data choices. See main text for details on each sensitivity analysis. Because of differences in data for these sensitivities, likelihoods are generally not comparable."
-#| tbl-pos: H
+
 #table_sens(here::here("report/tables/sens_data_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_table.csv"), check.names = FALSE) |>
   dplyr::slice(-1) %>% #remove Npar
@@ -413,86 +446,8 @@ kableExtra::kable(
   kableExtra::kable_styling(font_size = 8, latex_options = "HOLD_position") |>
   kableExtra::column_spec(1, width = "3.5cm") |>
   kableExtra::column_spec(2:10, width = "1.5cm") 
-
-
 ``` 
 
 :::
 
 {{< pagebreak >}}
-
-<!-- ## Management -->
-
-<!-- <!-- \pagebreak --> -->
-
-<!-- <!-- ```{r, results = "asis"} --> -->
-<!-- <!-- #| label: tbl-projections --> -->
-<!-- <!-- #| warning: false --> -->
-<!-- <!-- #| echo: false --> -->
-<!-- <!-- #| eval: !expr eval_tables  --> -->
-<!-- <!-- #| tbl-cap: !expr if(eval_tables) projections_cap  --> -->
-<!-- <!-- #| tbl-pos: H --> -->
-
-<!-- <!-- projections_table |> --> -->
-<!-- <!--   gt::gt() |> --> -->
-<!-- <!--   gt::fmt_number( --> -->
-<!-- <!--     columns = c(2:5, 7:9), --> -->
-<!-- <!--     decimals = 0 --> -->
-<!-- <!--   ) |> --> -->
-<!-- <!--   gt::fmt_number( --> -->
-<!-- <!--     columns = c(6, 10), --> -->
-<!-- <!--     decimals = 3, --> -->
-<!-- <!--     drop_trailing_zeros = FALSE, --> -->
-<!-- <!--   ) |> --> -->
-<!-- <!--   gt::fmt_number( --> -->
-<!-- <!--     columns = c(4, 5, 7, 8), --> -->
-<!-- <!--     decimals = 2, --> -->
-<!-- <!--     drop_trailing_zeros = FALSE, --> -->
-<!-- <!--   ) |> --> -->
-<!-- <!--   gt::tab_options( --> -->
-<!-- <!--     table.font.size = 12, --> -->
-<!-- <!--     latex.use_longtable = TRUE  --> -->
-<!-- <!--   ) |> --> -->
-<!-- <!--   gt::sub_missing( --> -->
-<!-- <!--     columns = tidyselect::everything(), --> -->
-<!-- <!--     missing_text = "---" --> -->
-<!-- <!--   ) |> --> -->
-<!-- <!--   gt::cols_align( --> -->
-<!-- <!--     align = "center" --> -->
-<!-- <!--   ) |> --> -->
-<!-- <!--   gt::cols_width( --> -->
-<!-- <!--     tidyselect::everything() ~ px(75) --> -->
-<!-- <!--   ) |> --> -->
-<!-- <!--   gt::as_latex() --> -->
-
-<!-- <!-- ``` --> -->
-
-
-
-<!-- ```{r, results = "asis"} -->
-<!-- #| label: tbl-risk -->
-<!-- #| echo: false -->
-<!-- #| warning: false -->
-<!-- #| tbl-cap: "Risk Table for California quillback rockfish to document ecosystem and environmental factors, as well as data driven factors potentially affecting stock productivity and uncertainty or other concerns arising from the stock assessment. Level 1 is a favorable ranking, Level 2 neutral, and Level 3 unfavorable." -->
-
-<!-- risk <-read.csv("Tables/RiskTable_quill.csv")  -->
-<!-- risk|> -->
-<!--   gt::gt() |> -->
-<!--   gt::tab_options( -->
-<!--     table.font.size = 12, -->
-<!--     latex.use_longtable = TRUE -->
-<!--   ) |> -->
-<!--   gt::cols_label( -->
-<!--     Ecosystem.and.environmental.conditions = "Ecosystem and environmental conditions", -->
-<!--     Assessment.data.inputs = "Assessment data inputs", -->
-<!--     Assessment.model.fits.and.structural.uncertainty = "Assessment model fits and structural uncertainty" -->
-<!--   ) |> -->
-<!--   gt::cols_width( -->
-<!--     Ecosystem.and.environmental.conditions ~ px(150), -->
-<!--     Assessment.data.inputs ~ px(300), -->
-<!--     Assessment.model.fits.and.structural.uncertainty ~ px(150) -->
-<!--   ) |> -->
-<!--   gt::as_latex() -->
-<!-- ``` -->
-
-<!-- {{< pagebreak >}} -->

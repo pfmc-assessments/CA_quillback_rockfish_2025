@@ -1,5 +1,5 @@
 ---
-title: 'Status of the Quillback Rockfish off California in U.S. Waters in 2025'
+title: 'Status of the Quillback Rockfish in U.S. Waters off California in 2025'
 author:
   - name: 'Brian J. Langseth'
     equal-contributor: true
@@ -407,6 +407,11 @@ cat(a, sep = '\n')
 ```
 
  {{< pagebreak >}} 
+
+ \renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
 
 ```{r, results='asis'}
 #| label: 'tables'

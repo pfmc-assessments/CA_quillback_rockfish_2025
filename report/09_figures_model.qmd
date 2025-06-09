@@ -5,7 +5,7 @@
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison of estimated spawning output (millions of eggs) of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
+#| fig-cap: "Bridge comparison of estimated spawning output (billions of eggs) of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
 #| fig-alt: "Figure showing that the trajectory from the 2021 assessment is similar when using the newest version of stock synthesis."
 
 knitr::include_graphics(
@@ -20,7 +20,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom). Each change is tested independently based off the 2021 assessment except the final one (Update All Biology), which combines all previous changes."
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output (billions of eggs, top) and spawning output relative to unfished (bottom). Each change is tested independently based off the 2021 assessment except the final one (Update All Biology), which combines all previous changes."
 #| fig-alt: "Figure showing that the trajectory of spawning output and spawning output relative to unfished from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
 
 knitr::include_graphics(
@@ -35,7 +35,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output (millions of eggs, top) and summary biomass (in metric tons, bottom). Each change is tested independently based off the 2021 assessment except the final one (Update All Biology), which combines across all previous changes."
+#| fig-cap: "Bridge comparison for biological relationships showing estimated spawning output (billions of eggs, top) and summary biomass (in metric tons, bottom). Each change is tested independently based off the 2021 assessment except the final one (Update All Biology), which combines across all previous changes."
 #| fig-alt: "Figure showing that the trajectory of spawning output and summary biomass from the 2021 assessment changes most with updates to growth and mortality."
 
 knitr::include_graphics(
@@ -50,7 +50,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparison showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating data. Each change is tested independently based off the 2021 assessment with updated biology (Update All Biology; see @fig-bridgeBio_comp) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all previous changes."
+#| fig-cap: "Bridge comparison showing estimated spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) when updating data. Each change is tested independently based off the 2021 assessment with updated biology (Update All Biology; see @fig-bridgeBio_comp) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all previous changes."
 #| fig-alt: "Figure showing that the trajectory generally doesn't change except when age data are included and growth is not estimated."
 
 knitr::include_graphics(
@@ -65,7 +65,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bridge comparisons showing estimated spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading up to the final base model, which includes additional minor changes as described in the text."
+#| fig-cap: "Bridge comparisons showing estimated spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading up to the final base model, which includes additional minor changes as described in the text."
 #| fig-alt: "Figure showing that the trajectory generally doesn't change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
 
 knitr::include_graphics(
@@ -328,7 +328,7 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of spawning output in millions of egg with ~95% asymptotic intervals."
+#| fig-cap: "Estimated time series of spawning output in billions of egg with ~95% asymptotic intervals."
 #| fig-alt: "Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increases and then stabilizes towrads the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
@@ -433,7 +433,7 @@ knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of ln(R~0~) values."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of ln(R~0~) values."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/R0_profile_bio_comparison.png")
@@ -468,7 +468,7 @@ knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of steepness values."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of steepness values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/h_profile_bio_comparison.png")
@@ -502,7 +502,7 @@ knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of natural mortality values."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of natural mortality values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/m_profile_bio_comparison.png")
@@ -561,7 +561,7 @@ knitr::include_graphics("figures/profile_m_h_contour.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for asymptotic average length."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for asymptotic average length."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/linf_profile_bio_comparison.png")
@@ -595,7 +595,7 @@ knitr::include_graphics("figures/piner_panel_L_at_Amax_Fem_GP_1.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for growth coefficient K."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for growth coefficient K."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/k_profile_bio_comparison.png")
@@ -629,7 +629,7 @@ knitr::include_graphics("figures/piner_panel_VonBert_K_Fem_GP_1.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Time series comparisons of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
+#| fig-cap: "Time series comparisons of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
 #| fig-alt: "."
 
 knitr::include_graphics(
@@ -657,7 +657,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for productivity related sensitivities."
+#| fig-cap: "Spawning output (billions of eggs, top), and spawning output relative to unfished (bottom) for productivity related sensitivities."
 #| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model. Changes to natural mortality result in greater recovery in recent years, and not estimating recrutiment deviations scales spawning output upward."
 
 knitr::include_graphics(
@@ -671,7 +671,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for sensitivities related to data weighting and contributions."
+#| fig-cap: "Spawning output (billions of eggs, top), and spawning output relative to unfished (bottom) for sensitivities related to data weighting and contributions."
 #| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes with the exception of excluding age data."
 
 knitr::include_graphics(
@@ -685,7 +685,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for data related sensitivities."
+#| fig-cap: "Spawning output (billions of eggs, top), and spawning output relative to unfished (bottom) for data related sensitivities."
 #| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
 
 knitr::include_graphics(
@@ -699,7 +699,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Spawning output (millions of eggs, top), and spawning output relative to unfished (bottom) for selectivity related sensitivities."
+#| fig-cap: "Spawning output (billions of eggs, top), and spawning output relative to unfished (bottom) for selectivity related sensitivities."
 #| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
 
 knitr::include_graphics(
