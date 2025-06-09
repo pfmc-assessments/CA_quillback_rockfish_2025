@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-05-14  08:27:49
+#C file write time: 2025-06-09  13:10:09
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -32,7 +32,7 @@
 0 #_natM_type:_0=1Parm; 1=N_breakpoints;_2=Lorenzen;_3=agespecific;_4=agespec_withseasinterpolate;_5=Maunder_M;_6=Age-range_Lorenzen
 #_no additional input for selected M option; read 1P per morph
 1 # GrowthModel: 1=vonBert with L1&L2; 2=Richards with L1&L2; 3=age_specific_K_incr; 4=age_specific_K_decr;5=age_specific_K_each; 6=NA; 7=NA; 8=growth cessation
-0 #_Age(post-settlement)_for_L1;linear growth below this
+1 #_Age(post-settlement)_for_L1;linear growth below this
 999 #_Growth_Age_for_L2 (999 to use as Linf)
 0.01 #_exponential decay for growth above maxage (value should approx initial Z; -999 replicates 3.24; -998 to not allow growth above maxage)
 0 #_placeholder for future growth feature
@@ -49,10 +49,10 @@
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env_var&link	dev_link	dev_minyr	dev_maxyr	dev_PH	Block	Block_Fxn
  0.01	0.15	     0.0675	       -2.7	 0.31	3	-2	0	0	0	0	0	0	0	#_NatM_p_1_Fem_GP_1  
     0	  20	    7.15451	    7.15451	    0	0	-3	0	0	0	0	0	0	0	#_L_at_Amin_Fem_GP_1 
-   35	  50	    41.1812	    41.1812	    0	0	-3	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
- 0.03	 0.3	     0.1782	     0.1782	    0	0	-3	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
- 0.01	 0.5	   0.203225	   0.203225	    0	0	-3	0	0	0	0	0	0	0	#_CV_young_Fem_GP_1  
-0.001	 0.5	  0.0637356	  0.0637356	    0	0	-3	0	0	0	0	0	0	0	#_CV_old_Fem_GP_1    
+   35	  50	    41.1767	    41.1767	    0	0	-3	0	0	0	0	0	0	0	#_L_at_Amax_Fem_GP_1 
+ 0.03	 0.3	   0.178276	   0.178276	    0	0	-3	0	0	0	0	0	0	0	#_VonBert_K_Fem_GP_1 
+ 0.01	 0.5	   0.203214	   0.203214	    0	0	-3	0	0	0	0	0	0	0	#_CV_young_Fem_GP_1  
+0.001	 0.5	  0.0638167	  0.0638167	    0	0	-3	0	0	0	0	0	0	0	#_CV_old_Fem_GP_1    
     0	 0.1	1.57769e-05	1.57769e-05	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_1_Fem_GP_1   
     2	   4	    3.08018	    3.08018	    0	0	-9	0	0	0	0	0	0	0	#_Wtlen_2_Fem_GP_1   
    25	  32	      28.96	      28.96	0.599	6	-9	0	0	0	0	0	0	0	#_Mat50%_Fem_GP_1    
