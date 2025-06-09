@@ -100,6 +100,12 @@ aggDisp <- catch %>%
   dplyr::group_by(disp, LANDING_YEAR) %>%
   dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
   data.frame()
+
+#get total live vs dead
+aggDisp1 <- catch %>%
+  dplyr::group_by(disp) %>%
+  dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
+  data.frame()
 #Breaking out by dealer, name, and ID (Dealer is most restrictive)
 #shows 1994 and 1995 alive has < 3
 #Note that in 2023 vessel_name is all NA
@@ -139,6 +145,14 @@ aggGear2 <- catch %>%
   dplyr::group_by(PACFIN_GEAR_CODE, LANDING_YEAR) %>% 
   dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
   data.frame()
+
+aggGear3  <- catch %>%  #filter(LANDING_YEAR > 2014) %>%
+  dplyr::group_by(PACFIN_GROUP_GEAR_CODE) %>% 
+  dplyr::summarize(sum = sum(LANDED_WEIGHT_MTONS)) %>%
+  data.frame()
+
+
+
 aggGearN2 <- catch %>% 
   dplyr::group_by(PACFIN_GEAR_CODE, LANDING_YEAR) %>% 
   dplyr::summarize(N = length(unique(VESSEL_NAME))) %>% 
