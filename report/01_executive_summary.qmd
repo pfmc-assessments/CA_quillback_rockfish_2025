@@ -2,7 +2,7 @@
 
 ## Stock Description{-}
 
-This full assessment reports the status of `r spp` (*Sebastes maliger*) off the California coast in U.S. waters, using data through 2024. `rSpp` off the coast of California is defined as a stock by the \gls{pfmc}. This assessment does not account for `r spp` in Oregon waters or other areas off the U.S. West Coast and assumes that these other populations do not contribute to nor take from the population being assessed here. There is a potential for regional management within California provided additional research on stock structure.
+This full assessment reports the status of `r spp` (*Sebastes maliger*) off the California coast in U.S. waters, using data through 2024. `r Spp` off the coast of California is defined as a stock by the \gls{pfmc}. This assessment does not account for `r spp` in Oregon waters or other areas off the U.S. West Coast and assumes that these other populations do not contribute to nor take from the population being assessed here. There is a potential for regional management within California provided additional research on stock structure.
 
 <!-- Species/area, including an evaluation of any potential biological basis for regional management -->
 
