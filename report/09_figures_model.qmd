@@ -625,19 +625,6 @@ knitr::include_graphics("figures/parameter_panel_VonBert_K_Fem_GP_1.png")
 knitr::include_graphics("figures/piner_panel_VonBert_K_Fem_GP_1.png")
 ```
 
-
-```{r}
-#| label: fig-historical
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Time series comparisons of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
-#| fig-alt: "."
-
-knitr::include_graphics(
-  "figures/historical_comparison.png")
-```
-
 #### Sensitivity Analyses
 
 ```{r}
@@ -707,6 +694,21 @@ knitr::include_graphics(
 knitr::include_graphics(
   "figures/sens_selectivity_comparison.png")
 ```
+
+#### Historical Analyses
+
+```{r}
+#| label: fig-historical
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Time series comparisons of spawning output (millions of eggs, top) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
+#| fig-alt: "."
+
+knitr::include_graphics(
+  "figures/historical_comparison.png")
+```
+
 
 ## Management
 
