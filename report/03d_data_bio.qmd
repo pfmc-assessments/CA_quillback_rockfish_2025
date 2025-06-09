@@ -35,7 +35,7 @@ The fecundity-at-length was based on ovary samples collected by the SWFSC Santa 
 $$
 F = `r mod_in$ctl$MG_parms['Eggs_alpha_Fem_GP_1', 'INIT']`L^{`r mod_in$ctl$MG_parms['Eggs_beta_Fem_GP_1', 'INIT']`} 
 $$
-where $F$ fecundity in millions of eggs and $L$ is fork length in cm (@fig-fecundity). 
+where $F$ is fecundity in millions of eggs and $L$ is fork length in cm (@fig-fecundity). 
 
 ### Growth (Length-at-Age)
 
