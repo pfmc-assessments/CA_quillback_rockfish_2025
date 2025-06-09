@@ -398,7 +398,7 @@ knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Retrospective results: change in the estimate of spawning output (in billions of eggs) when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model."
+#| fig-cap: "Retrospective results: change in the estimate of spawning output (in billions of eggs) when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model. Mohn's rho values are provided as per year averages."
 #| fig-alt: "The population scale decreases as more years of data are removed."
 
 knitr::include_graphics("figures/retro_compare_spawnbio_uncertainty.png")
@@ -409,7 +409,7 @@ knitr::include_graphics("figures/retro_compare_spawnbio_uncertainty.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Retrospective results: change in the estimate of the fraction of unfished relative to the start year when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model."
+#| fig-cap: "Retrospective results: change in the estimate of the fraction of unfished relative to the start year when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model. Mohn's rho values are provided as per year averages."
 #| fig-alt: "The stock is more depleted in the ending year of each retrospective as more years of data are removed."
 
 knitr::include_graphics("figures/retro_compare_Bratio_uncertainty.png")
