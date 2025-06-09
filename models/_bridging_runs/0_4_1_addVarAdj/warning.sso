@@ -8,5 +8,5 @@ Warning 6 : ; 2024 is <= endyr; set to endyr+1
 Warning 7 : ; 2025 is <= last_rd_yr; overwrite will occur 
 Warning 8 : ; 2025 is <= last_rd_yr; overwrite will occur 
 Warning 9 : At least one block pattern ends in endyr. Check the output parameter value time series to see if the values in forecast years are as intended.
-Warning 10 : Final gradient: 2.39393e-05 is larger than final_conv: 1e-05
+Warning 10 : Final gradient: 0.000183495 is larger than final_conv: 1e-05
  10 warnings  and 1 note 

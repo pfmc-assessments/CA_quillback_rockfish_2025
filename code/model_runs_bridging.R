@@ -439,7 +439,7 @@ mod$ctl$MG_parms['NatM_p_1_Fem_GP_1', c('LO', 'HI', 'INIT', 'PRIOR', 'PR_SD', 'P
 
 ### Update growth prior
 
-mod$ctl$Growth_Age_for_L1 <- 0
+mod$ctl$Growth_Age_for_L1 <- 1
 
 #Growth curve from all individuals. Follows from quillback_growth.R
 vb_ests <- read.csv(here("data", "vonb_ests_withAge0.csv"))
@@ -2567,9 +2567,10 @@ dev.off()
 ## List of remaining changes to get to base that we aren't running doing
 
 #Remove small sample sizes
-#Change L at first size to 1
 #Bias adjust factors
 #Final reweight
+#Change M based on max age of 80
+#Update initial parameter values
 
 
 ##-------------------------------------------------------------------##
