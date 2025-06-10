@@ -41,7 +41,7 @@ qlbk %>% filter(age !=0) %>% group_by(faa_area) %>% tally()
 #Assign a flag if not included in the base model
 qlbk <- qlbk %>%
 mutate(InModel = case_when(fleet == "Commercial" & year %in% c(2007, 2023, 2024) ~ "External fit only",
-                           fleet == "Growth" & year %in% c(1985, 2004, 2007, 2014, 2019, 2020) ~ "External fit only",
+                           fleet == "Growth" & year %in% c(1985, 2004, 2007, 2014, 2019, 2020, 2025) ~ "External fit only",
                            age == 0 ~ "External fit only",
                            TRUE ~ "Included in base model"))
 qlbk$InModel <- as.factor(qlbk$InModel)
