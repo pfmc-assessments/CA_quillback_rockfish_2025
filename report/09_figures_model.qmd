@@ -159,7 +159,7 @@ knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Length composition aggregated across years by fleet with the model with estimated fit to the data by sex (red female, blue male, green unsexed)"
+#| fig-cap: "Length composition aggregated across years by fleet with the model with estimated fit to the data."
 #| fig-alt: "Aggregated length comps are fit reasonably well."
 
 knitr::include_graphics(
