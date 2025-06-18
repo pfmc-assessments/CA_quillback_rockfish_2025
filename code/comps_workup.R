@@ -158,7 +158,6 @@ dataN <- data %>%
 dataN[is.na(dataN)] <- 0
 #write.csv(dataN, here("data", "SampleSize_length.csv"), row.names = FALSE)
 
-
 ## Create table of sample sizes and trips ages for non-growth fleet sources
 dataN_age <- data %>% dplyr::filter(!is.na(age)) %>%
   dplyr::group_by(source, Year) %>% 
@@ -171,6 +170,67 @@ dataN_age <- data %>% dplyr::filter(!is.na(age)) %>%
   data.frame()
 dataN_age[is.na(dataN_age)] <- 0
 #write.csv(dataN_age, here("data", "SampleSize_age.csv"), row.names = FALSE)
+
+
+## 
+#Create figure of sample sizes and trips for length and age fleets (for STAR panel presentation)
+#Pull from the summary tables
+##
+
+#Lengths
+len_ccfrp <- read.csv(here("data", "SampleSize_length_CCFRP.csv")) %>%
+  dplyr::mutate(CCFRP_Ntrip = CCFRP_Ndrift) %>% dplyr::select(-CCFRP_Ndrift)
+len_rov <- read.csv(here("data", "SampleSize_length_ROV.csv"))
+len_other <- read.csv(here("data", "SampleSize_length.csv")) %>%
+  dplyr::select(-c(ROV_Nfish, ROV_Ntrip, 
+                   trawl_Nfish, trawl_Ntrip,
+                   triennial_Nfish, triennial_Ntrip)) #remove the ROV here because output in superyears
+
+len_temp1 <- merge(len_other, len_ccfrp, by = "Year", all.x = TRUE)
+len_temp2 <- merge(len_temp1, len_rov, by = "Year", "all.x" = TRUE)
+len_ALL <- len_temp2 %>% tidyr::pivot_longer(cols = -Year,
+                                             names_to = c("fleet", "type"),
+                                             names_sep = "_",
+                                             values_to = "N") %>% dplyr::mutate(mod_fleet = fleet)
+len_ALL$mod_fleet <- dplyr::case_when(len_ALL$mod_fleet %in% c("pacfin") ~ "Com",
+                                      len_ALL$mod_fleet %in% c("GeiCol", "MilGei", "MilGot", "deb", "mrfss", "recfin") ~ "Rec",
+                                      len_ALL$mod_fleet %in% c("rov") ~ "ROV",
+                                      len_ALL$mod_fleet %in% c("CCFRP") ~ "CCFRP")
+
+ggplot(len_ALL %>% dplyr::filter(type == "Nfish"), aes(y = N, x = Year, fill = mod_fleet)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Number of samples") + 
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                     legend.position = c(0.1, 0.6)) +
+  scale_fill_manual("legend", values = c("CCFRP" = "#F8766D", "Com" = "#A3A500", "Rec" = "#00BF7D", "ROV" = "#00B0F6"))
+#ggsave(here('data_explore_figs',"ALL_lengths_N.png"), width = 6, height = 4)
+
+
+#Ages
+age_com <- read.csv(here("data", "SampleSize_age.csv")) %>%
+  dplyr::select(-c(trawl_Nfish, trawl_Ntrip))
+age_growth <- read.csv(here("data", "SampleSize_ageGrowth.csv"))
+colnames(age_growth)[1] = "Year"
+
+age_temp <- merge(age_growth, age_com, by = "Year", all.x = TRUE)
+age_ALL <- age_temp %>% tidyr::pivot_longer(cols = -Year,
+                                             names_to = c("fleet", "type"),
+                                             names_sep = "_",
+                                             values_to = "N") %>% dplyr::mutate(mod_fleet = fleet)
+age_ALL$mod_fleet <- dplyr::case_when(age_ALL$mod_fleet %in% c("pacfin") ~ "Com",
+                                      TRUE ~ "growth")
+
+ggplot(age_ALL %>% dplyr::filter(type == "Nfish"), aes(y = N, x = Year, fill = mod_fleet)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Number of samples") +
+  xlim(1960,2025) + 
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                     legend.position = c(0.1, 0.6)) +
+  scale_fill_manual("legend", values = c("Com" = "#A3A500", "growth" = "#E76BF3"))
+#ggsave(here('data_explore_figs',"ALL_ages_N.png"), width = 6, height = 4)
+
 
 
 #---------------------------------------------------------------------------------------------------------------#

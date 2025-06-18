@@ -443,6 +443,17 @@ ggplot(ca_catch_long %>% dplyr::filter(type == "tot"), aes(y = mt, x = Year, fil
 ggsave(here('data_explore_figs',"ALL_landings.png"),
        width = 6, height = 4)
 
+ggplot(ca_catch_long %>% dplyr::filter(type != "tot"), aes(y = mt, x = Year, fill = type)) +
+  geom_bar(position = "stack", stat = "identity") +
+  xlab("Year") +
+  ylab("Mortality (MT)") +
+  #facet_wrap(~fleet) + 
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                     legend.position = c(0.1, 0.7))
+ggsave(here('data_explore_figs',"ALL_landings_disp.png"),
+       width = 6, height = 4)
+
+
 
 #Plot of rec (mrfss and recfin) landings and discards. 
 #This plot does not include imputted values for 1990-1992
