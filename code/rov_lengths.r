@@ -275,6 +275,22 @@ rov_bio_used <- rov_bio %>%
 write.csv(rov_bio_used, here("data", "length_processed_noShare", "CAquillback_rov_bio.csv"), row.names = FALSE)
 
 
+#Plot density of lengths inside/outside for prep for STAR presentation
+#Mostly it is site specific differences
+temp <- rov_bio %>% dplyr::filter(Transect_ID %in% c(transect$Transect_ID))
+temp[temp$Designation == "N/A", "Designation"] <- "Reference"
+temp[temp$Designation == "MPA/Outside", "Designation"] <- "MPA"
+ggplot(temp, aes(x = StereoSize)) +
+  geom_density(aes(color = Designation)) +
+  xlab("Length (cm)")
+ggplot(temp, aes(x = Depth)) +
+  geom_density(aes(color = Designation)) +
+  xlab("Depth")
+ggplot(temp, aes(x = StereoSize)) +
+  geom_density(aes(color = area)) +
+  xlab("Length (cm)")
+
+
 
 # ##############################################################################################################
 # ##############################################################################################################
