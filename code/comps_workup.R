@@ -213,7 +213,7 @@ age_com <- read.csv(here("data", "SampleSize_age.csv")) %>%
 age_growth <- read.csv(here("data", "SampleSize_ageGrowth.csv"))
 colnames(age_growth)[1] = "Year"
 
-age_temp <- merge(age_growth, age_com, by = "Year", all.x = TRUE)
+age_temp <- merge(age_growth, age_com, by = "Year", all = TRUE)
 age_ALL <- age_temp %>% tidyr::pivot_longer(cols = -Year,
                                              names_to = c("fleet", "type"),
                                              names_sep = "_",
