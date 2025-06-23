@@ -3288,6 +3288,31 @@ ggsave(file.path(outdir, 'figures', 'sens_summary.png'),  dpi = 300,
 ##########################################################################################-
 
 ######-
+## Request 1 - plotting recruitment from existing sensitivities
+
+new_name <- 'STAR Req1'
+dir.create(sens_dir, new_name)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'leaveOut_all_ages'),
+                                                   file.path('_sensitivities', 'leaveOut_growth_ages'),
+                                                   file.path('_sensitivities', 'Growth_2021est'),
+                                                   file.path('_sensitivities', 'Growth_2021est_noAges'),
+                                                   file.path('_sensitivities', 'Estimate_M'),
+                                                   file.path('_sensitivities', 'sel_NoBlocks')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove All Ages',
+                                     "Remove Growth Fleet",
+                                     "Fix Growth at 2021 w/ Ages",
+                                     "Fix Growth at 2021 w/out Ages",
+                                     "Estimate M",
+                                     "No Blocks on Selectivity"),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name), legendloc = 'topleft')
+
+
+######-
 ## Request 6 - sigmaR tuning --------------------------------------------------------
 
 #Explore sigmaR adjustments 
