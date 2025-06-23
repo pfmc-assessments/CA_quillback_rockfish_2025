@@ -3281,3 +3281,83 @@ ggsave(file.path(outdir, 'figures', 'sens_summary.png'),  dpi = 300,
        width = 6, height = 7, units = "in")
 
 
+##########################################################################################-
+#
+# STAR Panel Requests ----
+#
+##########################################################################################-
+
+######-
+## Request 6 - sigmaR tuning --------------------------------------------------------
+
+#Explore sigmaR adjustments 
+#First step
+
+new_name <- "STAR_request6_sigmaR1"
+
+#Calculate new sigmaR adjustment
+pp <- SS_output(here('models',base_mod_name), covar = TRUE)
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+
+#Update in new sensitivity
+mod <- base_mod
+
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+#Second step
+
+new_name <- "STAR_request6_sigmaR2"
+
+#Calculate new sigmaR adjustment
+pp <- SS_output(here('models',base_mod_name), covar = TRUE)
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+
+#Update in new sensitivity
+mod <- base_mod
+
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+
+
+
+
+
+
+
+
+
+#Next round suggest even higher sigmaR. Seem likes its the common pattern that 
+#it wants to just keep increasing. Keeping at 0.6 seems reasonable.
+pp$sigma_R_info
+
