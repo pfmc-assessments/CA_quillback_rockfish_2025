@@ -68,7 +68,7 @@ ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_len
        width = 10, height = 8)
 
 
-#plot by faceted sex
+#plot by faceted year
 ggplot(ca, aes(y = length_cm, x = age, color = project)) +
 	geom_point(alpha = 0.1) + 
   theme_bw() + 
@@ -80,25 +80,14 @@ ggplot(ca, aes(y = length_cm, x = age, color = project)) +
         strip.text.y = element_text(size = 16),
          legend.text = element_text(size = 20),
         panel.grid.minor = element_blank()) + 
-	#facet_grid(rows = vars(sex)) + 
+	facet_grid(rows = vars(year)) + 
 	xlab("Age") + ylab("Length (cm)") +
   scale_color_viridis_d()
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_at_length_byproject.png"),
        width = 10, height = 8)
 
 #plot by area and project
-ggplot(ca, aes(y = length_cm, x = age, color = project)) +
-	geom_point(alpha = 0.3, size = 4) + 
-  theme_bw() +  
-  xlim(0, 60) + ylim(0, 60) +
-  theme(panel.grid.major = element_blank(), 
-        axis.text = element_text(size = 16),
-        axis.title = element_text(size = 16),
-        strip.text.y = element_text(size = 16),
-         legend.text = element_text(size = 20),
-        panel.grid.minor = element_blank()) + 
-       facet_grid(rows = vars(faa_area)) +
-	xlab("Age") + ylab("Length (cm)") #+
+ #+
   #scale_color_viridis_d()#begin = .05, end = .8)
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length_and_project.png"),
        width = 10, height = 8)
@@ -120,6 +109,23 @@ ggplot(ca, aes(y = length_cm, x = age, colour = fleet, shape = faa_area)) +
 ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length_byfleet.png"),
        width = 10, height = 8)
 
+
+
+#plot by faceted area
+ggplot(ca, aes(y = length_cm, x = year, colour = factor(year))) +
+	geom_boxplot() + 
+  theme_bw() +  
+  xlim(0, 60) + ylim(0, 60) +
+  theme(panel.grid.major = element_blank(), 
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 16),
+        strip.text.y = element_text(size = 16),
+         legend.text = element_text(size = 20),
+        panel.grid.minor = element_blank()) + 
+	xlab("Age") + ylab("Length (cm)") +
+  scale_color_viridis_d(begin = .05, end = .8)
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "faa_age_at_length_byfleet.png"),
+       width = 10, height = 8)
 
 ####################################################################################
 # Data summary tables
@@ -191,6 +197,37 @@ ggplot(aes(x = factor(age), y = length_cm, fill = faa_area)) +
 geom_boxplot()
 
 
+##look at the birth year for each age
+births <- ca %>% filter(age > 0) %>%
+mutate(birthyear = year - age) %>% filter(birthyear > 1969)
+View(births)
+
+births$projects <- as.factor(births$project)
+ggplot(births, aes(x = birthyear)) +
+geom_histogram(breaks=seq(1970, 2021,by=1), aes(fill=project)) +
+theme_bw()+
+theme(text = element_text(size = 20)) +
+scale_x_continuous(breaks = seq(1970, 2021,by=1)) +
+scale_fill_viridis(discrete = TRUE) +
+theme(axis.text.x=element_text(angle=90, hjust=1))+
+xlab("Birth Year") + ylab("Number of aged fish")
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_birthyears_by_project.png"),
+       width = 16, height = 10)
+
+births$year <- as.factor(births$year)
+ggplot(births, aes(x = birthyear)) +
+geom_histogram(breaks=seq(1970, 2021,by=1), aes(fill=year)) +
+theme_bw()+
+theme(text = element_text(size = 20)) +
+scale_x_continuous(breaks = seq(1970, 2021,by=1)) +
+scale_fill_viridis(discrete = TRUE) +
+guides(fill = guide_legend(title = "Capture Year")) +
+theme(axis.text.x=element_text(angle=90, hjust=1)) +
+xlab("Birth Year") + ylab("Number of aged fish")
+ggsave(filename = file.path(here(), "data_explore_figs", "bio_figs", "age_birthyears_by_captureyear.png"),
+       width = 16, height = 10)
+
+with(births, table(birthyear))
 ###########################################################################################################
 #############################################
 #estimate growth

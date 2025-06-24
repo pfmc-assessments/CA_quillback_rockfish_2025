@@ -10,14 +10,14 @@ library(tictoc)
 library(nwfscSurvey)
 source(here('code/selexComp.R'))
 
-
-
+sens_dir <- here('models', '_sensitivities')
 #Enter in base model from which to base sensitivities
 base_mod_name <- '5_1_3_preStarBase' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
 
-new_name <- 'blockdiffs'
+###fix growth to internal and leave out ages
+new_name <- 'fix_growth_no_ages'
 old_name <- base_mod_name
 
 copy_SS_inputs(dir.old = here('models', old_name), 
@@ -25,6 +25,29 @@ copy_SS_inputs(dir.old = here('models', old_name),
                overwrite = TRUE)
 
 mod <- SS_read(here('models',new_name))
+
+#
+
+mod$ctl$MG_parms$INIT[2] <-  9.8022100
+mod$ctl$MG_parms$INIT[3] <- 42.7486000	
+mod$ctl$MG_parms$INIT[4] <-  0.1261450	
+mod$ctl$MG_parms$INIT[5] <-  0.1836600
+mod$ctl$MG_parms$INIT[6] <-  0.0854974
+mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
+#negative phase 
+mod$ctl$MG_parms$PHASE[2:6] <- -9
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(5, 5), #age comps
+                      "fleet" = c(1, 3),
+                      "phase" = c(1, 1),
+                      "value" = c(0, 0),
+                      "sizefreq_method" = c(1, 1))
+rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
 
 # Write model and run
 SS_write(mod, here(sens_dir, new_name),
