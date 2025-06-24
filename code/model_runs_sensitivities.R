@@ -3367,6 +3367,103 @@ SSsummarize(xx) |>
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
+#####-
+## STAR panel request 4 - commercial N_trips ---------------------------------
+
+#Use number of trips for commercial input N lengths instead of the formula
+
+new_name <- "STAR_request4_comNtrips"
+old_name <- base_mod_name
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', '_sensitivities', new_name),
+               overwrite = TRUE)
+mod <- SS_read(here('models', '_sensitivities', new_name))
+
+##
+#Make Changes and run models
+##
+
+#Get number of trips and use and sample size for commercial lengths
+commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
+  dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
+  dplyr::mutate(pacfin_Ninput = 
+                  ifelse(pacfin_Nfish/pacfin_Ntrip < 44, 
+                         pacfin_Ntrip + 0.138 * pacfin_Nfish,
+                         7.06 * pacfin_Ntrip)) |>
+  dplyr::filter(!is.na(pacfin_Ninput))
+
+mod$dat$lencomp[mod$dat$lencomp$fleet == 1, "Nsamp"] <- commlengths$pacfin_Ntrip
+
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', '_sensitivities', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', '_sensitivities', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', '_sensitivities', new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', '_sensitivities', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', '_sensitivities', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+##
+#Compare effective sample size for commercial lengths
+##
+
+pp_base <- SS_output(here('models', base_mod_name))
+effN <- data.frame("Year" = pp_base$len_comp_fit_table[pp_base$len_comp_fit_table$Fleet == 1, "Yr"],
+                   "effN_base" = pp_base$len_comp_fit_table[pp_base$len_comp_fit_table$Fleet == 1, "Nsamp_adj"],
+                   "effN_Ntrip" = pp$len_comp_fit_table[pp$len_comp_fit_table$Fleet == 1, "Nsamp_adj"])
+
+png(here('models', '_sensitivities', new_name, paste0("_Sample size compare",".png")), width = 6, height = 4, units = "in", res = 300)
+  plot(effN$Year, effN$effN_Ntrip, pch = 19, ylim = c(0,50),
+       col = "green", xlab = "Year", ylab = "Sample size")
+  abline(h = mean(effN$effN_Ntrip), lty = 2, col = "green")
+  points(effN$Year, effN$effN_base, pch = 19)
+  abline(h = mean(effN$effN_base))
+  legend("topright", c("Base","Ntrip"), pch = c(19,19), col = c("black","green"))
+dev.off()
+
+
+##
+#Comparison plots
+##
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('sensitivities', "STAR_request4_comNtrips"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'Reweight based on comm length trips'),
+                    subplots = c(1,3, 8, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', 'sensitivities', new_name))
+dev.off()
+
+
 ######-
 ## Request 6 - sigmaR tuning --------------------------------------------------------
 
