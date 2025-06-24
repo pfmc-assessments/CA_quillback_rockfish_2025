@@ -173,7 +173,7 @@ new_name <- 'leaveOut_com_ages'
 
 mod <- base_mod
 
-#Set all rec lengths to negative year
+#Set all com ages to negative year
 mod$dat$agecomp <- mod$dat$agecomp %>% 
   dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("com", fleet.converter$fleet)], 
                               -abs(year), year))
@@ -248,7 +248,7 @@ mod <- base_mod
 
 
 # Create a lambda section 
-lambdas <- data.frame("like_comp" = c(5, 5), #length comps
+lambdas <- data.frame("like_comp" = c(5, 5), #age comps
                       "fleet" = c(1, 3),
                       "phase" = c(1, 1),
                       "value" = c(0, 0),
@@ -3288,10 +3288,10 @@ ggsave(file.path(outdir, 'figures', 'sens_summary.png'),  dpi = 300,
 ##########################################################################################-
 
 ######-
-## Request 1 - plotting recruitment from existing sensitivities
+## Request 1 - plotting recruitment from existing sensitivities --------------------------------------------------------
 
 new_name <- 'STAR Req1'
-dir.create(sens_dir, new_name)
+dir.create(here(sens_dir, new_name))
 
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
                                         subdir = c(base_mod_name,
@@ -3311,11 +3311,9 @@ SSsummarize(xx) |>
                                      "No Blocks on Selectivity"),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name), legendloc = 'topleft')
 
+
 #####-
-
-## STAR panel request 3
-
-### leaveOut_all_ages_NoBlocks ---------------------------------
+## STAR panel request 3 - leaveOut_all_ages_NoBlocks ---------------------------------
 
 # Remove commercial and CAAL ages using lambdas
 
@@ -3323,9 +3321,8 @@ new_name <- 'STAR_request_3'
 
 mod <- base_mod
 
-
 # Create a lambda section 
-lambdas <- data.frame("like_comp" = c(5, 5), #length comps
+lambdas <- data.frame("like_comp" = c(5, 5), #age comps
                       "fleet" = c(1, 3),
                       "phase" = c(1, 1),
                       "value" = c(0, 0),
@@ -3368,8 +3365,6 @@ SSsummarize(xx) |>
                                      'No Blocks with Ages',
                                      'Blocks without Ages'),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
-
-
 
 
 ######-
