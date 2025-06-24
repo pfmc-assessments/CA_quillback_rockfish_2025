@@ -3603,3 +3603,53 @@ alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sig
 #Still wants to increase
 
 
+######-
+## Request XX - growth fleet selectivity --------------------------------------------------------
+
+#Explore dome shaped selectivity for growth fleet 
+
+
+new_name <- "STAR_requestX_growthselex"
+
+dir.create(here(sens_dir, new_name))
+
+
+#Turn on length based selectivity for growth fleet
+mod <- base_mod
+
+#hold
+
+#Size selex to 24
+mod$ctl$size_selex_types$Pattern[3] <- 24
+
+#Add in the new growth parameters by copying the rec ones
+selex_new <- mod$ctl$size_selex_parms
+selex_growth <- selex_new[19:24,]
+
+rownames(selex_growth) <- c(
+"SizeSel_P_1_CA_Growth(3)",
+"SizeSel_P_2_CA_Growth(3)",
+"SizeSel_P_3_CA_Growth(3)",
+"SizeSel_P_4_CA_Growth(3)",
+"SizeSel_P_5_CA_Growth(3)",
+"SizeSel_P_6_CA_Growth(3)")
+
+selex_new1 <- rbind(selex_new[1:12,],
+                    selex_growth,
+                    selex_new[13:24,])
+View(selex_new1)
+mod$ctl$size_selex_parms <- selex_new1
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
