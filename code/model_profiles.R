@@ -585,11 +585,12 @@ peels <- seq(1:15)
 mod_labels <- paste0("Data -",peels," years")
 
 #two panel plots
- r4ss::plot_twopanel_comparison(list(xx$replist2, xx$replist9, xx$replist10, 
-                                  xx$replist11, xx$replist12, xx$replist13, 
-                                  xx$replist14, xx$replist15, xx$replist16,
-                                  xx$replist3, xx$replist4, xx$replist5,
-                                  xx$replist6, xx$replist7, xx$replist8), 
+ r4ss::plot_twopanel_comparison(list(SS_output(here('models', base_model)), 
+                                     xx$replist2, xx$replist9, xx$replist10, 
+                                     xx$replist11, xx$replist12, xx$replist13, 
+                                     xx$replist14, xx$replist15, xx$replist16,
+                                     xx$replist3, xx$replist4, xx$replist5,
+                                     xx$replist6, xx$replist7, xx$replist8), 
                                 dir = here('report', 'figures'), 
                                 filename = "retro_bio_comparison.png",
                                 legendlabels = c('Base model', mod_labels), 
@@ -611,7 +612,20 @@ file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'co
           to = here('report', 'figures','retro_compare_Bratio_uncertainty.png'), 
           overwrite = TRUE, recursive = FALSE)
 
+##
+#STAR panel request for rec dev plot
+##
 
+xx_update <- list(xx$replist2, xx$replist9, xx$replist10, 
+                  xx$replist11, xx$replist12, xx$replist13, 
+                  xx$replist14, xx$replist15, xx$replist16,
+                  xx$replist3, xx$replist4, xx$replist5,
+                  xx$replist6, xx$replist7, xx$replist8)
+SSsummarize(xx_update) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     "Recdevs start at 1990",
+                                     "Recdevs start at 2000"),
+                    subplots = c(1,3,9,18), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
 
