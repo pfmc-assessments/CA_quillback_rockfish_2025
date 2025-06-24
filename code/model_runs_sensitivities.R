@@ -3311,6 +3311,65 @@ SSsummarize(xx) |>
                                      "No Blocks on Selectivity"),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name), legendloc = 'topleft')
 
+#####-
+
+## STAR panel request 2
+
+### leaveOut_all_ages_NoBlocks ---------------------------------
+
+# Remove commercial and CAAL ages using lambdas
+
+new_name <- 'STAR_request_3'
+
+mod <- base_mod
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(5, 5), #length comps
+                      "fleet" = c(1, 3),
+                      "phase" = c(1, 1),
+                      "value" = c(0, 0),
+                      "sizefreq_method" = c(1, 1))
+rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+mod$ctl$N_Block_Designs <- 0
+#mod$ctl$N_Block_Designs <- paste0("#",mod$ctl$blocks_per_pattern)
+mod$ctl$size_selex_parms$Block  = 0
+mod$ctl$size_selex_parms$Block_Fxn  = 0
+mod$ctl$size_selex_parms_tv <- 0
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+pp$likelihoods_used
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name),
+                                                   file.path('_sensitivities', 'sel_NoBlocks')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'No Blocks without Ages',
+                                     'No Blocks with Ages'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+
 
 ######-
 ## Request 6 - sigmaR tuning --------------------------------------------------------
