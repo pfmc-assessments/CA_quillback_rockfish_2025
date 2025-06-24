@@ -4,6 +4,7 @@
 library(r4ss)
 library(ggplot2)
 library(cowplot)
+library(here)
 base_model <- '5_1_3_preStarBase' #<============== UPDATE
 
 setwd(here('models','_bivariate_profiles', 'M_and_h', base_model))
@@ -110,7 +111,7 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=NLL)) +
   theme_bw() + scale_fill_viridis_c(direction = 1) +
   scale_x_continuous(expand = c(0,0), breaks = unique(Sdgrid$M)) + 
   scale_y_continuous(expand = c(0,0), breaks = unique(Sdgrid$h)) +
-  theme_bw(base_size = 18)
+  theme_bw(base_size = 20)
 ggsave(file.path(mydir,'Mhgrid_nll.png'),width = 10, height = 10)
 
 ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
@@ -122,7 +123,7 @@ ggplot(Sdgrid,aes(x=M,y=h,fill=Depletion)) +
   theme_bw() + scale_fill_viridis_c(direction = 1) +
   scale_x_continuous(expand = c(0,0), breaks = unique(Sdgrid$M)) + 
   scale_y_continuous(expand = c(0,0), breaks = unique(Sdgrid$h)) +
-  theme_bw(base_size = 18)
+  theme_bw(base_size = 20)
   ggsave(file.path(mydir,'Mhgrid_depletion.png'),width = 10, height = 10)
 
 
@@ -206,7 +207,7 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
       legend.text = element_text(size = 15), 
       legend.title = element_text(size = 15)) +
     guides(fill = guide_legend(title = "Change in NLL")) +
-    theme_bw(base_size = 16)
+    theme_bw(base_size = 20)
  ggsave(file.path(mydir, "joint_m_h_profile_ggsave.png"),width = 14, height = 12)
 
 #dev.off()
