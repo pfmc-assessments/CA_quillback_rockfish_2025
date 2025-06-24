@@ -3349,8 +3349,7 @@ SS_write(mod, here(sens_dir, new_name),
 r4ss::run(dir = here(sens_dir, new_name), 
           exe = here('models/ss3_win.exe'), 
           extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
+          show_in_console = TRUE,           skipfinished = FALSE)
 
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
@@ -3450,5 +3449,15 @@ r4ss::plot_twopanel_comparison(xx,
                                subplot1 = 1,
                                subplot2 = 3,
                                endyrvec = 2025)
+
+#What is the sigmaR for the run with recdevs starting in 1990
+pp <- SS_output(here('models', '_sensitivities', 'recdev_1990_hessian'), covar = TRUE)
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+#Still wants to increase
+
+#What is the sigmaR for the run with recdevs starting in 1990 with recdev option2
+pp <- SS_output(here('models', '_sensitivities', 'recdev_1990opt2_hessian'), covar = TRUE)
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+#Still wants to increase
 
 
