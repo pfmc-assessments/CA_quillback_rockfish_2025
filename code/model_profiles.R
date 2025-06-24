@@ -575,8 +575,9 @@ tictoc::toc()
 future::plan(future::sequential)
 
 
-
-#modify the comparison plots and save them to report/figures 
+#Originally, two panel comparison plot did not work so copied plots. 
+#Now, two panel comparison works. 
+#modify the comparison plots and save them to report/figures
 retro_dir <- here('models', glue::glue(base_model,'_retro_15_yr_peel/retro'))#,'retro')
 xx <- SSgetoutput(dirvec = list.dirs(retro_dir))
 
@@ -585,15 +586,15 @@ peels <- seq(1:15)
 mod_labels <- paste0("Data -",peels," years")
 
 #two panel plots
- r4ss::plot_twopanel_comparison(list(SS_output(here('models', base_model)), 
-                                     xx$replist2, xx$replist9, xx$replist10, 
-                                     xx$replist11, xx$replist12, xx$replist13, 
+ r4ss::plot_twopanel_comparison(list(SS_output(here('models', base_model)),
+                                     xx$replist2, xx$replist9, xx$replist10,
+                                     xx$replist11, xx$replist12, xx$replist13,
                                      xx$replist14, xx$replist15, xx$replist16,
                                      xx$replist3, xx$replist4, xx$replist5,
-                                     xx$replist6, xx$replist7, xx$replist8), 
-                                dir = here('report', 'figures'), 
+                                     xx$replist6, xx$replist7, xx$replist8),
+                                dir = here('report', 'figures'),
                                 filename = "retro_bio_comparison.png",
-                                legendlabels = c('Base model', mod_labels), 
+                                legendlabels = c('Base model', mod_labels),
                                 legendloc = 'bottomleft',
                                 hessian = FALSE,
                                 subplot1 = 1,
@@ -613,19 +614,20 @@ file.copy(from = here('models', glue::glue(base_model, '_retro_15_yr_peel'), 'co
           overwrite = TRUE, recursive = FALSE)
 
 ##
-#STAR panel request for rec dev plot
+#STAR panel request 2 for rec dev plot
 ##
 
-xx_update <- list(xx$replist2, xx$replist9, xx$replist10, 
+xx_update <- list(SS_output(here('models', base_model)),
+                  xx$replist2, xx$replist9, xx$replist10, 
                   xx$replist11, xx$replist12, xx$replist13, 
                   xx$replist14, xx$replist15, xx$replist16,
                   xx$replist3, xx$replist4, xx$replist5,
                   xx$replist6, xx$replist7, xx$replist8)
 SSsummarize(xx_update) |>
-  SSplotComparisons(legendlabels = c('Base model',
-                                     "Recdevs start at 1990",
-                                     "Recdevs start at 2000"),
-                    subplots = c(1,3,9,18), print = TRUE, plotdir = here(sens_dir, new_name))
+  SSplotComparisons(legendlabels = c('Base model', paste0("Data -", 1:15, " years")),
+                    subplots = c(11), print = TRUE, 
+                    plotdir = here('models', paste0(base_model, '_retro_15_yr_peel')),
+                    legendloc = "bottomleft", legendncol = 2)
 
 
 
