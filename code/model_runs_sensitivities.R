@@ -3313,7 +3313,7 @@ SSsummarize(xx) |>
 
 #####-
 
-## STAR panel request 2
+## STAR panel request 3
 
 ### leaveOut_all_ages_NoBlocks ---------------------------------
 
@@ -3361,11 +3361,13 @@ pp$likelihoods_used
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
                                         subdir = c(base_mod_name,
                                                    file.path('_sensitivities', new_name),
-                                                   file.path('_sensitivities', 'sel_NoBlocks')))))
+                                                   file.path('_sensitivities', 'sel_NoBlocks'),
+                                                   file.path('_sensitivities', 'leaveOut_all_ages')))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'No Blocks without Ages',
-                                     'No Blocks with Ages'),
+                                     'No Blocks with Ages',
+                                     'Blocks without Ages'),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
