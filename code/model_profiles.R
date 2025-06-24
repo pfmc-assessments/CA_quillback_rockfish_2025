@@ -577,8 +577,6 @@ future::plan(future::sequential)
 
 
 #modify the comparison plots and save them to report/figures 
-#retro plots don't plot correctly wiht two panel so revertying for now
-#had to add a copy of the base model to the folder to get it to work without adding two directories
 retro_dir <- here('models', glue::glue(base_model,'_retro_15_yr_peel/retro'))#,'retro')
 xx <- SSgetoutput(dirvec = list.dirs(retro_dir))
 
@@ -587,7 +585,11 @@ peels <- seq(1:15)
 mod_labels <- paste0("Data -",peels," years")
 
 #two panel plots
- r4ss::plot_twopanel_comparison(xx, 
+ r4ss::plot_twopanel_comparison(list(xx$replist2, xx$replist9, xx$replist10, 
+                                  xx$replist11, xx$replist12, xx$replist13, 
+                                  xx$replist14, xx$replist15, xx$replist16,
+                                  xx$replist3, xx$replist4, xx$replist5,
+                                  xx$replist6, xx$replist7, xx$replist8), 
                                 dir = here('report', 'figures'), 
                                 filename = "retro_bio_comparison.png",
                                 legendlabels = c('Base model', mod_labels), 
