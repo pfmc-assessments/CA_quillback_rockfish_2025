@@ -3281,3 +3281,174 @@ ggsave(file.path(outdir, 'figures', 'sens_summary.png'),  dpi = 300,
        width = 6, height = 7, units = "in")
 
 
+##########################################################################################-
+#
+# STAR Panel Requests ----
+#
+##########################################################################################-
+
+######-
+## Request 1 - plotting recruitment from existing sensitivities
+
+new_name <- 'STAR Req1'
+dir.create(sens_dir, new_name)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'leaveOut_all_ages'),
+                                                   file.path('_sensitivities', 'leaveOut_growth_ages'),
+                                                   file.path('_sensitivities', 'Growth_2021est'),
+                                                   file.path('_sensitivities', 'Growth_2021est_noAges'),
+                                                   file.path('_sensitivities', 'Estimate_M'),
+                                                   file.path('_sensitivities', 'sel_NoBlocks')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove All Ages',
+                                     "Remove Growth Fleet",
+                                     "Fix Growth at 2021 w/ Ages",
+                                     "Fix Growth at 2021 w/out Ages",
+                                     "Estimate M",
+                                     "No Blocks on Selectivity"),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name), legendloc = 'topleft')
+
+#####-
+
+## STAR panel request 3
+
+### leaveOut_all_ages_NoBlocks ---------------------------------
+
+# Remove commercial and CAAL ages using lambdas
+
+new_name <- 'STAR_request_3'
+
+mod <- base_mod
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(5, 5), #length comps
+                      "fleet" = c(1, 3),
+                      "phase" = c(1, 1),
+                      "value" = c(0, 0),
+                      "sizefreq_method" = c(1, 1))
+rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+mod$ctl$N_Block_Designs <- 0
+#mod$ctl$N_Block_Designs <- paste0("#",mod$ctl$blocks_per_pattern)
+mod$ctl$size_selex_parms$Block  = 0
+mod$ctl$size_selex_parms$Block_Fxn  = 0
+mod$ctl$size_selex_parms_tv <- 0
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+pp$likelihoods_used
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name),
+                                                   file.path('_sensitivities', 'sel_NoBlocks'),
+                                                   file.path('_sensitivities', 'leaveOut_all_ages')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'No Blocks without Ages',
+                                     'No Blocks with Ages',
+                                     'Blocks without Ages'),
+                    subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
+
+
+
+######-
+## Request 6 - sigmaR tuning --------------------------------------------------------
+
+#Explore sigmaR adjustments 
+#First step
+
+new_name <- "STAR_request6_sigmaR1"
+
+#Calculate new sigmaR adjustment
+pp <- SS_output(here('models',base_mod_name), covar = TRUE)
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+
+#Update in new sensitivity
+mod <- base_mod
+
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+#Second step
+
+new_name <- "STAR_request6_sigmaR2"
+
+#Calculate new sigmaR adjustment from first step
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+
+#Update in new sensitivity
+mod <- base_mod
+
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'STAR_request6_sigmaR1'),
+                                                   file.path('_sensitivities', 'STAR_request6_sigmaR2')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Run 1: 0.85',
+                                     'Run 2: 1.12'),
+                    subplots = c(1, 3, 9, 11), print = TRUE, plotdir = here(sens_dir, new_name))
+
+r4ss::plot_twopanel_comparison(xx,
+                               dir = here('models', '_sensitivities', 'STAR_request6_sigmaR2'),
+                               filename = "_sigmaR_comparison.png",
+                               legendlabels = c('Base model', 'Run 1: 0.85', 'Run 2: 1.12'),
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3,
+                               endyrvec = 2025)
+
+

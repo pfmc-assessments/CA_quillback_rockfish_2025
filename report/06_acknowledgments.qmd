@@ -1,1 +1,15 @@
 # Acknowledgements {#sec-acknowledgements}
+
+* STAR panel reviewers Geoff Tingley, Kotaro Ono, Alan Hicks for comments during STAR panel to improve analysis and description of the assessment.
+
+* STAR panel chair, Cheryl Barnes for comments during STAR panel and preliminary review of document, and so ensuring materials conform to the TOR and are reviewed timely. 
+
+* Council staff Marlene Bellman for overall coordination and for preliminary review of document to ensure adherance to the TOR. 
+
+* GAP and GMT advisors Tim Clauson and Thompson Banez, respectively, for help in understanding fleet dynamics to help inform initial selectivity blocks and types, in understanding management actions, and in providing catch values for use in years between and during projections
+
+* Melissa Head for biological analyses of maturity and fecundity.
+
+* Samplers collecting data onboard CCFRP and ROV fleets. These include university and CDFW employees, as well as volunteer anglers paricitating in collection of biological and survey data.
+
+* Owen Hamel for comments on iproving initial versions of assessment report as well as comment for improving assessment model. 
