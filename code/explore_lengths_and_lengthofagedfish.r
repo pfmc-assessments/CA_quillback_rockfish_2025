@@ -1,5 +1,5 @@
 ###############################################################
-# Script tolook at the available length distribution of samples 
+# Script to look at the available length distribution of samples 
 # and length of aged fish for quillback
 # rockfish for the 2025 California stock assessment
 #Author: Melissa Monk SWFSC
@@ -30,7 +30,7 @@ lengths$aged <- as.factor(lengths$aged)
 
 summary(as.factor(laa$source))
 summary(as.factor(lengths$source))
-
+pacfin_only <- lengths %>% filter(source == "pacfin")
 #pacfin lengths for aged and unaged fish - unweighted comps
 ggplot(lengths %>% filter(source == "pacfin"), aes(x = as.factor(Year), y = length_cm, fill = aged)) +
 geom_boxplot() +
