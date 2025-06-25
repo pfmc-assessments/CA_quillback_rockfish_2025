@@ -1622,6 +1622,28 @@ SSsummarize(xx) |>
                     print = TRUE, legendloc = "topleft",
                     plotdir = here('models', "_bridging_runs", new_name))
 
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models', "_bridging_runs"),
+                                      subdir = c("0_0_1_2025rename",
+                                                 "0_1_0_updateAllBio",
+                                                 "0_2_1_updateCatch",
+                                                 "0_2_2_update_Lcomps_oldFleets",
+                                                 "0_2_3_update_Comps_oldFleets",
+                                                 "0_2_4_update_Comps_addGrowth",
+                                                 "0_2_5_update_Indices_noGrowth",
+                                                 "0_2_0_updateAllData")))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('2021 base',
+                                     'Update all bio relationships',
+                                     'Update catch',
+                                     'Update length comps of existing fleets',
+                                     'Update length/age comps of existing fleets',
+                                     '+ add growth fleet and estimate growth',
+                                     'Add new index fleets (new indices and comps)',
+                                     'Update all data and estimate growth'),
+                    print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', "_bridging_runs", new_name, "STAR"))
+
+
 dev.off()
 
 
