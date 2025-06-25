@@ -3640,7 +3640,7 @@ rownames(selex_growth) <- c(
 selex_new1 <- rbind(selex_new[1:12,],
                     selex_growth,
                     selex_new[13:24,])
-View(selex_new1)
+#View(selex_new1)
 mod$ctl$size_selex_parms <- selex_new1
 
 # Write model and run
@@ -3649,7 +3649,7 @@ SS_write(mod, here(sens_dir, new_name),
 
 r4ss::run(dir = here(sens_dir, new_name), 
           exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
+          #extras = '-nohess', 
           show_in_console = TRUE, 
           skipfinished = FALSE)
 
@@ -3708,3 +3708,25 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+##########################################################
+#Request 8 comparison with the base model
+
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', 'STAR_request8_growthselex')))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Growth selectivity asymptotic'),
+                    subplots = c(1, 3, 9, 11), print = TRUE, plotdir = here(sens_dir, new_name))
+
+r4ss::plot_twopanel_comparison(xx,
+                               dir = here('models', '_sensitivities', 'STAR_request8_growthselex'),
+                               filename = "_sigmaR_comparison.png",
+                               legendlabels = c('Base model', 'Growth selectivity asymptotic'),
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3,
+                               endyrvec = 2025)
