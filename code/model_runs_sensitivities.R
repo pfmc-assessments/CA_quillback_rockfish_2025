@@ -3727,7 +3727,7 @@ plot_compare_growth(models = xx,
 ######-
 ## Request 7b - assign growth fleet and other ages elsewhere --------------------------------------------------------
 
-#Remove the growth fleet CAAL and assign CCFRP ages to the survey fleet
+#Remove the growth fleet CAAL and assign CCFRP ages and other ages to their fleets
 
 new_name <- "STAR_request7b_CCFRP_rec_ages"
 
@@ -3817,7 +3817,7 @@ pp <- SS_output(here('models', '_sensitivities', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-pp$sigma_R_info 
+pp$sigma_R_info #0.86
 
 ##Comparison plots
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
@@ -3855,6 +3855,132 @@ plot_compare_growth(models = xx,
                     legend_names = c('Base',
                                      'CCFRP ages to CCFRP fleet',
                                      'CCFRP and some rec growth fleet ages to fleets'))
+
+######-
+## Request 7b2 - assign growth fleet and Abrams ages elsewhere --------------------------------------------------------
+
+#Remove the growth fleet CAAL and assign CCFRP ages and Rec ages to their fleets
+
+new_name <- "STAR_request7b2_CCFRP_recAbrams_ages"
+
+mod <- base_mod
+
+#Remove growth fleet CAAL data 
+mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
+
+#Add in other Rec related CAAL and assign to that fleet
+otherRec.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_AbramsRec_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 2) %>%
+  as.data.frame()
+names(otherRec.CAAL) <- names(mod$dat$agecomp)
+
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, otherRec.CAAL)
+
+#Add in CCFRP only CAAL and assign to that fleet
+ccfrp.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_ccfrp_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 4) %>%
+  as.data.frame()
+names(ccfrp.CAAL) <- names(mod$dat$agecomp)
+
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
+
+
+#Set francis weight for growth fleet ages to be the same for ccfrp and rec
+mod$ctl$Variance_adjustment_list[6,2] <- 2
+mod$ctl$Variance_adjustment_list[7,] <- mod$ctl$Variance_adjustment_list[6,]
+mod$ctl$Variance_adjustment_list[7,2] <- 4
+rownames(mod$ctl$Variance_adjustment_list)[7] <- "Variance_adjustment_list7"
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Request 7b2 reweight - assign growth fleet and Abrams only elsewhere and reweight --------------------------------------------------------
+
+#Copy model from request 7b and now reweight
+
+new_name <- "STAR_request7b2_CCFRP_recAbrams_ages_reweight"
+
+mod <- SS_read(here('models', '_sensitivities', "STAR_request7b2_CCFRP_recAbrams_ages"))
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', '_sensitivities', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', '_sensitivities', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', '_sensitivities', new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', '_sensitivities', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       #extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', '_sensitivities', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+pp$sigma_R_info #0.85
+
+##Comparison plots
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_request7b2_CCFRP_recAbrams_ages"),
+                                                 file.path('_sensitivities', "STAR_request7b2_CCFRP_recAbrams_ages_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'Add CCFRP growth fleet ages into CCFRP fleet and Abrams growth fleet ages into rec fleet',
+                                     'Same as above but reweight ccfrp and rec ages'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', '_sensitivities', "STAR_request7b2_CCFRP_recAbrams_ages_reweight"))
+dev.off()
+
+#Non reweighted and reweighted runs are similar. Can present only reweighted
+
+
+#For STAR presentation
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_request7_CCFRPages_reweight"),
+                                                 file.path('_sensitivities', "STAR_request7b2_CCFRP_recAbrams_ages_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'CCFRP growth fleet ages to CCFRP fleet',
+                                     'CCFRP and Abrams growth fleet ages to CCFRP and rec fleet'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', '_sensitivities', "STAR_request7b2_CCFRP_recAbrams_ages_reweight"))
+dev.off()
 
 
 
