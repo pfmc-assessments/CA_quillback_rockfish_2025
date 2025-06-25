@@ -3487,6 +3487,9 @@ pp_base <- SS_output(here('models', base_mod_name))
 effN <- data.frame("Year" = pp_base$len_comp_fit_table[pp_base$len_comp_fit_table$Fleet == 1, "Yr"],
                    "effN_base" = pp_base$len_comp_fit_table[pp_base$len_comp_fit_table$Fleet == 1, "Nsamp_adj"],
                    "effN_Ntrip" = pp$len_comp_fit_table[pp$len_comp_fit_table$Fleet == 1, "Nsamp_adj"])
+inputN <- data.frame("Year" = pp_base$len_comp_fit_table[pp_base$len_comp_fit_table$Fleet == 1, "Yr"],
+                     "effN_base" = pp_base$len_comp_fit_table[pp_base$len_comp_fit_table$Fleet == 1, "Nsamp_in"],
+                     "effN_Ntrip" = pp$len_comp_fit_table[pp$len_comp_fit_table$Fleet == 1, "Nsamp_in"])
 
 png(here('models', '_sensitivities', new_name, paste0("_Sample size compare",".png")), width = 6, height = 4, units = "in", res = 300)
   plot(effN$Year, effN$effN_Ntrip, pch = 19, ylim = c(0,50),
@@ -3504,13 +3507,13 @@ dev.off()
 
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
                                       subdir = c(base_mod_name,
-                                                 file.path('sensitivities', "STAR_request4_comNtrips"))))
+                                                 file.path('_sensitivities', "STAR_request4_comNtrips"))))
 
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base',
                                      'Reweight based on comm length trips'),
-                    subplots = c(1,3, 8, 11), print = TRUE, legendloc = "topright",
-                    plotdir = here('models', 'sensitivities', new_name))
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', '_sensitivities', new_name))
 dev.off()
 
 
