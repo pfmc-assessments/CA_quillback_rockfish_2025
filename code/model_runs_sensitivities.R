@@ -3853,8 +3853,8 @@ dev.off()
 plot_compare_growth(models = xx,
                     new_name = "STAR_request7b_CCFRP_rec_ages_reweight",
                     legend_names = c('Base',
-                                     'CCFRP growth fleet ages to CCFRP fleet',
-                                     'CCFRP and some rec growth fleet ages to CCFRP and rec fleet'))
+                                     'CCFRP ages to CCFRP fleet',
+                                     'CCFRP and some rec growth fleet ages to fleets'))
 
 
 
