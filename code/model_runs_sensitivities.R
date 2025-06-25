@@ -3604,12 +3604,12 @@ alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sig
 
 
 ######-
-## Request XX - growth fleet selectivity --------------------------------------------------------
+## Request 8 - growth fleet selectivity --------------------------------------------------------
 
 #Explore asymptotic shaped selectivity for growth fleet 
 
 
-new_name <- "STAR_requestX_growthselex"
+new_name <- "STAR_request8_growthselex"
 
 dir.create(here(sens_dir, new_name))
 
@@ -3655,11 +3655,11 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
-## Request XXX - growth fleet selectivity --------------------------------------------------------
+## Request 8b - growth fleet selectivity --------------------------------------------------------
 
 #Explore dome shaped selectivity for growth fleet 
 
-new_name <- "STAR_requestXX_growthselexdomed"
+new_name <- "STAR_request8b_growthselexdomed"
 
 dir.create(here(sens_dir, new_name))
 
