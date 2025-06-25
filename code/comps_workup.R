@@ -611,6 +611,26 @@ write.csv(caal_nonccfrp, here("data", "forSS3", paste0("CAAL_noncommercial_noncc
 #Dont need FAA for the growth fleet so no faa marginal age comps
 
 
+##
+#For STAR panel request 7 - splitting out select rec fleet samples
+##
+
+caal_otherRec <-  nwfscSurvey::get_raw_caal(
+  data = age_ca %>% dplyr::filter(source %in% c("Abrams", "Cooperative", "CRFS")), 
+  len_bins = length_bins,
+  age_bins = age_bins,
+  length_column_name = "length_cm",
+  age_column_name = "age",
+  month = 7,
+  fleet = "rec_CAAL",
+  dir = NULL)
+
+write.csv(caal_otherRec, here("data", "forSS3", paste0("CAAL_noncommercial_possibleRec_unsexed_",
+                                                    length_bins[1], "_", tail(length_bins,1),
+                                                    "_", age_bins[1], "_", tail(age_bins,1),
+                                                    ".csv")), row.names = FALSE)
+
+
 ######- 
 ####  Growth fleet N table -----
 ######-
