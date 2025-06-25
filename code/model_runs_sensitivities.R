@@ -3363,7 +3363,7 @@ SSsummarize(xx) |>
 
 
 #####-
-## STAR panel request 3 - leaveOut_all_ages_NoBlocks ---------------------------------
+## Request 3 - leaveOut_all_ages_NoBlocks ---------------------------------
 
 # Remove commercial and CAAL ages using lambdas
 
@@ -3418,7 +3418,7 @@ SSsummarize(xx) |>
 
 
 #####-
-## STAR panel request 4 - commercial N_trips ---------------------------------
+## Request 4 - commercial N_trips ---------------------------------
 
 #Use number of trips for commercial input N lengths instead of the formula
 
@@ -3604,6 +3604,202 @@ alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sig
 pp <- SS_output(here('models', '_sensitivities', 'recdev_1990opt2_hessian'), covar = TRUE)
 alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
 #Still wants to increase
+
+
+######-
+## Request 7 - assign growth fleet ages elsewhere --------------------------------------------------------
+
+#Remove the growth fleet CAAL and assign CCFRP ages to the survey fleet
+
+new_name <- "STAR_request7_CCFRPages"
+
+mod <- base_mod
+
+#Remove growth fleet CAAL data and add in CCFRP only CAAL and assign to that fleet
+mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
+
+ccfrp.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_ccfrp_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 4) %>%
+  as.data.frame()
+names(ccfrp.CAAL) <- names(mod$dat$agecomp)
+
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
+
+#Set francis weight for growth fleet ages to be the same as for ccfrp
+mod$ctl$Variance_adjustment_list[6,2] <- 4
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Request 7 reweight - assign growth fleet ages elsewhere and reweight --------------------------------------------------------
+
+#Copy request 7 and now reweight
+
+new_name <- "STAR_request7_CCFRPages_reweight"
+
+mod <- base_mod
+
+#Remove growth fleet CAAL data and add in CCFRP only CAAL and assign to that fleet
+mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
+
+ccfrp.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_ccfrp_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 4) %>%
+  as.data.frame()
+names(ccfrp.CAAL) <- names(mod$dat$agecomp)
+
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
+
+#Set francis weight for growth fleet ages to be the same as for ccfrp
+mod$ctl$Variance_adjustment_list[6,2] <- 4
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', '_sensitivities', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', '_sensitivities', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', '_sensitivities', new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', '_sensitivities', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       #extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', '_sensitivities', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+pp$sigma_R_info #0.8
+
+
+######-
+## Request 7b - assign growth fleet and other ages elsewhere --------------------------------------------------------
+
+#Remove the growth fleet CAAL and assign CCFRP ages to the survey fleet
+
+new_name <- "STAR_request7b_CCFRP_rec_ages"
+
+mod <- base_mod
+
+#Remove growth fleet CAAL data 
+mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
+
+#Add in CCFRP only CAAL and assign to that fleet
+ccfrp.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_ccfrp_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 4) %>%
+  as.data.frame()
+names(ccfrp.CAAL) <- names(mod$dat$agecomp)
+
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
+
+#Add in other Rec related CAAL and assign to that fleet
+
+
+###CONTINUE HERE
+
+
+#Set francis weight for growth fleet ages to be the same for ccfrp and rec
+mod$ctl$Variance_adjustment_list[6,2] <- 2
+mod$ctl$Variance_adjustment_list[7,] <- mod$ctl$Variance_adjustment_list[6,]
+mod$ctl$Variance_adjustment_list[7,2] <- 4
+names(mod$ctl$Variance_adjustment_list)[7] <- "Variance_adjustment_list7"
+
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Request 7b reweight - assign growth fleet and other ages elsewhere and reweight --------------------------------------------------------
+
+#Copy request 7b and now reweight
+
+new_name <- "STAR_request7_CCFRPages_reweight"
+
+mod <- base_mod
+
+
+##COPY from above and paste here
+
+
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', '_sensitivities', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', '_sensitivities', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', '_sensitivities', new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', '_sensitivities', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       #extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', '_sensitivities', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+pp$sigma_R_info #0.8
+
+
+
+
 
 
 ######-
