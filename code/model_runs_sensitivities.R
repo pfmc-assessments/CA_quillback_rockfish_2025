@@ -11,7 +11,7 @@ library(here)
 library(dplyr)
 library(ggplot2)
 source(here('code/selexComp.R'))
-
+source(here('code/model_runs_growth_comparison.R'))
 #Enter in base model from which to base sensitivities
 #base_mod_name <-'3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
 #base_mod_name <- '4_2_1_propBase' #<---------------UPDATE WHEN CHANGE
@@ -3715,6 +3715,11 @@ SSsummarize(xx) |>
                     subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
                     plotdir = here('models', '_sensitivities', "STAR_request7_CCFRPages_reweight"))
 dev.off()
+plot_compare_growth(models = xx,
+                    new_name = "STAR_request7_CCFRPages_reweight",
+                    legend_names = c('Base',
+                                     'Add CCFRP growth fleet ages into CCFRP fleet',
+                                     'Same as above but reweight ccfrp ages'))
 
 #Non reweighted and reweighted runs are similar. Can present only reweighted
 
@@ -3845,7 +3850,11 @@ SSsummarize(xx) |>
                     plotdir = here('models', '_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"))
 dev.off()
 
-
+plot_compare_growth(models = xx,
+                    new_name = "STAR_request7b_CCFRP_rec_ages_reweight",
+                    legend_names = c('Base',
+                                     'CCFRP growth fleet ages to CCFRP fleet',
+                                     'CCFRP and some rec growth fleet ages to CCFRP and rec fleet'))
 
 
 
@@ -3973,3 +3982,6 @@ r4ss::plot_twopanel_comparison(xx,
                                subplot1 = 1,
                                subplot2 = 3,
                                endyrvec = 2025)
+
+plot_compare_growth(models = xx,
+                    legend_names = c("base","Request 8"))
