@@ -3702,6 +3702,23 @@ plot_sel_all(pp)
 pp$sigma_R_info #0.8
 
 
+##Comparison plots
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_request7_CCFRPages"),
+                                                 file.path('_sensitivities', "STAR_request7_CCFRPages_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'Add CCFRP growth fleet ages into CCFRP fleet',
+                                     'Same as above but reweight ccfrp ages'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', '_sensitivities', "STAR_request7_CCFRPages_reweight"))
+dev.off()
+
+#Non reweighted and reweighted runs are similar. Can present only reweighted
+
+
 ######-
 ## Request 7b - assign growth fleet and other ages elsewhere --------------------------------------------------------
 
@@ -3714,6 +3731,16 @@ mod <- base_mod
 #Remove growth fleet CAAL data 
 mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
 
+#Add in other Rec related CAAL and assign to that fleet
+otherRec.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_possibleRec_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 2) %>%
+  as.data.frame()
+names(otherRec.CAAL) <- names(mod$dat$agecomp)
+
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, otherRec.CAAL)
+
 #Add in CCFRP only CAAL and assign to that fleet
 ccfrp.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_ccfrp_unsexed_10_50_1_60.csv")) %>%
   dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
@@ -3724,17 +3751,12 @@ names(ccfrp.CAAL) <- names(mod$dat$agecomp)
 
 mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
 
-#Add in other Rec related CAAL and assign to that fleet
-
-
-###CONTINUE HERE
-
 
 #Set francis weight for growth fleet ages to be the same for ccfrp and rec
 mod$ctl$Variance_adjustment_list[6,2] <- 2
 mod$ctl$Variance_adjustment_list[7,] <- mod$ctl$Variance_adjustment_list[6,]
 mod$ctl$Variance_adjustment_list[7,2] <- 4
-names(mod$ctl$Variance_adjustment_list)[7] <- "Variance_adjustment_list7"
+rownames(mod$ctl$Variance_adjustment_list)[7] <- "Variance_adjustment_list7"
 
 
 # Write model and run
@@ -3755,16 +3777,11 @@ plot_sel_all(pp)
 ######-
 ## Request 7b reweight - assign growth fleet and other ages elsewhere and reweight --------------------------------------------------------
 
-#Copy request 7b and now reweight
+#Copy model from request 7b and now reweight
 
-new_name <- "STAR_request7_CCFRPages_reweight"
+new_name <- "STAR_request7b_CCFRP_rec_ages_reweight"
 
-mod <- base_mod
-
-
-##COPY from above and paste here
-
-
+mod <- SS_read(here('models', '_sensitivities', "STAR_request7b_CCFRP_rec_ages"))
 
 #Run based on weights set to one
 mod$ctl$Variance_adjustment_list$value <-  1
@@ -3795,8 +3812,38 @@ pp <- SS_output(here('models', '_sensitivities', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-pp$sigma_R_info #0.8
+pp$sigma_R_info 
 
+##Comparison plots
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_request7b_CCFRP_rec_ages"),
+                                                 file.path('_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'Add CCFRP growth fleet ages into CCFRP fleet /n Add som rec growth fleet ages into rec fleet',
+                                     'Same as above but reweight ccfrp and rec ages'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', '_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"))
+dev.off()
+
+#Non reweighted and reweighted runs are similar. Can present only reweighted
+
+
+#For STAR presentation
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_request7_CCFRPages_reweight"),
+                                                 file.path('_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'CCFRP growth fleet ages to CCFRP fleet',
+                                     'CCFRP and some rec growth fleet ages to CCFRP and rec fleet'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', '_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"))
+dev.off()
 
 
 
