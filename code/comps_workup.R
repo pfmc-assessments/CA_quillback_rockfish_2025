@@ -560,12 +560,10 @@ afs_nsamp_otherRec <-  nwfscSurvey::get_raw_comps(
   fleet = "rec",
   dir = NULL)
 
-write.csv(afs_nsamp_otherRec, 
+write.csv(afs_nsamp_otherRec$unsexed, 
           here("data", "forSS3", paste0("Acomps_possibleRec_unsexed_raw_", 
                                         age_bins[1], "_", tail(age_bins,1), 
                                         ".csv")), row.names = FALSE)
-
-
 
 
 #######-
