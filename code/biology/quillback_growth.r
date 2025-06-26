@@ -47,6 +47,9 @@ mutate(InModel = case_when(fleet == "Commercial" & year %in% c(2007, 2023, 2024)
 qlbk$InModel <- as.factor(qlbk$InModel)
 qlbk <- qlbk %>% mutate(fleet = case_when(fleet =="CCFRP" ~ "Growth", 
 TRUE ~ fleet))
+
+write.csv(qlbk, here("data", "growth_data_inmodel_forplots.csv"))
+
 ##############################################################################################################
 #make a copy to keep the code the same
 ca <- qlbk

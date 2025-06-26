@@ -4722,3 +4722,24 @@ plot_sel_all(pp)
 alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
 pp$sigma_R_info
 
+##Request 13 comparison Comparison plots
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_request13_collapseGrowth_reweight"),
+                                                 file.path('_sensitivities', "STAR_request13_nogrowthfleet_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'STAR_request13_collapseGrowth_reweight',
+                                     'STAR_request13_nogrowthfleet_reweight'),
+                     col = rich.colors.short(3),
+                    subplots = c(2,4, 9, 11), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', '_sensitivities', "STAR_request13_collapseGrowth_reweight"))
+dev.off()
+
+plot_compare_growth(models = xx,
+                                new_name = "STAR_request13_collapseGrowth_reweight",
+                                legend_names = c('Base',
+                                     'STAR_request13_collapseGrowth_reweight',
+                                     'STAR_request13_nogrowthfleet_reweight'),
+                                max_age = 60) 
