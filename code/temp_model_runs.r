@@ -17,7 +17,7 @@ base_mod <- SS_read(here('models', base_mod_name))
 
 
 ###fix growth to internal and leave out ages
-new_name <- 'fix_growth_no_ages'
+new_name <- 'fix_growth_external_no_ages'
 old_name <- base_mod_name
 
 copy_SS_inputs(dir.old = here('models', old_name), 
@@ -26,13 +26,15 @@ copy_SS_inputs(dir.old = here('models', old_name),
 
 mod <- SS_read(here('models',new_name))
 
-#
+ #         K        Linf          L0         CV0         CV1
+ #0.17840051 41.17135518  3.99192977  0.20157461  0.06413399
+#This is L0 so change that in the model
 
-mod$ctl$MG_parms$INIT[2] <-  9.8022100
-mod$ctl$MG_parms$INIT[3] <- 42.7486000	
-mod$ctl$MG_parms$INIT[4] <-  0.1261450	
-mod$ctl$MG_parms$INIT[5] <-  0.1836600
-mod$ctl$MG_parms$INIT[6] <-  0.0854974
+mod$ctl$MG_parms$INIT[2] <-  3.99192977
+mod$ctl$MG_parms$INIT[3] <- 41.17135518	
+mod$ctl$MG_parms$INIT[4] <-  0.17840051	
+mod$ctl$MG_parms$INIT[5] <-  0.20157461
+mod$ctl$MG_parms$INIT[6] <-  0.06413399
 mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
 #negative phase 
 mod$ctl$MG_parms$PHASE[2:6] <- -9

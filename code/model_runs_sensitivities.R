@@ -3332,6 +3332,59 @@ plot_sel_all(pp)
 
 
 
+###fix growth to internal and leave out ages
+new_name <- 'fix_growth_external_no_ages'
+old_name <- base_mod_name
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here(sens_dir, new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here(sens_dir,new_name))
+
+ #         K        Linf          L0         CV0         CV1
+ #0.17840051 41.17135518  3.99192977  0.20157461  0.06413399
+#This is L0 so change that in the model
+mod$ctl$Growth_Age_for_L1 <- 0
+mod$ctl$MG_parms$INIT[2] <-  3.99192977
+mod$ctl$MG_parms$INIT[3] <- 41.17135518	
+mod$ctl$MG_parms$INIT[4] <-  0.17840051	
+mod$ctl$MG_parms$INIT[5] <-  0.20157461
+mod$ctl$MG_parms$INIT[6] <-  0.06413399
+mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
+#negative phase 
+mod$ctl$MG_parms$PHASE[2:6] <- -9
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(5), #age comps
+                      "fleet" = c(3),
+                      "phase" = c(1),
+                      "value" = c(0),
+                      "sizefreq_method" = c(1))
+rownames(lambdas) <- c("CAAL_CA_Growth")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+
+
 ##########################################################################################-
 #
 # STAR Panel Requests ----
