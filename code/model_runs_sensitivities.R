@@ -4651,5 +4651,5 @@ pp <- SS_output(here('models', '_sensitivities', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-pp$sigma_R_info #0.78
+pp$sigma_R_info #0.82
 
