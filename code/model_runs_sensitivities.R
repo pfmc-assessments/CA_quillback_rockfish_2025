@@ -4119,14 +4119,14 @@ plot_compare_growth(models = xx,
 # ## Request 11 - redo request 7b using additional rec sources NOT USED --------------------------------------------------------
 # 
 # #During discussion it was noted that surrendered fish and CDFW Gfish columns should be switched
-# #To capture all ages from recreational sources, we should add both in. 
+# #To capture all ages from recreational sources, we should add both in.
 # #Thus redo request 7b but include the 55 fish from RBG sources
 # 
 # new_name <- "STAR_request11_redo7b"
 # 
 # mod <- base_mod
 # 
-# #Remove growth fleet CAAL data 
+# #Remove growth fleet CAAL data
 # mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
 # 
 # #Add in other Rec related CAAL and assign to that fleet
@@ -4161,10 +4161,10 @@ plot_compare_growth(models = xx,
 # SS_write(mod, here(sens_dir, new_name),
 #          overwrite = TRUE)
 # 
-# r4ss::run(dir = here(sens_dir, new_name), 
-#           exe = here('models/ss3_win.exe'), 
-#           extras = '-nohess', 
-#           show_in_console = TRUE, 
+# r4ss::run(dir = here(sens_dir, new_name),
+#           exe = here('models/ss3_win.exe'),
+#           extras = '-nohess',
+#           show_in_console = TRUE,
 #           skipfinished = FALSE)
 # 
 # pp <- SS_output(here(sens_dir, new_name))
@@ -4186,8 +4186,8 @@ plot_compare_growth(models = xx,
 #          dir = here('models', '_sensitivities', new_name),
 #          overwrite = TRUE)
 # 
-# r4ss::run(dir = here('models', '_sensitivities', new_name), 
-#           exe = here('models/ss3_win.exe'), 
+# r4ss::run(dir = here('models', '_sensitivities', new_name),
+#           exe = here('models/ss3_win.exe'),
 #           extras = '-nohess',
 #           show_in_console = TRUE,
 #           skipfinished = FALSE)
@@ -4195,11 +4195,11 @@ plot_compare_growth(models = xx,
 # #Now iteratively reweight based on weight = 1 run and reassign weights
 # pp <- SS_output(here('models', '_sensitivities', new_name))
 # iter <- 3
-# dw <- r4ss::tune_comps(replist = pp, 
-#                        option = 'Francis', 
-#                        dir = here('models', '_sensitivities', new_name), 
-#                        exe = here('models/ss3_win.exe'), 
-#                        niters_tuning = iter, 
+# dw <- r4ss::tune_comps(replist = pp,
+#                        option = 'Francis',
+#                        dir = here('models', '_sensitivities', new_name),
+#                        exe = here('models/ss3_win.exe'),
+#                        niters_tuning = iter,
 #                        #extras = '-nohess',
 #                        allow_up_tuning = TRUE,
 #                        show_in_console = TRUE)
@@ -4212,7 +4212,7 @@ plot_compare_growth(models = xx,
 # 
 # #Our reweighting goes wonky and wants to upweight rec ages, which then induces
 # #odd bias adjustment. Since we dont like this run anyway, dont suggest doing
-# #request 11 with this data added. 
+# #request 11 with this data added.
 # 
 # #Comparison plots
 # 
