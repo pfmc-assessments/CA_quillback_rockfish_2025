@@ -4229,3 +4229,102 @@ plot_compare_growth(models = xx,
                                      'CCFRP ages to CCFRP fleet',
                                      'CCFRP and some rec growth fleet ages to fleets'))
 
+######-
+## STAR Request 12 Step 1--------------------------------------------------------
+# Adjust main period start to 1994
+
+new_name <- 'STAR_Req12_Step1'
+
+mod <- base_mod
+
+mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+mod$ctl$MainRdevYrFirst <- 1994
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+
+
+## STAR Request 12 Step 2--------------------------------------------------------
+# Adjust main period start to 1994
+
+new_name <- 'STAR_Req12_Step2'
+
+# Update sigmaR 1st time to 0.889584
+
+mod <- base_mod
+
+mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+mod$ctl$MainRdevYrFirst <- 1994
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
+
+## STAR Request 12 Step 3--------------------------------------------------------
+# Adjust main period start to 1994
+
+new_name <- 'STAR_Req12_Step3'
+
+# Update sigmaR 1st time to 1.053443
+
+mod <- base_mod
+
+mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+mod$ctl$MainRdevYrFirst <- 1994
+mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]  # 1.1362739
+
+##Comparison plots
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_Req12_Step1"),
+                                                 file.path('_sensitivities', "STAR_Req12_Step3"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'Rec Main 1994',
+                                     'Rec Main 1994, sigmaR = 1.0534'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topleft",
+                    plotdir = here('models', '_sensitivities', "STAR_Req12_Step3"))
+dev.off()
+
+
