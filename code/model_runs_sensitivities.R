@@ -4209,25 +4209,28 @@ plot_sel_all(pp)
 
 pp$sigma_R_info #0.98
 
-#For STAR presentation
+#Our reweighting goes wonky and wants to upweight rec ages, which then induces
+#odd bias adjustment. Since we dont like this run anyway, dont suggest doing
+#request 11 with this data added. 
+
+#Comparison plots
+
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
                                       subdir = c(base_mod_name,
                                                  file.path('_sensitivities', "STAR_request7_CCFRPages_reweight"),
-                                                 file.path('_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"))))
+                                                 file.path('_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"),
+                                                 file.path('_sensitivities', "STAR_request11_redo7b_reweight"))))
 
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base',
                                      'CCFRP growth fleet ages to CCFRP fleet',
-                                     'CCFRP and some rec growth fleet ages to CCFRP and rec fleet'),
+                                     'CCFRP and some rec growth fleet ages to CCFRP and rec fleet',
+                                     'CCFRP and some more rec growth fleet ages to CCFRP and rec fleet'),
                     subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
-                    plotdir = here('models', '_sensitivities', "STAR_request7b_CCFRP_rec_ages_reweight"))
+                    plotdir = here('models', '_sensitivities', new_name))
 dev.off()
 
-plot_compare_growth(models = xx,
-                    new_name = "STAR_request7b_CCFRP_rec_ages_reweight",
-                    legend_names = c('Base',
-                                     'CCFRP ages to CCFRP fleet',
-                                     'CCFRP and some rec growth fleet ages to fleets'))
+
 
 ######-
 ## STAR Request 12 Step 1--------------------------------------------------------
@@ -4326,5 +4329,4 @@ SSsummarize(xx) |>
                     subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topleft",
                     plotdir = here('models', '_sensitivities', "STAR_Req12_Step3"))
 dev.off()
-
 
