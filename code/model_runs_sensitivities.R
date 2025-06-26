@@ -4502,6 +4502,7 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 
 alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
 
@@ -4531,6 +4532,7 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 
 alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
 
@@ -4559,6 +4561,7 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 
 alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]  # 1.140418
 
@@ -4575,4 +4578,78 @@ SSsummarize(xx) |>
                     subplots = c(1,3, 9, 11), print = TRUE, legendloc = "topright",
                     plotdir = here('models', '_sensitivities', "STAR_Req12_Step3"))
 dev.off()
+
+
+######-
+## Request 13 - assign growth fleet ages to early year and reweight --------------------------------------------------------
+
+#Collapse the growth fleet comps into 1920
+
+new_name <- "STAR_request13_collapseGrowth"
+
+mod <- base_mod
+
+#Remove growth fleet CAAL data and add in CCFRP only CAAL and assign to that fleet
+mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
+
+CAAL.1920 <- read.csv(here("data", "forSS3", "CAAL_noncommercial_all1920_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 3) %>%
+  as.data.frame()
+names(CAAL.1920) <- names(mod$dat$agecomp)
+
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, CAAL.1920)
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+#Copy model from request 13 and now reweight
+
+new_name <- "STAR_request13_collapseGrowth_reweight"
+
+mod <- SS_read(here('models', '_sensitivities', "STAR_request13_collapseGrowth"))
+
+#Run based on weights set to one
+mod$ctl$Variance_adjustment_list$value <-  1
+
+SS_write(mod,
+         dir = here('models', '_sensitivities', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', '_sensitivities', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess',
+          show_in_console = TRUE,
+          skipfinished = FALSE)
+
+#Now iteratively reweight based on weight = 1 run and reassign weights
+pp <- SS_output(here('models', '_sensitivities', new_name))
+iter <- 3
+dw <- r4ss::tune_comps(replist = pp, 
+                       option = 'Francis', 
+                       dir = here('models', '_sensitivities', new_name), 
+                       exe = here('models/ss3_win.exe'), 
+                       niters_tuning = iter, 
+                       #extras = '-nohess',
+                       allow_up_tuning = TRUE,
+                       show_in_console = TRUE)
+
+pp <- SS_output(here('models', '_sensitivities', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+pp$sigma_R_info #0.78
 

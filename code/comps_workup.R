@@ -668,6 +668,30 @@ write.csv(caal_otherRec, here("data", "forSS3", paste0("CAAL_noncommercial_possi
                                                        "_", age_bins[1], "_", tail(age_bins,1),
                                                        ".csv")), row.names = FALSE)
 
+##
+#For STAR panel request 13 - compressing growth fleet ages into 1920
+##
+
+#For all non-commercial
+
+temp <- age_ca %>% dplyr::filter(fleet1 == "Growth")
+temp$year = 1920
+
+caal.compress <-  nwfscSurvey::get_raw_caal(
+  data = temp, 
+  len_bins = length_bins,
+  age_bins = age_bins,
+  length_column_name = "length_cm",
+  age_column_name = "age",
+  month = 7,
+  fleet = "growthCAALcompressed",
+  dir = NULL)
+
+write.csv(caal.compress, here("data", "forSS3", paste0("CAAL_noncommercial_all1920_unsexed_",
+                                              length_bins[1], "_", tail(length_bins,1),
+                                              "_", age_bins[1], "_", tail(age_bins,1),
+                                              ".csv")), row.names = FALSE)
+
 
 ######- 
 ####  Growth fleet N table -----
