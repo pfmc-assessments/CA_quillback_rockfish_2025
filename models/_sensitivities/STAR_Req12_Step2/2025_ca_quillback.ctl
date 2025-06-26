@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-06-25  19:00:21
+#C file write time: 2025-06-26  08:48:56
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -76,7 +76,7 @@
 #_LO	HI	INIT	PRIOR	PR_SD	PR_type	PHASE	env-var	use_dev	dev_mnyr	dev_mxyr	dev_PH	Block	Blk_Fxn # parm_name
    1	 20	       5	   5	   5	0	  1	0	0	0	0	0	0	0	#_SR_LN(R0)  
  0.2	  1	    0.72	0.72	0.16	2	 -7	0	0	0	0	0	0	0	#_SR_BH_steep
-0.15	0.9	0.889584	 0.6	 0.2	0	-99	0	0	0	0	0	0	0	#_SR_sigmaR  
+0.15	0.9	0.884558	 0.6	 0.2	0	-99	0	0	0	0	0	0	0	#_SR_sigmaR  
   -2	  2	       0	   0	   2	0	-99	0	0	0	0	0	0	0	#_SR_regime  
    0	  0	       0	   0	   0	0	-99	0	0	0	0	0	0	0	#_SR_autocorr
 #_no timevary SR parameters
@@ -86,7 +86,7 @@
 2 #_recdev phase
 1 # (0/1) to read 13 advanced options
 1940 #_recdev_early_start (0=none; neg value makes relative to recdev_start)
--5 #_recdev_early_phase
+5 #_recdev_early_phase
 6 #_forecast_recruitment phase (incl. late recr) (0 value resets to maxphase+1)
 1 #_lambda for Fcast_recr_like occurring before endyr+1
 1993 #_last_yr_nobias_adj_in_MPD; begin of ramp

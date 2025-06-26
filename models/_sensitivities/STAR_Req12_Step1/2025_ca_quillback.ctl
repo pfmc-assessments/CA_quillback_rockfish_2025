@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-06-25  18:56:37
+#C file write time: 2025-06-26  08:42:01
 #
 0 # 0 means do not read wtatage.ss; 1 means read and usewtatage.ss and also read and use growth parameters
 1 #_N_Growth_Patterns
@@ -86,7 +86,7 @@
 2 #_recdev phase
 1 # (0/1) to read 13 advanced options
 1940 #_recdev_early_start (0=none; neg value makes relative to recdev_start)
--5 #_recdev_early_phase
+5 #_recdev_early_phase
 6 #_forecast_recruitment phase (incl. late recr) (0 value resets to maxphase+1)
 1 #_lambda for Fcast_recr_like occurring before endyr+1
 1993 #_last_yr_nobias_adj_in_MPD; begin of ramp

@@ -4434,7 +4434,7 @@ new_name <- 'STAR_Req12_Step1'
 
 mod <- base_mod
 
-mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+#mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
 mod$ctl$MainRdevYrFirst <- 1994
 
 # Write model and run
@@ -4449,7 +4449,6 @@ r4ss::run(dir = here(sens_dir, new_name),
 
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
 
 alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
 
@@ -4459,11 +4458,11 @@ alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sig
 
 new_name <- 'STAR_Req12_Step2'
 
-# Update sigmaR 1st time to 0.889584
+# Update sigmaR 1st time to 0.8845576
 
 mod <- base_mod
 
-mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+#mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
 mod$ctl$MainRdevYrFirst <- 1994
 mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
 
@@ -4487,11 +4486,11 @@ alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sig
 
 new_name <- 'STAR_Req12_Step3'
 
-# Update sigmaR 1st time to 1.053443
+# Update sigmaR 1st time to 1.053906
 
 mod <- base_mod
 
-mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
+#mod$ctl$recdev_early_phase <- -5 #turn off early recdevs
 mod$ctl$MainRdevYrFirst <- 1994
 mod$ctl$SR_parms["SR_sigmaR", "INIT"] <- as.numeric(alt_sigmaR)
 
@@ -4508,7 +4507,7 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 
-alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]  # 1.1362739
+alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]  # 1.140418
 
 ##Comparison plots
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
