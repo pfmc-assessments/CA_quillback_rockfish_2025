@@ -546,6 +546,27 @@ write.csv(afs_nsamp_nonccfrp$unsexed,
 
 #Dont need FAA for the growth fleet so no faa marginal age comps
 
+##
+#For STAR panel request 11 - redoing request 7 as marginals
+##
+
+afs_nsamp_otherRec <-  nwfscSurvey::get_raw_comps(
+  data = age_ca %>% dplyr::filter(source %in% c("Abrams", "Cooperative", "CRFS")), 
+  comp_bins = age_bins,
+  comp_column_name = "age",
+  two_sex_comps = FALSE,
+  input_n_method = c("total_samples"),
+  month = 7,
+  fleet = "rec",
+  dir = NULL)
+
+write.csv(afs_nsamp_otherRec, 
+          here("data", "forSS3", paste0("Acomps_possibleRec_unsexed_raw_", 
+                                        age_bins[1], "_", tail(age_bins,1), 
+                                        ".csv")), row.names = FALSE)
+
+
+
 
 #######-
 ### Conditionals ----
