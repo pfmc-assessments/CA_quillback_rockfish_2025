@@ -10418,7 +10418,7 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 
                                filename = "historical_comparison.png",
-                               legendlabels = c('2025 pre-star base model', '2021 model'), 
+                               legendlabels = c('2025 post-star base model', '2021 model'), 
                                legendloc = 'bottomleft',
                                hessian = c(TRUE, TRUE),
                                subplot1 = 18,
@@ -10436,3 +10436,22 @@ new_name <- "6_0_1_preStarBase"
 old_name <- "STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt"
 
 #Write code here to copy this automatically
+
+
+###Historical analysis figures
+new_name <- "0_0_2_2025setup"
+base_mod_name <- "6_0_1_postStarBase"
+
+#get the report files - need to look in the results spreadsheet to get the order
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,new_name))))
+
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = "historical_comparison_poststar.png",
+                               legendlabels = c('2025 post-star base model', '2021 model'), 
+                               legendloc = 'bottomleft',
+                               hessian = c(TRUE, TRUE),
+                               subplot1 = 18,
+                               subplot2 = 11,
+                               endyrvec = c(2025, 2021))

@@ -221,10 +221,11 @@ R0_dir <- here('models', glue::glue(base_model,'_profile_SR_LN(R0)'))
 #get the report files 
 xx <- SSgetoutput(dirvec = R0_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10))
 
+dev.off()
 vals <- c(seq(3.4, 4.3, by = .1))
 R0_names <- paste0("log(R0) =", vals)
 r4ss::plot_twopanel_comparison(xx, 
-                               dir = here(glue::glue(base_model, '_profile_SR_LN(R0)')),#here('report', 'figures'), 
+                               dir = here('models', glue::glue( base_model, '_profile_SR_LN(R0)')), #here('report', 'figures'), 
                                filename = "R0_profile_bio_comparison.png",
                                legendlabels = c('Base model', R0_names), 
                                legendloc = 'bottomleft',
@@ -592,7 +593,7 @@ mod_labels <- paste0("Data -",peels," years")
                                      xx$replist14, xx$replist15, xx$replist16,
                                      xx$replist3, xx$replist4, xx$replist5,
                                      xx$replist6, xx$replist7, xx$replist8),
-                                dir = here('report', 'figures'),
+                                dir = here('models', glue::glue(base_model, '_retro_15_yr_peel')),#here('report', 'figures'),
                                 filename = "retro_bio_comparison.png",
                                 legendlabels = c('Base model', mod_labels),
                                 legendloc = 'bottomleft',
