@@ -10426,3 +10426,13 @@ r4ss::plot_twopanel_comparison(xx,
                                endyrvec = c(2025, 2021))
 
 
+####------------------------------------------------#
+## 6_0_1_postStarBase ----
+####------------------------------------------------#
+
+#Copy the model from the sensitivities
+
+new_name <- "6_0_1_preStarBase"
+old_name <- "STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt"
+
+#Write code here to copy this automatically
