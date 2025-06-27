@@ -11,6 +11,10 @@ plot_compare_growth <- function(models = xx,
                                 max_age = 60){
 
 qlbk <- read.csv(here("data", "growth_data_inmodel_forplots.csv"))
+qlbk_temp <- qlbk %>%
+        filter(project %in% c('CCFRPFarallons', 'CCFRPNotFarallons', 'pacfin', 'Abrams')) %>%
+        filter(InModel == 'Included in base model')
+qlbk <- qlbk_temp
 #Figure out how many runs you're looking at
  n_runs <- length(xx)
 
@@ -90,7 +94,7 @@ else {age_length = rbind(age_length, preds)
   	xlab("Age (years)") + ylab("Length (cm)") +
    scale_color_viridis_d(begin = 0, end = .7) 
 
-   ggsave(filename = file.path(sens_dir, new_name,"compare_growth.jpg"),
+   ggsave(filename = file.path(sens_dir, new_name,"compare_growth_inmodel_only.jpg"),
        width = 16, height = 8)
 
 }

@@ -5173,7 +5173,7 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 pp$sigma_R_info #0.85
-
+pp$OFL_sigma
 #This looks good enough
 
 #Reweight this once doesn't greatly differ weights, does downweight CCFRP 
@@ -5197,3 +5197,7 @@ SSsummarize(xx) |>
 
 
 
+plot_compare_growth( new_name = "STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt",
+                                legend_names = c('Base',
+                                     'STAR_request14_CCFRP_BiasAdj',
+                                     'STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt'))

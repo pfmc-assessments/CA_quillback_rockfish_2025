@@ -1,6 +1,6 @@
 ##########################################################################################-
 #
-# This script runs the required proviles for 2025 California Quillback Rockfish 
+# This script runs the required profiles for 2025 California Quillback Rockfish 
 #   By: Brian Langseth, Melissa Monk, Julia Coates
 #
 #
@@ -17,7 +17,7 @@ library(r4ss)
 library(here)
 library(tictoc)
 
-base_model <- '5_1_3_preStarBase'
+base_model <- '6_0_1_postStarBase' # '5_1_3_preStarBase'
 
 directory <-  here::here("models")
 exe_loc <- here::here(directory, 'ss3_win.exe')
@@ -64,7 +64,7 @@ future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)
 
 tictoc::tic()
 set.seed(12345)
-run_diagnostics(mydir = here('models'), model_settings = settings)
+#run_diagnostics(mydir = here('models'), model_settings = settings)
 tictoc::toc()
 
 # back to sequential processing
@@ -113,7 +113,7 @@ xx <- SSgetoutput(dirvec = m_dir, keyvec = c("",seq(10,1,by = -1), seq(11, 17,by
 vals <- seq(.02, .1 , by = 0.005)
 m_names <- c("Base model", paste0("M =", vals))
 r4ss::plot_twopanel_comparison(xx, 
-                               dir = here('report', 'figures'), 
+                               dir = here ('models',glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1')),#('report', 'figures'), 
                                filename = "m_profile_bio_comparison.png",
                                legendlabels = m_names,#c('Base model', m_names), 
                                legendloc = 'bottomleft',
@@ -122,10 +122,10 @@ r4ss::plot_twopanel_comparison(xx,
                                subplot2 = 3,
                                endyrvec = 2025)
 
-#R0 figs - copy to report folder
-file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'piner_panel_NatM_uniform_Fem_GP_1.png'),
-          to = here('report', 'figures','piner_panel_NatM_uniform_Fem_GP_1.png'), 
-          overwrite = TRUE, recursive = FALSE)
+#M figs - copy to report folder
+#file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'piner_panel_NatM_uniform_Fem_GP_1.png'),
+#          to = here('report', 'figures','piner_panel_NatM_uniform_Fem_GP_1.png'), 
+#          overwrite = TRUE, recursive = FALSE)
 
 
 
@@ -169,7 +169,7 @@ xx <- SSgetoutput(dirvec = h_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10))
 vals <- seq(0.5, .95, by = 0.05)
 h_names <- paste0("h =", vals)
 r4ss::plot_twopanel_comparison(xx, 
-                               dir = here('report', 'figures'), 
+                               dir = here('models',glue::glue(base_model, '_profile_SR_BH_steep')), #here('report', 'figures'), 
                                filename = "h_profile_bio_comparison.png",
                                legendlabels = c('Base model', h_names), 
                                legendloc = 'bottomleft',
@@ -179,9 +179,9 @@ r4ss::plot_twopanel_comparison(xx,
                                endyrvec = 2025)
 
 #h figs - copy to report folder
-file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'piner_panel_SR_BH_steep.png'),
-          to = here('report', 'figures','piner_panel_SR_BH_steep.png'), 
-          overwrite = TRUE, recursive = FALSE)
+#file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'piner_panel_SR_BH_steep.png'),
+#          to = here('report', 'figures','piner_panel_SR_BH_steep.png'), 
+#          overwrite = TRUE, recursive = FALSE)
 
 # Individual R0 profile --------------------------------------------------------------
 
@@ -224,7 +224,7 @@ xx <- SSgetoutput(dirvec = R0_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10))
 vals <- c(seq(3.4, 4.3, by = .1))
 R0_names <- paste0("log(R0) =", vals)
 r4ss::plot_twopanel_comparison(xx, 
-                               dir = here('report', 'figures'), 
+                               dir = here(glue::glue(base_model, '_profile_SR_LN(R0)')),#here('report', 'figures'), 
                                filename = "R0_profile_bio_comparison.png",
                                legendlabels = c('Base model', R0_names), 
                                legendloc = 'bottomleft',
@@ -234,9 +234,9 @@ r4ss::plot_twopanel_comparison(xx,
                                endyrvec = 2025)
 
 #R0 figs - copy to report folder
-file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'piner_panel_SR_LN(R0).png'),
-          to = here('report', 'figures','piner_panel_SR_LN(R0).png'), 
-          overwrite = TRUE, recursive = FALSE)
+#file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'piner_panel_SR_LN(R0).png'),
+#          to = here('report', 'figures','piner_panel_SR_LN(R0).png'), 
+#          overwrite = TRUE, recursive = FALSE)
 
 
 # Individual sigmaR profile -------------------------------------------------------
@@ -273,238 +273,238 @@ file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'p
 
 # Individual von Bert k profile -------------------------------------------------------
 
-profile.settings <- nwfscDiag::get_settings_profile(
-  parameters = 'VonBert_K_Fem_GP_1', 
-  low = 0.07, 
-  high = 0.2,
-  step_size = 0.01,
-  param_space = 'real',
-  use_prior_like = 1) 
+# profile.settings <- nwfscDiag::get_settings_profile(
+#   parameters = 'VonBert_K_Fem_GP_1', 
+#   low = 0.07, 
+#   high = 0.2,
+#   step_size = 0.01,
+#   param_space = 'real',
+#   use_prior_like = 1) 
 
-settings <- nwfscDiag::get_settings(
-  mydir = directory,
-  settings = list(
-    base_name = base_model,
-    run = "profile",
-    profile_details = profile.settings,
-    exe = exe_loc,
-    extras = '-nohess',
-    usepar = FALSE,
-    init_values_src = 0))
+# settings <- nwfscDiag::get_settings(
+#   mydir = directory,
+#   settings = list(
+#     base_name = base_model,
+#     run = "profile",
+#     profile_details = profile.settings,
+#     exe = exe_loc,
+#     extras = '-nohess',
+#     usepar = FALSE,
+#     init_values_src = 0))
 
-# set up parallel stuff
-future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+# # set up parallel stuff
+# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
 
-tictoc::tic()
-run_diagnostics(mydir = here('models'), model_settings = settings)
-tictoc::toc()
+# tictoc::tic()
+# run_diagnostics(mydir = here('models'), model_settings = settings)
+# tictoc::toc()
 
-# back to sequential processing
-future::plan(future::sequential)
+# # back to sequential processing
+# future::plan(future::sequential)
 
-#K two panel plots - with uncertainty
-k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
+# #K two panel plots - with uncertainty
+# k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
 
-#get the report files
-xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10,11,12,13))
+# #get the report files
+# xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10,11,12,13))
 
-vals <- seq(0.08, 0.2, by = 0.01)
-k_names <- c("Base model", paste0("K =", vals))
-r4ss::plot_twopanel_comparison(xx,
-                               dir = here('report', 'figures'),
-                               filename = "k_profile_bio_comparison.png",
-                               legendlabels = c(k_names),
-                               legendloc = 'bottomleft',
-                               hessian = FALSE,
-                               subplot1 = 1,
-                               subplot2 = 3,
-                               endyrvec = 2025)
+# vals <- seq(0.08, 0.2, by = 0.01)
+# k_names <- c("Base model", paste0("K =", vals))
+# r4ss::plot_twopanel_comparison(xx,
+#                                dir = here('report', 'figures'),
+#                                filename = "k_profile_bio_comparison.png",
+#                                legendlabels = c(k_names),
+#                                legendloc = 'bottomleft',
+#                                hessian = FALSE,
+#                                subplot1 = 1,
+#                                subplot2 = 3,
+#                                endyrvec = 2025)
 
-#K figs - copy to report folder
-file.copy(from = here('models', glue::glue(base_model, '_profile_VonBert_K_Fem_GP_1'), 'piner_panel_VonBert_K_Fem_GP_1.png'),
-          to = here('report', 'figures','piner_panel_VonBert_K_Fem_GP_1.png'), 
-          overwrite = TRUE, recursive = FALSE)
+# #K figs - copy to report folder
+# file.copy(from = here('models', glue::glue(base_model, '_profile_VonBert_K_Fem_GP_1'), 'piner_panel_VonBert_K_Fem_GP_1.png'),
+#           to = here('report', 'figures','piner_panel_VonBert_K_Fem_GP_1.png'), 
+#           overwrite = TRUE, recursive = FALSE)
 
 #The reason why the profiles are less extreme than in 2021 is that
 #now with parameters estimated, changes in one can be offset by changes in others
 #This may be the reason why the profile for K has changed direction.
 #I will try profiling when Linf is fixed. 
-k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
-xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",seq(1:13)))
-for(i in c(1:14)){
-  print(xx[[i]]$parameters[xx[[i]]$parameters$Label == "L_at_Amax_Fem_GP_1", "Value"])
-}
+# k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
+# xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",seq(1:13)))
+# for(i in c(1:14)){
+#   print(xx[[i]]$parameters[xx[[i]]$parameters$Label == "L_at_Amax_Fem_GP_1", "Value"])
+# }
 
 
 # Individual von Bert k profile with other growth params fixed -------------------------------------------------------
 
-#Create model with fixed non-K growth parameters
-new_name <- "5_1_3_preStarBase_fixGrowthNonK"
-old_name <- "5_1_3_preStarBase"
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               overwrite = TRUE)
-mod <- SS_read(here('models',new_name))
-mod$ctl$MG_parms[c("L_at_Amin_Fem_GP_1", "L_at_Amax_Fem_GP_1", "CV_young_Fem_GP_1", "CV_old_Fem_GP_1"), 
-                 c("INIT", "PRIOR", "PHASE")] <- c(9.80221, 42.7486, 0.18366, 0.0854974,
-                                                   9.80221, 42.7486, 0.18366, 0.0854974,
-                                                   -3, -3, -3, -3)
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
-pp <- SS_output(here('models', new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
+# #Create model with fixed non-K growth parameters
+# new_name <- "5_1_3_preStarBase_fixGrowthNonK"
+# old_name <- "5_1_3_preStarBase"
+# copy_SS_inputs(dir.old = here('models', old_name), 
+#                dir.new = here('models', new_name),
+#                overwrite = TRUE)
+# mod <- SS_read(here('models',new_name))
+# mod$ctl$MG_parms[c("L_at_Amin_Fem_GP_1", "L_at_Amax_Fem_GP_1", "CV_young_Fem_GP_1", "CV_old_Fem_GP_1"), 
+#                  c("INIT", "PRIOR", "PHASE")] <- c(9.80221, 42.7486, 0.18366, 0.0854974,
+#                                                    9.80221, 42.7486, 0.18366, 0.0854974,
+#                                                    -3, -3, -3, -3)
+# SS_write(mod,
+#          dir = here('models', new_name),
+#          overwrite = TRUE)
+# r4ss::run(dir = here('models', new_name), 
+#           exe = here('models/ss3_win.exe'), 
+#           extras = '-nohess',
+#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
+#           skipfinished = FALSE)
+# pp <- SS_output(here('models', new_name))
+# SS_plots(pp, plot = c(1:26))
+# plot_sel_all(pp)
 
 
-#Now profile over K
-profile.settings <- nwfscDiag::get_settings_profile(
-  parameters = 'VonBert_K_Fem_GP_1', 
-  low = 0.07, 
-  high = 0.2,
-  step_size = 0.01,
-  param_space = 'real',
-  use_prior_like = 1) 
+# #Now profile over K
+# profile.settings <- nwfscDiag::get_settings_profile(
+#   parameters = 'VonBert_K_Fem_GP_1', 
+#   low = 0.07, 
+#   high = 0.2,
+#   step_size = 0.01,
+#   param_space = 'real',
+#   use_prior_like = 1) 
 
-settings <- nwfscDiag::get_settings(
-  mydir = directory,
-  settings = list(
-    base_name = "5_1_3_preStarBase_fixGrowthNonK",
-    run = "profile",
-    profile_details = profile.settings,
-    exe = exe_loc,
-    extras = '-nohess',
-    usepar = FALSE,
-    init_values_src = 0))
+# settings <- nwfscDiag::get_settings(
+#   mydir = directory,
+#   settings = list(
+#     base_name = "5_1_3_preStarBase_fixGrowthNonK",
+#     run = "profile",
+#     profile_details = profile.settings,
+#     exe = exe_loc,
+#     extras = '-nohess',
+#     usepar = FALSE,
+#     init_values_src = 0))
 
-# set up parallel stuff
-future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+# # set up parallel stuff
+# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
 
-tictoc::tic()
-run_diagnostics(mydir = here('models'), model_settings = settings)
-tictoc::toc()
+# tictoc::tic()
+# run_diagnostics(mydir = here('models'), model_settings = settings)
+# tictoc::toc()
 
-# back to sequential processing
-future::plan(future::sequential)
-
-
-# Individual von Bert k profile with all growth params fixed and without ages -------------------------------------------------------
-
-#Create model with fixed non-K growth parameters
-new_name <- "5_1_3_preStarBase_fixGrowth_noAges"
-old_name <- "5_1_3_preStarBase"
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               overwrite = TRUE)
-mod <- SS_read(here('models',new_name))
-mod$ctl$MG_parms[c("L_at_Amin_Fem_GP_1", "L_at_Amax_Fem_GP_1", "VonBert_K_Fem_GP_1", "CV_young_Fem_GP_1", "CV_old_Fem_GP_1"), 
-                 c("INIT", "PRIOR", "PHASE")] <- c(9.80221, 42.7486, 0.1261450, 0.18366, 0.0854974,
-                                                   9.80221, 42.7486, 0.1261450, 0.18366, 0.0854974,
-                                                   -3, -3, -3, -3, -3)
-mod$dat$agecomp$year <- -abs(mod$dat$agecomp$year)
-SS_write(mod,
-         dir = here('models', new_name),
-         overwrite = TRUE)
-r4ss::run(dir = here('models', new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
-          show_in_console = TRUE, #comment out if you dont want to watch model iterations
-          skipfinished = FALSE)
-pp <- SS_output(here('models', new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
+# # back to sequential processing
+# future::plan(future::sequential)
 
 
-#Now profile over K
-profile.settings <- nwfscDiag::get_settings_profile(
-  parameters = 'VonBert_K_Fem_GP_1', 
-  low = 0.07, 
-  high = 0.2,
-  step_size = 0.01,
-  param_space = 'real',
-  use_prior_like = 1) 
+# # Individual von Bert k profile with all growth params fixed and without ages -------------------------------------------------------
 
-settings <- nwfscDiag::get_settings(
-  mydir = directory,
-  settings = list(
-    base_name = "5_1_3_preStarBase_fixGrowth_noAges",
-    run = "profile",
-    profile_details = profile.settings,
-    exe = exe_loc,
-    extras = '-nohess',
-    usepar = FALSE,
-    init_values_src = 0))
-
-# set up parallel stuff
-future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
-
-tictoc::tic()
-run_diagnostics(mydir = here('models'), model_settings = settings)
-tictoc::toc()
-
-# back to sequential processing
-future::plan(future::sequential)
+# #Create model with fixed non-K growth parameters
+# new_name <- "5_1_3_preStarBase_fixGrowth_noAges"
+# old_name <- "5_1_3_preStarBase"
+# copy_SS_inputs(dir.old = here('models', old_name), 
+#                dir.new = here('models', new_name),
+#                overwrite = TRUE)
+# mod <- SS_read(here('models',new_name))
+# mod$ctl$MG_parms[c("L_at_Amin_Fem_GP_1", "L_at_Amax_Fem_GP_1", "VonBert_K_Fem_GP_1", "CV_young_Fem_GP_1", "CV_old_Fem_GP_1"), 
+#                  c("INIT", "PRIOR", "PHASE")] <- c(9.80221, 42.7486, 0.1261450, 0.18366, 0.0854974,
+#                                                    9.80221, 42.7486, 0.1261450, 0.18366, 0.0854974,
+#                                                    -3, -3, -3, -3, -3)
+# mod$dat$agecomp$year <- -abs(mod$dat$agecomp$year)
+# SS_write(mod,
+#          dir = here('models', new_name),
+#          overwrite = TRUE)
+# r4ss::run(dir = here('models', new_name), 
+#           exe = here('models/ss3_win.exe'), 
+#           extras = '-nohess',
+#           show_in_console = TRUE, #comment out if you dont want to watch model iterations
+#           skipfinished = FALSE)
+# pp <- SS_output(here('models', new_name))
+# SS_plots(pp, plot = c(1:26))
+# plot_sel_all(pp)
 
 
+# #Now profile over K
+# profile.settings <- nwfscDiag::get_settings_profile(
+#   parameters = 'VonBert_K_Fem_GP_1', 
+#   low = 0.07, 
+#   high = 0.2,
+#   step_size = 0.01,
+#   param_space = 'real',
+#   use_prior_like = 1) 
 
-# Individual Linf profile -------------------------------------------------------
+# settings <- nwfscDiag::get_settings(
+#   mydir = directory,
+#   settings = list(
+#     base_name = "5_1_3_preStarBase_fixGrowth_noAges",
+#     run = "profile",
+#     profile_details = profile.settings,
+#     exe = exe_loc,
+#     extras = '-nohess',
+#     usepar = FALSE,
+#     init_values_src = 0))
 
-profile.settings <- nwfscDiag::get_settings_profile(
-  parameters = 'L_at_Amax_Fem_GP_1', 
-  low = 40, 
-  high = 46,
-  step_size = 1,
-  param_space = 'real',
-  use_prior_like = 1) 
+# # set up parallel stuff
+# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
 
-settings <- nwfscDiag::get_settings(
-  mydir = directory,
-  settings = list(
-    base_name = base_model,
-    run = "profile",
-    profile_details = profile.settings,
-    exe = exe_loc,
-    extras = '-nohess',
-    usepar = FALSE,
-    init_values_src = 0))
+# tictoc::tic()
+# run_diagnostics(mydir = here('models'), model_settings = settings)
+# tictoc::toc()
 
-# set up parallel stuff
-future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+# # back to sequential processing
+# future::plan(future::sequential)
 
-tictoc::tic()
-run_diagnostics(mydir = here('models'), model_settings = settings)
-tictoc::toc()
 
-# back to sequential processing
-future::plan(future::sequential)
 
-#linf two panel plots - with uncertainty
-linf_dir <- here('models', glue::glue(base_model,'_profile_L_at_Amax_Fem_GP_1'))
+# # Individual Linf profile -------------------------------------------------------
 
-#get the report files
-xx <- SSgetoutput(dirvec = linf_dir, keyvec = c("", 3,2,1,4,5,6,7))
+# profile.settings <- nwfscDiag::get_settings_profile(
+#   parameters = 'L_at_Amax_Fem_GP_1', 
+#   low = 40, 
+#   high = 46,
+#   step_size = 1,
+#   param_space = 'real',
+#   use_prior_like = 1) 
 
-vals <- seq(40, 46, by = 1)
-linf_names <- c("Base model", paste0("Linf =", vals))
-r4ss::plot_twopanel_comparison(xx,
-                               dir = here('report', 'figures'),
-                               filename = "linf_profile_bio_comparison.png",
-                               legendlabels = linf_names,
-                               legendloc = 'bottomleft',
-                               hessian = FALSE,
-                               subplot1 = 1,
-                               subplot2 = 3,
-                               endyrvec = 2025)
+# settings <- nwfscDiag::get_settings(
+#   mydir = directory,
+#   settings = list(
+#     base_name = base_model,
+#     run = "profile",
+#     profile_details = profile.settings,
+#     exe = exe_loc,
+#     extras = '-nohess',
+#     usepar = FALSE,
+#     init_values_src = 0))
 
-#linf figs - copy to report folder
-file.copy(from = here('models', glue::glue(base_model, '_profile_L_at_Amax_Fem_GP_1'), 'piner_panel_L_at_Amax_Fem_GP_1.png'),
-          to = here('report', 'figures','piner_panel_L_at_Amax_Fem_GP_1.png'), 
-          overwrite = TRUE, recursive = FALSE)
+# # set up parallel stuff
+# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+
+# tictoc::tic()
+# run_diagnostics(mydir = here('models'), model_settings = settings)
+# tictoc::toc()
+
+# # back to sequential processing
+# future::plan(future::sequential)
+
+# #linf two panel plots - with uncertainty
+# linf_dir <- here('models', glue::glue(base_model,'_profile_L_at_Amax_Fem_GP_1'))
+
+# #get the report files
+# xx <- SSgetoutput(dirvec = linf_dir, keyvec = c("", 3,2,1,4,5,6,7))
+
+# vals <- seq(40, 46, by = 1)
+# linf_names <- c("Base model", paste0("Linf =", vals))
+# r4ss::plot_twopanel_comparison(xx,
+#                                dir = here('report', 'figures'),
+#                                filename = "linf_profile_bio_comparison.png",
+#                                legendlabels = linf_names,
+#                                legendloc = 'bottomleft',
+#                                hessian = FALSE,
+#                                subplot1 = 1,
+#                                subplot2 = 3,
+#                                endyrvec = 2025)
+
+# #linf figs - copy to report folder
+# file.copy(from = here('models', glue::glue(base_model, '_profile_L_at_Amax_Fem_GP_1'), 'piner_panel_L_at_Amax_Fem_GP_1.png'),
+#           to = here('report', 'figures','piner_panel_L_at_Amax_Fem_GP_1.png'), 
+#           overwrite = TRUE, recursive = FALSE)
 
 
  

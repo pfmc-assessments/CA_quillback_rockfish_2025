@@ -5,12 +5,15 @@ library(r4ss)
 library(ggplot2)
 library(cowplot)
 library(here)
-base_model <- '5_1_3_preStarBase' #<============== UPDATE
+base_model <- 'STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt' #'5_1_3_preStarBase' #<============== UPDATE
 
-setwd(here('models','_bivariate_profiles', 'M_and_h', base_model))
+bivar_dir <- here('models', '_bivariate_profiles')
+
+
+setwd(here('models','_sensitivities', base_model))
 mydir = getwd()
 #copy over base model and run it in the new folder
-copy_SS_inputs(dir.old = here('models', base_model), 
+copy_SS_inputs(dir.old = here('models','sensitivities', base_model), 
                dir.new = mydir,
                overwrite = TRUE)
 r4ss::run(dir = mydir, 
