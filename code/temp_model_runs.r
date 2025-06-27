@@ -9,6 +9,8 @@ library(dplyr)
 library(tictoc)
 library(nwfscSurvey)
 source(here('code/selexComp.R'))
+source(here('code/selexComp.R'))
+source(here('code/model_runs_growth_comparison.R'))
 
 sens_dir <- here('models', '_sensitivities')
 #Enter in base model from which to base sensitivities
@@ -16,41 +18,38 @@ base_mod_name <- '5_1_3_preStarBase' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
 ######-
-## Request  13 remove the growth fleet completely
-##
-new_name <- 'STAR_Request13_nogrowthfleet'
-old_name <- base_mod_name
+## Request 14 Add CCFRP to the CCFRP fleet and Abrams to the growth fleet
 
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here(sens_dir, new_name),
-               overwrite = TRUE)
+#Copy over Model 7 and then keep only positive years on 2010 and 2011
+#in the growth fleet
 
-mod <- SS_read(here(sens_dir,new_name))
+new_name <- "STAR_request14_CCFRPages_Abramsgrowth"
 
-#Remove growth fleet CAAL data 
+mod <- base_mod
+
+#Remove growth fleet CAAL data and add in CCFRP only CAAL and assign to that fleet
 mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"] <- -abs(mod$dat$agecomp[mod$dat$agecomp$fleet == 3, "year"])
 
+aa <- mod$dat$agecomp
+aa <- aa %>%
+    mutate(year = case_when(fleet = 3  ~ -abs(year), 
+                             TRUE ~ year)) %>%
+    mutate(year = case_when(fleet =3 & year = 2010 ~ abs(year), 
+                            TRUE ~ year))
+View(aa)
+& year %in% c(2010,2011) 
 
-# Write model and run
-SS_write(mod, here(sens_dir, new_name),
-         overwrite = TRUE)
+ccfrp.CAAL <- read.csv(here("data", "forSS3", "CAAL_noncommercial_ccfrp_unsexed_10_50_1_60.csv")) %>%
+  dplyr::mutate(dplyr::across(Lbin_lo:Lbin_hi, ~ match(., mod$dat$lbin_vector))) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = 4) %>%
+  as.data.frame()
+names(ccfrp.CAAL) <- names(mod$dat$agecomp)
 
-r4ss::run(dir = here(sens_dir, new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
+mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
 
-pp <- SS_output(here(sens_dir, new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
-
-######-
-## Request 13 remove the growth fleet completely - reweighting
-
-new_name <- "STAR_request13_nogrowthfleet_reweight"
-
-mod <- SS_read(here('models', '_sensitivities', "STAR_request13_nogrowthfleet"))
+#Set francis weight for growth fleet ages to be the same as for ccfrp
+mod$ctl$Variance_adjustment_list[6,2] <- 4
 
 #Run based on weights set to one
 mod$ctl$Variance_adjustment_list$value <-  1
@@ -65,35 +64,6 @@ r4ss::run(dir = here('models', '_sensitivities', new_name),
           show_in_console = TRUE,
           skipfinished = FALSE)
 
-#Now iteratively reweight based on weight = 1 run and reassign weights
-pp <- SS_output(here('models', '_sensitivities', new_name))
-iter <- 3
-dw <- r4ss::tune_comps(replist = pp, 
-                       option = 'Francis', 
-                       dir = here('models', '_sensitivities', new_name), 
-                       exe = here('models/ss3_win.exe'), 
-                       niters_tuning = iter, 
-                       #extras = '-nohess',
-                       allow_up_tuning = TRUE,
-                       show_in_console = TRUE)
-
-pp <- SS_output(here('models', '_sensitivities', new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
-
-alt_sigmaR <- pp$sigma_R_info[pp$sigma_R_info$period == "Main", "alternative_sigma_R"]
-pp$sigma_R_info
 
 
-
-
-
-
-
-
-
-
-xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
-                                        subdir = c(base_mod_name,
-                                                   file.path('_sensitivities', new_name)))))
 
