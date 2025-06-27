@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-06-26  18:55:49
+#C file write time: 2025-06-26  21:46:01
 #
 2025_ca_quillback.dat #_datfile
 2025_ca_quillback.ctl #_ctlfile

@@ -4744,8 +4744,9 @@ plot_compare_growth(models = xx,
                                      'STAR_request13_nogrowthfleet_reweight'),
                                 max_age = 60) 
 
-#####
-# Request 14----
+#####-
+## Request 14 - update bias adjust for request 7 run --------------------------------------------------------
+
 
 new_name <- "STAR_request14_CCFRP_BiasAdj"
 old_name <- "STAR_request7_CCFRPages_reweight"
@@ -4806,7 +4807,7 @@ pp <- SS_output(here('models', '_sensitivities', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
-pp <- SS_output(here('models', '_sensitivities', new_name), covar = TRUE)
+pp$sigma_R_info #0.8
 
 # Check new bias adjustment recommendation
 
@@ -4816,7 +4817,22 @@ biasadj <- SS_fitbiasramp(pp, verbose = TRUE)
 
 # These look good.  No need to adjust again.  Now reweight
 
-###################################
+#Compare this to the previous request 7 run without bias adj
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(file.path('_sensitivities', "STAR_request14_CCFRP_BiasAdj"),
+                                                 file.path('_sensitivities', "STAR_request7_CCFRPages_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Request 7 CCFRP growth fleet ages',
+                                     'Request 14 adjust bias ramp'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "bottomleft",
+                    plotdir = here('models', '_sensitivities', new_name))
+
+#####-
+## Now reweight. Given request 7 was already reweighted before bias correct
+## and doing the following reweighting did not greatly alter the model weights
+## nor the suggested bias adj ramp. I dont think this step is necessary.
+# We can present only the bias adjusted run
 
 new_name <- "STAR_request14_CCFRP_BiasAdj_reweight"
 old_name <- "STAR_request14_CCFRP_BiasAdj"
@@ -4868,7 +4884,7 @@ dw <- r4ss::tune_comps(replist = pp,
                        dir = here('models', '_sensitivities', new_name), 
                        exe = here('models/ss3_win.exe'), 
                        niters_tuning = iter, 
-                       extras = '-nohess',
+                       #extras = '-nohess',
                        allow_up_tuning = TRUE,
                        show_in_console = TRUE)
 
@@ -4876,9 +4892,23 @@ pp <- SS_output(here('models', '_sensitivities', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
+#Compare this to the previous request 7 run without bias adj
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(file.path('_sensitivities', "STAR_request7_CCFRPages_reweight"),
+                                                 file.path('_sensitivities', "STAR_request14_CCFRP_BiasAdj"),
+                                                 file.path('_sensitivities', "STAR_request14_CCFRP_BiasAdj_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Request 7 CCFRP growth fleet ages',
+                                     'Request 14 adjust bias ramp',
+                                     'Request 14 adjust bias ramp reweight'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "bottomleft",
+                    plotdir = here('models', '_sensitivities', new_name))
+
+
 
 ######-
-## Request 14 Add CCFRP to the CCFRP fleet and Abrams to the growth fleet
+## Request 14 Add CCFRP to the CCFRP fleet and Abrams to the growth fleet --------------------------------------------------------
 
 #Copy over Model 7 and then keep only positive years on 2010 and 2011
 #in the growth fleet
@@ -4908,10 +4938,10 @@ names(ccfrp.CAAL) <- names(mod$dat$agecomp)
 mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
 
 #Set francis weight for growth fleet ages to be the same as for ccfrp
-mod$ctl$Variance_adjustment_list[6,2] <- 4
+mod$ctl$Variance_adjustment_list[7,] <- mod$ctl$Variance_adjustment_list[6,]
+mod$ctl$Variance_adjustment_list[7,2] <- 4
+rownames(mod$ctl$Variance_adjustment_list)[7] <- "Variance_adjustment_list7"
 
-#Run based on weights set to one
-mod$ctl$Variance_adjustment_list$value <-  1
 
 SS_write(mod,
          dir = here('models', '_sensitivities', new_name),
@@ -4928,8 +4958,9 @@ pp <- SS_output(here('models', '_sensitivities', new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
+
 ######-
-## Request 14 reweight CCFRP to CCFRP fleet and Abrams to growth---------------------------------------------
+## Request 14 reweight CCFRP to CCFRP fleet and Abrams to growth ---------------------------------------------
 
 #Copy request 14 and reweight
 new_name <- "STAR_request14_CCFRPages_Abramsgrowth_reweight"
@@ -4957,24 +4988,9 @@ names(ccfrp.CAAL) <- names(mod$dat$agecomp)
 mod$dat$agecomp <- dplyr::bind_rows(mod$dat$agecomp, ccfrp.CAAL)
 
 #Set francis weight for growth fleet ages to be the same as for ccfrp
-mod$ctl$Variance_adjustment_list[6,2] <- 4
-
-#Run based on weights set to one
-mod$ctl$Variance_adjustment_list$value <-  1
-
-SS_write(mod,
-         dir = here('models', '_sensitivities', new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here('models', '_sensitivities', new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess',
-          show_in_console = TRUE,
-          skipfinished = FALSE)
-
-
-#Set francis weight for growth fleet ages to be the same as for ccfrp
-mod$ctl$Variance_adjustment_list[6,2] <- 4
+mod$ctl$Variance_adjustment_list[7,] <- mod$ctl$Variance_adjustment_list[6,]
+mod$ctl$Variance_adjustment_list[7,2] <- 4
+rownames(mod$ctl$Variance_adjustment_list)[7] <- "Variance_adjustment_list7"
 
 #Run based on weights set to one
 mod$ctl$Variance_adjustment_list$value <-  1
@@ -5006,6 +5022,20 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 pp$sigma_R_info #alternate 0.84
+
+
+#Compare this to the previous request 7 run without bias adj
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(file.path('_sensitivities', "STAR_request14_CCFRPages_Abramsgrowth"),
+                                                 file.path('_sensitivities', "STAR_request14_CCFRPages_Abramsgrowth_reweight"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Request 14 Abrams',
+                                     'Request 14 Abrams reweight'),
+                    subplots = c(1,3, 9, 11), print = TRUE, legendloc = "bottomleft",
+                    plotdir = here('models', '_sensitivities', new_name))
+
+
 
 ####------------------------------------------------#
 ## STAR_request14_CCFRPAbrams_biasAdjRamp ----
@@ -5072,4 +5102,98 @@ r4ss::run(dir = here(sens_dir, new_name),
 pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
+
+
+
+####------------------------------------------------#
+## STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt ----
+####------------------------------------------------#
+
+#Test whether a change to bias adjsut ramp is really necessary. 
+#Switch to a manual value based on trying to match data rather than the algorithm
+
+new_name <- "STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt"
+old_name <- "STAR_request14_CCFRPages_Abramsgrowth_reweight"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here(sens_dir, old_name), 
+               dir.new = here(sens_dir, new_name),
+               overwrite = TRUE)
+
+file.copy(from = file.path(here(sens_dir, old_name),"Report.sso"),
+          to = file.path(here(sens_dir, new_name),"Report.sso"), overwrite = TRUE)
+file.copy(from = file.path(here(sens_dir, old_name),"CompReport.sso"),
+          to = file.path(here(sens_dir,new_name),"CompReport.sso"), overwrite = TRUE)
+file.copy(from = file.path(here(sens_dir, old_name),"warning.sso"),
+          to = file.path(here(sens_dir,new_name),"warning.sso"), overwrite = TRUE)
+file.copy(from = file.path(here(sens_dir, old_name),"covar.sso"),
+          to = file.path(here(sens_dir,new_name),"covar.sso"), overwrite = TRUE)
+
+mod <- SS_read(here(sens_dir,new_name))
+
+pp <- SS_output(here(sens_dir,new_name), covar = TRUE)
+
+
+##
+#Make Changes
+##
+
+#Update bias adjust? Yes, all values
+pp$breakpoints_for_bias_adjustment_ramp
+
+biasadj <- SS_fitbiasramp(pp, verbose = TRUE)
+
+#This pattern doesnt look good. Match the data themselves
+mod$ctl$last_early_yr_nobias_adj <- 1995
+mod$ctl$first_yr_fullbias_adj <- 1998
+mod$ctl$last_yr_fullbias_adj <- 2016.5 
+mod$ctl$first_recent_yr_nobias_adj <- 2018 
+mod$ctl$max_bias_adj <- 0.55
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+pp$sigma_R_info #0.85
+
+#This looks good enough
+
+#Reweight this once doesn't greatly differ weights, does downweight CCFRP 
+#but result isn't greatly different going forward with what we have
+
+
+
+#Compare this to the previous request 7 run without bias adj
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path('_sensitivities', "STAR_request14_CCFRP_BiasAdj"),
+                                                 file.path('_sensitivities', "STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt"))))
+
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base',
+                                     'Request 7 CCFRP bias adj',
+                                     'Request 14 CCFRP Abrams reweight bias adj'),
+                    subplots = c(2, 4, 9, 11), print = TRUE, legendloc = "bottomleft",
+                    col = rich.colors.short(3),
+                    plotdir = here('models', '_sensitivities', new_name))
+
+
 
