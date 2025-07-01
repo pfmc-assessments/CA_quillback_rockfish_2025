@@ -10418,7 +10418,7 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 
                                filename = "historical_comparison.png",
-                               legendlabels = c('2025 post-star base model', '2021 model'), 
+                               legendlabels = c('2025 pre-star base model', '2021 model'), 
                                legendloc = 'bottomleft',
                                hessian = c(TRUE, TRUE),
                                subplot1 = 18,
@@ -10432,10 +10432,57 @@ r4ss::plot_twopanel_comparison(xx,
 
 #Copy the model from the sensitivities
 
-new_name <- "6_0_1_preStarBase"
+new_name <- "6_0_1_postStarBase"
 old_name <- "STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt"
 
-#Write code here to copy this automatically
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', '_sensitivities', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes and run models
+##
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+
+#Compare to Tanya's MPA abs abundance estimate
+numbers_at_age <- pp$natage
+natageOnePlus_numbers <- numbers_at_age %>%
+  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
+  mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
+  dplyr::select(c("Time", "numberOfFish"))
+
+#Tanya predicts 151,934  in 2015 and 317,274 in 2020 based on final report
+#Model predicted 2015.5 - believe these are in 1,000s
+natageOnePlus_numbers %>% filter(Time == 2015.5)
+#Model predicted 2020.5
+natageOnePlus_numbers %>% filter(Time == 2020.5)
 
 
 ###Historical analysis figures
