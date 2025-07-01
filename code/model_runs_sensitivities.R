@@ -16,7 +16,8 @@ source(here('code/model_runs_growth_comparison.R'))
 #Enter in base model from which to base sensitivities
 #base_mod_name <-'3_2_2_SetUpExtraSE' #<---------------UPDATE WHEN CHANGE
 #base_mod_name <- '4_2_1_propBase' #<---------------UPDATE WHEN CHANGE
-base_mod_name <- '5_1_3_preStarBase' #<---------------UPDATE WHEN CHANGE
+#base_mod_name <- '5_1_3_preStarBase' #<---------------UPDATE WHEN CHANGE
+base_mod_name <- '6_0_1_postStarBase' #<---------------UPDATE WHEN CHANGE
 base_mod <- SS_read(here('models', base_mod_name))
 
 #Create the sensitivities directory
@@ -237,6 +238,42 @@ SSsummarize(xx) |>
                                      'Remove growth ages'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+######-
+### leaveOut_ccfrp_ages --------------------------------
+
+# CCFRP ages
+
+new_name <- 'leaveOut_ccfrp_ages'
+
+mod <- base_mod
+
+#Set all com ages to negative year
+mod$dat$agecomp <- mod$dat$agecomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("ccfrp", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'Remove ccfrp ages'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+
 
 ######-
 ### leaveOut_all_ages ---------------------------------
@@ -249,12 +286,12 @@ mod <- base_mod
 
 
 # Create a lambda section 
-lambdas <- data.frame("like_comp" = c(5, 5), #age comps
-                      "fleet" = c(1, 3),
-                      "phase" = c(1, 1),
-                      "value" = c(0, 0),
-                      "sizefreq_method" = c(1, 1))
-rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth")
+lambdas <- data.frame("like_comp" = c(5, 5, 5), #age comps
+                      "fleet" = c(1, 3, 4),
+                      "phase" = c(1, 1, 1),
+                      "value" = c(0, 0, 0),
+                      "sizefreq_method" = c(1, 1, 1))
+rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth", "CAAL_CA_CCFRP")
 
 mod$ctl$N_lambdas <- nrow(lambdas)
 mod$ctl$lambdas <- lambdas
@@ -279,7 +316,7 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
                                                    file.path('_sensitivities', new_name)))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
-                                     'Remove com and growth caal'),
+                                     'Remove com, growth, and ccfrp caal'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 
 
@@ -296,6 +333,11 @@ mod <- base_mod
 
 #Set all ccfrp lengths to negative year
 mod$dat$lencomp <- mod$dat$lencomp %>% 
+  dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("ccfrp", fleet.converter$fleet)], 
+                              -abs(year), year))
+
+#Set all ccfrp ages to negative year
+mod$dat$agecomp <- mod$dat$agecomp %>% 
   dplyr::mutate(year = ifelse(fleet == fleet.converter$fleet_no_num[grep("ccfrp", fleet.converter$fleet)], 
                               -abs(year), year))
 
@@ -431,7 +473,7 @@ mod <- base_mod
 
 
 # Create a lambda section 
-lambdas <- data.frame("like_comp" = c(1, 1, 1), #length comps
+lambdas <- data.frame("like_comp" = c(1, 1, 1), #indices
                       "fleet" = c(2, 4, 5),
                       "phase" = c(1, 1, 1),
                       "value" = c(0, 0, 0),
@@ -1413,7 +1455,8 @@ dev.off()
 #the model is much more well behaved. Overall, doesn't seem to suggest wide differences
 #at existing weights with non-FAA model. Early explorations showed reweighting didn't
 #give as large of differences and that was done with reweighting first and then
-#updating blocks. 
+#updating blocks. Also note that this odd behavior was really only present in the
+#old 421 version. With the preSTAR and postSTAR bases, reweighting behaved better. 
 
 
 ########-
@@ -1466,15 +1509,28 @@ SSsummarize(xx) |>
 dev.off()
 
 
-######-
-## Use all data: Replace all negative year with positive --------------------------------------------------------
+########-
+## Replace ccfrp CAAL with marginal age comps --------------------------------------------------------
 
-new_name <- 'noNegYear'
+new_name <- 'marginalCCFRPAge'
 
 mod <- base_mod
 
-mod$dat$agecomp[which(mod$dat$agecomp$year < 0), "year"] <- -mod$dat$agecomp[which(mod$dat$agecomp$year < 0), "year"]
-mod$dat$lencomp[which(mod$dat$lencomp$year < 0), "year"] <- -mod$dat$lencomp[which(mod$dat$lencomp$year < 0), "year"]
+#Reset fleet.converter
+fleet.converter <- base_mod$dat$fleetinfo %>%
+  dplyr::mutate(fleet_no_num = 1:5,
+                fleet = c("com", "rec", "growth", "ccfrp", "rov")) %>%
+  dplyr::select(fleetname, fleet_no_num, fleet)
+
+ccfrp.marg <- read.csv(here("data", "forSS3", "Acomps_noncommercial_ccfrp_unsexed_raw_1_60.csv")) %>%
+  dplyr::mutate(ageerr = 1) %>%
+  dplyr::mutate(fleet = "ccfrp") %>%
+  dplyr::mutate(fleet = dplyr::left_join(., dplyr::select(fleet.converter, -fleetname))$fleet_no_num) %>%
+  as.data.frame()
+names(ccfrp.marg) <- names(mod$dat$agecomp)
+
+new.age.df <- dplyr::bind_rows(mod$dat$agecomp[which(mod$dat$agecomp$fleet != 4),], ccfrp.marg)
+mod$dat$agecomp <- new.age.df
 
 
 # Write model and run
@@ -1496,7 +1552,45 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
                                                    file.path('_sensitivities', new_name)))))
 SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
-                                     'Marginal commercial age comps'),
+                                     'Marginal ccfrp age comps'),
+                    subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
+dev.off()
+
+
+
+######-
+## Use all data: Replace all negative year with positive --------------------------------------------------------
+
+new_name <- 'noNegYear'
+
+mod <- base_mod
+
+mod$dat$agecomp[which(mod$dat$agecomp$year < 0), "year"] <- -mod$dat$agecomp[which(mod$dat$agecomp$year < 0), "year"]
+mod$dat$lencomp[which(mod$dat$lencomp$year < 0), "year"] <- -mod$dat$lencomp[which(mod$dat$lencomp$year < 0), "year"]
+
+#Need to keep negative years for non-Abrams growth years as negative though
+mod$dat$agecomp[which(mod$dat$agecomp$fleet == 3 & !mod$dat$agecomp$year %in% c(2010, 2011)), "year"] <- -mod$dat$agecomp[which(mod$dat$agecomp$fleet == 3 & !mod$dat$agecomp$year %in% c(2010, 2011)), "year"]
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
+                                        subdir = c(base_mod_name,
+                                                   file.path('_sensitivities', new_name)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base model',
+                                     'No negative year comps'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 dev.off()
 
