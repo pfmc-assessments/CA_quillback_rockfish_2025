@@ -5,15 +5,16 @@ library(r4ss)
 library(ggplot2)
 library(cowplot)
 library(here)
-base_model <- 'STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt' #'5_1_3_preStarBase' #<============== UPDATE
+base_model <- '6_0_1_postStarBase' #'5_1_3_preStarBase' #<============== UPDATE
 
 bivar_dir <- here('models', '_bivariate_profiles')
 
 
-setwd(here('models','_sensitivities', base_model))
-mydir = getwd()
+
+dir.create(here(bivar_dir, base_model))
+mydir = here(bivar_dir, base_model)
 #copy over base model and run it in the new folder
-copy_SS_inputs(dir.old = here('models','sensitivities', base_model), 
+copy_SS_inputs(dir.old = here('models', base_model), 
                dir.new = mydir,
                overwrite = TRUE)
 r4ss::run(dir = mydir, 
@@ -194,7 +195,7 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
     geom_contour_filled(aes(z = Delta_NLL), breaks = c(0, 2, 3, 4, 6, 10, 20, 50, seq(100, 600, 100))) +
     geom_point(aes (x = Mbase, y = 0.72),  size = 4, col = "white") +
     geom_point(aes (x = find[,1], y = find[,2]),  size = 4, col = "white") +
-    annotate("text", x = find[,1] + 0.016, y = find[,2], label = "Lowest NLL", size =10, col = 'white') +
+    annotate("text", x = find[,1] + 0.019, y = find[,2], label = "Lowest NLL", size =10, col = 'white') +
     annotate("text", x = Mbase, y = 0.7, label = "Base Model", size =10, col = 'white') +
     geom_text_contour(aes(z = Delta_NLL), 
        breaks = c(3, 5, 7, seq(10, 30, 10)), size = 7, color = 'white') +
@@ -214,3 +215,11 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
  ggsave(file.path(mydir, "joint_m_h_profile_ggsave.png"),width = 14, height = 12)
 
 #dev.off()
+file.copy(from = here(mydir, 'joint_m_h_profile_ggsave.png'),
+          to = here('report', 'figures','profile_m_h_contour.png'), 
+          overwrite = TRUE, recursive = FALSE)
+
+file.copy(from = here(mydir, 'Mhgrid_nll.png'),
+          to = here('report', 'figures','profile_Mhgrid_nll.png'), 
+          overwrite = TRUE, recursive = FALSE)
+            
