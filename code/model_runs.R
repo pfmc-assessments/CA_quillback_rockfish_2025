@@ -10418,7 +10418,7 @@ xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('mode
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 
                                filename = "historical_comparison.png",
-                               legendlabels = c('2025 post-star base model', '2021 model'), 
+                               legendlabels = c('2025 pre-star base model', '2021 model'), 
                                legendloc = 'bottomleft',
                                hessian = c(TRUE, TRUE),
                                subplot1 = 18,
@@ -10432,7 +10432,7 @@ r4ss::plot_twopanel_comparison(xx,
 
 #Copy the model from the sensitivities
 
-new_name <- "6_0_1_preStarBase"
+new_name <- "6_0_1_postStarBase_DELETE"
 old_name <- "STAR_request14_CCFRPages_Abrams_biasAdjRamp_alt"
 
 #Write code here to copy this automatically
