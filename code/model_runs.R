@@ -10409,7 +10409,7 @@ natageOnePlus_numbers %>% filter(Time == 2020.5)
 
 ###Historical analysis figures
 new_name <- "0_0_2_2025setup"
-base_mod_name <- "5_1_3_preStarBase"
+base_mod_name <- "6_0_1_postStarBase"
 
 #get the report files - need to look in the results spreadsheet to get the order
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),

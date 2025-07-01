@@ -123,12 +123,18 @@ r4ss::plot_twopanel_comparison(xx,
                                endyrvec = 2025)
 
 #M figs - copy to report folder
-#file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'piner_panel_NatM_uniform_Fem_GP_1.png'),
-#          to = here('report', 'figures','piner_panel_NatM_uniform_Fem_GP_1.png'), 
-#          overwrite = TRUE, recursive = FALSE)
+file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'piner_panel_NatM_uniform_Fem_GP_1.png'),
+          to = here('report', 'figures','piner_panel_NatM_uniform_Fem_GP_1.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
 
+file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'm_profile_bio_comparison.png'),
+          to = here('report', 'figures','m_profile_bio_comparison.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
+file.copy(from = here('models', glue::glue(base_model, '_profile_NatM_uniform_Fem_GP_1'), 'parameter_panel_NatM_uniform_Fem_GP_1.png'),
+          to = here('report', 'figures','parameter_panel_NatM_uniform_Fem_GP_1.png'), 
+          overwrite = TRUE, recursive = FALSE)
 # Individual Steepness profile -------------------------------------------------------
 
 profile.settings <- nwfscDiag::get_settings_profile(
@@ -179,10 +185,17 @@ r4ss::plot_twopanel_comparison(xx,
                                endyrvec = 2025)
 
 #h figs - copy to report folder
-#file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'piner_panel_SR_BH_steep.png'),
-#          to = here('report', 'figures','piner_panel_SR_BH_steep.png'), 
-#          overwrite = TRUE, recursive = FALSE)
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'piner_panel_SR_BH_steep.png'),
+          to = here('report', 'figures','piner_panel_SR_BH_steep.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'h_profile_bio_comparison.png'),
+          to = here('report', 'figures','h_profile_bio_comparison.png'), 
+          overwrite = TRUE, recursive = FALSE)
+
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_BH_steep'), 'parameter_panel_SR_BH_steep.png'),
+          to = here('report', 'figures','parameter_panel_SR_BH_steep.png'), 
+          overwrite = TRUE, recursive = FALSE)
 # Individual R0 profile --------------------------------------------------------------
 
 profile.settings <- nwfscDiag::get_settings_profile(
@@ -235,11 +248,17 @@ r4ss::plot_twopanel_comparison(xx,
                                endyrvec = 2025)
 
 #R0 figs - copy to report folder
-#file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'piner_panel_SR_LN(R0).png'),
-#          to = here('report', 'figures','piner_panel_SR_LN(R0).png'), 
-#          overwrite = TRUE, recursive = FALSE)
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'piner_panel_SR_LN(R0).png'),
+          to = here('report', 'figures','piner_panel_SR_LN(R0).png'), 
+          overwrite = TRUE, recursive = FALSE)
 
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'R0_profile_bio_comparison.png'),
+          to = here('report', 'figures','R0_profile_bio_comparison.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
+file.copy(from = here('models', glue::glue(base_model, '_profile_SR_LN(R0)'), 'parameter_panel_SR_LN(R0).png'),
+          to = here('report', 'figures','parameter_panel_SR_LN(R0).png'), 
+          overwrite = TRUE, recursive = FALSE)
 # Individual sigmaR profile -------------------------------------------------------
 
 # profile.settings <- nwfscDiag::get_settings_profile(
@@ -274,58 +293,64 @@ r4ss::plot_twopanel_comparison(xx,
 
 # Individual von Bert k profile -------------------------------------------------------
 
-# profile.settings <- nwfscDiag::get_settings_profile(
-#   parameters = 'VonBert_K_Fem_GP_1', 
-#   low = 0.07, 
-#   high = 0.2,
-#   step_size = 0.01,
-#   param_space = 'real',
-#   use_prior_like = 1) 
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'VonBert_K_Fem_GP_1', 
+  low = 0.07, 
+  high = 0.2,
+  step_size = 0.01,
+  param_space = 'real') 
 
-# settings <- nwfscDiag::get_settings(
-#   mydir = directory,
-#   settings = list(
-#     base_name = base_model,
-#     run = "profile",
-#     profile_details = profile.settings,
-#     exe = exe_loc,
-#     extras = '-nohess',
-#     usepar = FALSE,
-#     init_values_src = 0))
+settings <- nwfscDiag::get_settings(
+  mydir = directory,
+  settings = list(
+    base_name = base_model,
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
 
-# # set up parallel stuff
-# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+# set up parallel stuff
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
 
-# tictoc::tic()
-# run_diagnostics(mydir = here('models'), model_settings = settings)
-# tictoc::toc()
+tictoc::tic()
+run_diagnostics(mydir = here('models'), model_settings = settings)
+tictoc::toc()
 
-# # back to sequential processing
-# future::plan(future::sequential)
+# back to sequential processing
+future::plan(future::sequential)
 
-# #K two panel plots - with uncertainty
-# k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
+#K two panel plots - with uncertainty
+k_dir <- here('models', glue::glue(base_model,'_profile_VonBert_K_Fem_GP_1'))
 
-# #get the report files
-# xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10,11,12,13))
+#get the report files
+xx <- SSgetoutput(dirvec = k_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10,11,12,13))
 
-# vals <- seq(0.08, 0.2, by = 0.01)
-# k_names <- c("Base model", paste0("K =", vals))
-# r4ss::plot_twopanel_comparison(xx,
-#                                dir = here('report', 'figures'),
-#                                filename = "k_profile_bio_comparison.png",
-#                                legendlabels = c(k_names),
-#                                legendloc = 'bottomleft',
-#                                hessian = FALSE,
-#                                subplot1 = 1,
-#                                subplot2 = 3,
-#                                endyrvec = 2025)
+vals <- seq(0.08, 0.2, by = 0.01)
+k_names <- c("Base model", paste0("K =", vals))
+r4ss::plot_twopanel_comparison(xx,
+                               dir = here('report', 'figures'),
+                               filename = "k_profile_bio_comparison.png",
+                               legendlabels = c(k_names),
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3,
+                               endyrvec = 2025)
 
-# #K figs - copy to report folder
-# file.copy(from = here('models', glue::glue(base_model, '_profile_VonBert_K_Fem_GP_1'), 'piner_panel_VonBert_K_Fem_GP_1.png'),
-#           to = here('report', 'figures','piner_panel_VonBert_K_Fem_GP_1.png'), 
-#           overwrite = TRUE, recursive = FALSE)
+#K figs - copy to report folder
+file.copy(from = here('models', glue::glue(base_model, '_profile_VonBert_K_Fem_GP_1'), 'piner_panel_VonBert_K_Fem_GP_1.png'),
+          to = here('report', 'figures','piner_panel_VonBert_K_Fem_GP_1.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
+#file.copy(from = here('models', glue::glue(base_model, '_profile_VonBert_K_Fem_GP_1)'), 'k_profile_bio_comparison.png'),
+#          to = here('report', 'figures','k_profile_bio_comparison.png'), 
+#          overwrite = TRUE, recursive = FALSE)
+
+file.copy(from = here('models', glue::glue(base_model, '_profile_VonBert_K_Fem_GP_1'), 'parameter_panel_VonBert_K_Fem_GP_1.png'),
+          to = here('report', 'figures','parameter_panel_VonBert_K_Fem_GP_1.png'), 
+          overwrite = TRUE, recursive = FALSE)
 #The reason why the profiles are less extreme than in 2021 is that
 #now with parameters estimated, changes in one can be offset by changes in others
 #This may be the reason why the profile for K has changed direction.
@@ -455,60 +480,62 @@ r4ss::plot_twopanel_comparison(xx,
 
 # # Individual Linf profile -------------------------------------------------------
 
-# profile.settings <- nwfscDiag::get_settings_profile(
-#   parameters = 'L_at_Amax_Fem_GP_1', 
-#   low = 40, 
-#   high = 46,
-#   step_size = 1,
-#   param_space = 'real',
-#   use_prior_like = 1) 
+profile.settings <- nwfscDiag::get_settings_profile(
+  parameters = 'L_at_Amax_Fem_GP_1', 
+  low = 40, 
+  high = 46,
+  step_size = 1,
+  param_space = 'real',
+  use_prior_like = 1) 
 
-# settings <- nwfscDiag::get_settings(
-#   mydir = directory,
-#   settings = list(
-#     base_name = base_model,
-#     run = "profile",
-#     profile_details = profile.settings,
-#     exe = exe_loc,
-#     extras = '-nohess',
-#     usepar = FALSE,
-#     init_values_src = 0))
+settings <- nwfscDiag::get_settings(
+  mydir = directory,
+  settings = list(
+    base_name = base_model,
+    run = "profile",
+    profile_details = profile.settings,
+    exe = exe_loc,
+    extras = '-nohess',
+    usepar = FALSE,
+    init_values_src = 0))
 
-# # set up parallel stuff
-# future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
+# set up parallel stuff
+future::plan(future::multisession(workers = parallelly::availableCores(omit = 1)))
 
-# tictoc::tic()
-# run_diagnostics(mydir = here('models'), model_settings = settings)
-# tictoc::toc()
+tictoc::tic()
+run_diagnostics(mydir = here('models'), model_settings = settings)
+tictoc::toc()
 
-# # back to sequential processing
-# future::plan(future::sequential)
+# back to sequential processing
+future::plan(future::sequential)
 
-# #linf two panel plots - with uncertainty
-# linf_dir <- here('models', glue::glue(base_model,'_profile_L_at_Amax_Fem_GP_1'))
+#linf two panel plots - with uncertainty
+linf_dir <- here('models', glue::glue(base_model,'_profile_L_at_Amax_Fem_GP_1'))
 
-# #get the report files
-# xx <- SSgetoutput(dirvec = linf_dir, keyvec = c("", 3,2,1,4,5,6,7))
+#get the report files
+xx <- SSgetoutput(dirvec = linf_dir, keyvec = c("", 3,2,1,4,5,6,7))
 
-# vals <- seq(40, 46, by = 1)
-# linf_names <- c("Base model", paste0("Linf =", vals))
-# r4ss::plot_twopanel_comparison(xx,
-#                                dir = here('report', 'figures'),
-#                                filename = "linf_profile_bio_comparison.png",
-#                                legendlabels = linf_names,
-#                                legendloc = 'bottomleft',
-#                                hessian = FALSE,
-#                                subplot1 = 1,
-#                                subplot2 = 3,
-#                                endyrvec = 2025)
+vals <- seq(40, 46, by = 1)
+linf_names <- c("Base model", paste0("Linf =", vals))
+r4ss::plot_twopanel_comparison(xx,
+                               dir = here('report', 'figures'),
+                               filename = "linf_profile_bio_comparison.png",
+                               legendlabels = linf_names,
+                               legendloc = 'bottomleft',
+                               hessian = FALSE,
+                               subplot1 = 1,
+                               subplot2 = 3,
+                               endyrvec = 2025)
 
-# #linf figs - copy to report folder
-# file.copy(from = here('models', glue::glue(base_model, '_profile_L_at_Amax_Fem_GP_1'), 'piner_panel_L_at_Amax_Fem_GP_1.png'),
-#           to = here('report', 'figures','piner_panel_L_at_Amax_Fem_GP_1.png'), 
-#           overwrite = TRUE, recursive = FALSE)
+#linf figs - copy to report folder
+file.copy(from = here('models', glue::glue(base_model, '_profile_L_at_Amax_Fem_GP_1'), 'piner_panel_L_at_Amax_Fem_GP_1.png'),
+          to = here('report', 'figures','piner_panel_L_at_Amax_Fem_GP_1.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
 
- 
+file.copy(from = here('models', glue::glue(base_model, '_profile_L_at_Amax_Fem_GP_1'), 'parameter_panel_L_at_Amax_Fem_GP_1.png'),
+          to = here('report', 'figures','parameter_panel_L_at_Amax_Fem_GP_1.png'), 
+          overwrite = TRUE, recursive = FALSE) 
 
 
 
@@ -541,6 +568,9 @@ tictoc::toc()
 # back to sequential processing
 future::plan(future::sequential)
 
+file.copy(from = here('models', glue::glue(base_model, '_jitter_0.5'), 'jitter.png'),
+          to = here('report', 'figures','jitter.png'), 
+          overwrite = TRUE, recursive = FALSE)
 
 # # If need to rerun best jitter
 # new_name <- paste0(base_model, '_best_jitter')
@@ -593,7 +623,7 @@ mod_labels <- paste0("Data -",peels," years")
                                      xx$replist14, xx$replist15, xx$replist16,
                                      xx$replist3, xx$replist4, xx$replist5,
                                      xx$replist6, xx$replist7, xx$replist8),
-                                dir = here('models', glue::glue(base_model, '_retro_15_yr_peel')),#here('report', 'figures'),
+                                dir = here('report', 'figures'),#here('report', 'figures'),
                                 filename = "retro_bio_comparison.png",
                                 legendlabels = c('Base model', mod_labels),
                                 legendloc = 'bottomleft',
