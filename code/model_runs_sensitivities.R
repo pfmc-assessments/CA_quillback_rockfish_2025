@@ -2177,6 +2177,7 @@ pp <- SS_output(here(sens_dir, new_name))
 SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
+
 ######-
 ## ROV and CCFRP Domed --------------------------------------------------------
 
@@ -2216,6 +2217,7 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base model',
                                      'ROV & CCFRP Domed', "Simplify Commercial Blocks", "No Blocks"),
                     subplots = c(1:14), print = TRUE, plotdir = here(sens_dir, new_name))
+
 
 ######-
 ## ROV and CCFRP and Rec Domed --------------------------------------------------------
@@ -2419,6 +2421,7 @@ SSsummarize(xx) |>
                                      'More Rec Blocks'),
                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+
 ######-
 ## More Rec Blocks with Early Period Asymptotic --------------------------------------------------------
 # Leave CCFRP and ROV asymptotic
@@ -2454,6 +2457,7 @@ SSsummarize(xx) |>
                                      'Late Rec Blocks & Surveys Domed'),
                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
 
+
 ######-
 ## Commercial Asymptotic --------------------------------------------------------
 #Asymptotic for final block (keeping earliest block as domed)
@@ -2487,6 +2491,7 @@ SSsummarize(xx) |>
 #   SSplotComparisons(legendlabels = c('Base model',
 #                                      'Commercial Asymptotic'),
 #                     subplots = c(1:3), print = TRUE, plotdir = here(sens_dir, new_name))
+
 
 ######-
 ## Commercial All Asymptotic --------------------------------------------------------
@@ -2703,14 +2708,13 @@ mod <- base_mod
 
 mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
 
-mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
+mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.3467300, 42.8202000, 0.1266600, 0.1767280, 0.0872109)
 
 # The estimated proportion of quillback habitat in MPAs is 0.20.
 # Tanya estimated 155225 fish in MPAs (actually 151,934 in final report) in 2015.
 # Expanding that to all habitat results in 759670 fish.
 
 pp <- SS_output(here('models', base_mod_name))
-pp <- SS_output(here('models', '5_1_3_preStarBase'))
 
 numbers_at_age <- pp$natage
 pp$natageOnePlus_numbers <- numbers_at_age %>%
@@ -2719,14 +2723,14 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   dplyr::select(c("Time", "numberOfFish"))
 
 # Using the code above from Melissa to look at numbers of fish in the middle of the year,
-# we get 348697 fish in 2015.  
+# we get 321840 fish in 2015.  
 
-# The ROV estimate is 2.18 times the model estimate.  
+# The ROV estimate is ~2.12 times the model estimate.  
 
 # Try increasing catch x 3
 mod <- base_mod
 mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
-mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
+mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.3467300, 42.8202000, 0.1266600, 0.1767280, 0.0872109)
 mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 3
 
 # Write model and run
@@ -2747,11 +2751,11 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
   dplyr::select(c("Time", "numberOfFish"))
 
-# This results in 957451 fish in 2015.  That's too many.  Let's try multiplying catch by 2.2.  
+# This results in 965463 fish in 2015.  That's too many.  Let's try multiplying catch by 2.1  
 mod <- base_mod
 mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
-mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.8983100, 42.7777000, 0.1256130, 0.1823610, 0.0862424)
-mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 2.2
+mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.3467300, 42.8202000, 0.1266600, 0.1767280, 0.0872109)
+mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 2.1
 
 # Write model and run
 SS_write(mod, here(sens_dir, new_name),
@@ -2771,7 +2775,31 @@ pp$natageOnePlus_numbers <- numbers_at_age %>%
   mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
   dplyr::select(c("Time", "numberOfFish"))
 
-# This gives 766260 fish in 2015 - pretty close to the ROV estimate.  
+# This gives 675832 fish in 2015 - too low. Let's try multiplying catch by 2.3
+mod <- base_mod
+mod[["ctl"]][["MG_parms"]][["PHASE"]][2:6] <- -3
+mod[["ctl"]][["MG_parms"]][["INIT"]][2:6] <- c(9.3467300, 42.8202000, 0.1266600, 0.1767280, 0.0872109)
+mod[["dat"]][["catch"]][["catch"]] <- mod[["dat"]][["catch"]][["catch"]] * 2.3
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+
+numbers_at_age <- pp$natage
+pp$natageOnePlus_numbers <- numbers_at_age %>%
+  filter(`Beg/Mid` == "M") %>% #taking that mid year since that represents the survey
+  mutate(numberOfFish = rowSums(across(c("3":"80")))) %>%  #could also look at ages 2+
+  dplyr::select(c("Time", "numberOfFish"))
+
+# This gives 740194 fish in 2015 - pretty close to the ROV estimate.  
 
 
 ######-
