@@ -90,7 +90,7 @@ library(dplyr)
 
 #source(here('Rscripts/table_sens.R'))
 
-base_model <- '5_1_3_preStarBase'
+base_model <- '6_0_1_postStarBase'
 mod_in <- r4ss::SS_read(here('models', base_model))
 mod_out <- r4ss::SS_output(here('models', base_model), verbose = FALSE, printstats = FALSE)
 
