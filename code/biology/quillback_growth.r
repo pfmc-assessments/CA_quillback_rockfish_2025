@@ -50,6 +50,22 @@ TRUE ~ fleet))
 
 write.csv(qlbk, here("data", "growth_data_inmodel_forplots.csv"))
 
+
+#For postSTAR version assign an updated flag if not included in the base model
+#Adding a new csv because other scripts pull earlier versions and may not work if update the csv
+qlbk_postSTAR <- qlbk %>%
+  mutate(InModel = case_when(source %in% c("Abrams", "CCFRPFarallons", "CCFRPNotFarallons") ~ "Included in base model",
+                             fleet == "Commercial" & year %in% c(2007, 2011, 2012, 2023, 2024) ~ "External fit only",
+                             fleet == "Growth" & year %in% c(1985, 2004, 2007, 2014, 2019, 2020, 2025) ~ "External fit only",
+                             fleet == "Growth" & !(source %in% c("Abrams", "CCFRPFarallons", "CCFRPNotFarallons")) ~ "External fit only",
+                             age == 0 ~ "External fit only",
+                             TRUE ~ "Included in base model"))
+qlbk_postSTAR$InModel <- as.factor(qlbk_postSTAR$InModel)
+qlbk_postSTAR <- qlbk_postSTAR %>% mutate(fleet = case_when(fleet =="CCFRP" ~ "Growth", 
+                                                            TRUE ~ fleet))
+
+write.csv(qlbk_postSTAR, here("data", "growth_data_inmodel_forplots_postSTAR.csv"))
+
 ##############################################################################################################
 #make a copy to keep the code the same
 ca <- qlbk
@@ -328,9 +344,13 @@ preds1 <- data.frame(ages,
 preds2 <- data.frame(ages,
                  fit = vb_fn2(ages,  Linf = 43.04, t0 = -0.067, k = 0.199))
 
-#2025 Internal estimate
+#2025 Internal estimate preSTAR
 preds3 <- data.frame(ages,
                      fit = vb_fn(ages,  Linf = 42.7486, L0 = 4, k = 0.126145))
+
+#2025 Internal estimate postSTAR
+preds4 <- data.frame(ages,
+                     fit = vb_fn(ages,  Linf = 42.8202, L0 = 4, k = 0.12666)) #keep L0 at 4 even though its nearer to 4.87 to get L1 of 9.34673
 
 
 #Plot data with fit 
@@ -361,6 +381,50 @@ preds3 <- data.frame(ages,
    #scale_color_viridis_d(begin = 0, end = .9) 
 ggsave(filename = file.path(here(),"report", "figures", "bio_growth.png"),
        width = 10, height = 8)
+
+
+## 
+#If want postSTAR version use the following code
+#This copies over all data into "External fit" so facet wrap includes all data
+##
+age_df <- qlbk_postSTAR #%>% filter(age !=0) %>% filter(project != "CCFRP")
+age_df$Age <- age_df$age
+age_df$Length_cm <- age_df$length_cm
+age_df <- age_df
+
+levels(age_df$InModel) <- c("External fit", "Included in base model")
+temp <- age_df[which(age_df$InModel == "Included in base model"),]
+temp$InModel <- "External fit"
+age_df_adjust <- dplyr::bind_rows(age_df, temp)
+
+ggplot(age_df_adjust, aes(y = length_cm, x = age)) +
+  #geom_point(data = age_df_adjust %>% filter(InModel == "yes"), aes(y = length_cm, x = age), shape = 21, size = 4,  colour = "darkgray") + 
+  #geom_point(data = age_df_adjust %>% filter(InModel == "no"), aes(y = length_cm, x = age), shape = 4, size = 4, colour = "deeppink4") + 
+  geom_point(data = age_df_adjust, aes(y = length_cm, x = age, shape = factor(InModel), colour = factor(InModel), size = factor(InModel))) + 
+  scale_shape_manual(values=c(1, 1), guide = "none") +
+  scale_fill_manual(values=c('darkgray', 'deeppink4'), guide = "none") +
+  scale_size_manual(values = c(4, 4), guide = "none") +
+  geom_line(data = preds1, aes(y = fit, x = ages, colour = "2025 fitted external est."), linewidth = 1.2) +
+  geom_line(data = preds2, aes(y = fit, x = ages, colour = "2021 model values"), linewidth = 1.2) +
+  geom_line(data = preds4, aes(y = fit, x = ages, colour = "2025 model fitted est."), linewidth = 1.2) +
+  theme_bw() + 
+  facet_wrap(~ InModel, ncol=1) + 
+  labs(colour = c("Legend")) +
+  guides(colour = guide_legend(position  = "inside")) +
+  scale_x_continuous(breaks = seq(0,60,10)) +
+  scale_y_continuous(breaks = seq(0,55,5)) +
+  theme(panel.grid.major = element_blank(), 
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 16),
+        strip.text.y = element_text(size = 16),
+        legend.text = element_text(size = 20),
+        legend.title = element_text(size = 20),
+        panel.grid.minor = element_blank(),
+        legend.position.inside = c(0.75, 0.15)) + 
+  xlab("Age (years)") + ylab("Length (cm)") #+
+#scale_color_viridis_d(begin = 0, end = .9) 
+ggsave(filename = file.path(here(),"report", "figures", "bio_growth_postSTAR.png"),
+       width = 8, height = 10)
 
 
 ###############################################################################
