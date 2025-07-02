@@ -2751,7 +2751,8 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
                                                  "_bridging_runs/0_2_0_updateAllData",
                                                  "_bridging_runs/0_3_6_finalBlocks",
                                                  "_bridging_runs/0_4_2_reweight",
-                                                 "5_1_3_preStarBase")))
+                                                 "5_1_3_preStarBase",
+                                                 "6_0_1_postStarBase")))
 
 # For individual figures for spawning output and relative spawning output
 # SSsummarize(xx) |>
@@ -2760,7 +2761,8 @@ xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models
 #                                      'Update All data and estimate growth',
 #                                      'Update blocks and selectivity type',
 #                                      'Reweight',
-#                                      'Base model'),
+#                                      'preSTAR base model', 
+#                                      'postSTAR base model'),
 #                     subplots = c(1, 3), print = TRUE, legendloc = "topright",
 #                     plotdir = here('report', "figures"))
 # file.rename(from = here('report', "figures", "compare1_spawnbio.png"),
@@ -2776,9 +2778,10 @@ r4ss::plot_twopanel_comparison(xx,
                                                 'Update All data and estimate growth',
                                                 'Update blocks and selectivity type',
                                                 'Initial reweight',
-                                                'Base model'), 
+                                                'preSTAR base model',
+                                                'postSTAR base model'), 
                                legendloc = 'bottomleft',
                                hessian = FALSE,
                                subplot1 = 1,
                                subplot2 = 3,
-                               endyrvec = c(rep(2021, 2), rep(2025, 4)))
+                               endyrvec = c(rep(2021, 2), rep(2025, 5)))
