@@ -7,7 +7,7 @@ The CCFRP data are quality controlled at the time they are key punched and littl
 
 From south to north, the CCFRP index includes the Southeast Farallon Islands, Bodega Head, Stewart's Point, Ten Mile, and South Cape Mendocino. The southeast Farallons Islands MPA was sampled in 2017, 2018 and 2025 and the average CPUE increased inside and outside the MPA in 2025 relative to 2017 and 2018.  The other four MPAs were sampled annually. The final index (@tbl-ccfrp-index) represents a similar trend to the arithmetic mean of the annual CPUE (@fig-ccfrp-avg-cpue). An interaction between year and area (location along the coast) was not considered in model selection due to inconsistent sampling of the Farallons. To account for the closed areas within the MPAs, the interaction of year and MPA or reference site was incorporated in the final model.
 
-A negative binomial model was fit to the drift-level data (catch with a log offset for angler hours). Because the average observed CPUE inside MPAs and in the reference sites exhibited differing trends, we explored a year:mpa/reference site interaction, which was selected as the best fit model by AIC (@tbl-ccfrp-model-select), The final model included year, mpa or reference site factor, depth as a spline, area (location along the coast), and a year:mpa/reference interaction. The simulated residuals indicate a good fit of the model (@fig-ccfrp-qq). The model was fit using the sdmTMB R package (version 0.3.0) and residuals simulated in the DHARMa package. 
+A negative binomial generalized linear model was fit to the drift-level data (catch with a log offset for angler hours). Because the average observed CPUE inside MPAs and in the reference sites exhibited differing trends, we explored a year:mpa/reference site interaction, which was selected as the best fit model by AIC (@tbl-ccfrp-model-select), The final model included year, mpa or reference site factor, depth as a spline, area (location along the coast), and a year:mpa/reference interaction. The simulated residuals indicate a good fit of the model (@fig-ccfrp-qq). The model was fit using the sdmTMB R package (version 0.3.0) and residuals simulated in the DHARMa package. 
 
 Based on work completed at the SWFSC, we estimate that the percent of rocky reef habitat from Point Conception to the California/Oregon border within California state waters is 892 $km^2$, of which approximately 23% is in MPAs that prohibit the harvest of groundfish (pers comm. Rebecca Miller, UCSC). There is recreational fishing outside of state waters, but habitat maps are not available at the same 2-m resolution and do not allow for direct comparisons. The final index was weighted, giving 20% of the model weight to MPAs and 80% of model weight to the "open" areas within state waters.
 
@@ -93,6 +93,9 @@ pr_filter |>
 pr_filter <- read.csv("tables/ccfrp_index.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
+    gt::fmt_number(
+            columns = c(2:3),
+    decimals = 2) |>
      tab_options(
     table.font.size = 12) |>
     as_latex()

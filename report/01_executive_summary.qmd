@@ -208,6 +208,8 @@ Exploitation rates were above the management target of a fishing intensity that 
 
 <!-- Exploitation rates (i.e., total catch divided by exploitable biomass, or the annual SPR harvest rate) - include a table with the last 10 years of data and a graph showing the trend in fishing mortality relative to the target (y-axis) plotted against the trend in biomass relative to the target (x-axis). -->
 
+\newpage 
+
 ```{r, tbl-es-spr, results = "asis"}
 #| label: tbl-es-spr
 #| warning: false
@@ -224,7 +226,7 @@ spr_es_table |>
   ) |>
   gt::tab_options(
     table.font.size = 12,
-    latex.use_longtable = TRUE 
+    latex.use_longtable = FALSE 
   ) |>
   gt::cols_align(
     align = "center"
@@ -277,6 +279,8 @@ Reference points were calculated using the estimated selectivities and catch dis
 
 <!-- Management targets and definitions of overfishing, including the harvest rate that brings the stock to equilibrium at B24% for flatfishes and B40% for all other groundfish stocks (BMSY proxies) and the equilibrium stock size that results from fishing at the default harvest rate (the FMSY proxy). Include a summary table that compares estimated reference points for SSB, SPR, Exploitation Rate and Yield based on SSB proxy for MSY, SPR proxy for MSY, and estimated MSY values. -->
 
+\newpage 
+
 ```{r, tbl-ref-points-es, results = "asis"}
 #| label: tbl-ref-points-es
 #| warning: false
@@ -304,7 +308,7 @@ reference_points_table |>
   ) |>
   gt::tab_options(
     table.font.size = 12,
-    latex.use_longtable = TRUE 
+    latex.use_longtable = FALSE 
   ) |>  
   gt::tab_style(
     style = list(
@@ -426,7 +430,7 @@ projections_table |>
   ) |>
   gt::tab_options(
     table.font.size = 12,
-    latex.use_longtable = TRUE 
+    latex.use_longtable = FALSE 
   ) |>
   gt::sub_missing(
     columns = tidyselect::everything(),
@@ -457,6 +461,7 @@ As with most nearshore rockfish stocks additional research and data are needed t
 
 Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, and species specific estimates of maturity and fecundity length data, we consider uncertainties in assessment data indicate a neutral to unfavorable determination. Determination of assessment model fits and structural uncertainty will be decided during the \gls{star} Panel.
 
+\newpage
 ```{r, results = "asis"}
 #| label: tbl-es-risk
 #| echo: false
@@ -468,7 +473,7 @@ risk|>
   gt::gt() |>
   gt::tab_options(
     table.font.size = 12,
-    latex.use_longtable = TRUE
+    latex.use_longtable = FALSE
   ) |>
   gt::cols_label(
     Ecosystem.and.environmental.conditions = "Ecosystem and environmental conditions",
