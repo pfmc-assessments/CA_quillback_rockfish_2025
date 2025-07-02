@@ -1792,6 +1792,7 @@ SSsummarize(xx) |>
 dev.off()
 
 
+######-
 ## Growth to 2021 estimates without ages ----
 
 new_name <- 'Growth_2021est_noAges'
@@ -1830,6 +1831,108 @@ SSsummarize(xx) |>
                                      'Growth fixed to 2021 est. and no ages'),
                     subplots = c(1,3), print = TRUE, plotdir = here(sens_dir, new_name))
 dev.off()
+
+
+
+######-
+## Remove ages and fix growth at internal est.
+## Fix growth to internal and leave out ages ----
+new_name <- 'fix_growth_no_ages'
+old_name <- base_mod_name
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here(sens_dir, new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here(sens_dir, new_name))
+
+#
+
+mod$ctl$MG_parms$INIT[2] <-  9.3467300
+mod$ctl$MG_parms$INIT[3] <- 42.8202000	
+mod$ctl$MG_parms$INIT[4] <-  0.1266600		
+mod$ctl$MG_parms$INIT[5] <-  0.1767280
+mod$ctl$MG_parms$INIT[6] <-  0.0872109
+mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
+#negative phase 
+mod$ctl$MG_parms$PHASE[2:6] <- -9
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(5, 5, 5), #age comps
+                      "fleet" = c(1, 3, 4),
+                      "phase" = c(1, 1, 1),
+                      "value" = c(0, 0, 0),
+                      "sizefreq_method" = c(1, 1, 1))
+rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth", "CAAL_CA_CCFRP")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
+
+
+######-
+## Fix growth to external and leave out ages ----
+new_name <- 'fix_growth_external_no_ages'
+old_name <- base_mod_name
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here(sens_dir, new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here(sens_dir,new_name))
+
+#         K        Linf          L0         CV0         CV1
+#0.17840051 41.17135518  3.99192977  0.20157461  0.06413399
+#This is L0 so change that in the model
+mod$ctl$Growth_Age_for_L1 <- 0
+mod$ctl$MG_parms$INIT[2] <-  3.99192977
+mod$ctl$MG_parms$INIT[3] <- 41.17135518	
+mod$ctl$MG_parms$INIT[4] <-  0.17840051	
+mod$ctl$MG_parms$INIT[5] <-  0.20157461
+mod$ctl$MG_parms$INIT[6] <-  0.06413399
+mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
+#negative phase 
+mod$ctl$MG_parms$PHASE[2:6] <- -9
+
+
+# Create a lambda section 
+lambdas <- data.frame("like_comp" = c(5, 5, 5), #age comps
+                      "fleet" = c(1, 3, 4),
+                      "phase" = c(1, 1, 1),
+                      "value" = c(0, 0, 0),
+                      "sizefreq_method" = c(1, 1, 1))
+rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth", "CAAL_CA_CCFRP")
+
+mod$ctl$N_lambdas <- nrow(lambdas)
+mod$ctl$lambdas <- lambdas
+
+# Write model and run
+SS_write(mod, here(sens_dir, new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here(sens_dir, new_name), 
+          exe = here('models/ss3_win.exe'), 
+          extras = '-nohess', 
+          show_in_console = TRUE, 
+          skipfinished = FALSE)
+
+pp <- SS_output(here(sens_dir, new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
 
 
 ######-
@@ -2523,7 +2626,7 @@ plot_sel_all(pp)
 
 ##Compare likelihoods of selectivity sensitivities - for testing purposes
 xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
-                                      subdir = c("5_1_3_preStarBase",
+                                      subdir = c("6_0_1_postStarBase",
                                                  file.path("_sensitivities", "sel_AltComBlocks"),
                                                  file.path("_sensitivities", "sel_NoBlocks"),
                                                  file.path("_sensitivities", "sel_ROVandCCFRPDomed"),
@@ -3402,107 +3505,6 @@ ggplot(dev.quants, aes(x = relErr, y = mod_num, col = Metric, pch = Metric)) +
   viridis::scale_color_viridis(discrete = TRUE, labels = metric.labs)
 ggsave(file.path(outdir, 'figures', 'sens_summary.png'),  dpi = 300,  
        width = 6, height = 7, units = "in")
-
-######-
-## Remove ages and fix growth at internal est.
-###fix growth to internal and leave out ages
-new_name <- 'fix_growth_no_ages'
-old_name <- base_mod_name
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here('models', new_name),
-               overwrite = TRUE)
-
-mod <- SS_read(here('models',new_name))
-
-#
-
-mod$ctl$MG_parms$INIT[2] <-  9.8022100
-mod$ctl$MG_parms$INIT[3] <- 42.7486000	
-mod$ctl$MG_parms$INIT[4] <-  0.1261450	
-mod$ctl$MG_parms$INIT[5] <-  0.1836600
-mod$ctl$MG_parms$INIT[6] <-  0.0854974
-mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
-#negative phase 
-mod$ctl$MG_parms$PHASE[2:6] <- -9
-
-
-# Create a lambda section 
-lambdas <- data.frame("like_comp" = c(5, 5), #age comps
-                      "fleet" = c(1, 3),
-                      "phase" = c(1, 1),
-                      "value" = c(0, 0),
-                      "sizefreq_method" = c(1, 1))
-rownames(lambdas) <- c("CAAL_CA_Commercial", "CAAL_CA_Growth")
-
-mod$ctl$N_lambdas <- nrow(lambdas)
-mod$ctl$lambdas <- lambdas
-
-# Write model and run
-SS_write(mod, here(sens_dir, new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here(sens_dir, new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
-
-pp <- SS_output(here(sens_dir, new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
-
-
-
-###fix growth to internal and leave out ages
-new_name <- 'fix_growth_external_no_ages'
-old_name <- base_mod_name
-
-copy_SS_inputs(dir.old = here('models', old_name), 
-               dir.new = here(sens_dir, new_name),
-               overwrite = TRUE)
-
-mod <- SS_read(here(sens_dir,new_name))
-
- #         K        Linf          L0         CV0         CV1
- #0.17840051 41.17135518  3.99192977  0.20157461  0.06413399
-#This is L0 so change that in the model
-mod$ctl$Growth_Age_for_L1 <- 0
-mod$ctl$MG_parms$INIT[2] <-  3.99192977
-mod$ctl$MG_parms$INIT[3] <- 41.17135518	
-mod$ctl$MG_parms$INIT[4] <-  0.17840051	
-mod$ctl$MG_parms$INIT[5] <-  0.20157461
-mod$ctl$MG_parms$INIT[6] <-  0.06413399
-mod$ctl$MG_parms$PRIOR[2:6] <- mod$ctl$MG_parms$INIT[2:6]
-#negative phase 
-mod$ctl$MG_parms$PHASE[2:6] <- -9
-
-
-# Create a lambda section 
-lambdas <- data.frame("like_comp" = c(5), #age comps
-                      "fleet" = c(3),
-                      "phase" = c(1),
-                      "value" = c(0),
-                      "sizefreq_method" = c(1))
-rownames(lambdas) <- c("CAAL_CA_Growth")
-
-mod$ctl$N_lambdas <- nrow(lambdas)
-mod$ctl$lambdas <- lambdas
-
-# Write model and run
-SS_write(mod, here(sens_dir, new_name),
-         overwrite = TRUE)
-
-r4ss::run(dir = here(sens_dir, new_name), 
-          exe = here('models/ss3_win.exe'), 
-          extras = '-nohess', 
-          show_in_console = TRUE, 
-          skipfinished = FALSE)
-
-pp <- SS_output(here(sens_dir, new_name))
-SS_plots(pp, plot = c(1:26))
-plot_sel_all(pp)
-
 
 
 
