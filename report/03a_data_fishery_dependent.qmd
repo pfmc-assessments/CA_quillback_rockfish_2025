@@ -10,7 +10,7 @@ Commercial landings for `r spp` were combined into a single fleet by aggregating
 
 Commercial landings data were available from 1916--2024. Historical landings (1916--1968) were obtained from the California Catch Reconstruction Project [@ralston_documentation_2010]. The reconstruction covered all of California, but only the northern port groups of Crescent City, Eureka, and Fort Bragg had landings for `r spp`. Additional landings caught off the coast of Oregon or Washington but landed in California for 1948--1968 were added to the reconstruction to represent total landings at California ports. These additional landings were small in magnitude; no more than 0.08 mt was landed in any one year and approximately 0.3 mt was landed across all years. Landings for 1969--1980 came from \gls{calcom}, and were negligible for `r spp`.
 
-Recent (1981--2024) landings were obtained from \gls{pacfin} (extracted 03/14/2025). There were no landings for `r spp` within \gls{pacfin} for the years 1981--1983, and 1985. Sampling occurred during these years, and so estimates of zero were not due to a lack of sampling. Given that landings in the immediate preceding years were negligible, we kept landings for `r spp` in these years at zero, rather than interpolate between years.
+Recent (1981--2024) landings were obtained from \gls{pacfin} (extracted 03/14/2025). There were no landings for `r spp` within \gls{pacfin} for the years 1981--1983, and 1985. Sampling occurred during these years, and so estimates of zero were not due to a lack of sampling. Given that landings in the immediate preceding years were negligible, we kept landings for `r spp` in these years at zero, rather than interpolate between years. These years of low landings were immediately followed by an estimate of high landings in 1991 which is the result of procedures used by \gls{calcom} to attribute species-specific landings samples to larger, unsampled landings quantities. 
 
 Commercial discard data for `r spp` are collected through the \gls{noaa}'s \gls{wcgop}. Estimates of dead discards in 2002--2023 for each sector of the commercial fleet are provided in the \gls{gemm} product [@somers_gemm_2023; and [publicly available](https://connect.fisheries.noaa.gov/gemm_csv/)]. Dead discards from the \gls{gemm} product for California `r spp` were added to landings estimates from \gls{pacfin} to obtain total removals for 2002--2023. Biological samples of `r spp` discards from \gls{wcgop} were available from 2004--2022, but were very sparse for all years other than 2022. Therefore, as there was limited information with which to estimate selectivity of the discards over the majority of years, we added dead discards to landings and used total removals.
 
@@ -45,7 +45,7 @@ Length and age samples were collected from commercial landings and extracted fro
 
 The raw length observations were expanded to the sample level, to allow for any fish that were not measured, then to the trip level to account for the relative size of the landing from which the sample was obtained. These expanded length observations were then combined within a year and used for the base model.
 
-The input sample sizes for the expanded commercial length data were calculated based on a combination of the number of trips and fish by year:
+The input sample sizes for the expanded commercial length data were calculated via the Stewart Method (Ian Stewart, personal communication, IPHC, and developed at NWFSC) based on a combination of the number of trips and fish by year:
 
 ```{=tex}
 \begin{centering}

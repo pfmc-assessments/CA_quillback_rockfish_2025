@@ -8,7 +8,7 @@ This full assessment reports the status of `r spp` (*Sebastes maliger*) off the 
 
 ## Catches{-}
 
-`r Spp` is encountered in both commercial and recreational fisheries throughout its range. In waters off the coast of California, `r spp` is generally not a highly desirable species by recreational fishermen and its value in the commercial fishery rose with the development of the live fish fishery in the 1990s. Since 1994, approximately 33% of the landings have been from the live fish fishery.  `r Spp` are landed in trawl, net and pot gear, but over 99% of `r spp`are landed commercial from hook-and-line. The majority of the commercial landings for `r spp` occurred between 1990 and 2008, with a small increase from 2016 to 2022. Recreational removals are the largest source of fishing mortality and represent approximately 70% of the total removals of `r spp` across all years (@tbl-es-catches, @fig-es-landings). 
+`r Spp` is encountered in both commercial and recreational fisheries throughout its range. In waters off the coast of California, `r spp` is generally not a highly desirable species by recreational fishermen and its value in the commercial fishery rose with the development of the live fish fishery in the 1990s. Since 1994, approximately 33% of the landings have been from the live fish fishery.  `r Spp` are landed in trawl, net and pot gear, but over 99% of `r spp` are landed commercial from hook-and-line. The majority of the commercial landings for `r spp` occurred between 1990 and 2008, with a small increase from 2016 to 2022. Recreational removals are the largest source of fishing mortality and represent approximately 70% of the total removals of `r spp` across all years (@tbl-es-catches, @fig-es-landings). 
 
 <!-- \clearpage -->
 
@@ -391,7 +391,7 @@ management |>
 
 ## Unresolved Problems and Major Uncertainties{-}
 
-The primary areas of uncertainty for this assessment are the parameters influencing population productivity, e.g., natural mortality and the growth parameters $k$. Model bridging analyses showed that updating biological parameters and data had a large effect on results and had a much greater impact than other changes such as selectivity.  Despite improved data on California-specific data, there is still uncertainty in the growth parameter $k$ and the choice for natural mortality given the available ages, shown by model profiles across parameters.  Additional sources of uncertainty include unusually high estimated recreational and commercial catches in some years and differences in `r spp` size distributions across space.  
+The primary areas of uncertainty for this assessment are the parameters influencing population productivity, e.g., natural mortality and the growth parameters $k$. Model bridging analyses showed that updating biological parameters and data had a large effect on results and had a much greater impact than other changes such as selectivity.  Despite improved California-specific data, there is still uncertainty in the growth parameter $k$ and the choice for natural mortality given the available ages, shown by model profiles across parameters.  Additional sources of uncertainty include unusually high estimated recreational and commercial catches in some years and differences in `r spp` size distributions across space.  
 
 <!-- Any special issues that complicate scientific assessment, questions about the best model scenario, etc. -->
 
