@@ -3230,6 +3230,7 @@ make_detailed_sensitivites <- function(biglist,
                                  legendloc = 'topleft',
                                  subplot1 = 9,
                                  subplot2 = 11,
+                                 xlim = c(1916, 2025),
                                  endyrvec = 2025)
   
   SStableComparisons(shortlist, 
@@ -3281,7 +3282,8 @@ selec_pretty <- c('All fleets domed',
 # leaveOut_models <- c('leaveOut_com_ages',
 #                      'leaveOut_com_lengths',
 #                      'leaveOut_rec_lengths',
-#                      'leaveOut_growth_ages', 
+#                      'leaveOut_growth_ages',
+#                      'leaveOut_ccfrp_ages',
 #                      'leaveOut_prIndex',
 #                      'leaveOut_rov',
 #                      'leaveOut_ccfrp')
@@ -3290,6 +3292,7 @@ selec_pretty <- c('All fleets domed',
 #                      'Remove com lengths',
 #                      'Remove rec lengths',
 #                      'Remove growth ages',
+#                      'Remove ccfrp ages',
 #                      'Remove PR index',
 #                      'Remove ROV index',
 #                      'Remove CCFRP index')
@@ -3472,7 +3475,9 @@ make_detailed_sensitivites(big_sensitivity_output,
 current.year <- 2025
 CI <- 0.95
 
-sensitivity_output <- SSsummarize(big_sensitivity_output) 
+sensitivity_output <- SSsummarize(big_sensitivity_output[-18]) #remove first leaveOut_all_ages because its in there twice
+models_all <- models_all[-17] #remove first leaveOut_all_ages because its in there twice
+pretty_all <- pretty_all[-17] #remove first leaveOut_all_ages because its in there twice
 
 lapply(big_sensitivity_output, function(.)
   .$warnings[grep('gradient', .$warnings)]) # check gradients

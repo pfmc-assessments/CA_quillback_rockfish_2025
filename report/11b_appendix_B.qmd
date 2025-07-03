@@ -8,10 +8,10 @@ Counts of quillback rockfish on each transect were modeled using a negative bino
 The selected model included site as a random effect, a super year and protection status interaction, the proportion of hard or mixed substrate, average latitude, latitude squared, depth, and depth squared. Latitude squared was included to address non-linearity in the residuals observed in a model with latitude alone. Diagnostics included a Q-Q plot (@fig-ROV-rel-fig3), Kolmogorov-Smirnov and overdispersion tests, and examination of outliers. 
 
 Indices of abundance providing density (fish/hectare) for each super year, both inside and outside of MPAs, were calculated using the ‘general linear hypothesis testing’ (glht) function from the multcomp package in R. This package allows the calculations of means and confidence intervals from linear combinations of beta coefficients. The estimated means and confidence intervals were back transformed to the response scale (density) by exponentiating the resultant means and upper and lower 95% confidence intervals. Index values were calculated for the following combinations:
-●	The intercept represents the mean density in reference areas in 2015
-●	The intercept + the estimate for super year 2020 represents the mean density for reference areas in 2020
-●	The intercept + the estimate for protection represents the mean density for MPAs in 2015
-●	The intercept + the estimate for super year 2020 + the estimate for protection represents the mean density for MPAs in 2020
+*	The intercept represents the mean density in reference areas in 2015
+*	The intercept + the estimate for super year 2020 represents the mean density for reference areas in 2020
+*	The intercept + the estimate for protection represents the mean density for MPAs in 2015
+*	The intercept + the estimate for super year 2020 + the estimate for protection represents the mean density for MPAs in 2020
 This assumes that all other covariates were held constant at their mean. The resulting indices inside and outside of MPAs were weighted in each super year by the proportion of rocky reef habitat inside and outside MPAs, with 80% outside MPAs and 20% inside based seafloor mapping within the 100 m depth contour (@tbl-ROV-rel-tbl5 and @tbl-ROV-rel-tbl6). The results show an increase in quillback rockfish density both inside and outside MPAs with a greater increase inside.   
 
 Fork lengths collected by stereo camera and software for image analysis allow for estimation of the survey selectivity. ROV transects are conducted between 20-120 m depth. In comparison, the CCFRP surveys depths shallower than 20 m but goes no deeper than 60 m to reduce barotrauma. 
