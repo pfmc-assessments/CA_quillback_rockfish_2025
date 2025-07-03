@@ -21,7 +21,7 @@ This assessment updates the data used in the 2021 stock assessment, as well as u
     a.  Recreational catch and effort data from the private/rental fleet were obtained from \gls{crfs} via \gls{recfin} for years 2004--2022.
 
 4.  Fishery-independent data, which include length composition data and relative abundance trends were obtained from two different surveys:
-    a.  \Gls{s-ccfrp} provides an index of abundance and corresponding length composition data and was included for years 2004-2022. Age samples were also obtained from \gls{s-ccfrp} and used to inform biological relationships.
+    a.  \Gls{s-ccfrp} provides an index of abundance and corresponding length composition data and was included for years 2004-2022. Age samples were also obtained from \gls{s-ccfrp} for the years 2017-2024 and used to inform biological relationships.
     b.  \Gls{rov} sampling done by the \gls{cdfw} provides an index of abundance and corresponding length composition data, which were included for two super-periods, 2014--2016 and 2019--2021. Data were combined within each super-period for the index but used as individual years for length compositions.
     
 5.  Estimates of life history parameters were generated from various sources, and include:
