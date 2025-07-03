@@ -27,10 +27,10 @@ This assessment updates the data used in the 2021 stock assessment, as well as u
 5.  Estimates of life history parameters were generated from various sources, and include:
     a.  Updated maturity schedule from fish sampled in California by the \gls{swfsc}'s Santa Cruz lab based on analysis assuming functional age-at-maturity.
     b.  Updated fecundity relationship from fish sampled in California by the \gls{swfsc}'s Santa Cruz lab and fitting fecundity as a power function of length.
-    c.  Updated value for natural mortality based on an updated value for maximum age.
+    c.  Updated value for natural mortality based a new compilation of existing age samples along the west coast and reconsideration of an appropriate assumed maximum age for California.
     d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{crfs}, as well as from the \gls{s-wcgbt}. These sources were the only ones with measured weights. 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
-    f.  Paired age and length samples were collected from various sources and included as a growth fleet in the model for internally estimating growth.  
+    f.  Paired age and length samples were collected from various fishery-dependent and independent sources and included as a growth fleet in the model for internally estimating growth.  
 
 The timing of these data sources as used in the base model are illustrated in @fig-data. Length data are reported as fork length. Any measurements in total length were converted to fork length following the conversion in @echeverria_conversions_1984.
 

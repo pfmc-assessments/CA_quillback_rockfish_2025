@@ -1,4 +1,4 @@
-Model Number,Intercept,Protection,Super Year,Proportion Hard or Mixed, Latitude,Latitude Squared,Depth,Depth Squared,Port Distance,Backsides,1/Site,Super Year * Protection,Offset,Residual DF,AICc,Delta AICc
+Model Number,Intercept,Protection,Super Year,Proportion Hard or Mixed, Latitude,Latitude Squared,Depth,Depth Squared,Port Distance,Backsides,Site,Super Year * Protection,Offset,Residual DF,AICc,Delta AICc
 1,-7.05305,+,+,+,+,+,+,`+,+,+,+,+,+,954,2521.6,-6.3
 2,-6.93612,+,+,+,+,+,+,`+,NA,+,+,+,+,955,2523.9,-4
 3,-7.07284,+,+,+,+,+,+,`+,+,NA,+,+,+,955,2525.3,-2.6

@@ -2,7 +2,7 @@
 
 ## Stock Description{-}
 
-This full assessment reports the status of `r spp` (*Sebastes maliger*) off the California coast in U.S. waters, using data through 2024. `r Spp` off the coast of California is defined as a stock by the \gls{pfmc}. This assessment does not account for `r spp` in Oregon waters or other areas off the U.S. West Coast and assumes that these other populations do not contribute to nor take from the population being assessed here. There is a potential for regional management within California provided additional research on stock structure.
+This full assessment reports the status of `r spp` (*Sebastes maliger*) off the California coast in U.S. waters, using data through 2024. `r Spp` off the coast of California is defined as a stock by the \gls{pfmc}. This assessment does not account for `r spp` in Oregon waters or other areas off the U.S. West Coast and assumes that these other stocks do not contribute to nor take from the stock being assessed here. There is a potential for regional management within California provided additional research on stock structure.
 
 <!-- Species/area, including an evaluation of any potential biological basis for regional management -->
 
@@ -56,7 +56,7 @@ knitr::include_graphics("r4ss_plots/catch2_landings_stacked.png")
 
 ## Data and assessment{-}
 
-This is an assessment of the `r spp` stock off California. Previously, length-based data-moderate assessments were conducted in 2021 for `r spp` off the U.S. West Coast. In 2021, `r spp` was assessed regionally with three separate population models, one each for Washington, Oregon, and California. This benchmark assessment, for the California stock only, uses Stock Synthesis 3 (version 3.30.21.1). All of the data sources included in the 2021 data-moderate assessment were re-evaluated for this assessment. 
+This is an assessment of the `r spp` stock off California. Previously, length-based data-moderate assessments were conducted in 2021 for `r spp` off the U.S. West Coast. In 2021, `r spp` was assessed with three separate population models, one each for Washington, Oregon, and California. This benchmark assessment, for the California stock only, uses Stock Synthesis 3 (version 3.30.21.1). All of the data sources included in the 2021 data-moderate assessment were re-evaluated for this assessment. 
 
 The assessment is a single-area, single-sex model and operates on an annual time step covering the period 1916--2024 and assumes an unfished population prior to 1916. Population dynamics are modeled for ages 0 through 80, with age 60 as the accumulator age.  The lengths are binned by 2 cm increments for data and the population is estimated at 1 cm length bins. The model is conditioned on total removals from two fishing sectors, commercial and recreational, and is informed by both fishery-dependent and fishery-independent data. The recreational fishery aggregates the private/rental and party/charter fleet catches and lengths. The commercial fishery aggregates catches from all gear types, and the live fish and dead fishery.  Commercial lengths are included as well as ages modeled as conditional age-at-length. Discards from the commercial and recreational fleets were estimated externally to the model and added to landings to represent total removals. 
 
@@ -70,7 +70,7 @@ Within-model uncertainty is explicitly included in this assessment through param
 
 ## Stock Biomass and Dynamics{-}
 
-The model estimates the spawning output of the stock did drop below the management target, but remained above the minimum stock size threshold throughout the late 1990s and later increased through the mid-2010s, before dropping back to the target by 2023 (@fig-es-sb, @fig-es-depl). Spawning output has been near, but above the management target of 40% of unfished spawning output in recent years (@tbl-es-sb). The 95% interval for the fraction of unfished spawning output in 2025 ranges from 35%--58%.
+The model estimates that the spawning output of the stock did drop below the management target, but remained above the minimum stock size threshold throughout the late 1990s and later increased through the mid-2010s, before declining back to the target by 2023 (@fig-es-sb, @fig-es-depl). Spawning output has been near, but above the management target of 40% of unfished spawning output in recent years (@tbl-es-sb). The 95% interval for the fraction of unfished spawning output in 2025 ranges from 35%--58%.
 
 <!-- Trends and current levels relative to virgin or historic levels, description of uncertainty-include table for last 10 years and graph with long term estimates. -->
 
