@@ -3302,6 +3302,20 @@ data_contribution_pretty <- c('Dirichlet',
                               'Remove indices')
 
 
+#STAR panel explorations around age data. Note STAR panel runs were from model 513
+#To do this had to copy over 513 preStarBase into sensitivities
+
+star_data_models <- c('5_1_3_preStarBase',
+                      '_STAR_requests/STAR_request7_CCFRPages_reweight',
+                      '_STAR_requests/STAR_Request13_nogrowthfleet_reweight',
+                      'leaveOut_all_ages')
+
+star_data_pretty <- c('preSTAR base - All ages in',
+                      'Remove all but CCFRP growth fleet sources',
+                      'Remove all growth fleet sources',
+                      'Remove all age sources')
+
+
 #Data related models
 
 data_models <- c(#'catchIncreaseSE',
@@ -3365,6 +3379,7 @@ models_all <- c(selec_models,
                 #weighting_models,
                 #leaveOut_models,
                 data_contribution_models,
+                star_data_models,
                 productivity_models)#, 
                 #biology_models)
 
@@ -3373,6 +3388,7 @@ pretty_all <- c(selec_pretty,
                 #weighting_pretty,
                 #leaveOut_pretty,
                 data_contribution_pretty,
+                star_data_pretty,
                 productivity_pretty)#,
                 #biology_pretty)
 
@@ -3421,6 +3437,12 @@ make_detailed_sensitivites(big_sensitivity_output,
                            outdir = outdir,
                            grp_name = 'data',
                            pretty_names = data_pretty)
+
+make_detailed_sensitivites(big_sensitivity_output,
+                           mods_to_include = star_data_models,
+                           outdir = outdir,
+                           grp_name = 'star',
+                           pretty_names = star_data_pretty)
 
 make_detailed_sensitivites(big_sensitivity_output, 
                            mods_to_include = productivity_models,
