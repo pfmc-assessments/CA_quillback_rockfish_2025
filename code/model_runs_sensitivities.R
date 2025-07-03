@@ -3472,7 +3472,9 @@ make_detailed_sensitivites(big_sensitivity_output,
 current.year <- 2025
 CI <- 0.95
 
-sensitivity_output <- SSsummarize(big_sensitivity_output) 
+sensitivity_output <- SSsummarize(big_sensitivity_output[-18]) #remove first leaveOut_all_ages because its in there twice
+models_all <- models_all[-17] #remove first leaveOut_all_ages because its in there twice
+pretty_all <- pretty_all[-17] #remove first leaveOut_all_ages because its in there twice
 
 lapply(big_sensitivity_output, function(.)
   .$warnings[grep('gradient', .$warnings)]) # check gradients
