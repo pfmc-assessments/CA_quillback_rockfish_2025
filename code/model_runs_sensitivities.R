@@ -3230,6 +3230,7 @@ make_detailed_sensitivites <- function(biglist,
                                  legendloc = 'topleft',
                                  subplot1 = 9,
                                  subplot2 = 11,
+                                 xlim = c(1916, 2025),
                                  endyrvec = 2025)
   
   SStableComparisons(shortlist, 
