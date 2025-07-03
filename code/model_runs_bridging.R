@@ -2677,6 +2677,24 @@ r4ss::plot_twopanel_comparison(xx,
                                subplot2 = 18,
                                endyrvec = 2021)
 
+#comparison between recruitment and recruitment deviations
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = paste0("bridgeBiology_recruitment_comparison.png"),
+                               legendlabels = c('2021: SS3v3.30.23.1',
+                                                'Update Natural mortality',
+                                                'Update Growth',
+                                                'Update Length weight',
+                                                'Update Maturity',
+                                                'Update Fecundity',
+                                                'Update All biology'), 
+                               legendloc = 'topleft',
+                               hessian = FALSE,
+                               subplot1 = 9,
+                               subplot2 = 11,
+                               xlim = c(1916, 2021),
+                               endyrvec = 2021)
+
 
 
 ####------------------------------------------------#
@@ -2739,6 +2757,26 @@ r4ss::plot_twopanel_comparison(xx,
                                hessian = FALSE,
                                endyrvec = c(rep(2021, 2), rep(2025, 6)))
 
+#comparison between recruitment and recruitment deviations
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = paste0("bridgeData_recruitment_comparison.png"),
+                               legendlabels = c('2021: SS3v3.30.23.1',
+                                                'Update All biology',
+                                                'Update Catch',
+                                                'Update Length comps of existing fleets',
+                                                'Update Length/age comps of existing fleets',
+                                                '+ estimate growth',
+                                                'Add Indices (indices and comps for index fleets)',
+                                                #'Update All data but do not estimate growth',
+                                                'Update All data and estimate growth'), 
+                               legendloc = 'topleft',
+                               hessian = FALSE,
+                               subplot1 = 9,
+                               subplot2 = 11,
+                               xlim = c(1916, 2025),
+                               endyrvec = c(rep(2021, 2), rep(2025, 6)))
+
 
 ####------------------------------------------------#
 ## Selectivity/Reweight figures----
@@ -2784,4 +2822,22 @@ r4ss::plot_twopanel_comparison(xx,
                                hessian = FALSE,
                                subplot1 = 1,
                                subplot2 = 3,
+                               endyrvec = c(rep(2021, 2), rep(2025, 5)))
+
+#comparison between recruitment and recruitment deviations
+r4ss::plot_twopanel_comparison(xx, 
+                               dir = here('report', 'figures'), 
+                               filename = paste0("bridgeOther_recruitment_comparison.png"),
+                               legendlabels = c('2021: SS3v3.30.23.1',
+                                                'Update All biology',
+                                                'Update All data and estimate growth',
+                                                'Update blocks and selectivity type',
+                                                'Initial reweight',
+                                                'preSTAR base model',
+                                                'postSTAR base model'), 
+                               legendloc = 'topleft',
+                               hessian = FALSE,
+                               subplot1 = 9,
+                               subplot2 = 11,
+                               xlim = c(1916, 2025),
                                endyrvec = c(rep(2021, 2), rep(2025, 5)))
