@@ -138,6 +138,10 @@ pr_filter |>
 pr_filter <- read.csv("tables/ROV_rel_tbl4.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
+    sub_missing(
+  columns = everything(),
+  rows = everything(),
+  missing_text = "-")|>
      tab_options(
     table.font.size = 12) |>
     cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
