@@ -3220,6 +3220,16 @@ make_detailed_sensitivites <- function(biglist,
                                  filename = paste0("sens_", grp_name, '_comparison.png'),
                                  legendlabels = c('Base', pretty_names), 
                                  legendloc = 'bottomleft',
+                                 uncertainty = 1,
+                                 endyrvec = 2025)
+  
+  r4ss::plot_twopanel_comparison(biglist[c('base', mods_to_include)],
+                                 dir = file.path(outdir, 'figures'), 
+                                 filename = paste0("sens_", grp_name, '_comparison_recruit.png'),
+                                 legendlabels = c('Base', pretty_names), 
+                                 legendloc = 'topleft',
+                                 subplot1 = 9,
+                                 subplot2 = 11,
                                  endyrvec = 2025)
   
   SStableComparisons(shortlist, 
