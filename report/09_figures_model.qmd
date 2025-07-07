@@ -262,6 +262,31 @@ knitr::include_graphics(
 )
 ```
 
+```{r}
+#| label: fig-age-pearson-ccfrp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Pearson residuals for the CCFRP survey fleet conditional age-at-length composition."
+#| fig-alt: "There are no clear patters in the residuals in the observed fits."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALfit_residsflt4mkt0.png"
+)
+```
+
+```{r}
+#| label: fig-meanage-ccfrp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean age from conditional age-at-length data (aggregated across length bins) for the CCFRP survey fleet with 95% confidence intervals based on current samples sizes."
+#| fig-alt: "Mean age in the commercial fleet is available from 2017-2024. Mean age varies around 15-16 with a higher mean age of 26 in 2019."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALfit_data_weighting_TA1-8_condAgeCA_CCFRP.png"
+)
+```
 
 ```{r}
 #| label: fig-age-pearson-grow
