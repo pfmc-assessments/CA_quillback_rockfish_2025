@@ -19,6 +19,7 @@
 knitr::include_graphics("figures/assessment_map.png")
 ```
 
+\clearpage
 
 ### Fishery-Dependent Data
 
@@ -159,6 +160,8 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
+\clearpage
+
 ### Fishery-Independent Data
 
 ```{r}
@@ -218,6 +221,8 @@ knitr::include_graphics(
     "r4ss_plots/comp_lendat_data_weighting_TA1-8_CA_ROV.png"
 )
 ```
+
+\clearpage
 
 ### Biological Parameters
 

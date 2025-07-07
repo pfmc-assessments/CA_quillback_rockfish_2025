@@ -90,6 +90,10 @@ pr_filter |>
      tab_options(
     table.font.size = 12) |>
     cols_width(starts_with("Description") ~ px(250) ) |>
+    gt::sub_missing(
+    columns = tidyselect::everything(),
+    missing_text = "---"
+  ) |>
     as_latex()
 
 ```
@@ -99,17 +103,13 @@ pr_filter |>
 #| label: tbl-pr-model-select
 #| echo: false
 #| warning: false
-#| tbl-cap: "Model selection for the CRFS dockside private/rental boat survey.  The selected final model is highlighted in yellow."
+#| tbl-cap: "Model selection for the CRFS dockside private/rental boat survey.  The final model excludes wave.  A plus sign indicates the covariate included and a minus sign indicates it is excluded."
 #| tbl-pos: H
 
 pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
 pr_filter |>
    dplyr::select(-c("Log-Likelihood","AICc")) |>
     gt() |> 
-     sub_missing(
-  columns = everything(),
-  rows = everything(),
-  missing_text = "-")|>
      tab_options(table.font.size = 12) |>
      cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
     as_latex()

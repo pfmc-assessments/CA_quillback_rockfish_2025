@@ -137,7 +137,7 @@ cols_label(
 #| label: tbl-caal_ages
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of age samples available for use in the assessment model as conditional age at length data for the growth fleet. See text for description of data sources. Only ages from Abrams were ultimately used in the assessment model for the growth fleet. Ages from CCFRP were used in the assessment model for the CCFRP fleet. For both cases, the number of ages was used as the input sample size."
+#| tbl-cap: "Summary of the number of age samples available (except commercial). See text for description of data sources. All data were used in the external estimate of growth. Only ages from Abrams were used in the assessment model as conditional age-at-length for the growth fleet. Ages from CCFRP were used in the assessment model as conditional age-at-length for the CCFRP survey fleet. For Abrams and CCFRP, the number of ages was used as the input sample size."
 
 growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
   dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
@@ -145,15 +145,20 @@ growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.nam
                 dplyr::select(-c('calcom_Nfish', 'comm85_Nfish' , 'CCFRPFarallons_Nfish', 'CCFRPNotFarallons_Nfish'))
 growthCAAL <- rbind(growthCAAL, colSums(growthCAAL))
 growthCAAL[nrow(growthCAAL), 1] <- "Total"
+colnames(growthCAAL) <- c("Year", "Abrams", "CRFS Surrendered" , "CDFW commercial", "SWFSC Coop", "IPHC" ,"CDFW Gfish", "SWFSC Research", "WCGBTS", "Misc.", "CCFRP")
+
+growthCAAL <- growthCAAL |> dplyr::relocate("CCFRP", .after = "Abrams")
+growthCAAL <- replace(growthCAAL, growthCAAL==0, "---")
+
+
 
 growthCAAL |>
 kableExtra::kable(
   format = "latex", 
-  #col.names = c("Year", "Abrams", "WCGBTS", "Comm", "CDFW Gfish", "SWFSC Coop", "SWFSC Res.","Surrendered", "IPHC", "Misc.", "CCFRP"), 
-   col.names = c("Year", "Abrams", "Surrendered" , "CDFW comm.", "SWFSC Coop", "IPHC" ,"CDFW Gfish", "SWFSC Res.", "WCGBTS", "Misc.", "CCFRP"), 
   longtable = TRUE,
   booktabs = TRUE,
   linesep = "",
+  align = 'r',
   padding = 0) |>
   kableExtra::kable_styling(
     latex_options = "repeat_header",

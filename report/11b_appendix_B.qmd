@@ -101,6 +101,8 @@ pr_filter |>
 pr_filter <- read.csv("tables/ROV_rel_tbl2.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
+         tab_options(
+    table.font.size = 10) |>
     cols_width(starts_with("Desc") ~ px(200),
                 everything() ~ px(100)) |>
     as_latex()
@@ -121,6 +123,10 @@ pr_filter |>
     gt() |>
      tab_options(
     table.font.size = 12) |>
+  sub_missing(
+  columns = everything(),
+  rows = everything(),
+  missing_text = "---")|>
     as_latex()
 
 ```
@@ -131,21 +137,17 @@ pr_filter |>
 #| label: tbl-ROV-rel-tbl4
 #| echo: false
 #| warning: false
-#| tbl-cap: "Model selection for the ROV survey."
+#| tbl-cap: "Model selection for the ROV survey.  A plus sign indicates the covariate included and a minus sign indicates it is excluded."
 #| tbl-pos: H
 
 
 pr_filter <- read.csv("tables/ROV_rel_tbl4.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
-    sub_missing(
-  columns = everything(),
-  rows = everything(),
-  missing_text = "-")|>
      tab_options(
     table.font.size = 12) |>
     cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
-    cols_width(everything() ~ px(50)) |>
+  #  cols_width(everything() ~ px(45)) |>
     as_latex()
 
 ```

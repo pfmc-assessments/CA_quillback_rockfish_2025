@@ -36,3 +36,12 @@
 \ModifyLayer[addvoffset=-.6ex]{plain.scrheadings.foot.above.line}
 \setkomafont{pageheadfoot}{\small}
 
+
+
+\RedeclareSectionCommands[
+  beforeskip=-.5\baselineskip,
+  afterskip=.25\baselineskip
+]{section,subsection,subsubsection}
+\RedeclareSectionCommands[
+  beforeskip=.5\baselineskip,
+  afterskip=-1em]{paragraph,subparagraph}

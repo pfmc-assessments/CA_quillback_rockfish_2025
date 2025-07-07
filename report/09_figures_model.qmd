@@ -92,6 +92,8 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
+\clearpage
+
 ### Base Model Results
 
 ```{r}
@@ -151,6 +153,7 @@ knitr::include_graphics("r4ss_plots/SR_curve2.png")
 knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
 ```
 
+\clearpage
 
 #### Fits to Data
 
@@ -322,6 +325,7 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_CCFRP.png")
 knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
 ```
 
+\clearpage
 
 #### Population Trajectory
 
@@ -388,6 +392,7 @@ knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 
 {{< pagebreak >}}
 
+\clearpage
 
 ### Model Diagnostics
 
