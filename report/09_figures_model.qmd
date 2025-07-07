@@ -670,6 +670,34 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
+#| label: fig-sens-star
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Spawning output (billions of eggs, top), and spawning output relative to unfished (bottom) for sensitivities related to age data contributions."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, and showing progressively larger changes as more age data are excluded."
+
+knitr::include_graphics(
+  "figures/sens_star_comparison.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-sens-star-recruit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Age-0 recruits (thousands, top), and recruitment deviations (bottom) for sensitivities related to age data contributions."
+#| fig-alt: "Two panel figure comparing trajectories between sensitivity models and the base model, showing reduced recruitment estimates in the mid 1990s and later 2010s as more age data are excluded."
+
+knitr::include_graphics(
+  "figures/sens_star_comparison_recruit.png")
+```
+
+{{< pagebreak >}}
+
+```{r}
 #| label: fig-sens-data
 #| echo: false
 #| warning: false

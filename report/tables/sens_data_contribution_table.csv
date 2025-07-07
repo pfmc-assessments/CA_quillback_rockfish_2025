@@ -1,4 +1,4 @@
-" ","Base","Dirichlet","McAllister-Ianelli","Index Extra SD","Remove fleet lengths","Remove ages","Remove indices"
+" ","Base","Dirichlet","McAllister-Ianelli","Index Extra SD","Remove all fleet lengths","Remove all ages","Remove all indices"
 "Npar","121","128","121","124","121","121","121"
 "TOTAL_like","532.463","3017.410","698.127","527.515","387.134","145.778","557.654"
 "Survey_like","-26.677","-27.958","-27.577","-30.713","-28.700","-27.057","0.000"

@@ -137,7 +137,7 @@ cols_label(
 #| label: tbl-caal_ages
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of age samples used for conditional age at length data for the growth fleet in the assessment model. See text for description of data sources. Ages in years that had fewer than 30 samples across all sources were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of age samples available for use in the assessment model as conditional age at length data for the growth fleet. See text for description of data sources. Only ages from Abrams were ultimately used in the assessment model for the growth fleet. Ages from CCFRP were used in the assessment model for the CCFRP fleet. For both cases, the number of ages was used as the input sample size."
 
 growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
   dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
@@ -393,6 +393,27 @@ kableExtra::kable(
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_weighting_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_data_contribution_table.csv"), check.names = FALSE) |>
+  dplyr::slice(-1) %>% #remove Npar
+  mutate_at(vars(-1), round, 3)
+sens |>
+  gt() |>
+  tab_options(
+    table.font.size = 12,
+    latex.use_longtable = TRUE
+  ) |>
+  as_latex()
+``` 
+
+\pagebreak
+
+```{r}
+#| label: tbl-sens-star
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: "Contributions from age data sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) related to age data. See main text for details on each sensitivity analysis. Because of differences in the relative contributions of data for these sensitivities, likelihoods are generally not comparable."
+#| tbl-pos: H
+sens <- read.csv(here::here("report/tables/sens_star_table.csv"), check.names = FALSE) |>
   dplyr::slice(-1) %>% #remove Npar
   mutate_at(vars(-1), round, 3)
 sens |>
