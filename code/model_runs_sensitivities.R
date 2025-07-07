@@ -3310,9 +3310,9 @@ data_contribution_models <- c('dw_dirichlet',
 data_contribution_pretty <- c('Dirichlet',
                               'McAllister-Ianelli',
                               'Index Extra SD',
-                              'Remove fleet lengths',
-                              'Remove ages',
-                              'Remove indices')
+                              'Remove all fleet lengths',
+                              'Remove all ages',
+                              'Remove all indices')
 
 
 #STAR panel explorations around age data. Note STAR panel runs were from model 513
@@ -3324,9 +3324,9 @@ star_data_models <- c('5_1_3_preStarBase',
                       'leaveOut_all_ages')
 
 star_data_pretty <- c('preSTAR base - All ages in',
-                      'Remove all but CCFRP growth fleet sources',
                       'Remove all growth fleet sources',
-                      'Remove all age sources')
+                      'Remove all growth fleet and CCFRP sources',
+                      'Remove all ages')
 
 
 #Data related models
@@ -4814,9 +4814,10 @@ plot_sel_all(pp)
 
 pp$sigma_R_info #0.82
 
+
 ######-
-## Request  13 remove the growth fleet completely
-##
+## Request 13 remove the growth fleet completely --------------------------------------------------------
+
 new_name <- 'STAR_Request13_nogrowthfleet'
 old_name <- base_mod_name
 
