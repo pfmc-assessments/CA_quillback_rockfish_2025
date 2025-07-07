@@ -39,7 +39,19 @@ where $F$ is fecundity in millions of eggs and $L$ is fork length in cm (@fig-fe
 
 ### Growth (Length-at-Age)
 
-The majority of length-at-age data available for California `r spp` were collected in the last five years. The \gls{ccgs} is the only fishery-dependent sampling program that collects otoliths as part of the sampling design and the majority of other age data are combined into a growth fleet.  External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (Claire Stuart, Cal Poly Humboldt, pers. comm.), as also found by @LenarzandEcheverria_dimorphism_1991. A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. Lengths from age-zero fish (N = 192) were available from a dissertation study [@baetscher_2019_larval] and were only used to inform initial parameters for growth that were estimated external to the base model. Baetscher -@baetscher_2019_larval trapped juvenile rockfish within Monterey Bay using \gls{smurf}s and divers with nets. All of the `r spp` captured were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 
+The majority of length-at-age data available for California `r spp` were collected in the last five years. Only 21 otoliths from the \gls{s-wcgbt} were read and available at the time of the 2021 assessment, but efforts during the subsequent reviews resulted in 122 additional age reads by the time the assessment was finalized. However, growth in the final 2021 model did not change throughout the review process and was fixed to the same external fit as the models for Washington and Oregon. Efforts since the 2021 assessment have resulted in substantially more age samples collected and read across a variety of data sources. 
+
+An additional 736 age reads were available from otoliths collected from `r spp` off the coast of California across a variety of non-commercial sources from 1985--2024. Available ages used in the external fit to growth only, and not included in the base model were from the following sources: 
+
+* The \gls{s-wcgbt} (N = 34)
+* The \gls{swfsc} Grounfish Cooperative Data Collection program during the 2022 fishing season (N = 134)
+* The \gls{swfsc} life history research activities (N = 96) 
+* The \gls{cdfw} collected `r spp` otoliths from commercial (N = 6) and recreational private/rental (N = 111) vessels, and from fish surrendered to \gls{crfs} samplers (N = 55). 
+* The \gls{iphc} \gls{fiss} (N = 5)
+* Miscellaneous sampling that could not be tracked to a specific data source (N = 9)
+* Age-zero fish from Baetscher's dissertation work -@baetscher_2019_larval trapping young-of-the-year rockfish within Monterey Bay using \gls{smurf}s and divers with nets (N = 192). All of the `r spp` captured were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 
+
+External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (Claire Stuart, Cal Poly Humboldt, pers. comm.), as also found by @LenarzandEcheverria_dimorphism_1991. A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. 
 
 The estimated growth curve from the available data, estimated externally to the base model, was 
 $$
@@ -51,7 +63,6 @@ where $L_{\infty}$ is the asymptotic average length, $K$ is the growth coefficie
 
 This model does not explicitly include environmental or ecosystem data. `r Spp` are a rocky habitat associated species and the area of available habitat was considered when developing indices of abundance for the fishery-independent surveys. 
 
-<!-- Environmental or ecosystem data or model products used in the stock assessment model and/or in the preparation of data or estimation of biological parameters. If environmental or ecosystem data are incorporated in the stock assessment model, provide a report of consultations with technical teams that evaluate ecosystem data or methodologies used in  -->
 
 
 
