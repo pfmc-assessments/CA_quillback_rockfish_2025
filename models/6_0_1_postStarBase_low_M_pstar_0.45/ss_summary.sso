@@ -1,7 +1,7 @@
 #V3.30.23.1;_safe;_compile_date:_Dec  5 2024;_Stock_Synthesis_by_Richard_Methot_(NOAA)_using_ADMB_13.2
 2025_ca_quillback.dat #_DataFile 
 2025_ca_quillback.ctl #_Control 
-Run_Date: Thu Jul  3 13:09:40 2025
+Run_Date: Tue Jul  8 13:57:26 2025
 Final_phase: 6  N_iterations: 646
 #_LIKELIHOOD 
 Label logL*Lambda
@@ -547,7 +547,7 @@ SPRratio_2032 0.624807 0
 SPRratio_2033 0.625063 0
 SPRratio_2034 0.624814 0
 SPRratio_2035 0.624777 0
-SPRratio_2036 0.624336 0
+SPRratio_2036 0.624335 0
 #_F Basis= _abs_F;_with_F=Exploit(bio)
 F_1916 2.83298e-05 0
 F_1917 5.855e-05 0

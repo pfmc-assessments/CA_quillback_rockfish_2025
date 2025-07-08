@@ -1,15 +1,49 @@
 # Acknowledgements {#sec-acknowledgements}
 
-* STAR panel reviewers Geoff Tingley, Kotaro Ono, Alan Hicks for comments during STAR panel to improve analysis and description of the assessment.
+* STAR panel reviewers Geoff Tingley, Kotaro Ono, Allan Hicks for comments during STAR panel to improve analysis and description of the assessment
 
-* STAR panel chair, Cheryl Barnes for comments during STAR panel and preliminary review of document, and so ensuring materials conform to the TOR and are reviewed timely. 
+* STAR panel chair, Cheryl Barnes for comments during STAR panel and preliminary review of document, and so ensuring materials conform to the TOR and are reviewed timely
 
-* Council staff Marlene Bellman for overall coordination and for preliminary review of document to ensure adherance to the TOR. 
+* Council staff Marlene Bellman for overall coordination and for preliminary review of document to ensure adherence to the TOR
 
-* GAP and GMT advisors Tim Clauson and Thompson Banez, respectively, for help in understanding fleet dynamics to help inform initial selectivity blocks and types, in understanding management actions, and in providing catch values for use in years between and during projections
+* GAP and GMT advisors Tim Klassen and Thompson Banez, respectively, for help in understanding fleet dynamics to help inform initial selectivity blocks and types, in understanding management actions, and in providing catch values for use in years between and during projections
 
-* Melissa Head for biological analyses of maturity and fecundity.
+* Melissa Head for biological analyses of maturity slides
 
-* Samplers collecting data onboard CCFRP and ROV fleets. These include university and CDFW employees, as well as volunteer anglers paricitating in collection of biological and survey data.
+* Jamie Hale and Patrick McDonald of the CAP lab for age reading
 
-* Owen Hamel for comments on iproving initial versions of assessment report as well as comment for improving assessment model. 
+* Jessica Join and Buddy Pendergast for fecundity counts        
+
+* Rebecca Miller, E.J. Dick, Tanya Rogers and Rachel Brooks for data wrangling an modelling assistance
+
+* The participants of the CCFRP and ROV surveys. These include university and CDFW, MARE, as well as volunteer anglers participating in collection of biological and survey data.
+
+* Owen Hamel for comments on improving initial versions of assessment report as well as comment for improving assessment model 
+
+* The following CCFRP and SWFSC cooperative research vessels:
+    + Crescent City Fishing Charters - Steve Huber, F/V Out of the Box
+    + Stella's Adventures - Harry Adams, F/V Onyx
+    + Northwind Charters - Matt Dallam, F/V Fishy Business
+    + Reel Steel Sportfishing - Tim Klassen, F/V New Reel Steel
+    + Coastline Fishing Charters - Mark Schmidt, F/V Scrimshaw 
+    + Fort Bragg Sportfishing - Kurt Akin, F/V Kyndall Lynn
+    + Bodega Bay Sportfishing - Rick Powers, F/V New Sea Angler
+    + Salty Lady Sportfishing - Jared Davis, F/V Salty Lady
+    + Sea Wolf Sportfishing - Jon Yokomizo, F/V Sea Wolf
+    + Huli Cat Sportfishing - Tom Mattusch. F/V Huli Cat
+    + New Captain Pete Sportfishing - Mike Cabanas, F/V New Captain Pete
+
+
+
+
+# Auxiliary files
+
+Files archived with the 2025 California quillback rockfish assessment:
+
+* 2025_ca_quillback.ctl
+* 2025_ca_quillback.dat
+* forecast.ss
+* Report.sso
+* starter.ss
+* r4ss html output and associated figures in ‘plots’ folder
+

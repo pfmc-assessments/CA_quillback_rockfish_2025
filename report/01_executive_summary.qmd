@@ -448,6 +448,20 @@ projections_table |>
 
 :::
 
+
+```{r, results = "asis"}
+#| label: tbl-es-decision
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) decision_table_cap 
+#| tbl-pos: H
+
+table_decision(
+  list(low45, base45, high45))
+
+```
+
 ## Scientific Uncertainty{-}
 
 The model estimate of the log-scale standard deviation of the overfishing limit (OFL) in 2025 is `r round(mod_out$OFL_sigma, 3)`, lower than the default SSC value of 0.5 for a category 1 assessment, so harvest projections assume an initial sigma of 0.5. The model estimate of uncertainty around the 2025 spawning output is `r round(mod_out$Pstar_sigma, 3)`. Each of these underestimates of overall uncertainty due to the necessity to fix several key population dynamics parameters (e.g., steepness, recruitment variance, natural mortality) and also because there is no explicit incorporation of model structural uncertainty (although see the decision table for alternative states of nature).

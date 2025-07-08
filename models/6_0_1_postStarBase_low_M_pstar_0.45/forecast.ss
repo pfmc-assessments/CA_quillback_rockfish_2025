@@ -1,5 +1,5 @@
 #C file created using an r4ss function
-#C file write time: 2025-07-03  13:08:58
+#C file write time: 2025-07-08  13:57:25
 #
 1 #_benchmarks
 2 #_MSY
@@ -24,7 +24,7 @@
         11      1      -3        0
         12      1    -999        0
 -9999 0 0 0
-3 #_ControlRuleMethod
+0 #_ControlRuleMethod
 0.4 #_BforconstantF
 0.1 #_BfornoF
 1 #_Flimitfraction

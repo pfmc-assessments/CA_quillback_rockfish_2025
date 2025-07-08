@@ -103,7 +103,7 @@ pr_filter |>
 #| label: tbl-pr-model-select
 #| echo: false
 #| warning: false
-#| tbl-cap: "Model selection for the CRFS dockside private/rental boat survey.  The final model excludes wave.  A plus sign indicates the covariate included and a minus sign indicates it is excluded."
+#| tbl-cap: "Model selection for the CRFS dockside private/rental boat survey.  The final model is bolded in the table. A plus sign indicates the covariate included and a minus sign indicates it is excluded."
 #| tbl-pos: H
 
 pr_filter <- read.csv("tables/pr_index_model_selection.csv", check.names = FALSE)
@@ -111,6 +111,12 @@ pr_filter |>
    dplyr::select(-c("Log-Likelihood","AICc")) |>
     gt() |> 
      tab_options(table.font.size = 12) |>
+    tab_style(
+     style = list(cell_text(weight = "bold")),
+    locations = cells_body(
+      rows = 7
+    )
+  ) |>
      cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
     as_latex()
 

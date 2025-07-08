@@ -39,12 +39,14 @@ table_decision <- function(
     digits = c(0, 2, 3),
     tex = TRUE) {
   mods <- list(...)
+
+  mods <-  list(list(low45, base45, high45))
   # make sure that the format input is good
   # chooses first option by default
   format <- match.arg(format)
   
   # hardwired to prevent users from adding too-long inputs
-  rowgroup <- c("A", "B", "C")
+  rowgroup <- c("A")#, "B")#, "C")
   
   # process output
   results <- purrr::modify_depth(
@@ -76,17 +78,25 @@ table_decision <- function(
     dplyr::rename(Catch = "catch...2") %>%
     dplyr::select(-dplyr::starts_with("catch", ignore.case = FALSE))
   
+
+
+  #for quillback make adjustments
+#remove mngmt columns
+
   # remove repeated lables in Mgmt column
   results <- results %>%
-    dplyr::mutate(Mgmt = ifelse(duplicated(Mgmt), "", Mgmt))
+    dplyr::select(-c(Mgmt))
+#    dplyr::mutate(Mgmt = ifelse(duplicated(Mgmt), "", Mgmt))
   
   # add column names
   rownames(results) <- NULL
   colnames(results) <- c(
-    "Mgmt", "Year", "Catch", "Low Spawn Single M", "Low Frac Single M",
-    "Base Spawn", "Base Frac", "High Spawn M ramp", "High Frac M ramp"
+    "Year", "Catch (mt)", "Low M Spawn", "Low M Frac",
+    "Base M Spawn", "Base M Frac", "High M Spawn", "High M Frac"
   )
-  
+
+
+
   if (tex) {
     results <- results %>%
       kableExtra::kbl(
@@ -94,15 +104,15 @@ table_decision <- function(
         escape = FALSE,
         booktabs = TRUE,
         linesep = rep(c(rep("", length(years) - 1), "\\addlinespace"), 2),
-        align = c("l", "l", "r", rep(c("r", "r"), 3)),
+        align = c("l", "r", rep(c("r", "r"), 3)),
         caption = caption,
         label = label
       ) %>%
       kableExtra::column_spec(c(1), bold = TRUE) # first column bold
     
     results <- results %>%
-      kableExtra::column_spec(4:5, width = "4.0em") %>%
-      kableExtra::column_spec(6:9, width = "3.5em") %>%
+      kableExtra::column_spec(3:4, width = "4.0em") %>%
+      kableExtra::column_spec(5:8, width = "3.5em") %>%
       kableExtra::kable_classic(full_width = FALSE)
   }  
   return(results)
