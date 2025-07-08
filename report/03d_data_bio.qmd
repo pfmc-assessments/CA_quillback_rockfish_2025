@@ -39,10 +39,9 @@ where $F$ is fecundity in millions of eggs and $L$ is fork length in cm (@fig-fe
 
 ### Growth (Length-at-Age) {#sec-growth}
 
-The majority of length-at-age data available for California `r spp` were collected in the last five years. Only 21 otoliths from the \gls{s-wcgbt} were read and available at the time of the 2021 assessment, but efforts during the subsequent reviews resulted in 122 additional age reads by the time the assessment was finalized. However, growth in the final 2021 model did not change throughout the review process and was fixed to the same external fit as the models for Washington and Oregon. Efforts since the 2021 assessment have resulted in substantially more age samples collected and read across a variety of data sources (@tbl-caal_ages). 
+The majority of length-at-age data available for California `r spp` were collected in the last five years. Only 21 otoliths from the \gls{s-wcgbt} were read and available at the time of the 2021 assessment, but efforts during the subsequent reviews resulted in 122 additional age reads by the time the assessment was finalized. However, growth in the final 2021 model did not change throughout the review process and was fixed to the same external fit as the models for Washington and Oregon. Efforts since the 2021 assessment have resulted in substantially more age samples collected and read across a variety of data sources. 
 
-An additional 736 age reads were available from otoliths collected from `r spp` off the coast of California across a variety of non-commercial sources from 1985--2024. Available ages used in the external fit to growth only, and not included in the base model were from the following sources: 
-
+An additional 450 age reads were available from otoliths collected from `r spp` off the coast of California from 1985--2024 across a variety of sources (@tbl-caal_ages). These available ages were used in initializing growth parameters (i.e. in external estimates of growth only), but were not included in the final base model. The sources include: 
 * The \gls{s-wcgbt} (N = 34)
 * The \gls{swfsc} Groundfish Cooperative Data Collection program during the 2022 fishing season (N = 134)
 * The \gls{swfsc} life history research activities (N = 96) 
@@ -51,7 +50,8 @@ An additional 736 age reads were available from otoliths collected from `r spp` 
 * Fish surrendered to \gls{crfs} samplers (N = 55) 
 * The \gls{iphc} \gls{fiss} (N = 5)
 * Miscellaneous sampling that could not be tracked to a specific data source (N = 9)
-* Age-zero fish from Baetscher's dissertation work -@baetscher_2019_larval trapping young-of-the-year rockfish within Monterey Bay using \gls{smurf}s and divers with nets (N = 192). All of the `r spp` captured were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 
+
+In addition to these 450 age reads, 192 age-zero fish from Diana Baetscher's dissertation work [@baetscher_2019_larval] trapping young-of-the-year rockfish within Monterey Bay using \gls{smurf}s and divers with nets were also available and used to inform initial parameters for growth. The `r spp` captured were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 
 
 External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (Claire Stuart, Cal Poly Humboldt, pers. comm.), as also found by @LenarzandEcheverria_dimorphism_1991. A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. 
 

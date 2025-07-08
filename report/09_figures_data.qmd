@@ -130,22 +130,6 @@ knitr::include_graphics(
 
 
 ```{r}
-#| label: fig-caal-growth
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Conditional age-at-length data for the growth fleet where bubbles correspond to the proportional sample size by age for each length bin."
-#| fig-alt: "Bubble plot of California age at length compositions for the growth fleet roughly following shape of growth curve."
-
-knitr::include_graphics(
-    "r4ss_plots/comp_condAALdat_bubflt3mkt0.png"
-)
-```
-
-{{< pagebreak >}}
-
-
-```{r}
 #| label: fig-indices
 #| echo: false
 #| warning: false
@@ -195,12 +179,43 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
+#| label: fig-caal-ccfrp
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Conditional age-at-length data for the CCFRP fleet where bubbles correspond to the proportional sample size by age for each length bin."
+#| fig-alt: "Bubble plot of California age at length compositions for the CCFRP fleet showing sparse samples that roughly following shape of growth curve."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALdat_bubflt4mkt0.png"
+)
+```
+
+{{< pagebreak >}}
+
+
+```{r}
+#| label: fig-caal-growth
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Conditional age-at-length data for the growth fleet based on samples from Abrams where bubbles correspond to the proportional sample size by age for each length bin."
+#| fig-alt: "Bubble plot of California age at length compositions for the growth fleet roughly following shape of growth curve."
+
+knitr::include_graphics(
+    "r4ss_plots/comp_condAALdat_bubflt3mkt0.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
 #| label: fig-len-rov-bubbles
 #| echo: false
 #| warning: false
 #| eval: true
 #| fig-cap: "Length composition data for the ROV survey where bubbles correspond to the proportional sample size by bin within each year."
-#| fig-alt: "Bubble plot of CCFRP length compositions. See text for description"
+#| fig-alt: "Bubble plot of ROV length compositions. See text for description"
 
 knitr::include_graphics(
     "r4ss_plots/comp_lendat_bubflt5mkt0.png"
