@@ -14,7 +14,7 @@ This assessment updates the data used in the 2021 stock assessment, as well as u
     c.  Commercial dead discards for recent years (2002--2023) come from the \gls{gemm} product which aggregates data from a variety of sources including the \gls{wcgop} [@somers_gemm_2023].
 
 2.  Fishery-dependent length and age composition data were obtained from the following sources:
-    a.  Commercial data come from the \gls{ccgs} sampling program in years ranging between 1978--2024 for lengths and 2007--2024 for ages. Data were obtained from \gls{pacfin}.
+    a.  Commercial composition data come from the \gls{ccgs} sampling program in years ranging between 1978--2024 for lengths and 2007--2024 for ages. Data were obtained from \gls{pacfin}.
     b.  Recreational length composition data from state sampling programs or historical sampling efforts ranged from 1959--1960 and 1980--2024 were obtained from \gls{cdfw}, online reports, and \gls{recfin}.
 
 3.  Fishery-dependent relative abundance trends were obtained from the following sources:
@@ -23,7 +23,7 @@ This assessment updates the data used in the 2021 stock assessment, as well as u
 4.  Fishery-independent data, which include length and age composition data and relative abundance trends were obtained from two different surveys:
     a.  The \gls{s-ccfrp} provides an index of abundance and corresponding length and age composition data and was included for years 2017-2022. 
     b.  The \gls{rov} survey by the \gls{cdfw} in collaboration with \gls{mare} provides an index of abundance and corresponding length composition data, which were included for two super-year periods, 2014--2016 and 2019--2021. Data were combined within each super-year for the index, but used as individual years for length compositions.
-    f.  Paired age and length samples collected by Jeff Abrams for his thesis study at Cal Poly Humboldt are included as a growth fleet in the model for internally estimating growth.  
+    f.  Paired age and length samples collected by Jeff Abrams for his thesis at Cal Poly Humboldt [@abrams_2014] are included as a growth fleet in the model to inform internal estimates of growth as well as to inform recruitment patterns.  
 
 5.  Estimates of life history parameters were generated from various sources, and include:
     a.  Updated maturity schedule from fish sampled in California by the \gls{swfsc}'s Santa Cruz lab with the analysis assuming functional length-at-maturity.
@@ -32,7 +32,4 @@ This assessment updates the data used in the 2021 stock assessment, as well as u
     d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{crfs}, as well as from the \gls{s-wcgbt}. These sources were the only ones with measured weights. 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
  
-
 The years of available data as used in the base model are illustrated in @fig-data. Length data are reported as fork length. Any measurements in total length were converted to fork length following the conversion in @echeverria_conversions_1984.
-
-

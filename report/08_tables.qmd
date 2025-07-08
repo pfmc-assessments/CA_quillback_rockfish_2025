@@ -131,48 +131,7 @@ cols_label(
   as_latex()
 ```
 
-::: {.landscape}
-
-```{r}
-#| label: tbl-caal_ages
-#| echo: false
-#| warning: false
-#| tbl-cap: "Summary of the number of age samples available (except commercial). See text for description of data sources. All data were used in the external estimate of growth. Only ages from Abrams were used in the assessment model as conditional age-at-length for the growth fleet. Ages from CCFRP were used in the assessment model as conditional age-at-length for the CCFRP survey fleet. For Abrams and CCFRP, the number of ages was used as the input sample size."
-
-growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
-  dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
-                CCFRP = CCFRPFarallons_Nfish + CCFRPNotFarallons_Nfish) |>
-                dplyr::select(-c('calcom_Nfish', 'comm85_Nfish' , 'CCFRPFarallons_Nfish', 'CCFRPNotFarallons_Nfish'))
-growthCAAL <- rbind(growthCAAL, colSums(growthCAAL))
-growthCAAL[nrow(growthCAAL), 1] <- "Total"
-colnames(growthCAAL) <- c("Year", "Abrams", "CRFS Surrendered" , "CDFW commercial", "SWFSC Coop", "IPHC" ,"CDFW Gfish", "SWFSC Research", "WCGBTS", "Misc.", "CCFRP")
-
-growthCAAL <- growthCAAL |> dplyr::relocate("CCFRP", .after = "Abrams")
-growthCAAL <- replace(growthCAAL, growthCAAL==0, "---")
-
-
-
-growthCAAL |>
-kableExtra::kable(
-  format = "latex", 
-  longtable = TRUE,
-  booktabs = TRUE,
-  linesep = "",
-  align = 'r',
-  padding = 0) |>
-  kableExtra::kable_styling(
-    latex_options = "repeat_header",
-    font_size = 11,
-    full_width = FALSE) |># |>
-  row_spec(15, bold=T)
-  #kableExtra::column_spec(
-  #  column = 1:3,
-  #  width = "1in")
-
-```
-
-:::
-
+{{< pagebreak >}}
 
 ```{r}
 #| label: tbl-survey_lengths
@@ -214,6 +173,51 @@ fi_lengths |>
   as_latex()
 ```
 
+{{< pagebreak >}}
+
+::: {.landscape}
+
+```{r}
+#| label: tbl-caal_ages
+#| echo: false
+#| warning: false
+#| tbl-cap: "Summary of the number of age samples available for use in the assessment model (except commercial, which is shown in @tbl-comm_ages). See text for description of data sources. All data were used to initialize growth parameters. Only ages from Abrams were used in the assessment model as conditional age-at-length for the growth fleet, and ages from CCFRP were used in the assessment model as conditional age-at-length for the CCFRP fleet. For Abrams and CCFRP, the number of ages was used as the input sample size."
+
+growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
+  dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
+                CCFRP = CCFRPFarallons_Nfish + CCFRPNotFarallons_Nfish) |>
+                dplyr::select(-c('calcom_Nfish', 'comm85_Nfish' , 'CCFRPFarallons_Nfish', 'CCFRPNotFarallons_Nfish'))
+growthCAAL <- rbind(growthCAAL, colSums(growthCAAL))
+growthCAAL[nrow(growthCAAL), 1] <- "Total"
+colnames(growthCAAL) <- c("Year", "Abrams", "CRFS Surrendered" , "CDFW commercial", "SWFSC Coop", "IPHC" ,"CDFW Gfish", "SWFSC Research", "WCGBTS", "Misc.", "CCFRP")
+
+growthCAAL <- growthCAAL |> dplyr::relocate("CCFRP", .after = "Abrams")
+growthCAAL <- replace(growthCAAL, growthCAAL==0, "---")
+
+
+
+growthCAAL |>
+kableExtra::kable(
+  format = "latex", 
+  longtable = TRUE,
+  booktabs = TRUE,
+  linesep = "",
+  align = 'r',
+  padding = 0) |>
+  kableExtra::kable_styling(
+    latex_options = "repeat_header",
+    font_size = 11,
+    full_width = FALSE) |># |>
+  row_spec(15, bold=T)
+  #kableExtra::column_spec(
+  #  column = 1:3,
+  #  width = "1in")
+
+```
+
+:::
+
+{{< pagebreak >}}
 
 ## Assessment Model
 
