@@ -37,16 +37,18 @@ F = `r mod_in$ctl$MG_parms['Eggs_alpha_Fem_GP_1', 'INIT']`L^{`r mod_in$ctl$MG_pa
 $$
 where $F$ is fecundity in millions of eggs and $L$ is fork length in cm (@fig-fecundity). 
 
-### Growth (Length-at-Age)
+### Growth (Length-at-Age) {#sec-growth}
 
-The majority of length-at-age data available for California `r spp` were collected in the last five years. Only 21 otoliths from the \gls{s-wcgbt} were read and available at the time of the 2021 assessment, but efforts during the subsequent reviews resulted in 122 additional age reads by the time the assessment was finalized. However, growth in the final 2021 model did not change throughout the review process and was fixed to the same external fit as the models for Washington and Oregon. Efforts since the 2021 assessment have resulted in substantially more age samples collected and read across a variety of data sources. 
+The majority of length-at-age data available for California `r spp` were collected in the last five years. Only 21 otoliths from the \gls{s-wcgbt} were read and available at the time of the 2021 assessment, but efforts during the subsequent reviews resulted in 122 additional age reads by the time the assessment was finalized. However, growth in the final 2021 model did not change throughout the review process and was fixed to the same external fit as the models for Washington and Oregon. Efforts since the 2021 assessment have resulted in substantially more age samples collected and read across a variety of data sources (@tbl-caal_ages). 
 
 An additional 736 age reads were available from otoliths collected from `r spp` off the coast of California across a variety of non-commercial sources from 1985--2024. Available ages used in the external fit to growth only, and not included in the base model were from the following sources: 
 
 * The \gls{s-wcgbt} (N = 34)
-* The \gls{swfsc} Grounfish Cooperative Data Collection program during the 2022 fishing season (N = 134)
+* The \gls{swfsc} Groundfish Cooperative Data Collection program during the 2022 fishing season (N = 134)
 * The \gls{swfsc} life history research activities (N = 96) 
-* The \gls{cdfw} collected `r spp` otoliths from commercial (N = 6) and recreational private/rental (N = 111) vessels, and from fish surrendered to \gls{crfs} samplers (N = 55). 
+* The \gls{cdfw} purchased `r spp` from commercial vessels (N = 6)
+* The \gls{cdfw} groundfish team sampled recreational private/rental vessels (N = 111) 
+* Fish surrendered to \gls{crfs} samplers (N = 55) 
 * The \gls{iphc} \gls{fiss} (N = 5)
 * Miscellaneous sampling that could not be tracked to a specific data source (N = 9)
 * Age-zero fish from Baetscher's dissertation work -@baetscher_2019_larval trapping young-of-the-year rockfish within Monterey Bay using \gls{smurf}s and divers with nets (N = 192). All of the `r spp` captured were morphologically identified as gopher, copper or kelp rockfish, but were genetically identified as `r spp`. 

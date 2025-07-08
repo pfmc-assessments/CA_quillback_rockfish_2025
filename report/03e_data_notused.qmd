@@ -1,6 +1,6 @@
 ## Data Sources Considered But Not Used {#sec-data-not-used}
 
-### \acrlong{nmfs} Surveys
+### \acrlong{nmfs} Survey Indices
 
 The \gls{s-wcgbt} and the \gls{s-tri} collect data off the California coast on rockfish biology and abundance and are commonly incorporated in West Coast groundfish assessments. The \gls{s-tri} operated between 1977--2004 and \gls{s-wcgbt} has operated since 2003. None of these fishery-independent surveys had adequate sample sizes of `r spp` off California to include as abundance indices for this assessment. There were no more than ten positive tows of `r spp` in any one year coastwide in the \gls{s-wcgbt}, and only seven positive tows in California. Similarly there were no more than five positive tows of `r spp` in any one year coastwide for the \gls{s-tri}, and only one positive tow in California. Given that indices of abundance were not calculated due to small sample sizes, length composition data from the \gls{s-wcgbt} (N = 39) and Triennial Survey (N = 1) off California were not included in the base model. Biological data from the \gls{s-wcgbt} were however used in external calculations of biological parameters. No ages or weights for `r spp` were available from the \gls{s-tri}, and so its single length sample was not incorporated.
 
