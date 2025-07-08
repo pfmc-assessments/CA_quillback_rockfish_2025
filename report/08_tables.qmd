@@ -178,7 +178,7 @@ fi_lengths |>
 ::: {.landscape}
 
 ```{r}
-#| label: tbl-caal_ages
+#| label: tbl-caal-ages
 #| echo: false
 #| warning: false
 #| tbl-cap: "Summary of the number of age samples available for use in the assessment model (except commercial, which is shown in @tbl-comm_ages). See text for description of data sources. All data were used to initialize growth parameters. Only ages from Abrams were used in the assessment model as conditional age-at-length for the growth fleet, and ages from CCFRP were used in the assessment model as conditional age-at-length for the CCFRP fleet. For Abrams and CCFRP, the number of ages was used as the input sample size."
@@ -466,8 +466,8 @@ kableExtra::kable(
 #| tbl-pos: H
 #table_sens(here::here("report/tables/sens_selectivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) %>%
-  mutate_at(vars(-1), round, 3)
-
+  mutate_at(vars(-1), round, 3) 
+sens[1, ] <- formatC(as.numeric(sens[1, ]), format = "f", digits = 0) 
 kableExtra::kable(
   sens,
   format = "latex", 
@@ -475,7 +475,7 @@ kableExtra::kable(
   linesep = "") |>
   kableExtra::kable_styling(font_size = 8, latex_options = "HOLD_position") |>
   kableExtra::column_spec(1, width = "3.5cm") |>
-  kableExtra::column_spec(2:10, width = "1.5cm") 
+  kableExtra::column_spec(2:10, width = "1.5cm")
 ``` 
 
 :::
