@@ -48,6 +48,21 @@ knitr::include_graphics(
 {{< pagebreak >}}
 
 ```{r}
+#| label: fig-bridgeBio_recruit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison for biological relationships showing estimated recruitment (thousands, top) and recruitment deviations (bottom). Each change is tested independently based off the 2021 assessment except the final one (Update All Biology), which combines all previous changes."
+#| fig-alt: "Figure showing that recruitment from the 2021 assessment changes from peaks in 1999, 1996, 1994, and 1987 to peaks in 1995 and 1991 updates to growth, fecundity, and mortality."
+
+knitr::include_graphics(
+    "figures/bridgeBiology_recruitment_comparison.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
 #| label: fig-bridgeData_comp
 #| echo: false
 #| warning: false
@@ -57,6 +72,21 @@ knitr::include_graphics(
 
 knitr::include_graphics(
     "figures/bridgeData_comparison.png"
+)
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeData_recruit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparison showing estimated recruitment (thousands, top) and recruitment deviations (bottom) when updating data. The first change (Update Catch) was based off the 2021 assessment with updated biology (Update All Biology; see @fig-bridgeBio_recruit). Subsequent changes were tested independently based off the 2021 assessment with updated biology and catch (Update Catch) except the one labeled with a plus (+), indicating it is based off the previous step, and the final one (Update All Data and Estimate Growth), which combines across all previous changes."
+#| fig-alt: "Figure showing that recruitment peaks change when data are added but generally occur very strongly in the early to mid 1980s and mid 1990s with exact years dependent on the type of data added, and also increase in the late 2010s with updates to indices."
+
+knitr::include_graphics(
+    "figures/bridgeData_recruitment_comparison.png"
 )
 ```
 
@@ -76,6 +106,22 @@ knitr::include_graphics(
 ```
 
 {{< pagebreak >}}
+
+```{r}
+#| label: fig-bridgeOther_recruit
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Bridge comparisons showing estimated recruitment (thousands, top) and recruitment deviations (bottom) when updating selectivity and reapplying data weighting procedures. Each step reflects sequential changes leading up to the final base model, which includes additional minor changes as described in the text."
+#| fig-alt: "Figure showing that recruitment peaks are most prominent in the mid 1990s, with the exact year of the peak varying as changes are made. Once data are updated recruitments are generally similar."
+
+knitr::include_graphics(
+    "figures/bridgeOther_recruitment_comparison.png"
+)
+```
+
+{{< pagebreak >}}
+
 
 ```{r}
 #| label: fig-age_error
