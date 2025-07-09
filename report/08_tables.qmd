@@ -2,13 +2,8 @@
 
 
 ```{r} 
-#| label: 'set-rda-dir-tbls'
-#| echo: false 
-#| warning: false 
-#| eval: true 
-#| include: false
-#library(flextable)
-#rda_dir <- here::here("documents", "rda_files")
+#| eval: true
+#| echo: false
 library(tidyr)
 library(gt)
 library(here)
@@ -20,10 +15,10 @@ library(kableExtra)
 ## Data
 
 ```{r}
-#| label: tbl-catches
 #| echo: false
 #| warning: false
 #| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial and recreational fleets as used in the assessment model. See text for description of sources."
+#| label: tbl-catches
 
 catches <- read.csv(here::here("data", "CAquillback_total_removals.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, com_tot, rec_tot)) 
@@ -43,10 +38,8 @@ kableExtra::kable(
     font_size = 11,
     full_width = FALSE)
 
-
 ```
 
-{{< pagebreak >}}
 
 
 ```{r}
@@ -77,7 +70,7 @@ cols_label(
   as_latex()
 ```
 
-{{< pagebreak >}}
+
 
 ```{r}
 #| label: tbl-comm_ages
@@ -102,7 +95,7 @@ commages|>
   as_latex()
 ```
 
-{{< pagebreak >}}
+
 
 
 ```{r}
@@ -131,7 +124,7 @@ cols_label(
   as_latex()
 ```
 
-{{< pagebreak >}}
+
 
 ```{r}
 #| label: tbl-survey_lengths
@@ -480,7 +473,7 @@ kableExtra::kable(
 
 :::
 
-{{< pagebreak >}}
+
 
 <!-- ## Management -->
 
