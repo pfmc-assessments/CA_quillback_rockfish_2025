@@ -1,5 +1,7 @@
 # Acknowledgements {#sec-acknowledgements}
 
+Many people were instrumental in the successful completion of this assessment and their contribution is greatly appreciated. These include: 
+
 * STAR panel reviewers Geoff Tingley, Kotaro Ono, Allan Hicks for comments during STAR panel to improve analysis and description of the assessment
 
 * STAR panel chair, Cheryl Barnes for comments during STAR panel and preliminary review of document, and so ensuring materials conform to the TOR and are reviewed timely
@@ -33,8 +35,7 @@
     + Huli Cat Sportfishing - Tom Mattusch. F/V Huli Cat
     + New Captain Pete Sportfishing - Mike Cabanas, F/V New Captain Pete
 
-
-
+{{< pagebreak >}}
 
 # Auxiliary files
 
