@@ -397,7 +397,7 @@ The primary areas of uncertainty for this assessment are the parameters influenc
 
 ## Decision Table and Harvest Projections{-}
 
-The 2025 stock assessment for `r spp` off California was recommended as a category 1 determination by the \gls{star} panel review. A ten-year projection of the \gls{ofl}, \gls{abc}, and \gls{acl}, all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 is included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the \gls{gmt}, and catches from 2027 onward assume full attainment of the \gls{abc}, assuming the \gls{acl} is equal to the \gls{abc}.
+The 2025 stock assessment for `r spp` off California was supported as a category 1 determination by the \gls{star} panel review. A ten-year projection of the \gls{ofl}, \gls{abc}, and \gls{acl}, all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 is included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the \gls{gmt}, and catches from 2027 onward assume full attainment of the \gls{abc}, assuming the \gls{acl} is equal to the \gls{abc}.
 
 The axis of uncertainty in the decision table is based on the uncertainty around natural mortality (@tbl-es-decision). Alternative values for natural mortality (M) were used to identify the low ($M$ = 0.0525) and high ($M$ = 0.08) states of nature, where the base model is assigned a 50% probability of being the true state of nature and both the low and high states of nature are assigned a 25% probability. The proposed decision table assumes full ACL removal during the projection period under alternative catch streams based on a $P^*$ = 0.45.
 
@@ -473,14 +473,17 @@ As with most nearshore rockfish stocks additional research and data are needed t
 
 ## Risk Table{-}
 
-Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, and species specific estimates of maturity and fecundity length data, we consider uncertainties in assessment data indicate a neutral to unfavorable determination. Determination of assessment model fits and structural uncertainty will be decided during the \gls{star} Panel.
+Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, but species specific estimates of maturity and fecundity length data, we consider uncertainties in assessment data indicate a neutral to unfavorable determination. Given generally good fits to data, that parameters governing growth and recruitment were estimated with steep profiles but natural mortality and steepness were fixed at prior values and had flat likelihood surfaces across a range of values, the magnitude of recruitment deviations was uncertain and influence by the inclusion of age data, and that a retrospective pattern was present in the model, we consider assessment model fits and structural uncertainty indicate a neutral determination. 
 
-\newpage
+
+::: {.landscape}
+
 ```{r, results = "asis"}
 #| label: tbl-es-risk
 #| echo: false
 #| warning: false
 #| tbl-cap: "Risk Table for California quillback rockfish to document ecosystem and environmental factors, as well as data driven factors potentially affecting stock productivity and uncertainty or other concerns arising from the stock assessment. Level 1 is a favorable ranking, Level 2 neutral, and Level 3 unfavorable."
+#| tbl-pos: H
 
 risk <-read.csv("Tables/RiskTable_quill.csv") 
 risk|>
@@ -497,9 +500,9 @@ risk|>
   gt::cols_width(
     Ecosystem.and.environmental.conditions ~ px(150),
     Assessment.data.inputs ~ px(300),
-    Assessment.model.fits.and.structural.uncertainty ~ px(150)
+    Assessment.model.fits.and.structural.uncertainty ~ px(300)
   ) |>
   gt::as_latex()
 ```
 
-{{< pagebreak >}}
+:::
