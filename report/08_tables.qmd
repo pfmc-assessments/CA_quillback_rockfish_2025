@@ -4,6 +4,7 @@
 ```{r} 
 #| eval: true
 #| echo: false
+#| warning: false
 library(tidyr)
 library(gt)
 library(here)
@@ -17,7 +18,7 @@ library(kableExtra)
 ```{r}
 #| echo: false
 #| warning: false
-#| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial and recreational fleets as used in the assessment model. See text for description of sources."
+#| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Comm.) and recreational (Rec.) fleets as used in the assessment model. See text for description of sources."
 #| label: tbl-catches
 
 catches <- read.csv(here::here("data", "CAquillback_total_removals.csv"), check.names = FALSE) |>
@@ -26,17 +27,17 @@ catches[is.na(catches)] <- 0
 
 
 kableExtra::kable(
-  catches,
+  list(catches[1:40,], catches[41:80,], catches[81:109,]),
   format = "latex", 
-  col.names = c("Year", "Commercial", "Recreational"), 
-  longtable = TRUE,
+  col.names = c("Year", "Comm.", "Rec."), 
+  longtable = FALSE,
+  row.names = FALSE,
   booktabs = TRUE,
-  linesep = "",
-  padding = 0) |>
+  linesep = "")|>
+ # padding = 0)|>
   kableExtra::kable_styling(
-    latex_options = "repeat_header",
-    font_size = 11,
-    full_width = FALSE)
+   # latex_options = "repeat_header",
+    font_size = 11)
 
 ```
 
@@ -59,7 +60,8 @@ commlengths|>
   gt() |>
   tab_options(
     table.font.size = 12,
-    latex.use_longtable = TRUE
+    latex.use_longtable = FALSE,
+    table.width = pct(50)
   ) |>
 cols_label(
     Year = "Year",
@@ -85,7 +87,8 @@ commages|>
   gt() |>
   tab_options(
     table.font.size = 12,
-    latex.use_longtable = TRUE
+    latex.use_longtable = FALSE,
+    table.width = pct(30)
   ) |>
  cols_label(
     Year = "Year",
@@ -96,7 +99,7 @@ commages|>
 ```
 
 
-
+\newpage
 
 ```{r}
 #| label: tbl-rec_lengths
@@ -114,7 +117,7 @@ reclengths |>
   gt() |>
   tab_options(
     table.font.size = 11,
-    latex.use_longtable = TRUE
+    latex.use_longtable = FALSE
   ) |>
 cols_label(
     Year = "Year",

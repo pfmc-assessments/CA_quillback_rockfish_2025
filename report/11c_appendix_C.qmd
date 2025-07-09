@@ -1,4 +1,3 @@
-
 ## CCFRP
 
 The survey design for CCFRP consists 500 x 500 m cells both within and adjacent to each MPA. On any given survey day site cells are randomly  selected within a stratum (MPA and/or reference cells). Party/charter vessels are chartered for the survey and the fishing captain is allowed to search within the cell for a fishing location.  During a sampling event, each cell is fished for a total of 30-45 minutes by volunteer anglers. Each fish encountered is recorded, measured, and released (or descended to depth) and can later be linked back to a particular angler. CCFRP samples shallower depths to avoid barotrauma-induced mortality. Starting in 2017, a subset of fish have been retained to collect otoliths and fin clips that provide needed biological information for nearshore species. For the index of abundance, CPUE was modeled at the level of the drift.
