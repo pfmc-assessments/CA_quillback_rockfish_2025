@@ -45,7 +45,7 @@ format:
     include-in-header:
       - 'support_files/in-header.tex'
       - 'support_files/pfmc.tex'
-    toc: true
+    toc: false
     lof: false
     lot: false
     sansfont: 'Cambria'
@@ -204,6 +204,14 @@ Langseth, B.J., M.H. Monk, J.H. Coates, 2025. Status of the Quillback rockfish s
 
  {{< pagebreak >}} 
  
+```{=latex}
+{
+\hypersetup{linkcolor=.}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+```
+
 <!--- 
 ```{r, results='asis'}
 #| label: 'disclaimer'
