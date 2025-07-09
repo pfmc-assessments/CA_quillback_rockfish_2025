@@ -473,7 +473,7 @@ As with most nearshore rockfish stocks additional research and data are needed t
 
 ## Risk Table{-}
 
-Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, and species specific estimates of maturity and fecundity length data, we consider uncertainties in assessment data indicate a neutral to unfavorable determination. Determination of assessment model fits and structural uncertainty will be decided during the \gls{star} Panel.
+Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, but species specific estimates of maturity and fecundity length data, we consider uncertainties in assessment data indicate a neutral to unfavorable determination. Determination of assessment model fits and structural uncertainty will be decided during the \gls{star} Panel.
 
 
 ```{r, results = "asis"}
@@ -481,6 +481,7 @@ Information on ecosystem and environmental processes impacting California `r spp
 #| echo: false
 #| warning: false
 #| tbl-cap: "Risk Table for California quillback rockfish to document ecosystem and environmental factors, as well as data driven factors potentially affecting stock productivity and uncertainty or other concerns arising from the stock assessment. Level 1 is a favorable ranking, Level 2 neutral, and Level 3 unfavorable."
+#| tbl-pos: H
 
 risk <-read.csv("Tables/RiskTable_quill.csv") 
 risk|>
