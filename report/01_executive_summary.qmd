@@ -475,6 +475,7 @@ As with most nearshore rockfish stocks additional research and data are needed t
 
 Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, but species specific estimates of maturity and fecundity length data, we consider uncertainties in assessment data indicate a neutral to unfavorable determination. Determination of assessment model fits and structural uncertainty will be decided during the \gls{star} Panel.
 
+::: {.landscape}
 
 ```{r, results = "asis"}
 #| label: tbl-es-risk
@@ -498,8 +499,9 @@ risk|>
   gt::cols_width(
     Ecosystem.and.environmental.conditions ~ px(150),
     Assessment.data.inputs ~ px(300),
-    Assessment.model.fits.and.structural.uncertainty ~ px(150)
+    Assessment.model.fits.and.structural.uncertainty ~ px(300)
   ) |>
   gt::as_latex()
 ```
 
+:::
