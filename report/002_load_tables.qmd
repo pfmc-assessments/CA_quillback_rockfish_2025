@@ -93,7 +93,7 @@ library(r4ss)
 source(here('code/table_decision_format.R'))
 
 
-decision_table_cap <- "Decision table with 10-year projections beginning in 2027 for alternative states of nature based around modeling natural mortality. All models assume a $P^* = 0.45$. Catch (mt) is from the projections from the base model, and is applied to each state of nature. Catches in 2025 and 2026 are fixed at the ACLs and have been set for that year with values provided by the GMT. The alternative states of nature ('Low', 'Base', and 'High') are provided in the columns. Natural mortality is fixed either at the low state state of nature (Low M = 0.0525), the base model value (M = 0.68) or the high state of nature (High M = 0.08). Spawning output ('Spawn', in billions of eggs) and fraction of unfished ('Frac') is provided for each state of nature. "
+decision_table_cap <- "Decision table with 10-year projections beginning in 2027 for alternative states of nature based around modeling natural mortality (M). All models assume a $P^* = 0.45$. Catch (mt) is from the projections from the base model, and is applied to each state of nature. Catches in 2025 and 2026 are fixed at values provided by the GMT. The alternative states of nature ('Low', 'Base', and 'High') are provided in the columns. Natural mortality is fixed either at the low state state of nature (Low M = 0.0525), the base model value (M = 0.068) or the high state of nature (High M = 0.08). Spawning output ('Spawn', in billions of eggs) and fraction of unfished ('Frac') is provided for each state of nature."
 
 
 low45 <- SS_output(here('models', paste0(base_model, "_low_M_pstar_0.45")), 

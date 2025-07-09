@@ -36,7 +36,7 @@ table_decision <- function(
     format = c("latex", "html"),
     caption = formals(kableExtra::kbl)$caption,
     label = formals(kableExtra::kbl)$label,
-    digits = c(0, 2, 3),
+    digits = c(1, 2, 3),
     tex = TRUE) {
   mods <- list(...)
 
@@ -107,8 +107,8 @@ table_decision <- function(
         align = c("l", "r", rep(c("r", "r"), 3)),
         caption = caption,
         label = label
-      ) %>%
-      kableExtra::column_spec(c(1), bold = TRUE) # first column bold
+      ) #%>%
+      #kableExtra::column_spec(c(1), bold = TRUE) # first column bold
     
     results <- results %>%
       kableExtra::column_spec(3:4, width = "4.0em") %>%
