@@ -16,10 +16,10 @@ library(kableExtra)
 ## Data
 
 ```{r}
+#| label: tbl-catches
 #| echo: false
 #| warning: false
 #| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Comm.) and recreational (Rec.) fleets as used in the assessment model. See text for description of sources."
-#| label: tbl-catches
 
 catches <- read.csv(here::here("data", "CAquillback_total_removals.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, com_tot, rec_tot)) 
@@ -117,7 +117,8 @@ reclengths |>
   gt() |>
   tab_options(
     table.font.size = 11,
-    latex.use_longtable = FALSE
+    latex.use_longtable = FALSE,
+    table.width = pct(50)
   ) |>
 cols_label(
     Year = "Year",
@@ -126,7 +127,6 @@ cols_label(
   ) |>
   as_latex()
 ```
-
 
 
 ```{r}
@@ -250,7 +250,6 @@ parcount_table |>
   as_latex()
 ```
 
-::: {.landscape}
 
 ```{r}
 #| label: tbl-compweight
@@ -267,6 +266,7 @@ compweight_table |>
   as_latex()
 ```
 
+::: {.landscape}
 
 ```{r}
 #| label: tbl-pars
@@ -449,7 +449,7 @@ kableExtra::kable(
   longtable = TRUE,
   booktabs = TRUE,
   linesep = "") |>
-  kableExtra::kable_styling(font_size = 8,
+  kableExtra::kable_styling(font_size = 9,
     latex_options=c("scale_down", "hold_position"))
 ``` 
 
@@ -463,14 +463,14 @@ kableExtra::kable(
 #table_sens(here::here("report/tables/sens_selectivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) %>%
   mutate_at(vars(-1), round, 3) 
-sens[1, ] <- formatC(as.numeric(sens[1, ]), format = "f", digits = 0) 
+sens[1, -1] <- formatC(as.numeric(sens[1, -1]), format = "f", digits = 0) 
 kableExtra::kable(
   sens,
   format = "latex", 
   booktabs = TRUE,
   linesep = "") |>
   kableExtra::kable_styling(font_size = 8, latex_options = "HOLD_position") |>
-  kableExtra::column_spec(1, width = "3.5cm") |>
+  kableExtra::column_spec(1, width = "3.75cm") |>
   kableExtra::column_spec(2:10, width = "1.5cm")
 ``` 
 
