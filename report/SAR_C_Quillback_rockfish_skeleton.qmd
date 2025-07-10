@@ -46,6 +46,7 @@ format:
       - 'support_files/in-header.tex'
       - 'support_files/pfmc.tex'
     toc: false
+    toc-depth: 3
     lof: false
     lot: false
     sansfont: 'Cambria'
@@ -56,7 +57,8 @@ format:
       - right=.72in
       - left=.72in
     link-citations: true
-    fig-pos: 'H'    
+    fig-pos: 'H'
+    tbl-pos: 'H'    
 output-file: 'Quillback_rockfish_SAR_2025' 
 params:
    office: 'SWFSC'
@@ -190,34 +192,18 @@ Spp <- "Quillback rockfish"
 state <- "California"
 ``` 
 
-{{< pagebreak >}} 
 
-Please cite this publication as: 
 
-Langseth, B.J., M.H. Monk, J.H. Coates, 2025. Status of the Quillback rockfish stock in U.S. waters off the coast of California in 2025. Pacific Fishery Management Council, Portland, OR. Available from https://www.pcouncil.org/stock-assessments-and-fishery-evaluation-safe-documents/.
-
- {{< pagebreak >}} 
- 
-```{=latex}
-{
-\hypersetup{linkcolor=.}
-\setcounter{tocdepth}{3}
-\tableofcontents
-}
-```
-
-<!--- 
+\thispagestyle{empty}
 ```{r, results='asis'}
-#| label: 'disclaimer'
+#| label: 'citation'
 #| eval: true
 #| echo: false
 #| warning: false
-a <- knitr::knit_child('01a_disclaimer.qmd', quiet = TRUE)
+a <- knitr::knit_child('01b_citation.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
---->
- 
- {{< pagebreak >}} 
+
 
 ```{r, results='asis'}
 #| label: 'load_tables'
@@ -228,13 +214,32 @@ a <- knitr::knit_child('002_load_tables.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
+
+```{=latex}
+{
+\hypersetup{linkcolor=.}
+\setcounter{tocdepth}{3}
+\pdfbookmark[1]{Table of Contents}{toc}
+\clearpage
+\tableofcontents 
+\addtocontents{toc}{
+\protect\thispagestyle{empty}} 
+\thispagestyle{empty} 
+\newpage
+}
+``` 
+
+\clearpage
+
 \pagenumbering{roman}
 \setcounter{page}{1}
-
+\setcounter{section}{-1}
 \renewcommand{\thetable}{\roman{table}}
 \renewcommand{\thefigure}{\roman{figure}}
 
 \setlength\parskip{0.5em plus 0.1em minus 0.2em}
+
+\clearpage
 
 ```{r, results='asis'}
 #| label: 'executive_summary'

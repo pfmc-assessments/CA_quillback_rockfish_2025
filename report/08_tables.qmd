@@ -1,6 +1,5 @@
 # Tables {#sec-tables}
 
-
 ```{r} 
 #| eval: true
 #| echo: false
@@ -14,39 +13,45 @@ library(kableExtra)
 
 
 ## Data
-
 ```{r}
 #| label: tbl-catches
 #| echo: false
 #| warning: false
+#| tbl-pos: H
+#| output: asis
 #| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Comm.) and recreational (Rec.) fleets as used in the assessment model. See text for description of sources."
 
 catches <- read.csv(here::here("data", "CAquillback_total_removals.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, com_tot, rec_tot)) 
 catches[is.na(catches)] <- 0
+catches[110:120,] <- NA
+catches.new <- cbind(catches[1:40,], catches[41:80,], catches[81:120,])
+#colnames(catches.new) <- rep(c("Year", "Comm.", "Rec."), 3)
 
-
-kableExtra::kable(
-  list(catches[1:40,], catches[41:80,], catches[81:109,]),
+options(knitr.kable.NA = '')
+kableExtra::kable(catches.new,
   format = "latex", 
-  col.names = c("Year", "Comm.", "Rec."), 
+  col.names = rep(c("Year", "Comm.", "Rec."), 3),
   longtable = FALSE,
   row.names = FALSE,
   booktabs = TRUE,
-  linesep = "")|>
- # padding = 0)|>
+  linesep = "",
+  padding = 0)|>
   kableExtra::kable_styling(
-   # latex_options = "repeat_header",
-    font_size = 11)
+    latex_options = c("HOLD_position", "scale_down"), 
+    font_size = 11) |>
+  column_spec(4, border_left = T) |>
+  column_spec(7, border_left = T) 
 
 ```
-
 
 
 ```{r}
 #| label: tbl-comm_lengths
 #| echo: false
 #| warning: false
+#| #| tbl-pos: t
+#| output: asis
 #| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the assessment model. Also included is the input sample size used in the assessment model following the formula described in the text. Lengths in years that had an input sample size of less than 5 were excluded from final model fits, as described in the text."
 
 commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
@@ -72,12 +77,14 @@ cols_label(
   as_latex()
 ```
 
-
+\clearpage
 
 ```{r}
 #| label: tbl-comm_ages
 #| echo: false
 #| warning: false
+#| #| tbl-pos: t
+#| output: asis
 #| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the assessment model as conditionals. The number of ages was used as the input sample size in the assessment model. Ages in years that had fewer than 30 samples were excluded from final model fits, as described in the text."
 
 commages <- read.csv(here::here('data', "SampleSize_age.csv"), check.names = FALSE) |>
@@ -98,13 +105,14 @@ commages|>
   as_latex()
 ```
 
-
-\newpage
+\FloatBarrier
 
 ```{r}
 #| label: tbl-rec_lengths
 #| echo: false
 #| warning: false
+#| #| tbl-pos: t
+#| output: asis
 #| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the assessment model. The number of trips was used as the input sample size in the assessment model. Duplicate private/charter mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than 5 were excluded from final model fits, as described in the text."
 
 reclengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) 
@@ -128,6 +136,8 @@ cols_label(
   as_latex()
 ```
 
+
+\FloatBarrier
 
 ```{r}
 #| label: tbl-survey_lengths
