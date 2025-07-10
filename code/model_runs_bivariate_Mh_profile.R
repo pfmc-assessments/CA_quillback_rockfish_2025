@@ -212,7 +212,7 @@ ggplot(mtrx_melt, aes(x = M, y = h)) +
       legend.title = element_text(size = 15)) +
     guides(fill = guide_legend(title = "Change in NLL")) +
     theme_bw(base_size = 20)
- ggsave(file.path(mydir, "joint_m_h_profile_ggsave.png"),width = 14, height = 12)
+ ggsave(file.path(mydir, "joint_m_h_profile_ggsave.png"),width = 14, height = 14)
 
 #dev.off()
 file.copy(from = here(mydir, 'joint_m_h_profile_ggsave.png'),

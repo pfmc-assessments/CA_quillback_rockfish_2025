@@ -58,7 +58,8 @@ format:
       - left=.72in
     link-citations: true
     fig-pos: 'H'
-    tbl-pos: 'H'    
+    tbl-pos: 'H'  
+    table-placement: top-of-page
 output-file: 'Quillback_rockfish_SAR_2025' 
 params:
    office: 'SWFSC'
@@ -217,14 +218,12 @@ cat(a, sep = '\n')
 
 ```{=latex}
 {
+\pagenumbering{gobble}
 \hypersetup{linkcolor=.}
 \setcounter{tocdepth}{3}
 \pdfbookmark[1]{Table of Contents}{toc}
 \clearpage
 \tableofcontents 
-\addtocontents{toc}{
-\protect\thispagestyle{empty}} 
-\thispagestyle{empty} 
 \newpage
 }
 ``` 

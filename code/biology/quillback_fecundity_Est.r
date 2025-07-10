@@ -79,8 +79,9 @@ ca_est <- function(x) {alpha.ca.mod*x^beta.ca.mod}
 ggplot(dat, aes(x = length_cm, y = fec_mil, colour = PORT,  xmin = 0, xmax = 42)) + 
 geom_point(size = 5) + #geom_line(stat = 'function', fun = ej_Est, color = "blue") +
 geom_line(stat = 'function', fun = ca_est, color = "red") +
+theme(text=element_text(size=21)) +
 xlab("Length (cm)") +
-ylab("Fecundity (millions of eggs)") +
+ylab("Fecundity (millions of eggs)") 
 ggsave(filename = file.path(here(), "report", "figures", "bio_fecundity_fit.png"),
        width = 10, height = 8)
 
@@ -161,6 +162,7 @@ lw_ests <- nwfscSurvey::estimate_weight_length(data = ca %>% mutate(weight_kg = 
 
 ggplot(dfo_ca, aes(x = length_cm, y = fec_mil, colour = area)) + 
 geom_point(size = 3)  + scale_colour_viridis_d(begin = 0, end = .6) +
+  theme(text=element_text(size=21)) +
 geom_line(stat = 'function', fun = ej_Est, color = "blue") +
 geom_line(stat = 'function', fun = dfo_est1, color = "purple") +
 geom_line(stat = 'function', fun = ca_est, color = "red")
