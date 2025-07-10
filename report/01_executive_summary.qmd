@@ -397,7 +397,7 @@ The primary areas of uncertainty for this assessment are the parameters influenc
 
 ## Decision Table and Harvest Projections{-}
 
-The 2025 stock assessment for `r spp` off California was supported as a category 1 determination by the \gls{star} panel review. A ten-year projection of the \gls{ofl}, \gls{abc}, and \gls{acl}, all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 is included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the \gls{gmt}, and catches from 2027 onward assume full attainment of the \gls{abc}, assuming the \gls{acl} is equal to the \gls{abc}.
+The 2025 stock assessment for `r spp` off California was supported as a category 1 determination by the \gls{star} panel. A ten-year projection of the \gls{ofl}, \gls{abc}, and \gls{acl}, all based on a $P^*$ of 0.45 and a log-space standard deviation of the overfishing limit $\sigma$ of 0.5 is included in @tbl-es-projections. Assumed catches for 2025 and 2026 for this projection were provided by the \gls{gmt}, and catches from 2027 onward assume full attainment of the \gls{abc}, assuming the \gls{acl} is equal to the \gls{abc}.
 
 The axis of uncertainty in the decision table is based on the uncertainty around natural mortality (@tbl-es-decision). Alternative values for natural mortality (M) were used to identify the low ($M$ = 0.0525) and high ($M$ = 0.08) states of nature, where the base model is assigned a 50% probability of being the true state of nature and both the low and high states of nature are assigned a 25% probability. The proposed decision table assumes full ACL removal during the projection period under alternative catch streams based on a $P^*$ = 0.45.
 
