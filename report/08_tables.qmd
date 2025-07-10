@@ -487,82 +487,64 @@ kableExtra::kable(
   kableExtra::column_spec(2:10, width = "1.5cm")
 ``` 
 
+\pagebreak
+
+## Management
+
+```{r, results = "asis"}
+#| label: tbl-projections
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) projections_cap 
+#| tbl-pos: H
+
+projections_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = c(2:5, 7:9),
+    decimals = 0
+  ) |>
+  gt::fmt_number(
+    columns = c(6, 10),
+    decimals = 3,
+    drop_trailing_zeros = FALSE,
+  ) |>
+  gt::fmt_number(
+    columns = c(2, 3, 4, 5, 7, 8),
+    decimals = 2,
+    drop_trailing_zeros = FALSE,
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = FALSE,
+    table.width = gt::pct(75)
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    missing_text = "---"
+  ) |>
+  gt::cols_align(
+    align = "center"
+  ) |>
+  gt::cols_width(
+    everything() ~ px(75)
+  ) |>
+  gt::as_latex()
+
+```
+
 :::
 
+```{r, results = "asis"}
+#| label: tbl-decision
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) decision_table_cap 
+#| tbl-pos: H
 
+table_decision(
+  list(low45, base45, high45))
 
-<!-- ## Management -->
-
-<!-- \pagebreak -->
-
-<!-- ```{r, results = "asis"} -->
-<!-- #| label: tbl-projections -->
-<!-- #| warning: false -->
-<!-- #| echo: false -->
-<!-- #| eval: !expr eval_tables  -->
-<!-- #| tbl-cap: !expr if(eval_tables) projections_cap  -->
-<!-- #| tbl-pos: H -->
-
-<!-- projections_table |> -->
-<!--   gt::gt() |> -->
-<!--   gt::fmt_number( -->
-<!--     columns = c(2:5, 7:9), -->
-<!--     decimals = 0 -->
-<!--   ) |> -->
-<!--   gt::fmt_number( -->
-<!--     columns = c(6, 10), -->
-<!--     decimals = 3, -->
-<!--     drop_trailing_zeros = FALSE, -->
-<!--   ) |> -->
-<!--   gt::fmt_number( -->
-<!--     columns = c(4, 5, 7, 8), -->
-<!--     decimals = 2, -->
-<!--     drop_trailing_zeros = FALSE, -->
-<!--   ) |> -->
-<!--   gt::tab_options( -->
-<!--     table.font.size = 12, -->
-<!--     latex.use_longtable = TRUE  -->
-<!--   ) |> -->
-<!--   gt::sub_missing( -->
-<!--     columns = tidyselect::everything(), -->
-<!--     missing_text = "---" -->
-<!--   ) |> -->
-<!--   gt::cols_align( -->
-<!--     align = "center" -->
-<!--   ) |> -->
-<!--   gt::cols_width( -->
-<!--     tidyselect::everything() ~ px(75) -->
-<!--   ) |> -->
-<!--   gt::as_latex() -->
-
-<!-- ``` -->
-
-
-
-<!-- ```{r, results = "asis"} -->
-<!-- #| label: tbl-risk -->
-<!-- #| echo: false -->
-<!-- #| warning: false -->
-<!-- #| tbl-cap: "Risk Table for California quillback rockfish to document ecosystem and environmental factors, as well as data driven factors potentially affecting stock productivity and uncertainty or other concerns arising from the stock assessment. Level 1 is a favorable ranking, Level 2 neutral, and Level 3 unfavorable." -->
-
-<!-- risk <-read.csv("Tables/RiskTable_quill.csv")  -->
-<!-- risk|> -->
-<!--   gt::gt() |> -->
-<!--   gt::tab_options( -->
-<!--     table.font.size = 12, -->
-<!--     latex.use_longtable = TRUE -->
-<!--   ) |> -->
-<!--   gt::cols_label( -->
-<!--     Ecosystem.and.environmental.conditions = "Ecosystem and environmental conditions", -->
-<!--     Assessment.data.inputs = "Assessment data inputs", -->
-<!--     Assessment.model.fits.and.structural.uncertainty = "Assessment model fits and structural uncertainty" -->
-<!--   ) |> -->
-<!--   gt::cols_width( -->
-<!--     Ecosystem.and.environmental.conditions ~ px(150), -->
-<!--     Assessment.data.inputs ~ px(300), -->
-<!--     Assessment.model.fits.and.structural.uncertainty ~ px(150) -->
-<!--   ) |> -->
-<!--   gt::as_latex() -->
-<!-- ``` -->
-
-<!-- {{< pagebreak >}} -->
+```

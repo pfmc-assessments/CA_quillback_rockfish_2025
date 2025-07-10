@@ -357,7 +357,7 @@ management |>
   ) |>
   gt::tab_options(
     table.font.size = 12,
-    latex.use_longtable = TRUE
+    latex.use_longtable = FALSE
   ) |>
   gt::cols_label(
     OFLsouth = "OFL* South",
@@ -431,7 +431,8 @@ projections_table |>
   ) |>
   gt::tab_options(
     table.font.size = 12,
-    latex.use_longtable = FALSE 
+    latex.use_longtable = FALSE,
+    table.width = gt::pct(75)
   ) |>
   gt::sub_missing(
     columns = tidyselect::everything(),
