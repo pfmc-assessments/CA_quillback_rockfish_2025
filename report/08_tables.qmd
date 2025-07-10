@@ -308,7 +308,7 @@ pars_table1 <- pars_table |>
   #as_latex()
 
 ```
-:::
+
 
 ```{r}
 #| label: tbl-likelihood
@@ -331,6 +331,8 @@ like |>
   ) |>
   as_latex()
 ```
+
+:::
 
 ```{r, results = "asis"}
 #| label: tbl-timeseries
@@ -443,6 +445,7 @@ sens |>
 sens <- read.csv(here::here("report/tables/sens_data_table.csv"), check.names = FALSE) |>
   dplyr::slice(-1) %>% #remove Npar
     mutate_at(vars(-1), round, 3)
+colnames(sens)[5] <- "Areas as fleets"
 sens |>
 kableExtra::kable(
   format = "latex", 
