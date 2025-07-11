@@ -1,5 +1,5 @@
 ---
-title: 'Status of the Quillback Rockfish in U.S. Waters off California in 2025'
+title: 'Status of Quillback Rockfish in U.S. Waters off California in 2025'
 author:
   - name: 'Brian J. Langseth$^*$'
     equal-contributor: true
