@@ -19,11 +19,6 @@
 knitr::include_graphics("figures/assessment_map.png")
 ```
 
-\clearpage
-
-### Fishery-Dependent Data
-
-
 ```{r}
 #| label: fig-catches
 #| echo: false
@@ -37,7 +32,6 @@ knitr::include_graphics(
 )
 ```
 
-
 ```{r}
 #| label: fig-data
 #| echo: false
@@ -49,8 +43,11 @@ knitr::include_graphics(
 knitr::include_graphics("r4ss_plots/data_plot2.png")
 ```
 
+{{< pagebreak >}}
 
+\clearpage
 
+### Fishery-Dependent Data
 
 ```{r}
 #| label: fig-len-comm-bubbles
