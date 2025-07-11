@@ -17,7 +17,8 @@
 #       already exists
 
 # render document
-library(here)
+library(here) 
+
 
 quarto::quarto_render(here("report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
 

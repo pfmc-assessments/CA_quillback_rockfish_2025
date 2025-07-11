@@ -1,12 +1,15 @@
-## Assessment Model
+## Assessment Model 
 
-### Base Model Structure
+### Model Structure and Assumptions
+
+#### Bridging Analysis
 
 ```{r}
 #| label: fig-bridgeSS3_bio
 #| echo: false
 #| warning: false
 #| eval: true
+#| fig-pos: 'h!'
 #| fig-cap: "Bridge comparison of estimated spawning output (billions of eggs) of the 2021 assessment with (red line) the newest version of stock synthesis compared to the 2021 version (blue line)."
 #| fig-alt: "Figure showing that the trajectory from the 2021 assessment is similar when using the newest version of stock synthesis."
 
@@ -122,6 +125,9 @@ knitr::include_graphics(
 
 {{< pagebreak >}}
 
+\clearpage
+
+#### Key Assumptions
 
 ```{r}
 #| label: fig-age_error
@@ -136,12 +142,12 @@ knitr::include_graphics(
 )
 ```
 
-{{< pagebreak >}}
 
 \clearpage
 
 ### Base Model Results
 
+#### Parameter Estimates
 ```{r}
 #| label: fig-selex
 #| echo: false
@@ -202,6 +208,8 @@ knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
 {{< pagebreak >}}
 
 \clearpage
+
+\FloatBarrier
 
 #### Fits to Data
 
@@ -297,6 +305,8 @@ knitr::include_graphics(
 knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
 ```
 
+\FloatBarrier
+
 ```{r}
 #| label: fig-meanlen-ccfrp
 #| echo: false
@@ -309,6 +319,7 @@ knitr::include_graphics(
     "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_CCFRP.png"
 )
 ```
+\FloatBarrier
 
 ```{r}
 #| label: fig-age-pearson-ccfrp

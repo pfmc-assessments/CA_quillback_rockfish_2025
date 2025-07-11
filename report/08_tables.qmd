@@ -17,7 +17,7 @@ library(kableExtra)
 #| label: tbl-catches
 #| echo: false
 #| warning: false
-#| tbl-pos: H
+#| tbl-pos: 'ht!'
 #| output: asis
 #| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Comm.) and recreational (Rec.) fleets as used in the assessment model. See text for description of sources."
 
@@ -476,9 +476,10 @@ kableExtra::kable(
 #| label: tbl-sens-selectivity
 #| warning: false
 #| echo: false
+#| tbl-pos: 'ht!'
 #| eval: !expr eval_tables 
 #| tbl-cap: "Selectivity sensitivities. Number of parameters, values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
-#| tbl-pos: H
+
 #table_sens(here::here("report/tables/sens_selectivity_table.csv"))
 sens <- read.csv(here::here("report/tables/sens_selectivity_table.csv"), check.names = FALSE) %>%
   mutate_at(vars(-1), round, 3) 
