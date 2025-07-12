@@ -146,9 +146,9 @@ pr_filter <- read.csv("tables/ROV_rel_tbl4.csv", check.names = FALSE)
 pr_filter |>
     gt() |>
      tab_options(
-    table.font.size = 12) |>
+    table.font.size = 11) |>
     cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
-  #  cols_width(everything() ~ px(45)) |>
+    cols_width(everything() ~ px(50)) |>
     as_latex()
 
 ```

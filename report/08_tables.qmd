@@ -69,7 +69,11 @@ commlengths|>
     latex.use_longtable = FALSE,
     table.width = pct(50)
   ) |>
-cols_label(
+  gt::fmt_number(
+    columns = c(4),
+    decimals = 2
+  )|>
+  cols_label(
     Year = "Year",
     pacfin_Nfish = "N Lengths",
     pacfin_Ntrip = "N Trips",
