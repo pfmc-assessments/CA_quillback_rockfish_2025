@@ -2,7 +2,9 @@
 
 ### Model Structure and Assumptions
 
-#### Bridging Analysis
+#### Bridging Analysis 
+
+.
 
 ```{r}
 #| label: fig-bridgeSS3_bio
@@ -129,6 +131,8 @@ knitr::include_graphics(
 
 #### Key Assumptions
 
+.
+
 ```{r}
 #| label: fig-age_error
 #| echo: false
@@ -142,12 +146,14 @@ knitr::include_graphics(
 )
 ```
 
-
 \clearpage
 
 ### Base Model Results
 
 #### Parameter Estimates
+
+.
+
 ```{r}
 #| label: fig-selex
 #| echo: false
@@ -212,6 +218,8 @@ knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
 \FloatBarrier
 
 #### Fits to Data
+
+.
 
 ```{r}
 #| label: fig-lenfit-all
@@ -415,6 +423,8 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
 
 #### Population Trajectory
 
+.
+
 ```{r}
 #| label: fig-ssb
 #| echo: false
@@ -483,6 +493,8 @@ knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 
 #### Retrospective Analyses
 
+.
+
 ```{r}
 #| label: fig-retro-ssb
 #| echo: false
@@ -522,6 +534,7 @@ knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 
 #### Likelihood Profiles
 
+.
 
 ```{r}
 #| label: fig-r0-profile
@@ -724,6 +737,8 @@ knitr::include_graphics("figures/piner_panel_VonBert_K_Fem_GP_1.png")
 
 #### Sensitivity Analyses
 
+.
+
 ```{r}
 #| label: fig-sens-overall
 #| echo: false
@@ -825,6 +840,8 @@ knitr::include_graphics(
 \clearpage
 
 #### Historical Analyses
+
+.
 
 ```{r}
 #| label: fig-historical

@@ -17,7 +17,7 @@ library(kableExtra)
 #| label: tbl-catches
 #| echo: false
 #| warning: false
-#| tbl-pos: 'ht!'
+#| tbl-pos: 'H'
 #| output: asis
 #| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Comm.) and recreational (Rec.) fleets as used in the assessment model. See text for description of sources."
 
@@ -36,9 +36,10 @@ kableExtra::kable(catches.new,
   row.names = FALSE,
   booktabs = TRUE,
   linesep = "",
-  padding = 0)|>
+  padding = 0,
+  digits = 2)|>
   kableExtra::kable_styling(
-    latex_options = c("HOLD_position", "scale_down"), 
+    latex_options = c("scale_down"), #c("HOLD_position", "scale_down"), 
     font_size = 11) |>
   column_spec(4, border_left = T) |>
   column_spec(7, border_left = T) 
@@ -476,7 +477,7 @@ kableExtra::kable(
 #| label: tbl-sens-selectivity
 #| warning: false
 #| echo: false
-#| tbl-pos: 'ht!'
+#| tbl-pos: 'H'
 #| eval: !expr eval_tables 
 #| tbl-cap: "Selectivity sensitivities. Number of parameters, values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) relative to selectivity. See main text for details on each sensitivity analysis."
 
@@ -489,7 +490,7 @@ kableExtra::kable(
   format = "latex", 
   booktabs = TRUE,
   linesep = "") |>
-  kableExtra::kable_styling(font_size = 8, latex_options = "HOLD_position") |>
+  kableExtra::kable_styling(font_size = 8) |> #, latex_options = "HOLD_position") |>
   kableExtra::column_spec(1, width = "3.75cm") |>
   kableExtra::column_spec(2:10, width = "1.5cm")
 ``` 
