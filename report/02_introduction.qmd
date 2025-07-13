@@ -62,7 +62,7 @@ The management of `r spp` in California changed after the 2021 assessment. When 
 
 <!-- Management performance, including a table or tables comparing Overfishing Limit (OFL), Acceptable Biological Catch (ABC), Annual Catch Limit (ACL), landings, and catch (i.e., landings plus discard) for each area and year. Groundfish assessments that estimate dead discarded catch must include a disclaimer noting that total mortality estimates from the WCGOP and from the stock assessment may differ due to the use of different methods. Investigation into how these methods differ is beyond the scope of a benchmark assessment. The rationale for modeling discard mortality can also be provided. This should be included in all update assessments.  -->
 
-## Foreign Fisheries <!--(TOR section C8)-->
+## Fisheries Outside Spatial Domain of This Assessment <!--(TOR section C8)-->
 
 `r Spp` does not extend south to Mexico and given that the stock is defined as California only we did not consider the fisheries in Alaska or Canada. Assessments in 2021 were also done for Oregon [@langseth_ORstock_2021] and Washington [@langseth_WAstock_2021]. The Oregon assessment estimated spawning stock relative to unfished of 0.47 and was used to inform harvest levels, whereas the Washington assessment was considered too uncertain to provide status determination criteria but was used to inform harvest levels. `r Spp` in both states are managed within the Minor Nearshore Rockfish North complex. 
 

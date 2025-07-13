@@ -353,7 +353,7 @@ like |>
   as_latex()
 ```
 
-
+\clearpage
 
 ```{r, results = "asis"}
 #| label: tbl-timeseries

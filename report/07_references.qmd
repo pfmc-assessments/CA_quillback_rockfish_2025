@@ -2,3 +2,17 @@
 
 ::: {#refs}
 :::
+
+\clearpage
+
+# Auxiliary files
+
+Files archived with the 2025 California quillback rockfish assessment:
+
+* 2025_ca_quillback.ctl
+* 2025_ca_quillback.dat
+* forecast.ss
+* Report.sso
+* starter.ss
+* ss3_win.exe
+* r4ss html output and associated figures in ‘plots’ folder

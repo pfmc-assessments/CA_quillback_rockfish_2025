@@ -36,15 +36,3 @@ Many people were instrumental in the successful completion of this assessment an
     + New Captain Pete Sportfishing - Mike Cabanas, F/V New Captain Pete
 
 {{< pagebreak >}}
-
-# Auxiliary files
-
-Files archived with the 2025 California quillback rockfish assessment:
-
-* 2025_ca_quillback.ctl
-* 2025_ca_quillback.dat
-* forecast.ss
-* Report.sso
-* starter.ss
-* r4ss html output and associated figures in ‘plots’ folder
-
