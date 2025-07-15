@@ -111,7 +111,6 @@ knitr::include_graphics(
 ```
 
 {{< pagebreak >}}
-
 ```{r}
 #| label: fig-bridgeOther_recruit
 #| echo: false
@@ -125,13 +124,12 @@ knitr::include_graphics(
 )
 ```
 
-{{< pagebreak >}}
-
 \clearpage
 
+\FloatBarrier
 #### Key Assumptions
 
-.
+\textcolor{white}{test}
 
 ```{r}
 #| label: fig-age_error
@@ -147,6 +145,10 @@ knitr::include_graphics(
 ```
 
 \clearpage
+\FloatBarrier
+
+
+\newpage
 
 ### Base Model Results
 

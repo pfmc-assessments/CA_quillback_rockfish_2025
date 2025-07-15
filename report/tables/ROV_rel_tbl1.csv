@@ -14,5 +14,5 @@ PropHardMixed,The proportion of hard or mixed usable habitat along a transect.
 Protection,Whether the segment in question is in a no take closed Marine Protected Area (1) or open to fishing (0).  Treated as a categorical factor. 
 ProtectionYrs,The number of years the site has been protected since implementation in the survey year.
 Portdistance,Distance in meters from nearest port to the centroid coordinates of the sub-unit. Derived from port distance raster layer provided by Becky Miller (SWFSC).
-Quillback Rockfish,Total number of quillback rockfish individuals counted within sub-unit. Numerator of the dependent variable of density.
-Usable_Area_Fish,"Summed two dimensional area (m^2) of all microframes (one second of ROV area swept) within a sub-unit determined by multiplying Total_XYdist with estimated width at horizontal center of video frame for each microframe, where video parameters are within useable parameters. Denominator of the dependent variable of density implemented as an offset."
+Quillback Rockfish,Total number of quillback rockfish individuals counted within sub-unit.
+Usable_Area_Fish,"Summed two dimensional area (m^2) of all microframes (one second of ROV area swept) within a sub-unit determined by multiplying Total_XYdist with estimated width at horizontal center of video frame for each microframe, where video parameters are within useable parameters."

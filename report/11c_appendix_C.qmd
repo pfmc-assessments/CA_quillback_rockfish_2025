@@ -1,10 +1,10 @@
 ## CCFRP
 
-The survey design for CCFRP consists 500 x 500 m cells both within and adjacent to each MPA. On any given survey day site cells are randomly  selected within a stratum (MPA and/or reference cells). Party/charter vessels are chartered for the survey and the fishing captain is allowed to search within the cell for a fishing location.  During a sampling event, each cell is fished for a total of 30-45 minutes by volunteer anglers. Each fish encountered is recorded, measured, and released (or descended to depth) and can later be linked back to a particular angler. CCFRP samples shallower depths to avoid barotrauma-induced mortality. Starting in 2017, a subset of fish have been retained to collect otoliths and fin clips that provide needed biological information for nearshore species. For the index of abundance, CPUE was modeled at the level of the drift.
+The survey design for CCFRP consists of 500 x 500 m cells both within and adjacent to each MPA. On any given survey day site cells are randomly  selected within a stratum (MPA and/or reference cells). Party/charter vessels are chartered for the survey and the fishing captain is allowed to search within the cell for a fishing location.  During a sampling event, each cell is fished for a total of 30-45 minutes by volunteer anglers. Each fish encountered is recorded, measured, and released (or descended to depth) and can later be linked back to a particular angler. CCFRP samples shallower depths to avoid barotrauma-induced mortality. Starting in 2017, a subset of fish have been retained to collect otoliths and fin clips that provide needed biological information for nearshore species. For the index of abundance, CPUE was modeled at the level of the drift.
 
 The CCFRP data are quality controlled at the time they are key punched and little filtering was needed for the index. Cells not consistently sampled over time or flagged for errors were excluded. The full dataset for northern California contained 2,699 drifts, 19% of which encountered `r spp`.  After applying filters to remove drifts marked for exclusion or that fished less than two minutes, 2,582 drifts remained for index standardization, with 481 of those drifts encountering `r spp` (@tbl-ccfrp-filter).
 
-From south to north, the CCFRP index includes the the following five regions: Southeast Farallon Islands, Bodega Head, Stewart's Point, Ten Mile, and South Cape Mendocino. The southeast Farallon Islands MPA was sampled in 2017, 2018 and 2025 and the average CPUE increased inside and outside the MPA in 2025 relative to 2017 and 2018.  The other four MPAs were sampled annually. The final index (@tbl-ccfrp-index) represents a similar trend to the arithmetic mean of the annual CPUE (@fig-ccfrp-avg-cpue). An interaction between year and region was not considered in model selection due to inconsistent sampling of the Farallon Islands. To account for the closed areas within the MPAs, the interaction of year and MPA/reference site was incorporated in the final model.
+From south to north, the CCFRP index includes the following five regions: Southeast Farallon Islands, Bodega Head, Stewart's Point, Ten Mile, and South Cape Mendocino. The southeast Farallon Islands MPA was sampled in 2017, 2018 and 2025 and the average CPUE increased inside and outside the MPA in 2025 relative to 2017 and 2018.  The other four MPAs were sampled annually. The final index (@tbl-ccfrp-index) represents a similar trend to the arithmetic mean of the annual CPUE (@fig-ccfrp-avg-cpue). An interaction between year and region was not considered in model selection due to inconsistent sampling of the Farallon Islands. To account for the closed areas within the MPAs, the interaction of year and MPA/reference site was incorporated in the final model.
 
 A negative binomial generalized linear model was fit to the drift-level data (catch with a log offset for angler hours). Because the average observed CPUE inside MPAs and in the reference sites exhibited differing trends, we explored a year:MPA/reference site interaction, which was selected as the best fit model by AIC (@tbl-ccfrp-model-select), The final model included main effects factors for year, mpa/reference site, and region, a year:mpa/reference interaction, and depth was modeled with a spline. The simulated residuals indicate a good fit of the model (@fig-ccfrp-qq). The model was fit using the sdmTMB R package (version 0.3.0) and residuals simulated in the DHARMa package. 
 
@@ -69,7 +69,7 @@ pr_filter |>
 #| label: tbl-ccfrp-model-select
 #| echo: false
 #| warning: false
-#| tbl-cap: "CCFRP model selection. A plus sign indicates the covariate included and a minus sign indicates it is excluded."
+#| tbl-cap: "CCFRP model selection with the final model bolded. A plus sign indicates the covariate included and a minus sign indicates it is excluded."
 #| tbl-pos: H
 
 pr_filter <- read.csv("tables/ccfrp_model_selection.csv", check.names = FALSE)
@@ -78,6 +78,8 @@ pr_filter |>
        cols_label(starts_with("Delta") ~ "\u0394 AIC" ) |>
      tab_options(
     table.font.size = 12) |>
+        tab_style(style = list(cell_text(weight = "bold")),
+    locations = cells_body(rows = 1)) |>
     as_latex()
 ```
 
@@ -94,7 +96,7 @@ pr_filter |>
     gt() |>
     gt::fmt_number(
             columns = c(2:3),
-    decimals = 2) |>
+    decimals = 3) |>
      tab_options(
     table.font.size = 12) |>
     as_latex()
