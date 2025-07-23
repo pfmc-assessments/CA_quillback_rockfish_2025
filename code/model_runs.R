@@ -10470,6 +10470,27 @@ SS_plots(pp, plot = c(1:26))
 plot_sel_all(pp)
 
 
+#Custom catch plots with total removals for y-axis
+SS_plots(pp, 
+         plot = c(7),
+         printfolder = "plots2", 
+         catlabels = c("Harvest rate/Year", # 1
+                       "Continuous F", # 2
+                       "Total removals", # 3
+                       "Total catch", # 4
+                       "Predicted discards", # 5 # should add units
+                       "Discard fraction", # 6  # need to add by weight or by length
+                       "(mt)", # 7
+                       "(numbers x1000)", # 8
+                       "Observed and expected", # 9
+                       "aggregated across seasons" # 10
+         ))
+#Transfer to r4ss file in the reports folder
+file.copy(from = here('models', new_name, "plots2", "catch2_landings_stacked.png"),
+          to = here('report', 'r4ss_plots', "catch2_landings_stacked_custom.png"))
+#Now delete the plots2 folder
+unlink(here('models', new_name, "plots2"), recursive = TRUE)
+
 
 #Compare to Tanya's MPA abs abundance estimate
 numbers_at_age <- pp$natage

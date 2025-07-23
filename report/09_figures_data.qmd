@@ -24,11 +24,11 @@ knitr::include_graphics("figures/assessment_map.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Total removals (mt) for quillback rockfish in California from 1916-2024 for the commercial (blue bars; CA_Commercial) and recreational (red bars; CA_Recreational) fleets. The y-axis units are metric tons."
+#| fig-cap: "Total removals (mt) for quillback rockfish in California from 1916-2024 for the commercial (blue bars; CA_Commercial) and recreational (red bars; CA_Recreational) fleets."
 #| fig-alt: "Stacked bar plot showing total removals were low through the 1940s, rising from the 1960s through 2000 and remaining relatively stable thereafter, with the majority of removals being from the recreational fleet, with removals from the commercial fleet largest in the 1990s."
 
 knitr::include_graphics(
-    "r4ss_plots/catch2_landings_stacked.png"
+    "r4ss_plots/catch2_landings_stacked_custom.png"
 )
 ```
 
