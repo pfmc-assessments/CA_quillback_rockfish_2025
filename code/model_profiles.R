@@ -236,7 +236,7 @@ xx <- SSgetoutput(dirvec = R0_dir, keyvec = c("",5,4,3,2,1,6,7,8,9,10))
 
 dev.off()
 vals <- c(seq(3.4, 4.3, by = .1))
-R0_names <- paste0("log(R0) =", vals)
+R0_names <- paste0("ln(R0) =", vals)
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('models', glue::glue( base_model, '_profile_SR_LN(R0)')), #here('report', 'figures'), 
                                filename = "R0_profile_bio_comparison.png",
