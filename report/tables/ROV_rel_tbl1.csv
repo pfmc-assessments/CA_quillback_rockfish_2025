@@ -3,9 +3,9 @@ SurveyYear,Year in which the actual survey occurred.
 SuperYear,Survey coverages are completed over three years resulting in compilation to 2015 (2014-2016) and 2020 (2019-2021). Treated as a categorical factor. 
 MPAGroup,MPA name that identifies records from MPA sites and associated reference areas. 
 Site,CDFW and MARE historical site code. A site generally designates a 500 meter wide rectangle with varying length and depth range. May be preferable to use MPA Group given spatial proximate of sites within a group and scale of spatial autocorrelation. Number of transects may not be equal between sites.
-Avg_Latitude,Average of longitudinal positions within a transect.
+Avg_Latitude,Average of latitudinal positions within a transect.
 Latitude Squared,The Square of the Avg_Latitude within a transect.
-Avg_Longitude,Average of latitudinal positions within a transect. 
+Avg_Longitude,Average of longitudinal positions within a transect. 
 Avg_Depth,Average depth in meters recorded within a transect. 
 Depth Squared,Average depth squared was calculated by squaring the Avg_Depth values after scaling so that these values were also centered on the mean.
 PropHard,The proportion of hard usable habitat along a transect. 

@@ -36,7 +36,7 @@ table_decision <- function(
     format = c("latex", "html"),
     caption = formals(kableExtra::kbl)$caption,
     label = formals(kableExtra::kbl)$label,
-    digits = c(1, 2, 3),
+    digits = c(2, 2, 3),
     tex = TRUE) {
   mods <- list(...)
 

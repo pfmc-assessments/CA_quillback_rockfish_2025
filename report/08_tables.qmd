@@ -89,7 +89,7 @@ commlengths|>
 #| echo: false
 #| warning: false
 #| tbl-pos: 'ht!'
-#| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the assessment model as conditionals. The number of ages was used as the input sample size in the assessment model. Ages in years that had fewer than 30 samples were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of commercial age samples and number of trips available for use in the assessment model as conditional age-at-length. The number of ages was used as the input sample size in the assessment model. Ages in years that had fewer than 30 samples were excluded from final model fits, as described in the text."
 
 commages <- read.csv(here::here('data', "SampleSize_age.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
@@ -151,7 +151,7 @@ cols_label(
 #| label: tbl-survey_lengths
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of fishery-independent length samples, along with the number of drifts or transects or tows, available for use in the assessment model. See text for description of data sources. The number of drifts or transects was used as the input sample size in the assessment model. Data from the WCGBTS were too sparse to use as length compositions in the assessment model. Lengths in years with input sample size fewer than 5 for each other source were excluded from final model fits, as described in the text. "
+#| tbl-cap: "Summary of the number of fishery-independent length samples, along with the number of drifts or transects or hauls, available for use in the assessment model. See text for description of data sources. The number of drifts or transects was used as the input sample size in the assessment model. Data from the WCGBTS were too sparse to use as length compositions in the assessment model. Lengths in years with input sample size fewer than 5 for each other source were excluded from final model fits, as described in the text. "
 
 ccfrplengths <- read.csv(here::here('data', "SampleSize_length_CCFRP.csv"), check.names = FALSE)
 lengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
@@ -161,7 +161,8 @@ rovlengths <-  read.csv(here::here('data', "SampleSize_length_ROV.csv"), check.n
 temp <- merge(ccfrplengths, rovlengths, by = "Year", all = TRUE)
 fi_lengths <- merge(lengths[lengths$Year >= 2007,], temp, by = "Year", all = TRUE) %>%
   dplyr::select(Year, CCFRP_Nfish, CCFRP_Ndrift, rov_Nfish, rov_Ntrip, trawl_Nfish,
-                trawl_Ntrip)
+                trawl_Ntrip) %>%
+  dplyr::filter(rowSums(.[,-1], na.rm = TRUE) > 0)
 fi_lengths |>
   gt() |>
   tab_options(
@@ -195,7 +196,7 @@ fi_lengths |>
 #| label: tbl-caal-ages
 #| echo: false
 #| warning: false
-#| tbl-cap: "Summary of the number of age samples available for use in the assessment model (except commercial, which is shown in @tbl-comm_ages). See text for description of data sources. All data were used to initialize growth parameters. Only ages from Abrams were used in the assessment model as conditional age-at-length for the growth fleet, and ages from CCFRP were used in the assessment model as conditional age-at-length for the CCFRP fleet. For Abrams and CCFRP, the number of ages was used as the input sample size."
+#| tbl-cap: "Summary of the number of age samples available for use in the assessment model (except commercial, which is shown in @tbl-comm_ages). See text for description of data sources. All data were used to initialize growth parameters. Ages from Abrams were used in the assessment model as conditional age-at-length for the growth fleet, and ages from CCFRP were used in the assessment model as conditional age-at-length for the CCFRP fleet. For Abrams and CCFRP, the number of ages was used as the input sample size."
 
 growthCAAL <- read.csv(here::here('data', "SampleSize_ageGrowth.csv"), check.names = FALSE) |>
   dplyr::mutate(misc = calcom_Nfish + comm85_Nfish,
@@ -392,6 +393,7 @@ kableExtra::kable(
 sens <- read.csv(here::here("report/tables/sens_productivity_table.csv"), check.names = FALSE) |>
   dplyr::slice(-1) |> #remove Npar %>%
   mutate_at(2:9, round, 3)
+sens <- replace(sens, is.na(sens), 0)
 
 sens |>
 kableExtra::kable(
@@ -439,7 +441,7 @@ sens |>
 #| warning: false
 #| echo: false
 #| eval: !expr eval_tables 
-#| tbl-cap: "Contributions from age data sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) related to age data. See main text for details on each sensitivity analysis. Because of differences in the relative contributions of data for these sensitivities, likelihoods are generally not comparable."
+#| tbl-cap: "Contributions from age data sensitivities. Values of negative log-likelihood, estimates of key parameters, and estimates of derived quantities between the base model and several alternative models (columns) related to age data. See main text for details on each sensitivity analysis. Because of differences in data for these sensitivities, likelihoods are generally not comparable."
 #| tbl-pos: H
 sens <- read.csv(here::here("report/tables/sens_star_table.csv"), check.names = FALSE) |>
   dplyr::slice(-1) %>% #remove Npar
