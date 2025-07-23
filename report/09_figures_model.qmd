@@ -4,7 +4,7 @@
 
 #### Bridging Analysis 
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-bridgeSS3_bio
@@ -129,7 +129,7 @@ knitr::include_graphics(
 \FloatBarrier
 #### Key Assumptions
 
-\textcolor{white}{test}
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-age_error
@@ -154,7 +154,7 @@ knitr::include_graphics(
 
 #### Parameter Estimates
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-selex
@@ -172,7 +172,7 @@ knitr::include_graphics("figures/selectivityPlot.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of age-0 recruits with ~95% asymptotic intervals for the base model."
+#| fig-cap: "Estimated time series of age-0 recruits with 95% confidence intervals for the base model."
 #| fig-alt: "Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
 
 knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png")
@@ -183,7 +183,7 @@ knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptot
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of recruitment deviations for the base model."
+#| fig-cap: "Estimated time series of recruitment deviations with 95% confience intervals for the base model."
 #| fig-alt: "Plot of recruitment deviations uncertainty intervals over time showing higher deviations in the 1980s, a peak in 1994, and then low deviations since with peaks in three years around 2010 and in 2016 and 2017."
 
 knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
@@ -195,7 +195,7 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Stock-recruit curve. Point colors indicate year, with warmer colors indicating earlier years and cooler colors in showing later years"
+#| fig-cap: "Stock-recruit curve. Point colors indicate year, with warmer colors indicating earlier years and cooler colors indicating later years"
 #| fig-alt:  "Beverton-holt stock recruitment relationship with a steepness of 0.72 with spawning output and the resulting recruitment estimates."
 
 knitr::include_graphics("r4ss_plots/SR_curve2.png")
@@ -221,14 +221,14 @@ knitr::include_graphics("r4ss_plots/recruit_fit_bias_adjust.png")
 
 #### Fits to Data
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-lenfit-all
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Length composition aggregated across years by fleet with the model with estimated fit to the data."
+#| fig-cap: "Length composition aggregated across years by fleet within the model with estimated fit to the data."
 #| fig-alt: "Aggregated length comps are fit reasonably well."
 
 knitr::include_graphics(
@@ -243,7 +243,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Pearson residuals for fit to length composition data for all fleets (red female, blue male, grey unsexed). Closed bubbles are positive residuals (observed > expected) and open bubbles are negative residuals (observed < expected)."
+#| fig-cap: "Pearson residuals for fit to length composition data for all fleets. Closed bubbles are positive residuals (observed > expected) and open bubbles are negative residuals (observed < expected)."
 #| fig-alt: "See 'Pearson' column in CompReport.sso for values."
 
 knitr::include_graphics(
@@ -269,7 +269,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Pearson residuals for the commercial conditional age at length composition."
+#| fig-cap: "Pearson residuals for the commercial conditional age-at-length composition. Closed bubbles are positive residuals (observed > expected) and open bubbles are negative residuals (observed < expected)."
 #| fig-alt: "There are no clear patters in the residuals in the observed fits."
 
 knitr::include_graphics(
@@ -282,7 +282,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean age from conditional data (aggregated across length bins) for the commercial fleet with 95% confidence intervals based on current samples sizes."
+#| fig-cap: "Mean age from conditional age-at-length data (aggregated across length bins) for the commercial fleet with 95% confidence intervals based on current samples sizes. The blue line is the model expectation."
 #| fig-alt: "Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximately 26 for 2020 and ranges from 15-19 for the other years."
 
 knitr::include_graphics(
@@ -336,7 +336,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Pearson residuals for the CCFRP survey fleet conditional age-at-length composition."
+#| fig-cap: "Pearson residuals for the CCFRP survey fleet conditional age-at-length composition. Closed bubbles are positive residuals (observed > expected) and open bubbles are negative residuals (observed < expected)."
 #| fig-alt: "There are no clear patters in the residuals in the observed fits."
 
 knitr::include_graphics(
@@ -349,7 +349,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean age from conditional age-at-length data (aggregated across length bins) for the CCFRP survey fleet with 95% confidence intervals based on current samples sizes."
+#| fig-cap: "Mean age from conditional age-at-length data (aggregated across length bins) for the CCFRP survey fleet with 95% confidence intervals based on current samples sizes. The blue line is the model expectation."
 #| fig-alt: "Mean age in the commercial fleet is available from 2017-2024. Mean age varies around 15-16 with a higher mean age of 26 in 2019."
 
 knitr::include_graphics(
@@ -362,7 +362,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Pearson residuals for the growth fleet conditional age-at-length composition."
+#| fig-cap: "Pearson residuals for the growth fleet conditional age-at-length composition. Closed bubbles are positive residuals (observed > expected) and open bubbles are negative residuals (observed < expected)."
 #| fig-alt: "There are no clear patters in the residuals in the observed fits."
 
 knitr::include_graphics(
@@ -375,7 +375,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Mean age from conditional age-at-length data (aggregated across length bins) for the growth fleet with 95% confidence intervals based on current samples sizes."
+#| fig-cap: "Mean age from conditional age-at-length data (aggregated across length bins) for the growth fleet with 95% confidence intervals based on current samples sizes. The blue line is the model expectation."
 #| fig-alt: "Mean age in the commercial fleet is available in eight years, 2010, 2011, 2017, 2018, and 2021 through 2024. Mean age varies around 16 until 2022 when it declines to nearer 12."
 
 knitr::include_graphics(
@@ -391,7 +391,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Fit to log index data on log scale for the CRFS dockside private/rental index of abundance. Lines indicate 95% uncertainty interval around index values based on the model assumption of lognormal error."
+#| fig-cap: "Fit to log index data on log scale for the CRFS dockside private/rental index of abundance. Lines indicate 95% confidence interval around index values based on the model assumption of lognormal error."
 #| fig-alt: "Model fit to the CRFS dockside PR index of abundance."
 
 knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_Recreational.png")
@@ -402,7 +402,7 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_Recreational.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Fit to log index data on log scale for the CCFRP index of abundance.   Lines indicate 95% uncertainty interval around index values based on the model assumption of lognormal error."
+#| fig-cap: "Fit to log index data on log scale for the CCFRP index of abundance. Lines indicate 95% confidence interval around index values based on the model assumption of lognormal error."
 #| fig-alt: "Model fit to the CCFRP index of abundance."
 
 knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_CCFRP.png")
@@ -425,14 +425,14 @@ knitr::include_graphics("r4ss_plots/index5_logcpuefit_CA_ROV.png")
 
 #### Population Trajectory
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-ssb
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of spawning output in billions of egg with ~95% asymptotic intervals."
+#| fig-cap: "Estimated time series of spawning output in billions of eggs with 95% asymptotic confidence intervals."
 #| fig-alt: "Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increases and then stabilizes towrads the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
@@ -443,7 +443,7 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of fraction of unfished spawning output with ~95% asymptotic intervals."
+#| fig-cap: "Estimated time series of spawning output relative to unfished with 95% asymptotic confidence intervals."
 #| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
@@ -454,7 +454,7 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of total biomass (mt) with ~95% asymptotic intervals."
+#| fig-cap: "Estimated time series of total biomass (mt)."
 #| fig-alt: "Total biomass in metric tons is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
@@ -495,14 +495,14 @@ knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
 
 #### Retrospective Analyses
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-retro-ssb
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Retrospective results: change in the estimate of spawning output (in billions of eggs) when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model. Mohn's rho values are provided as per year averages."
+#| fig-cap: "Retrospective results: change in the estimate of spawning output (in billions of eggs) when the most recent 15 years of data are removed sequentially. The uncertainty shown represents the base model. Mohn's rho values are provided as per year averages."
 #| fig-alt: "The population scale decreases as more years of data are removed."
 
 knitr::include_graphics("figures/retro_compare_spawnbio_uncertainty.png")
@@ -513,7 +513,7 @@ knitr::include_graphics("figures/retro_compare_spawnbio_uncertainty.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Retrospective results: change in the estimate of the fraction of unfished relative to the start year when the most recent 15 years of data area removed sequentially. The uncertainty shown represents the base model. Mohn's rho values are provided as per year averages."
+#| fig-cap: "Retrospective results: change in the estimate of the fraction of unfished relative to the start year when the most recent 15 years of data are removed sequentially. The uncertainty shown represents the base model. Mohn's rho values are provided as per year averages."
 #| fig-alt: "The stock is more depleted in the ending year of each retrospective as more years of data are removed."
 
 knitr::include_graphics("figures/retro_compare_Bratio_uncertainty.png")
@@ -524,7 +524,7 @@ knitr::include_graphics("figures/retro_compare_Bratio_uncertainty.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Squid plots of retrospective results relative to the base model for fishing mortality, fraction unfished, recruits, and spawning output (in billions of eggs)."
+#| fig-cap: "Squid plots of retrospective results relative to the base model for fishing mortality (F), fraction unfished, recruits, and spawning output (in billions of eggs)."
 #| fig-alt: "A four panel plot showing that all four metrics indicate a more depleted stock of smaller size as years of data are removed."
 
 knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
@@ -536,7 +536,7 @@ knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 
 #### Likelihood Profiles
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-r0-profile
@@ -578,7 +578,7 @@ knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of steepness values."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of steepness (h) values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/h_profile_bio_comparison.png")
@@ -612,7 +612,7 @@ knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of natural mortality values."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of natural mortality (M) values."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/m_profile_bio_comparison.png")
@@ -647,7 +647,7 @@ knitr::include_graphics("figures/piner_panel_NatM_uniform_Fem_GP_1.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Bivariate profile of natural mortality (M) and steepness (h) relative with the negative log-likelihood (NLL) value for each model run shown with a white dot indicating the pre-STAR base model values."
+#| fig-cap: "Bivariate profile of natural mortality (M) and steepness (h) relative with the negative log-likelihood (NLL) value for each model run shown with a white dot indicating the base model values."
 #| fig-alt: "FROG"
 
 knitr::include_graphics("figures/profile_Mhgrid_nll.png")
@@ -671,7 +671,7 @@ knitr::include_graphics("figures/profile_m_h_contour.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for asymptotic average length."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for asymptotic average length (L~inf~)."
 #| fig-alt: "."
 
 knitr::include_graphics("figures/linf_profile_bio_comparison.png")
@@ -739,7 +739,7 @@ knitr::include_graphics("figures/piner_panel_VonBert_K_Fem_GP_1.png")
 
 #### Sensitivity Analyses
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-sens-overall
@@ -843,14 +843,14 @@ knitr::include_graphics(
 
 #### Historical Analyses
 
-.
+\textcolor{white}{.}
 
 ```{r}
 #| label: fig-historical
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Time series comparisons of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
+#| fig-cap: "Time series comparisons of summary biomass (in metric tons, bottom) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
 #| fig-alt: "."
 
 knitr::include_graphics(
@@ -882,7 +882,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of fishing intensity for the base model."
+#| fig-cap: "Estimated time series of fishing intensity for the base model with 95% asymptotic confidence intervals."
 #| fig-alt: "Time series plot with uncertainty intervals showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
 
 knitr::include_graphics(
