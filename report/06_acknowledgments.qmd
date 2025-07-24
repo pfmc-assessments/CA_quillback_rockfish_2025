@@ -14,7 +14,7 @@ Many people were instrumental in the successful completion of this assessment an
 
 * Jamie Hale and Patrick McDonald (Pacific States Marine Fisheries Commission) of the CAP lab for age reading
 
-* Jessica Join and Buddy Pendergast (Southwest Fisheries Science Center) for fecundity counts 
+* Jessica Join and Buddy Pendergast (University of California, Santa Cruz) for fecundity counts 
 
 * E.J. Dick and Tanya Rogers (Southwest Fisheries Science Center), and Rebecca Miller and Rachel Brooks (University of California, Santa Cruz) for data wrangling and modelling assistance
 
