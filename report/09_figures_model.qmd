@@ -882,7 +882,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Estimated time series of fishing intensity for the base model with 95% asymptotic confidence intervals."
+#| fig-cap: "Estimated time series of fishing intensity for the base model with 95% asymptotic confidence intervals. The horizontal line is at the fishing intensity target: 1 - 0.5 = 0.5"
 #| fig-alt: "Time series plot with uncertainty intervals showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
 
 knitr::include_graphics(

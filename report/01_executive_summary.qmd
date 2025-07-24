@@ -2,7 +2,7 @@
 
 ## Stock Description{-}
 
-This benchmark assessment reports the status of `r spp` (*Sebastes maliger*) in U.S. waters off the California coast, using data through 2024. `r Spp` off the coast of California is defined as a stock by the \gls{pfmc}. This assessment does not account for `r spp` in Oregon waters or other areas off the U.S. West Coast and assumes that these other stocks do not contribute to nor take from the stock being assessed here. There is a potential for regional management of `r spp` within California provided additional research on stock structure.
+This benchmark assessment reports the status of `r spp` (*Sebastes maliger*) in U.S. waters off the California coast using data through 2024. `r Spp` off the coast of California is defined as a stock by the \gls{pfmc}. This assessment does not account for `r spp` in Oregon waters or other areas off the U.S. West Coast and assumes that these other stocks do not contribute to nor take from the stock being assessed here. There is a potential for regional management of `r spp` within California provided additional research on stock structure.
 
 <!-- Species/area, including an evaluation of any potential biological basis for regional management -->
 
@@ -46,10 +46,10 @@ catches_es_table |>
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Landings in metric tons (mt) by year for each fleet."
+#| fig-cap: "Total removals in metric tons (mt) by year for each fleet."
 #| fig-alt: "See Table 9 for values."
 
-knitr::include_graphics("r4ss_plots/catch2_landings_stacked.png")
+knitr::include_graphics("r4ss_plots/catch2_landings_stacked_custom.png")
 
 ```
 <!-- \clearpage -->
@@ -58,11 +58,11 @@ knitr::include_graphics("r4ss_plots/catch2_landings_stacked.png")
 
 This is an assessment of the `r spp` stock off California. Previously, length-based data-moderate assessments were conducted in 2021 for `r spp` off the U.S. West Coast. In 2021, `r spp` was assessed with three separate population models, one each for Washington, Oregon, and California. This benchmark assessment, for the California stock only, uses Stock Synthesis 3 (version 3.30.21.1). All of the data sources included in the 2021 data-moderate assessment were re-evaluated for this assessment. 
 
-The assessment is a single-area, single-sex model and operates on an annual time step covering the period 1916--2024 and assumes an unfished population prior to 1916. Population dynamics are modeled for ages 0 through 80 in 1 year age bins, with age 80 as the accumulator age. The lengths are binned by 2 cm increments for data and the population is estimated at 1 cm length bins. The model is conditioned on total removals from two fishing fleets, commercial and recreational, and is informed by both fishery-dependent and fishery-independent data. The recreational fleet aggregates the private/rental and party/charter mode catches and lengths. The commercial fleet aggregates catches from all gear types, and the live fish and dead fish fisheries. Commercial lengths are included in the model as well as ages modeled as conditional age-at-length. Discards from the commercial and recreational fleets were estimated or provided externally to the model and added to landings to represent total removals. 
+The assessment is a single-area, single-sex model and operates on an annual time step covering the period 1916--2024 and assumes an unfished population prior to 1916. Population dynamics are modeled for ages 0 through 80 in 1 year age bins, with age 80 as the accumulator age. The lengths are binned by 2 cm increments for data and the population is estimated at 1 cm length bins. The model is conditioned on total removals from two fishing fleets, commercial and recreational, and is informed by both fishery-dependent and fishery-independent data. The recreational fleet aggregates the private/rental and party/charter mode catches and lengths. The commercial fleet aggregates catches from all gear types, and the live fish and dead fish fisheries. Commercial lengths are included in the model as well as ages modeled as conditional age-at-length. Discards from the commercial and recreational fleets were estimated externally to the model and added to landings to represent total removals. 
 
-The model is fit to three indices of relative abundance, the fishery-independent \gls{cdfw} \gls{rov} survey and \gls{ccfrp} hook-and-line survey, and the fishery-dependent angler interview \gls{cdfw} \gls{crfs} of the private/rental recreational fleet. Both of the fishery-independent surveys were developed to monitor California's network of \gls{mpa}s compared to adjacent areas open to fishing and have been reviewed for use in stock assessments. 
+The model is fit to three indices of relative abundance, the fishery-independent \gls{cdfw} \gls{rov} survey and \gls{ccfrp} hook-and-line survey, and the fishery-dependent angler interview \gls{cdfw} \gls{crfs} of the private/rental mode of the recreational fleet. Both of the fishery-independent surveys were developed to monitor California's network of \glspl{mpa} compared to adjacent areas open to fishing and have been reviewed for use in stock assessments. 
 
-The model incorporates updated life history information using data from `r spp` collected in waters off California. This includes externally estimated relationships for length-based maturity, the length-weight relationship, and fecundity-at-length. Additional available ages conditioned on length that were not collected as part of a survey fleet in the model nor representative of the length distribution of the recreational fleet were included in a growth fleet. This model estimates all growth parameters and fixes natural mortality at the median of the prior (0.068 yr^-1^), based on a maximum age of 80 years. Year-class strength is estimated as deviations from a Beverton-Holt stock-recruitment relationship beginning in 1978. Steepness of the Beverton-Holt stock-recruitment relationship is fixed at the mean of the prior for U.S. West Coast rockfish at 0.72.
+The model incorporates updated life history information using data from `r spp` collected in waters off California. This includes externally estimated relationships for length-based maturity, the length-weight relationship, and fecundity-at-length. Additional available ages conditioned on length that were not collected as part of a survey fleet in the model nor representative of the length distribution of the recreational fleet were included in a growth fleet. This model estimates all growth parameters and fixes natural mortality at the median of the prior (0.068 yr^-1^), based on a maximum age of 80 years. Year-class strength is estimated as deviations from a Beverton-Holt stock-recruitment relationship beginning in 1940. Steepness of the Beverton-Holt stock-recruitment relationship is fixed at the mean of the prior for U.S. West Coast rockfish at 0.72.
 
 Within-model uncertainty is explicitly included in this assessment through parameter estimation uncertainty, while among-model uncertainty is explored through sensitivity analyses addressing alternative input assumptions such as data treatment and weighting, and model specification sensitivity to the treatment of life history parameters, selectivity, and recruitment. A base model was selected that best fit the observed data while concomitantly balancing the desire to capture the central tendency across those sources of uncertainty, ensure model realism and tractability, and promote robustness to potential model mis-specification.
 
@@ -70,7 +70,7 @@ Within-model uncertainty is explicitly included in this assessment through param
 
 ## Stock Biomass and Dynamics{-}
 
-The model estimates that the spawning output of the stock dropped below the management target, but remained above the minimum stock size threshold throughout the late 1990s and later increased through the mid-2010s, before declining back to the target by 2019 (@fig-es-sb, @fig-es-depl). Spawning output has been near, but below, the management target of 40% of unfished spawning output in recent years with the exception of the last year (2025) when it increased above the target (@tbl-es-sb). The 95% interval for the fraction of unfished spawning output in 2025 ranges from 35%--58%.
+The model estimates that the spawning output of the stock dropped below the management target, but remained above the minimum stock size threshold throughout the late 1990s and later increased through the mid-2000s, before declining back to the target by 2019 (@fig-es-sb, @fig-es-depl). Spawning output has been near, but below, the management target of 40% of unfished spawning output in recent years with the exception of the last year (2025) when it increased above the target (@tbl-es-sb). The 95% confidence interval for the fraction of unfished spawning output in 2025 ranges from 35%--58%.
 
 <!-- Trends and current levels relative to virgin or historic levels, description of uncertainty-include table for last 10 years and graph with long term estimates. -->
 
@@ -136,7 +136,7 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 
 ## Recruitment{-}
 
-Over the last ten years the largest recruitment events were estimated to be in 2016 and 2017, but those were either near to or lower than the large recruitment events in 1993 and 1994 (@tbl-es-recr, @fig-es-recruits). Recruitment is estimated to be relatively low from 1995 through 2009. There is little information for `r spp` on the drivers of recruitment.
+Over the last ten years the largest recruitment events were estimated to be in 2016 and 2017, and those were either near to or lower than the large recruitment events in 1993 and 1994 (@tbl-es-recr, @fig-es-recruits). Recruitment is estimated to be relatively low from 1995 through 2009. There is little information for `r spp` on the drivers of recruitment.
 
 <!-- Trends and current levels relative to virgin or historic levels-include table for last 10 years and graph with long term estimates. -->
 
@@ -204,7 +204,7 @@ knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
 
 ## Exploitation Status{-}
 
-Exploitation rates were above the management target of a fishing intensity that leads to a spawning potential ratio of 0.5 during the 1990s (@tbl-es-spr, @fig-es-kobe, @fig-es-spr). Exploitation rates decreased in the 2010s and have been low during the last few years of precautionary management subsequent to declaration of overfished status in 2023.
+Exploitation rates were above the management target of a fishing intensity that leads to a spawning potential ratio of 0.5 during the 1990s. Exploitation rates decreased in the 2010s and have been low during the last few years of precautionary management subsequent to declaration of overfished status in 2023 (@tbl-es-spr, @fig-es-kobe, @fig-es-spr).
 
 <!-- Exploitation rates (i.e., total catch divided by exploitable biomass, or the annual SPR harvest rate) - include a table with the last 10 years of data and a graph showing the trend in fishing mortality relative to the target (y-axis) plotted against the trend in biomass relative to the target (x-axis). -->
 
@@ -241,7 +241,7 @@ spr_es_table |>
 #| fig-pos: H
 #| warning: false 
 #| eval: true
-#| fig-cap: "Phase plot of fishing intensity versus fraction unfished. Each point represents the biomass ratio at the start of the year and the relative fishing intensity in that same year. Lines through the final point show 95% intervals based on the asymptotic uncertainty for each dimension. The shaded ellipse is a 95% region which accounts for the estimated correlation between the two quantities."
+#| fig-cap: "Phase plot of fishing intensity versus spawning output relative to unfished. Each point represents the relative spawning output at the start of the year and the relative fishing intensity in that same year. Lines through the final point show 95% confidence intervals based on the asymptotic uncertainty for each dimension. The shaded ellipse is a 95% region which accounts for the estimated correlation between the two quantities."
 #| fig-alt: "See table @tbl-ts for the values of the fraction unfished and fishing intensity which are related in this figure."
 
 
@@ -255,7 +255,7 @@ knitr::include_graphics("r4ss_plots/SPR4_phase.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| fig-cap: "Time series of 1-SPR (spawning potential ratio). The horizontal line is at 1-SPR target: 1 - 0.5 = 0.5"
+#| fig-cap: "Time series of 1-SPR (spawning potential ratio). The horizontal line is at the 1-SPR target: 1 - 0.5 = 0.5"
 #| fig-alt: "See table @tbl-ts for the values of the fraction unfished and fishing intensity which are related in this figure."
 
 
@@ -311,12 +311,18 @@ reference_points_table |>
       gt::cell_text(style = "italic")
     ),
     locations = gt::cells_body(
-      columns = "Reference Point",
-      rows = dplyr::starts_with("Reference")
+      columns = 1,
+      rows = c(6, 11, 16) #dplyr::starts_with("Reference")
     )
   ) |>
   gt::sub_missing(
     columns = tidyselect::everything(),
+    rows = c(6, 11, 16),
+    missing_text = ""
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    rows = c(13),
     missing_text = "---"
   ) |>
   gt::as_latex()
@@ -470,7 +476,7 @@ As with most nearshore rockfish stocks additional research and data are needed t
 
 ## Risk Table{-}
 
-Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, but species specific estimates of maturity and fecundity length data, we consider uncertainties in assessment data indicate an unfavorable determination. Given generally good fits to data, that parameters governing growth and recruitment were estimated with steep profiles but natural mortality and steepness were fixed at prior values and had flat likelihood surfaces, that the magnitude of recruitment deviations was uncertain and influenced by the inclusion of age data, and that a retrospective pattern was present in the model, we consider assessment model fits and structural uncertainty indicate a neutral determination. 
+Information on ecosystem and environmental processes impacting California `r spp` along with information related to the stock assessment were used to fill out a 'Risk Table' in @tbl-es-risk, based on the framework outlined by the \gls{cciea} team [@Golden2024]. Information on the influence of environmental conditions on California `r spp` is lacking, and prevents a determination to be made for ecosystem and environmental processes. Given some uncertainties in values from the historical catch reconstructions as well as some gaps in estimates since 1980, limited sampling of age data for use in compositions as well as some gaps in sampling length compositions, but species specific estimates of maturity and fecundity, we consider uncertainties in assessment data indicate an unfavorable determination. Given generally good fits to data, that parameters governing growth and recruitment were estimated with steep profiles but natural mortality and steepness were fixed at prior values and had flat likelihood surfaces, that the magnitude of recruitment deviations was uncertain and influenced by the inclusion of age data, and that a retrospective pattern was present in the model, we consider assessment model fits and structural uncertainty indicate a neutral determination. 
 
 
 <!-- ::: {.landscape} -->
