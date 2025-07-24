@@ -2,25 +2,25 @@
 
 Many people were instrumental in the successful completion of this assessment and their contribution is greatly appreciated. These include: 
 
-* STAR panel reviewers Geoff Tingley, Kotaro Ono, Allan Hicks for comments during STAR panel to improve analysis and description of the assessment
+* STAR panel reviewers Geoff Tingley (Center for Independent Experts), Kotaro Ono (Center for Independent Experts), and Allan Hicks (International Pacific Halibut Commission) for comments during STAR panel to improve analysis and description of the assessment
 
-* STAR panel chair, Cheryl Barnes for comments during STAR panel and preliminary review of document, and so ensuring materials conform to the TOR and are reviewed timely
+* STAR panel chair, Cheryl Barnes (Oregon State University) for comments during STAR panel and preliminary review of the assessment document, and for ensuring materials conform to the TOR and are reviewed in a timely manner
 
-* Council staff Marlene Bellman for overall coordination and for preliminary review of document to ensure adherence to the TOR
+* Council staff Marlene Bellman for overall coordination and for preliminary review of the assessment document to ensure adherence to the TOR
 
-* GAP and GMT advisors Tim Klassen and Thompson Banez, respectively, for help in understanding fleet dynamics to help inform initial selectivity blocks and types, in understanding management actions, and in providing catch values for use in years between and during projections
+* GAP and GMT advisors Tim Klassen (Reel Steel Sportfishing) and Thompson Banez (California Department of Fish and Wildlife), respectively, for help in understanding fleet dynamics to help inform initial selectivity blocks and types, in understanding management actions, and in providing catch values for use in years between and during projections
 
-* Melissa Head for biological analyses of maturity slides
+* Melissa Head (Northwest Fisheries Science Center) for biological analyses of maturity slides
 
-* Jamie Hale and Patrick McDonald of the CAP lab for age reading
+* Jamie Hale and Patrick McDonald (Pacific States Marine Fisheries Commission) of the CAP lab for age reading
 
-* Jessica Join and Buddy Pendergast for fecundity counts        
+* Jessica Join and Buddy Pendergast (Southwest Fisheries Science Center) for fecundity counts 
 
-* Rebecca Miller, E.J. Dick, Tanya Rogers and Rachel Brooks for data wrangling an modelling assistance
+* E.J. Dick and Tanya Rogers (Southwest Fisheries Science Center), and Rebecca Miller and Rachel Brooks (University of California, Santa Cruz) for data wrangling and modelling assistance
 
 * The participants of the CCFRP and ROV surveys. These include university and CDFW, MARE, as well as volunteer anglers participating in collection of biological and survey data.
 
-* Owen Hamel for comments on improving initial versions of assessment report as well as comment for improving assessment model 
+* Owen Hamel (Northwest Fisheries Science Center) for comments on improving initial versions of the assessment document as well as comments for improving the assessment model 
 
 * The following CCFRP and SWFSC cooperative research vessels:
     + Crescent City Fishing Charters - Steve Huber, F/V Out of the Box
