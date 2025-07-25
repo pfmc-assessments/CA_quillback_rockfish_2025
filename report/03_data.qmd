@@ -2,7 +2,7 @@
 
 <!-- Data comprise the foundational components of stock assessment models. They drive estimated dynamics and inform modeling decisions. The decision to include or exclude particular data sources in an assessment model depends on many factors. These factors often include, but are not limited to, the way in which data were collected, the spatial and temporal coverage of the data, the quantity of data available per desired sampling unit, the representativeness of the data to inform modeled processes, and the presence of an avenue for the inclusion of the data in the assessment model. Attributes associated with a data source can change through time, as can the applicability of the data source when different modeling approaches are explored (e.g., stock structure or time-varying processes). Therefore, the specific data sources included or excluded from this assessment should not necessarily constrain the selection of data sources applicable to future stock assessments for `r spp`. Even if a data source is not directly used in the stock assessment, it can provide valuable insights into biology, fishery behavior, or local dynamics. -->
 
-Data from a wide range of programs were available for possible inclusion in the current assessment model. Descriptions of each data source included in the base model and sources that were explored but not included in the base model are provided in this section. In some cases, alternative treatments of included data were explored through sensitivity analyses (see @sec-assmt-sens).
+Data from a wide range of programs were available for possible inclusion in the current assessment model. Descriptions of each data source included in the base model and sources that were explored but not included in the base model are provided in this section. In some cases, alternative treatments of data were explored through sensitivity analyses (see @sec-assmt-sens).
 
 ## Data Sources Used
 
@@ -15,20 +15,20 @@ This assessment updates the data used in the 2021 stock assessment, as well as u
 
 2.  Fishery-dependent length and age composition data were obtained from the following sources:
     a.  Commercial composition data come from the \gls{ccgs} sampling program in years ranging between 1978--2024 for lengths and 2007--2024 for ages. Data were obtained from \gls{pacfin}.
-    b.  Recreational length composition data from state sampling programs or historical sampling efforts ranged from 1959--1960 and 1980--2024 were obtained from \gls{cdfw}, online reports, and \gls{recfin}.
+    b.  Recreational length composition data from state sampling programs or historical sampling efforts ranged from 1959--1960 and 1980--2024 and were obtained from \gls{cdfw}, online reports, and \gls{recfin}.
 
 3.  Fishery-dependent relative abundance trends were obtained from the following sources:
-    a.  Recreational catch and effort data from the private/rental fleet were obtained from \gls{crfs} via \gls{recfin} for years 2004--2022.
+    a.  Recreational catch and effort data from the private/rental mode of the recreational fleet were obtained from \gls{crfs} via \gls{recfin} for years 2004--2022.
 
 4.  Fishery-independent data, which include length and age composition data and relative abundance trends were obtained from two different surveys:
-    a.  The \gls{s-ccfrp} provides an index of abundance and corresponding length and age composition data and was included for years 2017-2022. 
+    a.  The \gls{s-ccfrp} provides an index of abundance and corresponding length and age composition data and was included for years 2017-2024. 
     b.  The \gls{rov} survey by the \gls{cdfw} in collaboration with \gls{mare} provides an index of abundance and corresponding length composition data, which were included for two super-year periods, 2014--2016 and 2019--2021. Data were combined within each super-year for the index, but used as individual years for length compositions.
     f.  Paired age and length samples collected by Jeff Abrams for his thesis at Cal Poly Humboldt [@abrams_2014] are included as a growth fleet in the model to inform internal estimates of growth as well as to inform recruitment patterns.  
 
 5.  Estimates of life history parameters were generated from various sources, and include:
     a.  Updated maturity schedule from fish sampled in California by the \gls{swfsc}'s Santa Cruz lab with the analysis assuming functional length-at-maturity.
     b.  Updated fecundity relationship from fish sampled in California by the \gls{swfsc}'s Santa Cruz lab and fitting fecundity as a power function of length.
-    c.  Changed value for natural mortality based a new compilation of existing age samples along the West Coast and reconsideration of an appropriate assumed maximum age for California.
+    c.  Value for natural mortality based a new compilation of existing age samples along the West Coast of the U.S. and Canada and reconsideration of an appropriate assumed maximum age for California.
     d.  Updated weight-at-length relationship as estimated from measured recreational samples in \gls{mrfss} and \gls{crfs}, as well as from the \gls{s-wcgbt}. These sources were the only ones with measured weights. 
     e.  Estimates of ageing error for break-and-burn ages were calculated from double reads of otoliths as provided by the \gls{psmfc} \gls{cap}.
  

@@ -110,7 +110,7 @@ management |>
 #| echo: false
 #| warning: false
 #| tbl-pos: 'ht!'
-#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the assessment model. Also included is the input sample size used in the assessment model following the formula described in the text. Lengths in years that had an input sample size of less than 5 were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of commercial length samples and number of trips available for use in the assessment model. Also included is the input sample size used in the assessment model following the formula described in the text. Lengths in years that had an input sample size of less than or equal to 5 were excluded from final model fits, as described in the text."
 
 commlengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) |>
   dplyr::select(c(Year, pacfin_Nfish, pacfin_Ntrip)) |>
@@ -176,7 +176,7 @@ commages|>
 #| warning: false
 #| tbl-pos: 'ht!'
 #| output: asis
-#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the assessment model. The number of trips was used as the input sample size in the assessment model. Duplicate private/charter mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than 5 were excluded from final model fits, as described in the text."
+#| tbl-cap: "Summary of the number of recreational length samples and number of trips available for use in the assessment model. The number of trips was used as the input sample size in the assessment model. Duplicate private/charter mode lengths from the MRFSS sampling program in 1997-1998 are not included. Lengths in years with the number of trips fewer than or equal to 5 were excluded from final model fits, as described in the text."
 
 reclengths <- read.csv(here::here('data', "SampleSize_length.csv"), check.names = FALSE) 
 reclengths <- reclengths |> 
