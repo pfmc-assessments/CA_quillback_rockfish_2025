@@ -48,6 +48,63 @@ kableExtra::kable(catches.new,
 
 \clearpage
 
+```{r, tbl-management, results = "asis"}
+#| label: tbl-management
+#| warning: false
+#| echo: false
+#| tbl-cap: "Recent trend in overfishing limits (OFL), acceptable biological catches (ABC), the annual catch limits (ACL; set to equal ABC) for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk ($\\ast$). The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calculated as described in Section 1.5. For 2023-2024, California quillback rockfish was assigned its own OFL, ABC, and ACL, which are provided here as California only values."
+#| tbl-pos: H
+
+management <- read.csv(here("report", "tables", "management.csv")) |>
+  dplyr::mutate("ACLca" = ACLnorth * 0.287 + ACLsouth) #only correct prior to 2023
+recent <- management[management$Year %in% c(2023, 2024), ]
+management[management$Year %in% c(2023, 2024), -1] <- NA
+management[management$Year %in% c(2023, 2024), c("OFLca", "ABCca", "caACL")] <-
+  cbind(c(recent$OFLsouth + recent$OFLnorth),
+        c(recent$ABCsouth + recent$ABCnorth),
+        c(recent$ACLsouth + recent$ACLnorth))
+management$catch <- recent_management_table$`Catch (mt)`
+management |>
+  gt::gt() |>
+  gt::cols_hide(
+    columns = c(ABCsouth,
+                ABCnorth)
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = FALSE
+  ) |>
+  gt::cols_label(
+    OFLsouth = "OFL* South",
+    ACLsouth = "ACL* South",
+    OFLnorth = "OFL* North",
+    ACLnorth = "ACL* North",
+    ACLca = "ACL* CA",
+    OFLca = "OFL CA",
+    ABCca = "ABC CA",
+    caACL = "ACL CA",
+    catch = "Total removals"
+  ) |>
+  gt::cols_width(
+    everything() ~ px(55)
+  ) |>
+  gt::fmt_number(
+    decimals = 2
+  ) |>
+  gt::fmt_number(
+    columns = 1,
+    decimals = 0,
+    use_seps = FALSE
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    missing_text = "---"
+  ) |>
+  gt::as_latex()
+```
+
+\clearpage
+
 ```{r}
 #| label: tbl-comm_lengths
 #| echo: false
