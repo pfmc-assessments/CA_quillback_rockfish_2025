@@ -558,10 +558,65 @@ kableExtra::kable(
   kableExtra::column_spec(2:10, width = "1.5cm")
 ``` 
 
+:::
+
 \pagebreak
 
 ## Management
 
+```{r, tbl-ref-points-es, results = "asis"}
+#| label: tbl-ref-points
+#| warning: false
+#| echo: false
+#| eval: !expr eval_tables 
+#| tbl-cap: !expr if(eval_tables) reference_points_cap 
+#| tbl-pos: H
+
+reference_points_table |>
+  gt::gt() |>
+  gt::fmt_number(
+    columns = 2:4,
+    rows = c(2:4, 7, 10, 12, 15, 17, 20),
+    decimals = 3
+  ) |>
+  gt::fmt_number(
+    columns = 2:4,
+    rows = 1,
+    decimals = 3
+  ) |>
+  gt::fmt_number(
+    columns = 2:4,
+    rows = c(5, 8, 9, 13:14, 18:19),
+    decimals = 3
+  ) |>
+  gt::tab_options(
+    table.font.size = 12,
+    latex.use_longtable = FALSE 
+  ) |>  
+  gt::tab_style(
+    style = list(
+      gt::cell_text(style = "italic")
+    ),
+    locations = gt::cells_body(
+      columns = 1,
+      rows = c(6, 11, 16) #dplyr::starts_with("Reference")
+    )
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    rows = c(6, 11, 16),
+    missing_text = ""
+  ) |>
+  gt::sub_missing(
+    columns = tidyselect::everything(),
+    rows = c(13),
+    missing_text = "---"
+  ) |>
+  gt::as_latex()
+
+```
+
+::: {.landscape}
 ```{r, results = "asis"}
 #| label: tbl-projections
 #| warning: false

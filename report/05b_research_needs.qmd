@@ -34,7 +34,7 @@ Research to better understand population processes:
 <!-- NOTE: This is covered in the general spatial recommendation -->
 <!-- * It was not possible to fully implement an areas-as-fleets approach for this assessment due to a lack of commercial size data south of Point Arena.  Increased size and age sampling is needed if future assessments are to explore this approach.  -->
 
-* More detailed information on recreational effort and fishing targets is needed, particularly for the private/rental mode. Explorations of time varying selectivity showed in some cases when depth limits relaxed (moved deeper) catch of `r spp` went down and the selectivity pattern became dome shaped. This is contrary to depth-based expectations for `r spp` and may reflect shifts in fishing targets. Information of fishing targets would better inform whether this is the case. Priority: Low
+* More detailed information on recreational effort and fishing targets is needed, particularly for the private/rental mode. Explorations of time varying selectivity showed in some cases when depth limits relaxed (moved deeper) catch of `r spp` went down and the selectivity pattern became dome-shaped. This is contrary to depth-based expectations for `r spp` and may reflect shifts in fishing targets. Information of fishing targets would better inform whether this is the case. Priority: Low
 
 
 

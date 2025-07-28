@@ -45,7 +45,7 @@ The \gls{ccgs} is the only fishery-dependent sampling program that collects otol
 
 The length observations were expanded to the sampled cluster level, to account for any fish that were not measured, then to the trip level to account for the relative size of the landing from which the sample was obtained. These expanded length observations were then combined within a year and used for the base model.
 
-The input sample sizes for the expanded commercial length data were calculated via the Stewart Method (Ian Stewart, pers. comm., IPHC, and developed at NWFSC) based on a combination of the number of trips and fish by year:
+The input sample sizes for the expanded commercial length data were calculated via the Stewart Method (I. Stewart, pers. comm., IPHC, and developed at NWFSC) based on a combination of the number of trips and fish by year:
 
 {{< pagebreak >}}
 

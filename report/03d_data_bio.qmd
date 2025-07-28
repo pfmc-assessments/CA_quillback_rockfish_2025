@@ -54,7 +54,7 @@ A total of 1038 age reads were available from otoliths collected from `r spp` of
 
 In addition to these 450 age reads not used in the base model, 192 age-zero fish from Diana Baetscher's dissertation work [@baetscher_2019_larval] trapping young-of-the-year rockfish within Monterey Bay using \gls{smurf}s and divers with nets were also available and used to inform initial parameters for growth. The `r spp` captured were morphologically identified as gopher (*S. carnatus*), copper, or kelp (*S. atrovirens*) rockfish, but were genetically identified as `r spp`. 
 
-External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (Claire Stuart, Cal Poly Humboldt, pers. comm.), as also found by @LenarzandEcheverria_dimorphism_1991. A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. 
+External estimates of growth from ages across the range of `r spp` do not indicate sexually dimorphic growth (C. Stuart, Cal Poly Humboldt, pers. comm.), as also found by @LenarzandEcheverria_dimorphism_1991. A number of the `r spp` collected for biological studies targeted females, and so, combined with lack of evidence for sexual dimorphism, we did not estimate dimorphic growth for the California-specific data. 
 
 The estimated growth curve from the available data, estimated externally to the base model, was 
 $$
