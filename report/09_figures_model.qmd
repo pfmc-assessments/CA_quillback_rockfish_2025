@@ -305,19 +305,6 @@ knitr::include_graphics(
 
 
 ```{r}
-#| label: fig-meanlen-rov
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
-#| fig-alt: "Mean length was well estimated by the model for all years."
-
-knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
-```
-
-\FloatBarrier
-
-```{r}
 #| label: fig-meanlen-ccfrp
 #| echo: false
 #| warning: false
@@ -329,6 +316,20 @@ knitr::include_graphics(
     "r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_CCFRP.png"
 )
 ```
+
+\FloatBarrier
+
+```{r}
+#| label: fig-meanlen-rov
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Mean length (cm) for ROV with 95% confidence intervals based on adjusted input sample sizes. The blue line is the model expectation."
+#| fig-alt: "Mean length was well estimated by the model for all years."
+
+knitr::include_graphics("r4ss_plots/comp_lenfit_data_weighting_TA1-8_CA_ROV.png")
+```
+
 \FloatBarrier
 
 ```{r}
@@ -439,17 +440,6 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 ```
 
 ```{r}
-#| label: fig-depl
-#| echo: false
-#| warning: false
-#| eval: true
-#| fig-cap: "Estimated time series of spawning output relative to unfished with 95% asymptotic confidence intervals."
-#| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
-
-knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
-```
-
-```{r}
 #| label: fig-tot-bio
 #| echo: false
 #| warning: false
@@ -458,6 +448,17 @@ knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 #| fig-alt: "Total biomass in metric tons is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 
 knitr::include_graphics("r4ss_plots/ts1_Total_biomass_(t).png")
+```
+
+```{r}
+#| label: fig-depl
+#| echo: false
+#| warning: false
+#| eval: true
+#| fig-cap: "Estimated time series of spawning output relative to unfished with 95% asymptotic confidence intervals."
+#| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
+
+knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
 ```
 
 
@@ -850,7 +851,7 @@ knitr::include_graphics(
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Time series comparisons of summary biomass (in metric tons, bottom) and spawning output relative to unfished (bottom) from the base model of the 2021 stock assessment and the 2025 base model."
+#| fig-cap: "Time series comparisons of summary biomass (in metric tons, top), and spawning output relative to unfished (bottom) with 95% confidence interval from the base model of the 2021 stock assessment and the 2025 base model."
 #| fig-alt: "."
 
 knitr::include_graphics(

@@ -10512,14 +10512,31 @@ base_mod_name <- "6_0_1_postStarBase"
 
 #get the report files - need to look in the results spreadsheet to get the order
 xx <- SSgetoutput(dirvec = c(glue::glue("{models}/{subdir}", models = here('models'),
-                                        subdir = c(base_mod_name,new_name))))
+                                        subdir = c(base_mod_name, new_name))))
 
 r4ss::plot_twopanel_comparison(xx, 
                                dir = here('report', 'figures'), 
-                               filename = "historical_comparison_poststar.png",
-                               legendlabels = c('2025 post-star base model', '2021 model'), 
+                               filename = "historical_comparison.png",
+                               legendlabels = c('2025 base model', '2021 model'), 
                                legendloc = 'bottomleft',
                                hessian = c(TRUE, TRUE),
                                subplot1 = 18,
-                               subplot2 = 11,
-                               endyrvec = c(2025, 2021))
+                               subplot2 = 4,
+                               endyrvec = c(2025, 2021),
+                               labels = c(
+                                 "Year", # 1
+                                 "Spawning biomass (mt)", # 2
+                                 "Fraction of unfished spawning biomass", # 3 automatically updated
+                                 "Age-0 recruits (1,000s)", # 4
+                                 "Recruitment deviations", # 5
+                                 "Index", # 6
+                                 "Log index", # 7
+                                 "SPR-related quantity", # 8 automatically updated when consistent
+                                 "Density", # 9
+                                 "Management target", # 10
+                                 "Minimum stock size threshold", # 11
+                                 "Spawning output", # 12 automatically updated when consistent
+                                 "Harvest rate", # 13
+                                 "Summary biomass (mt)", # 14
+                                 "Age X+ biomass (mt)" # 15
+                               ))
