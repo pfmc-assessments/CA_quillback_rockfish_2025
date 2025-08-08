@@ -116,6 +116,40 @@ r4ss::run(dir = here('models', paste0(base_mod_name, "_high_M_pstar_",pstar)),
 # )
 # writeLines(tab,here('report', "tables", "decision_table.tex"))
 
+#####-------------------------------------------####-
+#Decision Table Figure - Not in Report
+#####-------------------------------------------####-
+low45 <- SS_output(here('models', paste0(base_mod_name, "_low_M_pstar_",pstar)))
+base45 <- SS_output(here('models', base_mod_name))
+high45 <- SS_output(here('models', paste0(base_mod_name, "_high_M_pstar_",pstar)))
+
+xx <- SSgetoutput(dirvec = glue::glue("{models}/{subdir}", models = here('models'),
+                                      subdir = c(base_mod_name,
+                                                 file.path(paste0(base_mod_name, "_low_M_pstar_",pstar)),
+                                                 file.path(paste0(base_mod_name, "_high_M_pstar_",pstar)))))
+SSsummarize(xx) |>
+  SSplotComparisons(legendlabels = c('Base (M = 0.068)',
+                                     'Low state of nature (M = 0.0525)',
+                                     'High state of nature (M = 0.08)'),
+                    subplots = c(1, 3, 9, 11, 18, 2, 4), print = TRUE, legendloc = "topright",
+                    plotdir = here('models', paste0(base_mod_name, "_high_M_pstar_",pstar)),
+                    labels = c(
+                      "Year", # 1
+                      "Spawning biomass (mt)", # 2
+                      "Fraction of unfished spawning biomass", # 3 automatically updated
+                      "Age-0 recruits (1,000s)", # 4
+                      "Recruitment deviations", # 5
+                      "Index", # 6
+                      "Log index", # 7
+                      "SPR-related quantity", # 8 automatically updated when consistent
+                      "Density", # 9
+                      "Management target", # 10
+                      "Minimum stock size threshold", # 11
+                      "Spawning output", # 12 automatically updated when consistent
+                      "Harvest rate", # 13
+                      "Summary biomass (mt)", # 14
+                      "Age X+ biomass (mt)" # 15
+                    ))
 
 
 
