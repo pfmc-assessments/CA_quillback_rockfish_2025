@@ -131,7 +131,8 @@ SSsummarize(xx) |>
   SSplotComparisons(legendlabels = c('Base (M = 0.068)',
                                      'Low state of nature (M = 0.0525)',
                                      'High state of nature (M = 0.08)'),
-                    subplots = c(1, 3, 9, 11, 18, 2, 4), print = TRUE, legendloc = "topright",
+                    subplots = c(1, 3, 9, 11, 18, 2, 4), print = TRUE, 
+                    legendloc = "topright", endyrvec = 2036,
                     plotdir = here('models', paste0(base_mod_name, "_high_M_pstar_",pstar)),
                     labels = c(
                       "Year", # 1
