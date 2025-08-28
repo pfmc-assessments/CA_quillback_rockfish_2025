@@ -4,7 +4,8 @@ library(dplyr)
 
 source(here('code/table_decision_format.R'))
 
-base_mod_name <- '6_0_1_postStarBase' 
+#base_mod_name <- '6_0_1_postStarBase' 
+base_mod_name <- '6_0_2_postStarBase_sigma075' 
 base_mod <- SS_read(here('models', base_mod_name))
 
 pstar <- 0.45
@@ -18,7 +19,7 @@ base45 <- SS_output(here('models', base_mod_name))
 mod <- base_mod
 
 #Update catches based on base model
-fore_catch <- r4ss::SS_ForeCatch(base45, yrs = 2025:2036)
+fore_catch <- r4ss::SS_ForeCatch(base45, yrs = 2025:2036, digits = 4)
 mod$fore$ForeCatch <- fore_catch[,c(1:4)]
 
 #Turn off buffers
@@ -53,7 +54,7 @@ r4ss::run(dir = here('models', paste0(base_mod_name, "_low_M_pstar_",pstar)),
 mod <- base_mod
 
 #Upate catches based on base model
-fore_catch <- r4ss::SS_ForeCatch(base45, yrs = 2025:2036)
+fore_catch <- r4ss::SS_ForeCatch(base45, yrs = 2025:2036, digits = 4)
 mod$fore$ForeCatch <- fore_catch[,c(1:4)]
 
 #Turn off buffers

@@ -10540,3 +10540,50 @@ r4ss::plot_twopanel_comparison(xx,
                                  "Summary biomass (mt)", # 14
                                  "Age X+ biomass (mt)" # 15
                                ))
+
+
+####------------------------------------------------#
+## 6_0_2_postStarBase_sigma075 ----
+####------------------------------------------------#
+
+#Update postStarBase but with sigma = 0.75. Only affects forecasts
+
+new_name <- "6_0_2_postStarBase_sigma075"
+old_name <- "6_0_1_postStarBase"
+
+
+##
+#Copy inputs
+##
+
+copy_SS_inputs(dir.old = here('models', old_name), 
+               dir.new = here('models', new_name),
+               overwrite = TRUE)
+
+mod <- SS_read(here('models',new_name))
+
+
+##
+#Make Changes and run models
+##
+
+mod$fore$Flimitfraction_m$fraction <- get_buffer(c(2025:2036), sigma = 0.75, pstar = 0.45)[,2]
+
+
+##
+#Output files and run
+##
+
+SS_write(mod,
+         dir = here('models', new_name),
+         overwrite = TRUE)
+
+r4ss::run(dir = here('models', new_name), 
+          exe = here('models/ss3_win.exe'), 
+          #extras = '-nohess',
+          show_in_console = TRUE, #comment out if you dont want to watch model iterations
+          skipfinished = FALSE)
+
+pp <- SS_output(here('models', new_name))
+SS_plots(pp, plot = c(1:26))
+plot_sel_all(pp)
