@@ -60,9 +60,9 @@ ggplot2::ggplot(removals, ggplot2::aes(x = year, y = catch_mt, fill = Fleet)) +
     axis.title = ggplot2::element_text(size = 21)
   )
 
-ggplot2::ggsave(filename = here::here("presentations", "At_A_Glance", "removals.png"), height = 8/1.7, width = 8, dpi = 500)
+ggplot2::ggsave(filename = here::here("presentations", "At_A_Glance", "removals.png"), height = 8/1.8, width = 8, dpi = 500)
 #Still have to resize on the slide, which is not ideal, but not going to change.
-#Aspect ratio is at least correct.
+#Aspect ratio is at least correct (accounting for figure captions changed it from 1.7 to 1.8).
 
 
 ############################################
@@ -108,7 +108,7 @@ ggplot2::ggplot(sumbio, ggplot2::aes(x = year, y = Bio_smry, color = model)) +
     axis.title = ggplot2::element_text(size = 21)
   )
 
-ggplot2::ggsave(filename = here::here("presentations", "At_A_Glance", "historical_comparison.png"), height = 8/1.7, width = 8, dpi = 500)
+ggplot2::ggsave(filename = here::here("presentations", "At_A_Glance", "historical_comparison.png"), height = 8/1.8, width = 8, dpi = 500)
 
 
 ############################################
@@ -144,14 +144,15 @@ p1 <- ggplot() +
   geom_line(data = bratio_pt, aes(x=Yr,y=Bratio, color = Model),size=1.2) +
   ggplot2::theme_bw() +
   ggplot2::xlab("Year") + ggplot2::ylab("Stock Status (fraction of \n unfished spawning output)") +
-  ggplot2::xlim(c(1995, 2037)) +
+  ggplot2::scale_x_continuous(breaks = seq(1995, 2035, by = 10), limits = c(1995, 2037)) +
+  #ggplot2::xlim(c(1995, 2037)) +
   ggplot2::scale_color_manual(labels = c("High State of Nature", "Base Model","Low State of Nature"), values = c("darkolivegreen4","blue", "brown4")) +
   ggplot2::annotate('rect', xmin=2025, xmax=2037, ymin=0, ymax=0.83, alpha=0.3, fill='gray35') +
   ggplot2::theme(
     strip.text.x = ggplot2::element_blank(),
     strip.background = ggplot2::element_rect(colour="white", fill="white"),
     legend.key.height = ggplot2::unit(0.05, "cm"),
-    legend.position = c(0.80, 0.9),
+    legend.position = c(0.80, 0.89),
     legend.title=element_blank(), 
     legend.text = ggplot2::element_text(size = 16),
     axis.text.y = ggplot2::element_text(angle = 90,vjust=0.5,hjust=0.5),
@@ -162,8 +163,8 @@ p1 <- ggplot() +
   geom_hline(yintercept=0.40, linetype="dashed", color = "red", size=0.7) +
   annotate(geom="text", x=1995, y=0.43, label="Management Target", color="red", hjust = 0, size=5) +
   annotate(geom="text", x=1995, y=0.28, label="Minimum Stock Size Threshold", color="red", hjust = 0, size=5) +
-  annotate(geom="text", x=2025.2, y=0.05, label="Forecast Period", color="gray35", hjust = 0, size =5) +
-  annotate(geom="text", x=1995, y=0.02, label="Blue shading represents 95% uncertainty range for the base model", color="gray40", hjust = 0, size = 4) +
+  annotate(geom="text", x=2026.7, y=0.05, label="Forecast Period", color="gray35", hjust = 0, size =5) +
+  annotate(geom="text", x=1995, y=0.05, label="Blue shading represents 95% uncertainty range for the \nbase model", color="gray40", hjust = 0, size = 4) +
   geom_polygon(data = data.frame(x = c(filter(bratio_hi,Yr>1994 & Model=="model3")$Yr, rev(filter(bratio_hi,Yr>1994 & Model=="model3")$Yr)),y = c(filter(bratio_hi,Yr>1994 & Model=="model3")$Bratio, rev(filter(bratio_lo,Yr>1994 & Model=="model3")$Bratio))),
                aes(x = x, y = y), fill = "brown4",alpha=0.2) +
   geom_polygon(data = data.frame(x = c(filter(bratio_hi,Yr>1994 & Model=="model2")$Yr, rev(filter(bratio_hi,Yr>1994 & Model=="model2")$Yr)),y = c(filter(bratio_hi,Yr>1994 & Model=="model2")$Bratio, rev(filter(bratio_lo,Yr>1994 & Model=="model2")$Bratio))),
@@ -188,9 +189,11 @@ p2 <- ggplot() +
   geom_line(data = bratio_pt, aes(x=Yr,y=Bratio, color = Model),size=0.8) +
   ggplot2::theme_bw() +
   ggplot2::xlab("") + ggplot2::ylab("") +
-  ggplot2::xlim(c(1916, 2037)) +
+  ggplot2::scale_x_continuous(breaks = seq(1915, 2035, by = 40)) +
+  #ggplot2::xlim(c(1916, 2037)) +
   ggplot2::scale_color_manual(labels = c("High State of Nature", "Base Model","Low State of Nature"), values = c("darkolivegreen4","blue", "brown4")) +
   ggplot2::annotate('rect', xmin=2025, xmax=2037, ymin=0, ymax=1.0, alpha=0.3, fill='gray35') +
+  ggplot2::scale_y_continuous(breaks = seq(0, 1, by = 0.5)) +
   ggplot2::theme(
     strip.text.x = ggplot2::element_blank(),
     strip.background = ggplot2::element_rect(colour="white", fill="white"),
@@ -213,9 +216,9 @@ p2 <- ggplot() +
   geom_polygon(data = data.frame(x = c(filter(bratio_hi,Model=="model1")$Yr, rev(filter(bratio_hi,Model=="model1")$Yr)),y = c(filter(bratio_hi,Model=="model1")$Bratio, rev(filter(bratio_lo,Model=="model1")$Bratio))),
                aes(x = x, y = y), fill = "darkolivegreen4",alpha=0.2)
   
-p1 + annotation_custom(ggplotGrob(p2), xmin = 1995, xmax = 2010, ymin = 0.55, ymax = 1.0)
+p1 + annotation_custom(ggplotGrob(p2), xmin = 1995, xmax = 2015, ymin = 0.6, ymax = 1.0)
 
-ggplot2::ggsave(filename = here::here("presentations", "At_A_Glance",  "decision_table.png"), height = 8/1.7, width = 8, dpi = 500)
+ggplot2::ggsave(filename = here::here("presentations", "At_A_Glance",  "decision_table.png"), height = 8/1.8, width = 8, dpi = 500)
 
 
 #-----------------------------------------------------------#
