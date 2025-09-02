@@ -17,10 +17,18 @@
 #       already exists
 
 # render document
+  
 library(here) 
 
 
-quarto::quarto_render(here("report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
+
+
+
+#quarto::quarto_render(here("report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
+
+
+
+quarto::quarto_render(here("report", "decision_tables_with_OFL.qmd"))
 
 
 
