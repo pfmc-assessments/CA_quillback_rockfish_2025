@@ -27,7 +27,7 @@ library(here)
 #quarto::quarto_render(here("report", "SAR_C_Quillback_rockfish_skeleton.qmd"))
 
 
-
+#Create the decision table with OFL for Ian and Owen's spreadsheet
 quarto::quarto_render(here("report", "decision_tables_with_OFL.qmd"))
 
 
