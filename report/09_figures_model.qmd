@@ -137,7 +137,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "The between-reader ages for quillback rockfish with a 1:1 line representing the same read age. The bubble size represents the number of otoliths in a combination of reads."
-#| fig-alt: "FROG"
+#| fig-alt: "Scatter plot of the ages from readers 1 on the x-axis and reader 2 on the y-axis.  The agreement among readers is reasonable and closer for younger fish.  The 1 to 1 line is alos plotted to show true agreement. There is some positive bias in reader 2 between ages 30 and 40."
 
 knitr::include_graphics(
     "figures/bio_age_error.png"
@@ -545,7 +545,8 @@ knitr::include_graphics("figures/retro_percent_difference_4_panel.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of ln(R~0~) values."
-#| fig-alt: "FROG"
+#| fig-alt: "Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of log(R0) values."
+
 
 knitr::include_graphics("figures/R0_profile_bio_comparison.png")
 ```
@@ -557,7 +558,7 @@ knitr::include_graphics("figures/R0_profile_bio_comparison.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the negative log-likelihood, fraction of unfished spawning output, initial spawning output (in billions of eggs), and final spawning output (in billions of eggs) across a range of ln(R~0~) values."
-#| fig-alt: "FROG"
+#| fig-alt: ""
 
 knitr::include_graphics("figures/parameter_panel_SR_LN(R0).png")
 ```
@@ -569,7 +570,8 @@ knitr::include_graphics("figures/parameter_panel_SR_LN(R0).png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the negative log-likelihood across a range of ln(R~0~) values."
-#| fig-alt: "."
+#| fig-alt: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of ln(R~0~) values."
+#| fig-alt: "Four panel plot with log(R0) on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of log(R0) with age data from the growth fleet supporting higher log(R0). There is little information about log(R0) from the survey indices."
 
 knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
 ```
@@ -580,7 +582,7 @@ knitr::include_graphics("figures/piner_panel_SR_LN(R0).png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of steepness (h) values."
-#| fig-alt: "."
+#| fig-alt: "Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of steepness values."
 
 knitr::include_graphics("figures/h_profile_bio_comparison.png")
 ```
@@ -603,7 +605,7 @@ knitr::include_graphics("figures/parameter_panel_SR_BH_steep.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the negative log-likelihood across a range of steepness values."
-#| fig-alt: "."
+#| fig-alt: "Four panel plot with steepness values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of steepness. There is little information about steepness from the survey indices."
 
 knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
 ```
@@ -614,7 +616,7 @@ knitr::include_graphics("figures/piner_panel_SR_BH_steep.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of natural mortality (M) values."
-#| fig-alt: "."
+#| fig-alt: "Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of natural mortality values."
 
 knitr::include_graphics("figures/m_profile_bio_comparison.png")
 ```
@@ -637,7 +639,7 @@ knitr::include_graphics("figures/parameter_panel_NatM_uniform_Fem_GP_1.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the negative log-likelihood across a range of natural mortality values."
-#| fig-alt: "."
+#| fig-alt: "Four panel plot with natural mortality values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The recruitment and recreational length data is the primarily source of information informing the estimate of natural mortality. There is little information about natural mortality from the survey indices."
 
 knitr::include_graphics("figures/piner_panel_NatM_uniform_Fem_GP_1.png")
 ```
@@ -649,7 +651,7 @@ knitr::include_graphics("figures/piner_panel_NatM_uniform_Fem_GP_1.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Bivariate profile of natural mortality (M) and steepness (h) relative with the negative log-likelihood (NLL) value for each model run shown with a white dot indicating the base model values."
-#| fig-alt: "FROG"
+#| fig-alt: "The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
 
 knitr::include_graphics("figures/profile_Mhgrid_nll.png")
 ```
@@ -673,7 +675,7 @@ knitr::include_graphics("figures/profile_m_h_contour.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for asymptotic average length (L~inf~)."
-#| fig-alt: "."
+#| fig-alt: "Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of L infinity values."
 
 knitr::include_graphics("figures/linf_profile_bio_comparison.png")
 ```
@@ -695,7 +697,7 @@ knitr::include_graphics("figures/parameter_panel_L_at_Amax_Fem_GP_1.png")
 #| warning: false
 #| eval: true
 #| fig-cap: "Change in the negative log-likelihood across a range of values for asymptotic average length."
-#| fig-alt: "."
+#| fig-alt: "Four panel plot with asymptotic average length values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of the asymptotic average length. There is little information about asymptotic average length from the survey indices."
 
 knitr::include_graphics("figures/piner_panel_L_at_Amax_Fem_GP_1.png")
 ```
@@ -706,8 +708,8 @@ knitr::include_graphics("figures/piner_panel_L_at_Amax_Fem_GP_1.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for growth coefficient K."
-#| fig-alt: "."
+#| fig-cap: "Change in the estimate of spawning output (billions of eggs, top) and spawning output relative to unfished (bottom) across a range of values for growth coefficient k."
+#| fig-alt: "Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of values for the growth coefficient k."
 
 knitr::include_graphics("figures/k_profile_bio_comparison.png")
 ```
@@ -728,8 +730,8 @@ knitr::include_graphics("figures/parameter_panel_VonBert_K_Fem_GP_1.png")
 #| echo: false
 #| warning: false
 #| eval: true
-#| fig-cap: "Change in the negative log-likelihood across a range of values for growth coefficient K"
-#| fig-alt: "."
+#| fig-cap: "Change in the negative log-likelihood across a range of values for growth coefficient k"
+#| fig-alt: "Four panel plot with growth coefficient k values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of the growth coefficient k. There is little information aboutgrowth coefficient k from the survey indices."
 
 knitr::include_graphics("figures/piner_panel_VonBert_K_Fem_GP_1.png")
 ```
@@ -852,7 +854,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Time series comparisons of summary biomass (in metric tons, top), and spawning output relative to unfished (bottom) with 95% confidence interval from the base model of the 2021 stock assessment and the 2025 base model."
-#| fig-alt: "."
+#| fig-alt: "Two panel line plot with years on the x-axis and age-3 biomass in the top panel and fraction unfished in the bottom panel's y-axis.  The time series shows the change in the base model from the 2021 assessment to the 2025 assessment."
 
 knitr::include_graphics(
   "figures/historical_comparison.png")

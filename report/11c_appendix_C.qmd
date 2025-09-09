@@ -16,7 +16,7 @@ Based on work completed at the SWFSC, we estimate that the percent of rocky reef
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Average CPUE (fish per angler hour) for each location and site."
-#| fig-alt: "FROG"
+#| fig-alt: "A five panel plot with each showing year on the x-axis and average CPUE on the y-axis.  The average CPUE is plotted for each of the sampling locations.  There is little trend information in the data from Bodega Head, South Cape Mendocino, Stewarts Point and Ten Mile.  The Southeast Farallon Island show an increase in CPUE in 2024."
 
 knitr::include_graphics("figures/ccfrp_avg_cpue.png")
 
@@ -29,7 +29,7 @@ knitr::include_graphics("figures/ccfrp_avg_cpue.png")
 #| warning: false 
 #| eval: true 
 #| fig-cap: "CPUE across 40 foot depth bins."
-#| fig-alt: "FROG"
+#| fig-alt: "A figure with box plots showing CPUE across depth bins.  The median CPUE is similar across all depths from 40 to 200 feet."
 
 knitr::include_graphics("figures/ccfrp_depth_cpue.png")
 
@@ -41,7 +41,7 @@ knitr::include_graphics("figures/ccfrp_depth_cpue.png")
 #| warning: false 
 #| eval: true 
 #| fig-cap: "QQ plot from 500 simulated residuals for the final CCFRP model."
-#| fig-alt: "FROG"
+#| fig-alt: "The QQ plot shows a fit close to the one to one line from 500 simulated residuals."
 
 knitr::include_graphics("figures/ccfrp_qq.png")
 

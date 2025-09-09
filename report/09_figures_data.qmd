@@ -244,7 +244,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Weight-length relationship (red line) with data (closed circles) for California quillback rockfish."
-#| fig-alt: "FROG"
+#| fig-alt: "Scatter plot of the available weight and length data for quillback rockfsih and a line with the fitted curve, showing and exponential increase of increasing weight at length."
 
 knitr::include_graphics(
     "figures/bio_length_weight.png"
@@ -257,7 +257,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Data (open circles) and the estimated functional maturity (red line) for California quillback rockfish."
-#| fig-alt: "FROG"
+#| fig-alt: "Scatter plot of the available maturity at length data for quillback rockfish and a solid line representing the estimates functional maturity."
 
 knitr::include_graphics(
     "figures/bio_maturity_fit.png"
@@ -272,7 +272,7 @@ knitr::include_graphics(
 #| warning: false
 #| eval: true
 #| fig-cap: "Fecundity (red line) estimated from samples (closed circles) collected by the SWFSC from across the range of California quillback rockfish."
-#| fig-alt: "FROG"
+#| fig-alt: "Scatter plot of the available fecundity at length data with the fitted relationship."
 
 knitr::include_graphics(
     "figures/bio_fecundity_fit.png"
