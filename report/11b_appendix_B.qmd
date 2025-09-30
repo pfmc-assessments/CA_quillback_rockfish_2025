@@ -27,7 +27,7 @@ Fork lengths collected by stereo camera and software for image analysis allow fo
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Sample locations for the California ROV sampling project."
-#| fig-alt: "A map showing the sample locations off the coast of California for hte ROV work."
+#| fig-alt: "A map showing the sample locations off the coast of California for the ROV work."
 
 knitr::include_graphics("figures/ROV_rel_fig1.png")
 
