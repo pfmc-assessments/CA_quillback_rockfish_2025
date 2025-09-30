@@ -27,6 +27,10 @@ r4ss::SS_plots(pp, printfolder = "", dir= here("report","r4ss_plots"), uncertain
 # TODO: add better fleetnames if desired
 r4ss::table_all(replist = pp, dir = here::here("report"))
 
+#Add csv of numbers at age table
+load(here::here("report", "tables", "numbers_at_age.rda"))
+write.csv(numbers_at_age$table, here::here("report", "tables", "natage.csv"), row.names = FALSE)
+
 # custom calls to r4ss functions
 
 # taller biology plot to be easier to see and 
