@@ -19,22 +19,22 @@ if (file.exists(here::here("report/tables"))) {
   colnames(ssb_es_table)[c(3,4)] <- c("Lower Interval (Billions of eggs)",  "Upper Interval (Billions of eggs)")
   ssb_es_cap <- ssb_es$cap
   ssb_es_cap <- gsub("fraction unfished", "fraction of unfished spawning output", ssb_es_cap)
-  ssb_es_cap <- gsub(" percent", "% confidence", ssb_es_cap)
+  ssb_es_cap <- gsub(" percent", "%", ssb_es_cap)
   rm(ssb_es)
   
   spr_es_table <- spr_es$table
   spr_es_cap <- spr_es$cap
-  spr_es_cap <- gsub(" percent", "% confidence", spr_es_cap)
+  spr_es_cap <- gsub(" percent", "%", spr_es_cap)
   rm(spr_es)
   
   recr_es_table <- recr_es$table
   recr_es_cap <- recr_es$cap
-  recr_es_cap <- gsub(" percent", "% confidence", recr_es_cap)
+  recr_es_cap <- gsub(" percent", "%", recr_es_cap)
   rm(recr_es)
   
   reference_points_table <- reference_points$table
   reference_points_cap <- reference_points$cap
-  reference_points_cap <- gsub(" percent", "% confidence", reference_points_cap)
+  reference_points_cap <- gsub(" percent", "%", reference_points_cap)
   rm(reference_points)
   
   recent_management_table <- recent_management$table
