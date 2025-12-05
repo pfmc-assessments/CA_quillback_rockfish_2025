@@ -3337,6 +3337,7 @@ data_models <- c(#'catchIncreaseSE',
                  #'comLenSampleSize', #minor
                  'FAA_resetCom_reblock_reweight', 
                  #'marginalComAge', #minor
+                 #'marginalCCFRPAge', #minor
                  'noAgeErr')#,
                  #'noNegYear', #minor
                  #'NoRecLen2024') #minor
@@ -3347,6 +3348,7 @@ data_pretty <- c(#'Increase catch se',
                  #'Remove com length comps with N < 10',
                  'Areas as fleets',
                  #'Use marginal com age comps',
+                 #'Use marginal CCFRP age comps',
                  'Remove ageing error')#,
                  #'Add all low sample size comps',
                  #'Remove rec length comp in 2024')
