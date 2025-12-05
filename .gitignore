@@ -57,6 +57,8 @@ _confidential_FAA_runs_noShare/
 models/*jitter*/
 models/*profile*/
 models/*retro*/
+# or files
+data/*sentToCDFW*
 
 
 # ignore R project
