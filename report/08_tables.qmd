@@ -52,7 +52,7 @@ kableExtra::kable(catches.new,
 #| label: tbl-management
 #| warning: false
 #| echo: false
-#| tbl-cap: "Recent trend in overfishing limits (OFL), acceptable biological catches (ABC), the annual catch limits (ACL; set to equal ABC) for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk ($\\ast$). The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calculated as described in Section 1.5. For 2023-2024, California quillback rockfish was assigned its own OFL, ABC, and ACL, which are provided here as California only values."
+#| tbl-cap: "Recent trend in overfishing limit (OFL), acceptable biological catche (ABC), and annual catch limit (ACL; set to equal ABC) contributions for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk ($\\ast$). The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calculated as described in Section 1.5. For 2023-2024, California quillback rockfish were managed with statewide values based on the 2021 rebuilding analysis, so OFL, ABC, and ACL contributions in these years are provided as California only values."
 #| tbl-pos: H
 
 management <- read.csv(here("report", "tables", "management.csv")) |>
