@@ -47,7 +47,7 @@ The length observations were expanded to the sampled cluster level, to account f
 
 The input sample sizes for the expanded commercial length data were calculated via the Stewart Method (I. Stewart, pers. comm., IPHC, and developed at NWFSC) based on a combination of the number of trips and fish by year:
 
-{{< pagebreak >}}
+ <!-- {{< pagebreak >}} <!-- Comment out if do letter size formatting -->
 
 ```{=tex}
 \begin{centering}

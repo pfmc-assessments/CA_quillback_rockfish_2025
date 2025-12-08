@@ -279,11 +279,11 @@ kableExtra::kable(
   kableExtra::kable_styling(
     latex_options = "repeat_header",
     font_size = 11,
-    full_width = FALSE) |># |>
-  row_spec(15, bold=T)
-  #kableExtra::column_spec(
-  #  column = 1:3,
-  #  width = "1in")
+    full_width = FALSE) |>
+  row_spec(15, bold=T) |>
+  kableExtra::column_spec(
+   column = c(4:6,8:9),
+   width = "2.25cm")
 
 ```
 
@@ -504,12 +504,21 @@ sens <- read.csv(here::here("report/tables/sens_star_table.csv"), check.names = 
   dplyr::slice(-1) %>% #remove Npar
   mutate_at(vars(-1), round, 3)
 sens |>
-  gt() |>
-  tab_options(
-    table.font.size = 12,
-    latex.use_longtable = TRUE
-  ) |>
-  as_latex()
+  # gt() |>
+  # tab_options(
+  #   table.font.size = 12,
+  #   latex.use_longtable = TRUE
+  # ) |>
+  # as_latex()
+  kableExtra::kable(
+    format = "latex", 
+    longtable = TRUE,
+    booktabs = TRUE,
+    linesep = "") |>
+  kableExtra::kable_styling(font_size = 9) |> 
+  kableExtra::column_spec(1, width = "4.25cm") |>
+  kableExtra::column_spec(3, width = "4cm") |>
+  kableExtra::column_spec(4:5, width = "3.5cm")
 ``` 
 
 \pagebreak

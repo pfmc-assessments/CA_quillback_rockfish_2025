@@ -34,6 +34,7 @@ pdf-engine: lualatex
 format: 
   pdf: 
     documentclass: scrartcl
+    papersize: letter
     margin-bottom: .72in
     margin-top: .72in
     number-sections: true
