@@ -214,6 +214,7 @@ Exploitation rates were above the management target of a fishing intensity that 
 #| echo: false
 #| eval: !expr eval_tables 
 #| tbl-cap: !expr if(eval_tables) spr_es_cap 
+#| tbl-pos: H
 
 spr_es_table |>
   gt::gt() |>
@@ -331,7 +332,7 @@ reference_points_table |>
 
 ## Management Performance{-}
 
-During the last 10 years when `r spp` in California was managed within the Minor Nearshore Rockfish complex, the total removals were above the species' \gls{ofl} contribution from 2015--2022. Since 2023, `r spp` in California have been managed individually but did not have species-specific reference points. Total removals were above the \gls{ofl} contribution in 2023 but below the \gls{ofl} contribution for 2024 (@tbl-es-management). 
+During the last 10 years when `r spp` in California was managed within the Minor Nearshore Rockfish complex, the total removals were above the species' \gls{ofl} contribution from 2015--2023. Since 2023, `r spp` in California have had species-specific management measures but did not have species-specific harvest specifications. Total removals were below the \gls{ofl} contribution in 2024 (@tbl-es-management). 
 
 <!-- Catches in comparison to OFL, ABC, HG, and OY/ACL values for the most recent 10 years (when available), overfishing levels, actual catch and discard. Include OFL (encountered), OFL (retained) and OFL (dead) if different due to discard and discard mortality. -->
 
@@ -339,7 +340,7 @@ During the last 10 years when `r spp` in California was managed within the Minor
 #| label: tbl-es-management
 #| warning: false
 #| echo: false
-#| tbl-cap: "Recent trend in overfishing limit (OFL), acceptable biological catch (ABC), and annual catch limit (ACL; set to equal ABC) contributions for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes and are marked with an asterisk ($\\ast$). The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calculated as described in Section 1.5. For 2023-2024, California quillback rockfish were managed with statewide values based on the 2021 rebuilding analysis, so OFL, ABC, and ACL contributions in these years are provided as California only values."
+#| tbl-cap: "Recent trend in overfishing limit (OFL), acceptable biological catch (ABC), and annual catch limit (ACL; set to equal ABC) contributions for quillback rockfish, along with total removals (landings + dead discards) all in metric tons (mt). For 2015-2022, values for OFLs and ACLs represent OFL and ACL contributions of quillback rockfish within the Minor Nearshore Rockfish North and South complexes. The ACL contribution allocated to California across both complexes is also provided and marked with an asterisk ($\\ast$), and is calculated as described in Section 1.5. For 2023-2024, California quillback rockfish remained in the complexes but was managed with statewide values based on the 2021 rebuilding analysis, so OFL, ABC, and ACL contributions in these years are provided as California only values."
 #| tbl-pos: H
 
 management <- read.csv(here("report", "tables", "management.csv")) |>
@@ -362,10 +363,10 @@ management |>
     latex.use_longtable = FALSE
   ) |>
   gt::cols_label(
-    OFLsouth = "OFL* South",
-    ACLsouth = "ACL* South",
-    OFLnorth = "OFL* North",
-    ACLnorth = "ACL* North",
+    OFLsouth = "OFL South",
+    ACLsouth = "ACL South",
+    OFLnorth = "OFL North",
+    ACLnorth = "ACL North",
     ACLca = "ACL* CA",
     OFLca = "OFL CA",
     ABCca = "ABC CA",
