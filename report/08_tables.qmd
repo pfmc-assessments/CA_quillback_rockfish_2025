@@ -17,7 +17,7 @@ library(kableExtra)
 #| label: tbl-catches
 #| echo: false
 #| warning: false
-#| tbl-pos: 'H'
+#| tbl-pos: 'h!'
 #| output: asis
 #| tbl-cap: "Total removals (mt) of quillback rockfish in California for the commercial (Comm.) and recreational (Rec.) fleets as used in the assessment model. See text for description of sources."
 
