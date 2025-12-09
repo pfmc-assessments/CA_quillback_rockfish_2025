@@ -1,12 +1,13 @@
 # Figures
 ## Data 
-```{r} 
-#| label: 'set-rda-dir-figs'
-#| echo: false 
-#| warning: false 
-#| eval: true 
- #  rda_dir <- here::here("rda_files")
-``` 
+
+<!-- ```{r}  -->
+<!-- #| label: 'set-rda-dir-figs' -->
+<!-- #| echo: false  -->
+<!-- #| warning: false  -->
+<!-- #| eval: true  -->
+<!--  #  rda_dir <- here::here("rda_files") -->
+<!-- ```  -->
 
 ```{r, results = "asis"}
 #| label: fig-map

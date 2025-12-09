@@ -47,7 +47,7 @@ catches_es_table |>
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Total removals in metric tons (mt) by year for each fleet."
-#| fig-alt: "See Table 9 for values."
+#| fig-alt: "Stacked bar plot showing total removals were low through the 1940s, rising from the 1960s through 2000 and remaining relatively stable thereafter, with the majority of removals being from the recreational fleet, with removals from the commercial fleet largest in the 1990s."
 
 knitr::include_graphics("r4ss_plots/catch2_landings_stacked_custom.png")
 
@@ -114,7 +114,7 @@ ssb_es_table |>
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Estimated time series of spawning output (billions of eggs) for the base model with 95% confidence intervals."
-#| fig-alt: "See table 26 for values."
+#| fig-alt: "Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increase and then stabilizes towards the end of the time series."
 #| fig-pos: H
 
 knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
@@ -127,7 +127,7 @@ knitr::include_graphics("r4ss_plots/ts7_Spawning_output_with_95_intervals.png")
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Estimated time series of spawning output relative to unfished spawning output for the base model with 95% confidence intervals."
-#| fig-alt: ""
+#| fig-alt: "The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
 #| fig-pos: H
 
 knitr::include_graphics("r4ss_plots/ts9_Relative_spawning_output_intervals.png")
@@ -178,27 +178,25 @@ recr_es_table |>
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Estimated time series of age-0 recruits (in thousands) for the base model with 95% confidence intervals."
-#| fig-alt: ""
+#| fig-alt: "Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
 #| fig-pos: H
 
 knitr::include_graphics("r4ss_plots/ts11_Age-0_recruits_(1000s)_with_95_asymptotic_intervals.png")
 
 ```
 
-<!-- 
-```{r} 
-#| label: fig-es-recdevs
-#| echo: false 
-#| warning: false 
-#| eval: true 
-#| fig-cap: "Estimated time series of recruitment deviations for the base model."
-#| fig-alt: ""
-#| fig-pos: H
 
-knitr::include_graphics("r4ss_plots/recdevs2_withbars.png")
+<!-- ```{r} -->
+<!-- #| label: fig-es-recdevs -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- #| eval: true -->
+<!-- #| fig-cap: "Estimated time series of recruitment deviations for the base model." -->
+<!-- #| fig-alt: "" -->
+<!-- #| fig-pos: H -->
 
-```
--->
+<!-- knitr::include_graphics("r4ss_plots/recdevs2_withbars.png") -->
+<!-- ``` -->
 
 <!-- \clearpage -->
 
@@ -243,7 +241,7 @@ spr_es_table |>
 #| warning: false 
 #| eval: true
 #| fig-cap: "Phase plot of fishing intensity versus spawning output relative to unfished. Each point represents the relative spawning output at the start of the year and the relative fishing intensity in that same year. Lines through the final point show 95% confidence intervals based on the asymptotic uncertainty for each dimension. The shaded ellipse is a 95% region which accounts for the estimated correlation between the two quantities."
-#| fig-alt: "See table @tbl-ts for the values of the fraction unfished and fishing intensity which are related in this figure."
+#| fig-alt: "Phase plot showing population trajectory above the spawning output target and below the overfishing target (i.e. lower right quadrant) in most years."
 
 
 knitr::include_graphics("r4ss_plots/SPR4_phase.png")
@@ -257,7 +255,7 @@ knitr::include_graphics("r4ss_plots/SPR4_phase.png")
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Time series of 1-SPR (spawning potential ratio). The horizontal line is at the 1-SPR target: 1 - 0.5 = 0.5"
-#| fig-alt: "See table @tbl-ts for the values of the fraction unfished and fishing intensity which are related in this figure."
+#| fig-alt: "Time series plot showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
 
 
 knitr::include_graphics("r4ss_plots/SPR2_minusSPRseries.png")

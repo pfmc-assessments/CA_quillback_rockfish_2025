@@ -40,7 +40,7 @@ knitr::include_graphics("figures/ROV_rel_fig1.png")
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Sampling design at an example MPA. Boxes identify sampling locations over hard substrate. Transect lines are 500 m long and align with bathymetry contours."
-#| fig-alt: "FROG"
+#| fig-alt: "A map showing transect locations along rocky habitat off Bodega Bay, California."
 
 knitr::include_graphics("figures/ROV_rel_fig2.png")
 
@@ -52,23 +52,23 @@ knitr::include_graphics("figures/ROV_rel_fig2.png")
 #| warning: false 
 #| eval: true 
 #| fig-cap: "Q-Q Plot for the ROV abundance index model with results of KS test, dispersion test and outlier test."
-#| fig-alt: "FROG"
+#| fig-alt: "A qq diagnostic plot showing residuals followed a normal distribution."
 
 knitr::include_graphics("figures/ROV_rel_fig3.png")
 
 ```
 
-```{r} 
-#| label: fig-ROV-rel-fig4
-#| echo: false 
-#| warning: false 
-#| eval: true 
-#| fig-cap: "Index and confidence limit estimates for the ROV abundance index model inside and outside MPAs."
-#| fig-alt: "FROG"
+<!-- ```{r}  -->
+<!-- #| label: fig-ROV-rel-fig4 -->
+<!-- #| echo: false  -->
+<!-- #| warning: false  -->
+<!-- #| eval: true  -->
+<!-- #| fig-cap: "Index and confidence limit estimates for the ROV abundance index model inside and outside MPAs." -->
+<!-- #| fig-alt: "FROG" -->
 
-#knitr::include_graphics("figures/ROV_rel_fig4.png")
+<!-- #knitr::include_graphics("figures/ROV_rel_fig4.png") -->
 
-```
+<!-- ``` -->
 
 \pagebreak
 
