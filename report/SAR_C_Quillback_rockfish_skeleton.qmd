@@ -207,6 +207,25 @@ a <- knitr::knit_child('01b_citation.qmd', quiet = TRUE)
 cat(a, sep = '\n')
 ```
 
+\clearpage
+\thispagestyle{empty}
+\noindent
+\begin{tikzpicture}[remember picture, overlay]
+    \node[inner sep=0pt, anchor=north west] 
+    at (current page.north west) {
+        \includegraphics[width=8.5in, height=11in, alt={The first page of a two page graphical summary of this assessment report. This page shows major results and key takeaways. Major results include figures of catches, population trajectory compared to that of the last assessment, and projections. Key takeaways include that the stock is above the biomass management target, in part due to newly collected data.}]{figures/QLBK_at_a_glance_1.png}
+    };
+\end{tikzpicture}
+\clearpage
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+    \node[inner sep=0pt, anchor=north west] 
+    at (current page.north west) {
+        \includegraphics[width=8.5in, height=11in, alt={The second page of a two page graphical summary of this assessment report. This page shows major changes from the last assessment and the risk table, which is a duplicate of Table xi. Major changes include the collection of additional biological data, particularly age samples, updates to assumptions about natural mortality, and new indices.}]{figures/QLBK_at_a_glance_2}
+    };
+\end{tikzpicture}
+\clearpage
+
 
 ```{r, results='asis'}
 #| label: 'load_tables'
