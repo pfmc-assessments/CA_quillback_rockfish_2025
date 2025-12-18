@@ -33,7 +33,7 @@ cover: figures/cover_photo_recfin.jpg
 pdf-engine: lualatex
 format: 
   pdf: 
-    documentclass: scrartcl
+    documentclass: article
     papersize: letter
     margin-bottom: .72in
     margin-top: .72in
