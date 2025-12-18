@@ -73,7 +73,6 @@ alt_text_to_csv <- function(input, output_file){
   
   ##Save the file as a csv
   out <- data.frame("label" = unlist(labs), 
-                    "type" = "figure",
                     "alt_text" = unlist(caps))
   file_name <- here("report", paste0(output_name, ".csv"))
   

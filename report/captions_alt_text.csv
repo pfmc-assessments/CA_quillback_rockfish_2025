@@ -1,101 +1,101 @@
-label,alt_text
-es-landings,"Stacked bar plot showing total removals were low through the 1940s, rising from the 1960s through 2000 and remaining relatively stable thereafter, with the majority of removals being from the recreational fleet, with removals from the commercial fleet largest in the 1990s."
-es-sb,Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increase and then stabilizes towards the end of the time series.
-es-depl,The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series.
-es-recruits,"Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
-es-kobe,Phase plot showing population trajectory above the spawning output target and below the overfishing target (i.e. lower right quadrant) in most years.
-es-spr,"Time series plot showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
-map,"Map of California showing indicating statewide management and assessment, but population range primarily north of central California."
-catches,"Stacked bar plot showing total removals were low through the 1940s, rising from the 1960s through 2000 and remaining relatively stable thereafter, with the majority of removals being from the recreational fleet, with removals from the commercial fleet largest in the 1990s."
-data,Tabular information for this figure can be found in the data file.
-len-comm-bubbles,Bubble plot of California commercial length compositions. See text for description.
-lenMean-comm,Line plot showing mean length along with uncertainty in each year with an increasing trend in mean length from 1995 to 2015.
-caal-comm,Bubble plot of California commercial age at length compositions roughly following shape of growth curve.
-len-rec-bubbles,Bubble plot of California recreational length compositions. See text for description
-lenMean-rec,Line plot showing mean length along with uncertainty in each year with a declining trend in mean length from 1980 to 1995 and slowing increasing trend to 2015.
-indices,"Line plot of relative abundance indices used in the base model showing limited overlap in time between the indices, and variable overlap."
-len-ccfrp-bubbles,Bubble plot of CCFRP length compositions. See text for description
-lenMean-ccfrp,Line plot showing mean length along with uncertainty in each year with a slight decline in mean length since 2020.
-caal-ccfrp,Bubble plot of California age at length compositions for the CCFRP fleet showing sparse samples that roughly following shape of growth curve.
-caal-growth,Bubble plot of California age at length compositions for the growth fleet roughly following shape of growth curve.
-len-rov-bubbles,Bubble plot of ROV length compositions. See text for description
-lenMean-rov,"Line plot showing mean length along with uncertainty in each year with a generally unchanged pattern, though lengths are larger in 2014 and 2015, and show and increasing trend from 2019 to 2021."
-weightlength,"Scatter plot of the available weight and length data for quillback rockfish and a line with the fitted curve, showing an exponential increase of increasing weight at length."
-maturity,Scatter plot of the available maturity at length data for quillback rockfish and a solid line representing the estimated functional maturity.
-fecundity,Scatter plot of the available fecundity at length data with the fitted relationship.
-growthdata,"Two panel fit of growth curves to age at length data. There are lengths for age zero fish, but the majority of data are for fish from approximately 24 to 44 cm. The 2021 assessment used a high value for L infinity with fish reaching that age at a smaller length. The 2025 external estimate has a slightly lower estimate for K, and a lower L infinity. The 2025 model estimate has a smaller value of K and reaches a similar L infinity as the 2021 model, around 43 cm."
-growth,Growth curves for females and males diverge are similar up to about age 8 after which females are notably larger. For both sexes the growth asymptotes around age 20. See parameter table for growth parameters.
-bridgeSS3_bio,Figure showing that the trajectory from the 2021 assessment is similar when using the newest version of stock synthesis.
-bridgeBio_comp,"Figure showing that the trajectory of spawning output and spawning output relative to unfished from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
-bridgeSmryBio_comp,Figure showing that the trajectory of spawning output and summary biomass from the 2021 assessment changes most with updates to growth and mortality.
-bridgeBio_recruit,"Figure showing that recruitment from the 2021 assessment changes from peaks in 1999, 1996, 1994, and 1987 to peaks in 1995 and 1991 updates to growth, fecundity, and mortality."
-bridgeData_comp,Figure showing that the trajectory generally doesn't change except when age data are included and growth is not estimated.
-bridgeData_recruit,"Figure showing that recruitment peaks change when data are added but generally occur very strongly in the early to mid 1980s and mid 1990s with exact years dependent on the type of data added, and also increase in the late 2010s with updates to indices."
-bridgeOther_comp,"Figure showing that the trajectory generally doesn't change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
-bridgeOther_recruit,"Figure showing that recruitment peaks are most prominent in the mid 1990s, with the exact year of the peak varying as changes are made. Once data are updated recruitments are generally similar."
-age_error,Scatter plot of the ages from readers 1 on the x-axis and reader 2 on the y-axis.  The agreement among readers is reasonable and closer for younger fish.  The 1 to 1 line is alos plotted to show true agreement. There is some positive bias in reader 2 between ages 30 and 40.
-selex,"Asymptotic selectivity is estimated for the recreational fleet in all time periods, the ROV survey and the CCFRP survey.  The commercial fleet has estimate dome shaped selectivity from 1916--2002 and asymptotic selecitivity for the remaining time blocks, 2003--2013, 2014--2021 and 2022-2024."
-recruits,"Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
-rec-devs,"Plot of recruitment deviations uncertainty intervals over time showing higher deviations in the 1980s, a peak in 1994, and then low deviations since with peaks in three years around 2010 and in 2016 and 2017."
-bh-curve,Beverton-Holt stock recruitment relationship with a steepness of 0.72 with spawning output and the resulting recruitment estimates.
-recdev-var,Time series plot showing a period of higher variance (low transformed variance) up to the early 1990s following by a informed recruitment deviations. The bias adjustment used in the model is as recommended.
-lenfit-all,Aggregated length comps are fit reasonably well.
-len-pearson-all,See 'Pearson' column in CompReport.sso for values.
-meanlen-comm,"Mean length begins around 34 cm in 1990, and increases with the time block in 2003. Mean length continues to incrfease through 2013 and is fit to remain stable until the two most recent years where it decreaases to around 37 cm."
-age-pearson-comm,There are no clear patters in the residuals in the observed fits.
-meanage-comm,"Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximately 26 for 2020 and ranges from 15-19 for the other years."
-meanlen-rec,The model predicted mean length generally fit the observed data well. Mean length ranges from 32 to 42 cm with lower mean length in more recent years.
-meanlen-ccfrp,"Mean length is well fit except for in 2019, a year in which the data has a higher mean length than other years."
-meanlen-rov,Mean length was well estimated by the model for all years.
-age-pearson-ccfrp,There are no clear patters in the residuals in the observed fits.
-meanage-ccfrp,Mean age in the commercial fleet is available from 2017-2024. Mean age varies around 15-16 with a higher mean age of 26 in 2019.
-age-pearson-grow,There are no clear patters in the residuals in the observed fits.
-meanage-growth,"Mean age in the commercial fleet is available in eight years, 2010, 2011, 2017, 2018, and 2021 through 2024. Mean age varies around 16 until 2022 when it declines to nearer 12."
-log-crfs-fit,Model fit to the CRFS dockside PR index of abundance.
-log-ccfrp-fit,Model fit to the CCFRP index of abundance.
-log-rov-fit,Model fit to the ROV index of abundance.
-ssb,Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increase and then stabilizes towards the end of the time series.
-tot-bio,Total biomass in metric tons is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series.
-depl,The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series.
-retro-ssb,The population scale decreases as more years of data are removed.
-retro-depl,The stock is more depleted in the ending year of each retrospective as more years of data are removed.
-retro-panel,A four panel plot showing that all four metrics indicate a more depleted stock of smaller size as years of data are removed.
-r0-profile,"Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of ln(R0) values."
-r0-profile-param-panel,"Four panel plot with ln(R0) on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a bowl, with the minimum at the estimate of ln(R0). In the other panels, as ln(R0) increases, the spawning output relative to unfished, initial spawning output, and final spawning output all increase as well."
-r0-piner,Four panel plot with ln(R0) on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model. The length data is the primarily source of information informing the estimate of log(R0) with age data from the growth fleet supporting higher log(R0). There is little information about log(R0) from the survey indices.
-h-profile,"Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of steepness values."
-h-profile-param-panel,"Four panel plot with steepness on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a declining pattern, with the minimum at higher fixed values of steepness than used for the base model. In the other panels, as steepness increases, the spawning output relative to unfished, and final spawning output increase slightly, and the initial spawning output declines slightly."
-h-piner,"Four panel plot with steepness values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of steepness. There is little information about steepness from the survey indices."
-m-profile,"Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of natural mortality values."
-m-profile_param-panel,"Four panel plot with natural mortality on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a declining pattern, with the minimum at higher fixed values of natural mortality than used for the base model. In the other panels, as natural mortality increases, the spawning output relative to unfished, initial spawning output, and final spawning output increase."
-m-piner,"Four panel plot with natural mortality values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The recruitment and recreational length data is the primarily source of information informing the estimate of natural mortality. There is little information about natural mortality from the survey indices."
-Mh-NLL,The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest
-Mh-contour,The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest
-linf-profile,"Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of L infinity values."
-linf-profile_param-panel,"Four panel plot with asymptotic average length on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a bowl, with the minimum at the estimated value of asymptotic average length. In the other panels, as asymptotic average length increases, the spawning output relative to unfished, and final spawning output increase, while initial spawning output is nearly unchanged."
-linf-piner,"Four panel plot with asymptotic average length values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of the asymptotic average length. There is little information about asymptotic average length from the survey indices."
-k-profile,"Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of values for the growth coefficient K."
-k-profile_param-panel,"Four panel plot with K on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a bowl, with the minimum at the estimated value of K. In the other panels, as K increases, the spawning output relative to unfished, and final spawning output increase, while initial spawning output is nearly unchanged."
-k-piner,"Four panel plot with growth coefficient K values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of the growth coefficient K. There is little information aboutgrowth coefficient K from the survey indices."
-sens-overall,Figure summarizing how estimates of derived quantities differ between sensitivity models and base model and that changes to assumptions related to model productivity result in the largest changes whereas most other quantities fall within the 95 percent confidence intervals for the respective derived quantities.
-sens-productivity,"Two panel figure comparing trajectories between sensitivity models and the base model. Changes to natural mortality result in greater recovery in recent years, and not estimating recrutiment deviations scales spawning output upward."
-sens-contributions,"Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes with the exception of excluding age data."
-sens-star,"Two panel figure comparing trajectories between sensitivity models and the base model, and showing progressively larger changes as more age data are excluded."
-sens-star-recruit,"Two panel figure comparing trajectories between sensitivity models and the base model, showing reduced recruitment estimates in the mid 1990s and later 2010s as more age data are excluded."
-sens-data,"Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
-sens-selectivity,"Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
-historical,Two panel line plot with years on the x-axis and age-3 biomass in the top panel and fraction unfished in the bottom panel's y-axis.  The time series shows the change in the base model from the 2021 assessment to the 2025 assessment.
-yield,"Yield curve shows equilibrium yield as a domed function of fraction of unfished spawning output, with a peak slightly above 0.2, a maximum sustainable yield around 0.25, a biomass target at 0.4, and a current estimate just above 0.45."
-spr,"Time series plot with uncertainty intervals showing fishing intensity above the SPR target of 50% in many years from 1980 to 2000, and again from 2015 to 2020."
-pr-sm,Horizontal bar plot showing co-occuring species were negatively associated with catches of quillback rockfish.
-pr-avg-cpue-district,Line plot showing CPUE by district was variable around a constant mean over time.
-pr-model-cpue,Line plot showing CPUE by declined slightly over time.
-pr-index-qq,A qq diagnostic plot showing residuals followed a normal distribution.
-ROV-rel-fig1,A map showing the sample locations off the coast of California for the ROV work.
-ROV-rel-fig2,"A map showing transect locations along rocky habitat off Bodega Bay, California."
-ROV-rel-fig3,A qq diagnostic plot showing residuals followed a normal distribution.
-ccfrp-avg-cpue,"A five panel plot with each showing year on the x-axis and average CPUE on the y-axis.  The average CPUE is plotted for each of the sampling locations.  There is little trend information in the data from Bodega Head, South Cape Mendocino, Stewarts Point and Ten Mile.  The Southeast Farallon Island show an increase in CPUE in 2024."
-ccfrp-depth-cpue,A figure with box plots showing CPUE across depth bins.  The median CPUE is similar across all depths from 40 to 200 feet.
-ccfrp-qq,The QQ plot shows a fit close to the one to one line from 500 simulated residuals.
-rec-regs-vis,Representation of the seasonal depth restrictions for rockfish.
-com-regs-vis,Representation of the commercial regulations affecting quillback rockfish.
+"label","alt_text"
+"es-landings","Stacked bar plot showing total removals were low through the 1940s, rising from the 1960s through 2000 and remaining relatively stable thereafter, with the majority of removals being from the recreational fleet, with removals from the commercial fleet largest in the 1990s."
+"es-sb","Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increase and then stabilizes towards the end of the time series."
+"es-depl","The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
+"es-recruits","Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
+"es-kobe","Phase plot showing population trajectory above the spawning output target and below the overfishing target (i.e. lower right quadrant) in most years."
+"es-spr","Time series plot showing fishing intensity above the SPR target of 50 percent in many years from 1980 to 2000, and again from 2015 to 2020."
+"map","Map of California showing indicating statewide management and assessment, but population range primarily north of central California."
+"catches","Stacked bar plot showing total removals were low through the 1940s, rising from the 1960s through 2000 and remaining relatively stable thereafter, with the majority of removals being from the recreational fleet, with removals from the commercial fleet largest in the 1990s."
+"data","Tabular information for this figure can be found in the data file."
+"len-comm-bubbles","Bubble plot of California commercial length compositions. See text for description."
+"lenMean-comm","Line plot showing mean length along with uncertainty in each year with an increasing trend in mean length from 1995 to 2015."
+"caal-comm","Bubble plot of California commercial age at length compositions roughly following shape of growth curve."
+"len-rec-bubbles","Bubble plot of California recreational length compositions. See text for description"
+"lenMean-rec","Line plot showing mean length along with uncertainty in each year with a declining trend in mean length from 1980 to 1995 and slowing increasing trend to 2015."
+"indices","Line plot of relative abundance indices used in the base model showing limited overlap in time between the indices, and variable overlap."
+"len-ccfrp-bubbles","Bubble plot of CCFRP length compositions. See text for description"
+"lenMean-ccfrp","Line plot showing mean length along with uncertainty in each year with a slight decline in mean length since 2020."
+"caal-ccfrp","Bubble plot of California age at length compositions for the CCFRP fleet showing sparse samples that roughly following shape of growth curve."
+"caal-growth","Bubble plot of California age at length compositions for the growth fleet roughly following shape of growth curve."
+"len-rov-bubbles","Bubble plot of ROV length compositions. See text for description"
+"lenMean-rov","Line plot showing mean length along with uncertainty in each year with a generally unchanged pattern, though lengths are larger in 2014 and 2015, and show and increasing trend from 2019 to 2021."
+"weightlength","Scatter plot of the available weight and length data for quillback rockfish and a line with the fitted curve, showing an exponential increase of increasing weight at length."
+"maturity","Scatter plot of the available maturity at length data for quillback rockfish and a solid line representing the estimated functional maturity."
+"fecundity","Scatter plot of the available fecundity at length data with the fitted relationship."
+"growthdata","Two panel fit of growth curves to age at length data. There are lengths for age zero fish, but the majority of data are for fish from approximately 24 to 44 cm. The 2021 assessment used a high value for L infinity with fish reaching that age at a smaller length. The 2025 external estimate has a slightly lower estimate for K, and a lower L infinity. The 2025 model estimate has a smaller value of K and reaches a similar L infinity as the 2021 model, around 43 cm."
+"growth","Growth curves for females and males diverge are similar up to about age 8 after which females are notably larger. For both sexes the growth asymptotes around age 20. See parameter table for growth parameters."
+"bridgeSS3_bio","Figure showing that the trajectory from the 2021 assessment is similar when using the newest version of stock synthesis."
+"bridgeBio_comp","Figure showing that the trajectory of spawning output and spawning output relative to unfished from the 2021 assessment changes most with updates to growth, fecundity, and mortality."
+"bridgeSmryBio_comp","Figure showing that the trajectory of spawning output and summary biomass from the 2021 assessment changes most with updates to growth and mortality."
+"bridgeBio_recruit","Figure showing that recruitment from the 2021 assessment changes from peaks in 1999, 1996, 1994, and 1987 to peaks in 1995 and 1991 updates to growth, fecundity, and mortality."
+"bridgeData_comp","Figure showing that the trajectory generally doesn't change except when age data are included and growth is not estimated."
+"bridgeData_recruit","Figure showing that recruitment peaks change when data are added but generally occur very strongly in the early to mid 1980s and mid 1990s with exact years dependent on the type of data added, and also increase in the late 2010s with updates to indices."
+"bridgeOther_comp","Figure showing that the trajectory generally doesn't change based on changes to selectivity or reweighting, and that spawning output is scaled upward compared to the 2021 assessment."
+"bridgeOther_recruit","Figure showing that recruitment peaks are most prominent in the mid 1990s, with the exact year of the peak varying as changes are made. Once data are updated recruitments are generally similar."
+"age_error","Scatter plot of the ages from readers 1 on the x-axis and reader 2 on the y-axis.  The agreement among readers is reasonable and closer for younger fish.  The 1 to 1 line is alos plotted to show true agreement. There is some positive bias in reader 2 between ages 30 and 40."
+"selex","Asymptotic selectivity is estimated for the recreational fleet in all time periods, the ROV survey and the CCFRP survey.  The commercial fleet has estimate dome shaped selectivity from 1916--2002 and asymptotic selecitivity for the remaining time blocks, 2003--2013, 2014--2021 and 2022-2024."
+"recruits","Plot of recruits and uncertainty intervals over time showing increasing recruitment in the 1980s, a peak in 1994, and then low recruitment since with peaks in three years around 2010 and in 2016 and 2017."
+"rec-devs","Plot of recruitment deviations uncertainty intervals over time showing higher deviations in the 1980s, a peak in 1994, and then low deviations since with peaks in three years around 2010 and in 2016 and 2017."
+"bh-curve","Beverton-Holt stock recruitment relationship with a steepness of 0.72 with spawning output and the resulting recruitment estimates."
+"recdev-var","Time series plot showing a period of higher variance (low transformed variance) up to the early 1990s following by a informed recruitment deviations. The bias adjustment used in the model is as recommended."
+"lenfit-all","Aggregated length comps are fit reasonably well."
+"len-pearson-all","See 'Pearson' column in CompReport.sso for values."
+"meanlen-comm","Mean length begins around 34 cm in 1990, and increases with the time block in 2003. Mean length continues to incrfease through 2013 and is fit to remain stable until the two most recent years where it decreaases to around 37 cm."
+"age-pearson-comm","There are no clear patters in the residuals in the observed fits."
+"meanage-comm","Mean age in the commercial fleet is available in four year, 2019, 2020, 2021 and 2022. Mean age is approximately 26 for 2020 and ranges from 15-19 for the other years."
+"meanlen-rec","The model predicted mean length generally fit the observed data well. Mean length ranges from 32 to 42 cm with lower mean length in more recent years."
+"meanlen-ccfrp","Mean length is well fit except for in 2019, a year in which the data has a higher mean length than other years."
+"meanlen-rov","Mean length was well estimated by the model for all years."
+"age-pearson-ccfrp","There are no clear patters in the residuals in the observed fits."
+"meanage-ccfrp","Mean age in the commercial fleet is available from 2017-2024. Mean age varies around 15-16 with a higher mean age of 26 in 2019."
+"age-pearson-grow","There are no clear patters in the residuals in the observed fits."
+"meanage-growth","Mean age in the commercial fleet is available in eight years, 2010, 2011, 2017, 2018, and 2021 through 2024. Mean age varies around 16 until 2022 when it declines to nearer 12."
+"log-crfs-fit","Model fit to the CRFS dockside PR index of abundance."
+"log-ccfrp-fit","Model fit to the CCFRP index of abundance."
+"log-rov-fit","Model fit to the ROV index of abundance."
+"ssb","Spawning output is relatively unfished between the start of the model until the mid 1980s with the spawning output sharply decreasing to low levels by 2000 remaining low until the early 2000s where spawning output begins to increase and then stabilizes towards the end of the time series."
+"tot-bio","Total biomass in metric tons is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
+"depl","The estimated fraction unfished is relatively unfished between the start of the model through 1980 with the spawning output sharply decreasing to low levels by the mid 1990s remaining low increasing in the early 2000s and stabilizing to the end of the time series."
+"retro-ssb","The population scale decreases as more years of data are removed."
+"retro-depl","The stock is more depleted in the ending year of each retrospective as more years of data are removed."
+"retro-panel","A four panel plot showing that all four metrics indicate a more depleted stock of smaller size as years of data are removed."
+"r0-profile","Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of ln(R0) values."
+"r0-profile-param-panel","Four panel plot with ln(R0) on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a bowl, with the minimum at the estimate of ln(R0). In the other panels, as ln(R0) increases, the spawning output relative to unfished, initial spawning output, and final spawning output all increase as well."
+"r0-piner","Four panel plot with ln(R0) on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model. The length data is the primarily source of information informing the estimate of log(R0) with age data from the growth fleet supporting higher log(R0). There is little information about log(R0) from the survey indices."
+"h-profile","Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of steepness values."
+"h-profile-param-panel","Four panel plot with steepness on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a declining pattern, with the minimum at higher fixed values of steepness than used for the base model. In the other panels, as steepness increases, the spawning output relative to unfished, and final spawning output increase slightly, and the initial spawning output declines slightly."
+"h-piner","Four panel plot with steepness values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of steepness. There is little information about steepness from the survey indices."
+"m-profile","Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of natural mortality values."
+"m-profile_param-panel","Four panel plot with natural mortality on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a declining pattern, with the minimum at higher fixed values of natural mortality than used for the base model. In the other panels, as natural mortality increases, the spawning output relative to unfished, initial spawning output, and final spawning output increase."
+"m-piner","Four panel plot with natural mortality values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The recruitment and recreational length data is the primarily source of information informing the estimate of natural mortality. There is little information about natural mortality from the survey indices."
+"Mh-NLL","The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
+"Mh-contour","The base model falls within the 0 to 2 NLL contour compared to the model with the lowest NLL.  The changes in NLL are concentric oval-like shapes deviating from models within two NLL points of the model with the lowest"
+"linf-profile","Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of L infinity values."
+"linf-profile_param-panel","Four panel plot with asymptotic average length on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a bowl, with the minimum at the estimated value of asymptotic average length. In the other panels, as asymptotic average length increases, the spawning output relative to unfished, and final spawning output increase, while initial spawning output is nearly unchanged."
+"linf-piner","Four panel plot with asymptotic average length values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of the asymptotic average length. There is little information about asymptotic average length from the survey indices."
+"k-profile","Two panels with line plots with year on the x-axis. The lines represent spawning output on the y-axis, top panel, and fraction unfished, bottom panel, for multiple model runs that assume a range of values for the growth coefficient K."
+"k-profile_param-panel","Four panel plot with K on the x-axis and values on the y-axis as described in the caption. The likelihood figure reflects a bowl, with the minimum at the estimated value of K. In the other panels, as K increases, the spawning output relative to unfished, and final spawning output increase, while initial spawning output is nearly unchanged."
+"k-piner","Four panel plot with growth coefficient K values on the x-axis and change in log-likelihood on the y-axis with panels showing the contribution from each data type in the model, the contribution from age data from each fleet. The length data is the primarily source of information informing the estimate of the growth coefficient K. There is little information aboutgrowth coefficient K from the survey indices."
+"sens-overall","Figure summarizing how estimates of derived quantities differ between sensitivity models and base model and that changes to assumptions related to model productivity result in the largest changes whereas most other quantities fall within the 95 percent confidence intervals for the respective derived quantities."
+"sens-productivity","Two panel figure comparing trajectories between sensitivity models and the base model. Changes to natural mortality result in greater recovery in recent years, and not estimating recrutiment deviations scales spawning output upward."
+"sens-contributions","Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes with the exception of excluding age data."
+"sens-star","Two panel figure comparing trajectories between sensitivity models and the base model, and showing progressively larger changes as more age data are excluded."
+"sens-star-recruit","Two panel figure comparing trajectories between sensitivity models and the base model, showing reduced recruitment estimates in the mid 1990s and later 2010s as more age data are excluded."
+"sens-data","Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+"sens-selectivity","Two panel figure comparing trajectories between sensitivity models and the base model, and showing relatively little changes."
+"historical","Two panel line plot with years on the x-axis and age-3 biomass in the top panel and fraction unfished in the bottom panel's y-axis.  The time series shows the change in the base model from the 2021 assessment to the 2025 assessment."
+"yield","Yield curve shows equilibrium yield as a domed function of fraction of unfished spawning output, with a peak slightly above 0.2, a maximum sustainable yield around 0.25, a biomass target at 0.4, and a current estimate just above 0.45."
+"spr","Time series plot with uncertainty intervals showing fishing intensity above the SPR target of 50 percent in many years from 1980 to 2000, and again from 2015 to 2020."
+"pr-sm","Horizontal bar plot showing co-occuring species were negatively associated with catches of quillback rockfish."
+"pr-avg-cpue-district","Line plot showing CPUE by district was variable around a constant mean over time."
+"pr-model-cpue","Line plot showing CPUE by declined slightly over time."
+"pr-index-qq","A qq diagnostic plot showing residuals followed a normal distribution."
+"ROV-rel-fig1","A map showing the sample locations off the coast of California for the ROV work."
+"ROV-rel-fig2","A map showing transect locations along rocky habitat off Bodega Bay, California."
+"ROV-rel-fig3","A qq diagnostic plot showing residuals followed a normal distribution."
+"ccfrp-avg-cpue","A five panel plot with each showing year on the x-axis and average CPUE on the y-axis.  The average CPUE is plotted for each of the sampling locations.  There is little trend information in the data from Bodega Head, South Cape Mendocino, Stewarts Point and Ten Mile.  The Southeast Farallon Island show an increase in CPUE in 2024."
+"ccfrp-depth-cpue","A figure with box plots showing CPUE across depth bins.  The median CPUE is similar across all depths from 40 to 200 feet."
+"ccfrp-qq","The QQ plot shows a fit close to the one to one line from 500 simulated residuals."
+"rec-regs-vis","Representation of the seasonal depth restrictions for rockfish."
+"com-regs-vis","Representation of the commercial regulations affecting quillback rockfish."

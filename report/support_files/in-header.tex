@@ -51,13 +51,28 @@
 %   beforeskip=.25\baselineskip,
 %   afterskip=-1em]{paragraph,subparagraph}
 
-%For using the article documentclass, the following reproduces the above
-\usepackage{titlesec}
-% For section, subsection, and subsubsection
-\titlespacing*{\section}{0pt}{-.25\baselineskip}{.25\baselineskip}
-\titlespacing*{\subsection}{0pt}{-.25\baselineskip}{.25\baselineskip}
-\titlespacing*{\subsubsection}{0pt}{-.25\baselineskip}{.25\baselineskip}
-% For paragraph and subparagraph (run-in style)
-% Note: In titlesec, a negative 'afterskip' value creates a horizontal (run-in) skip.
-\titlespacing*{\paragraph}{0pt}{.25\baselineskip}{1em}
-\titlespacing*{\subparagraph}{0pt}{.25\baselineskip}{1em}
+% %For using the article documentclass, the following reproduces the above
+% \usepackage{titlesec}
+% % For section, subsection, and subsubsection
+% \titlespacing*{\section}{0pt}{-.25\baselineskip}{.25\baselineskip}
+% \titlespacing*{\subsection}{0pt}{-.25\baselineskip}{.25\baselineskip}
+% \titlespacing*{\subsubsection}{0pt}{-.25\baselineskip}{.25\baselineskip}
+% % For paragraph and subparagraph (run-in style)
+% % Note: In titlesec, a negative 'afterskip' value creates a horizontal (run-in) skip.
+% \titlespacing*{\paragraph}{0pt}{.25\baselineskip}{1em}
+% \titlespacing*{\subparagraph}{0pt}{.25\baselineskip}{1em}
+
+
+% %For using the article documentclass, the following reproduces the above
+% \usepackage{titlesec}
+% %Try to add this definition first to resolve the error above at the fourth-order section
+% \titleformat{\paragraph}[runin]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+% \titleformat{\subparagraph}[runin]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+% % For section, subsection, and subsubsection
+% \titlespacing*{\section}{0pt}{-.25\baselineskip}{.25\baselineskip}
+% \titlespacing*{\subsection}{0pt}{-.25\baselineskip}{.25\baselineskip}
+% \titlespacing*{\subsubsection}{0pt}{-.25\baselineskip}{.25\baselineskip}
+% % For paragraph and subparagraph (run-in style)
+% % Note: In titlesec, a negative 'afterskip' value creates a horizontal (run-in) skip.
+% \titlespacing*{\paragraph}{0pt}{.25\baselineskip}{1em}
+% \titlespacing*{\subparagraph}{0pt}{.25\baselineskip}{1em}

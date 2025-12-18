@@ -25,7 +25,6 @@ The final model shows a peak index value in 2006 with a declining trend thereaft
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| out.width: "75%"
 #| fig-cap: "Species coefficients (blue bars) from the binomial GLM for presence/absence of quillback rockfish in the private/rental boat data.  Horizontal black lines are 95% confidence intervals."
 #| fig-alt: "Horizontal bar plot showing co-occuring species were negatively associated with catches of quillback rockfish."
 
@@ -39,7 +38,6 @@ knitr::include_graphics("figures/pr_index_SM.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| out.width: "75%"
 #| fig-cap: "Average CPUE by CRFS district prior to standardization."
 #| fig-alt: "Line plot showing CPUE by district was variable around a constant mean over time."
 
@@ -54,7 +52,6 @@ knitr::include_graphics("figures/pr_index_average_cpue_by_district.png")
 #| echo: false 
 #| warning: false 
 #| eval: true 
-#| out.width: "75%"
 #| fig-cap: "Index for the CRFS dockside private/rental boat survey."
 #| fig-alt: "Line plot showing CPUE by declined slightly over time."
 
